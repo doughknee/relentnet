@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
+import { Header } from '@/components/Header'
 
 export const Route = createFileRoute('/contact')({
   component: Contact,
@@ -55,37 +56,7 @@ function Contact() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden flex flex-col">
       {/* NAVIGATION */}
-      <nav className="fixed top-0 w-full flex justify-between items-center p-8 z-50 mix-blend-difference bg-[#050505]/50 backdrop-blur-sm">
-        <Link to="/" className="text-xl tracking-[0.2em] font-serif uppercase">
-          <span className="font-bold text-[#E1BE4C]">Relent</span>Net
-        </Link>
-        <div className="hidden md:flex gap-12 text-xs tracking-[0.15em] uppercase opacity-80">
-          <Link
-            to="/process"
-            className="hover:text-[#E1BE4C] transition-colors duration-300"
-          >
-            Our Process
-          </Link>
-          <Link
-            to="/portfolio"
-            className="hover:text-[#E1BE4C] transition-colors duration-300"
-          >
-            The Work
-          </Link>
-          <Link
-            to="/client-portal"
-            className="hover:text-[#E1BE4C] transition-colors duration-300"
-          >
-            Client Login
-          </Link>
-        </div>
-        <Link
-          to="/contact"
-          className="border border-[#E1BE4C] px-6 py-3 text-xs tracking-widest uppercase bg-[#E1BE4C] text-black transition-all duration-500"
-        >
-          Inquire
-        </Link>
-      </nav>
+      <Header />
 
       <div className="flex-grow pt-32 pb-12 px-6 md:px-20 relative z-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
