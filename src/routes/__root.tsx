@@ -4,8 +4,10 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import StarParticles from '@/components/StarParticles'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { NotFound } from '@/components/NotFound'
 
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
   component: () => {
     const jsonLd = {
       '@context': 'https://schema.org',

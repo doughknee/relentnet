@@ -16,9 +16,9 @@ export function Button({
 
   const variants = {
     primary:
-      'bg-[#E1BE4C] text-black font-bold py-4 px-8 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed',
+      'bg-gold text-black font-bold py-4 px-8 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed',
     outline:
-      'border border-white/20 px-6 py-3 text-xs hover:bg-[#E1BE4C] hover:border-[#E1BE4C] hover:text-black',
+      'border border-white/20 px-6 py-3 text-xs hover:bg-gold hover:border-gold hover:text-black',
   }
 
   const widthStyles = fullWidth ? 'w-full' : ''

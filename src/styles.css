@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-gold: #E1BE4C;
+  --color-gold-dim: #E1BE4C10; /* 10% opacity for backgrounds */
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
