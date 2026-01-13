@@ -62,8 +62,8 @@ function Portfolio() {
                   VM Homes
                 </h3>
                 <p className="text-neutral-500 leading-relaxed text-sm">
-                  A comprehensive and robust real estate platform serving the St.
-                  Pete area. Engineered with complex MLS integration and
+                  A comprehensive and robust real estate platform serving the
+                  St. Pete area. Engineered with complex MLS integration and
                   high-performance search functionality, this site prioritizes
                   utility and speed without sacrificing aesthetic.
                 </p>
@@ -166,7 +166,7 @@ function Portfolio() {
 
       {/* CTA */}
       <section
-        className="py-32 flex flex-col justify-center items-center text-center px-4 relative z-10 border-t border-white/5 mt-20 animate-fade-in-up opacity-0"
+        className="py-32 flex flex-col justify-center items-center text-center px-4 relative z-10 animate-fade-in-up opacity-0"
         style={{ animationDelay: '800ms' }}
       >
         <p className="text-xs font-bold tracking-[0.3em] text-neutral-500 uppercase mb-8">
@@ -181,7 +181,7 @@ function Portfolio() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
+      <footer className="py-12 px-8 bg-[#050505]/50 backdrop-blur-sm border-y border-white/10 flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
         <div className="space-y-2">
           <p>© RelentNet 2026</p>
           <p>Nashville • Baton Rouge</p>
