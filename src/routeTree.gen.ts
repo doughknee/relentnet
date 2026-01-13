@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProcessRouteImport } from './routes/process'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as ContactRouteImport } from './routes/contact'
+import { Route as InquireRouteImport } from './routes/inquire'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -27,9 +27,9 @@ const PortfolioRoute = PortfolioRouteImport.update({
   path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const InquireRoute = InquireRouteImport.update({
+  id: '/inquire',
+  path: '/inquire',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientPortalRoute = ClientPortalRouteImport.update({
@@ -56,7 +56,7 @@ const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/client-portal': typeof ClientPortalRoute
-  '/contact': typeof ContactRoute
+  '/inquire': typeof InquireRoute
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -65,7 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/client-portal': typeof ClientPortalRoute
-  '/contact': typeof ContactRoute
+  '/inquire': typeof InquireRoute
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -75,7 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/client-portal': typeof ClientPortalRoute
-  '/contact': typeof ContactRoute
+  '/inquire': typeof InquireRoute
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -86,7 +86,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/client-portal'
-    | '/contact'
+    | '/inquire'
     | '/portfolio'
     | '/process'
     | '/demo/form/address'
@@ -95,7 +95,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/client-portal'
-    | '/contact'
+    | '/inquire'
     | '/portfolio'
     | '/process'
     | '/demo/form/address'
@@ -104,7 +104,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/client-portal'
-    | '/contact'
+    | '/inquire'
     | '/portfolio'
     | '/process'
     | '/demo/form/address'
@@ -114,7 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClientPortalRoute: typeof ClientPortalRoute
-  ContactRoute: typeof ContactRoute
+  InquireRoute: typeof InquireRoute
   PortfolioRoute: typeof PortfolioRoute
   ProcessRoute: typeof ProcessRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
@@ -137,11 +137,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
+    '/inquire': {
+      id: '/inquire'
+      path: '/inquire'
+      fullPath: '/inquire'
+      preLoaderRoute: typeof InquireRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client-portal': {
@@ -178,7 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClientPortalRoute: ClientPortalRoute,
-  ContactRoute: ContactRoute,
+  InquireRoute: InquireRoute,
   PortfolioRoute: PortfolioRoute,
   ProcessRoute: ProcessRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,

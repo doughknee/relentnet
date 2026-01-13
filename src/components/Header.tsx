@@ -1,15 +1,8 @@
 import { Link } from '@tanstack/react-router'
 
-interface HeaderProps {
-  variant?: 'home' | 'default'
-}
-
-export function Header({ variant = 'default' }: HeaderProps) {
-  const isHome = variant === 'home'
-  
-  const containerClasses = isHome
-    ? "absolute top-0 w-full flex justify-between items-center p-8 z-50 mix-blend-difference"
-    : "fixed top-0 w-full flex justify-between items-center p-8 z-50 mix-blend-difference bg-[#050505]/50 backdrop-blur-sm"
+export function Header() {
+  const containerClasses =
+    'fixed top-0 w-full flex justify-between items-center p-8 z-50 bg-[#050505]/50 backdrop-blur-sm text-[#e5e5e5]'
 
   return (
     <nav className={containerClasses}>
@@ -37,7 +30,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
         </Link>
       </div>
       <Link
-        to="/contact"
+        to="/inquire"
         className="border border-white/20 px-6 py-3 text-xs tracking-widest uppercase hover:bg-[#E1BE4C] hover:border-[#E1BE4C] hover:text-black transition-all duration-500 [&.active]:bg-[#E1BE4C] [&.active]:text-black [&.active]:border-[#E1BE4C]"
       >
         Inquire

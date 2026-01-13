@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Header } from '@/components/Header'
 
 export const Route = createFileRoute('/process')({
   component: Process,
@@ -8,9 +7,6 @@ export const Route = createFileRoute('/process')({
 function Process() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
-      {/* NAVIGATION */}
-      <Header />
-
       {/* HERO SECTION */}
       <section className="pt-48 pb-24 px-4 flex flex-col justify-center items-center relative">
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl text-center leading-[1.1] animate-fade-in-up">
@@ -24,7 +20,7 @@ function Process() {
       </section>
 
       {/* STEPS SECTION */}
-      <section className="py-24 px-6 md:px-20 relative z-10 backdrop-blur-xs">
+      <section className="py-24  px-6 md:px-20 relative z-10 bg-[#050505]/50 backdrop-blur-sm border-y border-white/10">
         <div className="max-w-5xl mx-auto space-y-24">
           {/* Step 1 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center group">
@@ -110,12 +106,12 @@ function Process() {
       </section>
 
       {/* CTA */}
-      <section className="py-32 flex flex-col justify-center items-center text-center px-4 relative z-10 border-t border-white/5">
+      <section className="py-32 flex flex-col justify-center items-center text-center px-4 relative z-10 ">
         <p className="text-xs font-bold tracking-[0.3em] text-neutral-500 uppercase mb-8">
           The Next Step
         </p>
         <Link
-          to="/contact"
+          to="/inquire"
           className="font-serif text-4xl md:text-7xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
         >
           Begin the Process.
@@ -123,7 +119,7 @@ function Process() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
+      <footer className="py-12 px-8 border-t border-white/10 bg-[#050505]/50 backdrop-blur-sm flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
         <div className="space-y-2">
           <p>© RelentNet 2026</p>
           <p>Nashville • Baton Rouge</p>

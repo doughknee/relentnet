@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Header } from '@/components/Header'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -8,9 +7,6 @@ export const Route = createFileRoute('/')({
 function HomeComponent() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
-      {/* 1. NAVIGATION */}
-      <Header variant="home" />
-
       {/* 2. HERO SECTION */}
       <section className="h-screen flex flex-col justify-center items-center px-4 relative">
         {/* --- HERO CONTENT --- */}
@@ -49,8 +45,8 @@ function HomeComponent() {
       </section>
 
       {/* 3. THE MANIFESTO */}
-      <section className="py-32 px-6 md:px-20 relative z-10 backdrop-blur-xs">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+      <section className="py-32 px-6 md:px-20 relative z-10 bg-[#050505]/50 backdrop-blur-sm border-y border-white/10">
+        <div className="max-w-7xl pb-24 mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
           <div>
             <h2 className="text-xs font-bold tracking-[0.3em] text-[#E1BE4C] uppercase mb-6">
               The Philosophy
@@ -78,10 +74,6 @@ function HomeComponent() {
             </p>
           </div>
         </div>
-      </section>
-
-      {/* 4. THE CONCIERGE SERVICE */}
-      <section className="py-32 backdrop-blur-xs relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="group border-l border-white/10 pl-8 hover:border-[#E1BE4C] transition-colors duration-500">
@@ -126,7 +118,7 @@ function HomeComponent() {
           Are you ready?
         </p>
         <Link
-          to="/contact"
+          to="/inquire"
           className="font-serif text-5xl md:text-8xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
         >
           Let's Talk.
@@ -140,7 +132,7 @@ function HomeComponent() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
+      <footer className="py-12 px-8 bg-[#050505]/50 backdrop-blur-sm border-y border-white/10 flex flex-col md:flex-row justify-between items-end text-[10px] uppercase tracking-widest text-neutral-600 relative z-10">
         <div className="space-y-2">
           <p>© RelentNet 2026</p>
           <p>Nashville • Baton Rouge</p>

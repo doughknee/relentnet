@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Header } from '@/components/Header'
 
 export const Route = createFileRoute('/portfolio')({
   component: Portfolio,
@@ -8,9 +7,6 @@ export const Route = createFileRoute('/portfolio')({
 function Portfolio() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
-      {/* NAVIGATION */}
-      <Header />
-
       {/* HERO SECTION */}
       <section className="pt-48 pb-24 px-4 flex flex-col justify-center items-center relative">
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl text-center leading-[1.1] animate-fade-in-up">
@@ -18,8 +14,8 @@ function Portfolio() {
           <span className="italic text-[#E1BE4C]/90">Excellence.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-center text-neutral-400 font-light text-lg leading-relaxed animate-fade-in-up delay-200">
-          A selection of digital experiences crafted with precision, purpose, and
-          an unyielding commitment to quality.
+          A selection of digital experiences crafted with precision, purpose,
+          and an unyielding commitment to quality.
         </p>
       </section>
 
@@ -104,8 +100,8 @@ function Portfolio() {
               <div className="md:col-span-4 space-y-6">
                 <p className="text-neutral-500 leading-relaxed text-sm">
                   A virtual tour platform and digital archive for a contemporary
-                  art museum. Enabling global access to local masterpieces through
-                  high-fidelity rendering.
+                  art museum. Enabling global access to local masterpieces
+                  through high-fidelity rendering.
                 </p>
                 <ul className="text-xs text-neutral-600 uppercase tracking-widest space-y-2 border-l border-white/10 pl-4">
                   <li>3D Rendering</li>
@@ -124,7 +120,7 @@ function Portfolio() {
           Your Turn
         </p>
         <Link
-          to="/contact"
+          to="/inquire"
           className="font-serif text-4xl md:text-7xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
         >
           Build Your Legacy.
