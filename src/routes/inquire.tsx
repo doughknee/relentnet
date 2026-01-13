@@ -99,9 +99,13 @@ function Contact() {
                   Office Locations
                 </h4>
                 <p className="text-sm text-neutral-400 leading-relaxed">
-                  <strong className="text-white">Tennessee, Louisiana, Georgia, Florida</strong>
+                  <strong className="text-white">
+                    Tennessee, Louisiana, Georgia, Florida
+                  </strong>
                   <br />
-                  <span className="text-xs text-neutral-500">Available for in-person consultation</span>
+                  <span className="text-xs text-neutral-500">
+                    Available for in-person consultation
+                  </span>
                 </p>
               </div>
 
@@ -158,8 +162,8 @@ function Contact() {
                 </div>
                 <h3 className="text-2xl font-serif">Message Received.</h3>
                 <p className="text-neutral-400 max-w-md">
-                  Your vision has been received. A RelentNet partner will reach
-                  out shortly via your preferred method.
+                  Your vision has been received. A senior partner will review
+                  your inquiry and contact you within 24 hours.
                 </p>
                 <button
                   onClick={() => setIsSuccess(false)}
@@ -616,7 +620,9 @@ function Contact() {
                                           }
                                           className="accent-[#E1BE4C]"
                                         />
-                                        <span className="text-sm">{option}</span>
+                                        <span className="text-sm">
+                                          {option}
+                                        </span>
                                       </label>
                                     ))}
                                   </div>

@@ -46,7 +46,7 @@ function HomeComponent() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-pulse z-10">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-pulse delay-1000 z-10">
           <span className="text-[10px] uppercase tracking-widest text-[#E1BE4C]">
             Scroll
           </span>

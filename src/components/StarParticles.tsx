@@ -97,7 +97,7 @@ const StarParticles = () => {
           },
         },
       },
-      detectRetina: true,
+      detectRetina: false,
     }),
     [],
   )
