@@ -17,12 +17,12 @@ export const Route = createFileRoute('/portfolio')({
 
 function Portfolio() {
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
+    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-gold selection:text-black overflow-hidden">
       {/* HERO SECTION */}
       <section className="pt-48 pb-24 px-4 flex flex-col justify-center items-center relative">
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl text-center leading-[1.1] animate-fade-in-up">
           Curated <br />
-          <span className="italic text-[#E1BE4C]/90">Excellence.</span>
+          <span className="italic text-gold/90">Excellence.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-center text-neutral-400 font-light text-lg leading-relaxed animate-fade-in-up delay-200">
           A selection of digital experiences crafted with precision, purpose,
@@ -39,7 +39,7 @@ function Portfolio() {
             style={{ animationDelay: '200ms' }}
           >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-              <div className="md:col-span-8 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-[#E1BE4C]/30 transition-colors duration-500">
+              <div className="md:col-span-8 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-gold/30 transition-colors duration-500">
                 {/* Placeholder for Project Image */}
                 <div className="absolute inset-0 z-10">
                   <img
@@ -56,7 +56,7 @@ function Portfolio() {
                 </div>
               </div>
               <div className="md:col-span-4 space-y-6">
-                <span className="text-[#E1BE4C] text-[10px] tracking-[0.3em] uppercase mb-2 block">
+                <span className="text-gold text-[10px] tracking-[0.3em] uppercase mb-2 block">
                   Real Estate
                 </span>
                 <h3 className="text-3xl md:text-4xl font-serif text-white">
@@ -84,7 +84,7 @@ function Portfolio() {
           >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
               <div className="md:col-span-4 order-2 md:order-1 space-y-6 md:text-right">
-                <span className="text-[#E1BE4C] text-[10px] tracking-[0.3em] uppercase mb-2 block">
+                <span className="text-gold text-[10px] tracking-[0.3em] uppercase mb-2 block">
                   Construction
                 </span>
                 <h3 className="text-3xl md:text-4xl font-serif text-white">
@@ -102,7 +102,7 @@ function Portfolio() {
                   <li>Streamlined UX</li>
                 </ul>
               </div>
-              <div className="md:col-span-8 order-1 md:order-2 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-[#E1BE4C]/30 transition-colors duration-500">
+              <div className="md:col-span-8 order-1 md:order-2 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-gold/30 transition-colors duration-500">
                 {/* Placeholder for Project Image */}
                 <div className="absolute inset-0 z-10">
                   <img
@@ -127,7 +127,7 @@ function Portfolio() {
             style={{ animationDelay: '600ms' }}
           >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-              <div className="md:col-span-8 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-[#E1BE4C]/30 transition-colors duration-500">
+              <div className="md:col-span-8 relative overflow-hidden aspect-video bg-neutral-900 border border-white/5 group-hover:border-gold/30 transition-colors duration-500">
                 {/* Placeholder for Project Image */}
                 <div className="absolute inset-0 z-10">
                   <img
@@ -144,7 +144,7 @@ function Portfolio() {
                 </div>
               </div>
               <div className="md:col-span-4 space-y-6">
-                <span className="text-[#E1BE4C] text-[10px] tracking-[0.3em] uppercase mb-2 block">
+                <span className="text-gold text-[10px] tracking-[0.3em] uppercase mb-2 block">
                   Technology
                 </span>
                 <h3 className="text-3xl md:text-4xl font-serif text-white">
@@ -177,7 +177,7 @@ function Portfolio() {
         </p>
         <Link
           to="/inquire"
-          className="font-serif text-4xl md:text-7xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
+          className="font-serif text-4xl md:text-7xl hover:italic hover:text-gold transition-all duration-300"
         >
           Build Your Legacy.
         </Link>

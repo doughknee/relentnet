@@ -16,12 +16,12 @@ export const Route = createFileRoute('/process')({
 
 function Process() {
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
+    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-gold selection:text-black overflow-hidden">
       {/* HERO SECTION */}
       <section className="pt-48 pb-24 px-4 flex flex-col justify-center items-center relative">
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl text-center leading-[1.1] animate-fade-in-up">
           Precision in <br />
-          <span className="italic text-[#E1BE4C]/90">Every Pixel.</span>
+          <span className="italic text-gold/90">Every Pixel.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-center text-neutral-400 font-light text-lg leading-relaxed animate-fade-in-up delay-200">
           Our process is not a checklist. It is a rigorous discipline designed
@@ -38,7 +38,7 @@ function Process() {
             style={{ animationDelay: '300ms' }}
           >
             <div className="order-2 md:order-1 space-y-4">
-              <span className="text-[#E1BE4C] text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-gold text-xs font-bold tracking-[0.3em] uppercase">
                 Phase 01
               </span>
               <h3 className="text-3xl font-serif">Discovery & Strategy</h3>
@@ -50,7 +50,7 @@ function Process() {
               </p>
             </div>
             <div className="order-1 md:order-2 flex justify-center md:justify-end">
-              <div className="text-9xl font-serif text-white/30 group-hover:text-[#E1BE4C]/70 transition-colors duration-500">
+              <div className="text-9xl font-serif text-white/30 group-hover:text-gold/70 transition-colors duration-500">
                 01
               </div>
             </div>
@@ -62,7 +62,7 @@ function Process() {
             style={{ animationDelay: '500ms' }}
           >
             <div className="order-2 md:order-2 space-y-4 md:text-right">
-              <span className="text-[#E1BE4C] text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-gold text-xs font-bold tracking-[0.3em] uppercase">
                 Phase 02
               </span>
               <h3 className="text-3xl font-serif">Design & Architecture</h3>
@@ -73,7 +73,7 @@ function Process() {
               </p>
             </div>
             <div className="order-1 md:order-1 flex justify-center md:justify-start">
-              <div className="text-9xl font-serif text-white/30 group-hover:text-[#E1BE4C]/70 transition-colors duration-500">
+              <div className="text-9xl font-serif text-white/30 group-hover:text-gold/70 transition-colors duration-500">
                 02
               </div>
             </div>
@@ -85,7 +85,7 @@ function Process() {
             style={{ animationDelay: '700ms' }}
           >
             <div className="order-2 md:order-1 space-y-4">
-              <span className="text-[#E1BE4C] text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-gold text-xs font-bold tracking-[0.3em] uppercase">
                 Phase 03
               </span>
               <h3 className="text-3xl font-serif">Development & Refinement</h3>
@@ -96,7 +96,7 @@ function Process() {
               </p>
             </div>
             <div className="order-1 md:order-2 flex justify-center md:justify-end">
-              <div className="text-9xl font-serif text-white/30 group-hover:text-[#E1BE4C]/70 transition-colors duration-500">
+              <div className="text-9xl font-serif text-white/30 group-hover:text-gold/70 transition-colors duration-500">
                 03
               </div>
             </div>
@@ -108,7 +108,7 @@ function Process() {
             style={{ animationDelay: '900ms' }}
           >
             <div className="order-2 md:order-2 space-y-4 md:text-right">
-              <span className="text-[#E1BE4C] text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-gold text-xs font-bold tracking-[0.3em] uppercase">
                 Phase 04
               </span>
               <h3 className="text-3xl font-serif">Launch & Stewardship</h3>
@@ -119,7 +119,7 @@ function Process() {
               </p>
             </div>
             <div className="order-1 md:order-1 flex justify-center md:justify-start">
-              <div className="text-9xl font-serif text-white/30 group-hover:text-[#E1BE4C]/70 transition-colors duration-500">
+              <div className="text-9xl font-serif text-white/30 group-hover:text-gold/70 transition-colors duration-500">
                 04
               </div>
             </div>
@@ -137,7 +137,7 @@ function Process() {
         </p>
         <Link
           to="/inquire"
-          className="font-serif text-4xl md:text-7xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
+          className="font-serif text-4xl md:text-7xl hover:italic hover:text-gold transition-all duration-300"
         >
           Begin the Process.
         </Link>

@@ -16,13 +16,13 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-[#E1BE4C] selection:text-black overflow-hidden">
+    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] font-sans selection:bg-gold selection:text-black overflow-hidden">
       {/* 2. HERO SECTION */}
       <section className="h-screen flex flex-col justify-center items-center px-4 relative">
         {/* --- HERO CONTENT --- */}
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl lg:text-9xl text-center leading-[1.1] opacity-0 animate-fade-in-up">
           Empower Your <br />
-          <span className="italic text-[#E1BE4C]/90">Digital Presence.</span>
+          <span className="italic text-gold/90">Digital Presence.</span>
         </h1>
 
         <div
@@ -38,7 +38,7 @@ function HomeComponent() {
             <span className="text-[10px] tracking-[0.3em] uppercase text-neutral-500">
               Tennessee • Georgia
             </span>
-            <div className="w-1 h-1 bg-[#E1BE4C] rounded-full shadow-[0_0_10px_#E1BE4C]"></div>
+            <div className="w-1 h-1 bg-gold rounded-full shadow-[0_0_10px_var(--color-gold)]"></div>
             <span className="text-[10px] tracking-[0.3em] uppercase text-neutral-500">
               Florida • Louisiana
             </span>
@@ -47,10 +47,10 @@ function HomeComponent() {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-pulse delay-1000 z-10">
-          <span className="text-[10px] uppercase tracking-widest text-[#E1BE4C]">
+          <span className="text-[10px] uppercase tracking-widest text-gold">
             Scroll
           </span>
-          <div className="w-px h-12 bg-linear-to-b from-[#E1BE4C] to-transparent"></div>
+          <div className="w-px h-12 bg-linear-to-b from-gold to-transparent"></div>
         </div>
       </section>
 
@@ -58,7 +58,7 @@ function HomeComponent() {
       <section className="py-32 px-6 md:px-20 relative z-10 bg-[#050505]/20 backdrop-blur-xs border-y border-white/10">
         <div className="max-w-7xl pb-24 mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-xs font-bold tracking-[0.3em] text-[#E1BE4C] uppercase mb-6">
+            <h2 className="text-xs font-bold tracking-[0.3em] text-gold uppercase mb-6">
               The Philosophy
             </h2>
             <h3 className="font-serif text-4xl md:text-5xl leading-tight mb-8">
@@ -71,7 +71,7 @@ function HomeComponent() {
             <p>
               In a world of templates and automated responses, RelentNet offers
               the antidote:
-              <strong className="text-[#E1BE4C] font-normal">
+              <strong className="text-gold font-normal">
                 {' '}
                 radical human attention.
               </strong>
@@ -86,8 +86,8 @@ function HomeComponent() {
         </div>
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="group border-l border-white/10 pl-8 hover:border-[#E1BE4C] transition-colors duration-500">
-              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-[#E1BE4C] transition-colors">
+            <div className="group border-l border-white/10 pl-8 hover:border-gold transition-colors duration-500">
+              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-gold transition-colors">
                 01
               </span>
               <h4 className="text-xl mb-3 tracking-wide">Bespoke Creation</h4>
@@ -96,8 +96,8 @@ function HomeComponent() {
                 your business goals.
               </p>
             </div>
-            <div className="group border-l border-white/10 pl-8 hover:border-[#E1BE4C] transition-colors duration-500">
-              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-[#E1BE4C] transition-colors">
+            <div className="group border-l border-white/10 pl-8 hover:border-gold transition-colors duration-500">
+              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-gold transition-colors">
                 02
               </span>
               <h4 className="text-xl mb-3 tracking-wide">
@@ -108,8 +108,8 @@ function HomeComponent() {
                 the business; we own the tech.
               </p>
             </div>
-            <div className="group border-l border-white/10 pl-8 hover:border-[#E1BE4C] transition-colors duration-500">
-              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-[#E1BE4C] transition-colors">
+            <div className="group border-l border-white/10 pl-8 hover:border-gold transition-colors duration-500">
+              <span className="block text-4xl font-serif text-white/20 mb-4 group-hover:text-gold transition-colors">
                 03
               </span>
               <h4 className="text-xl mb-3 tracking-wide">Personal Access</h4>
@@ -129,7 +129,7 @@ function HomeComponent() {
         </p>
         <Link
           to="/inquire"
-          className="font-serif text-5xl md:text-8xl hover:italic hover:text-[#E1BE4C] transition-all duration-300"
+          className="font-serif text-5xl md:text-8xl hover:italic hover:text-gold transition-all duration-300"
         >
           Let's Talk.
         </Link>
