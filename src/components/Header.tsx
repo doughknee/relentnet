@@ -26,7 +26,7 @@ export function Header() {
       {/* Desktop Center — absolutely positioned for true centering */}
       <div className="hidden md:flex gap-12 text-xs tracking-[0.15em] uppercase opacity-80 absolute left-1/2 -translate-x-1/2">
         <Link to="/process" className={linkClasses}>
-          Our Process
+          The Discipline
         </Link>
         <Link to="/portfolio" className={linkClasses}>
           The Work
@@ -69,7 +69,7 @@ export function Header() {
             Home
           </Link>
           <Link to="/process" onClick={closeMenu} className={linkClasses}>
-            Our Process
+            The Discipline
           </Link>
           <Link to="/portfolio" onClick={closeMenu} className={linkClasses}>
             The Work
