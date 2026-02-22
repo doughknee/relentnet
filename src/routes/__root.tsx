@@ -103,7 +103,9 @@ export const Route = createRootRoute({
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <StarParticles />
         <Header />
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>
         <Footer />
         <TanStackDevtools
           config={{
