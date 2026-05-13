@@ -17,7 +17,7 @@ export const Route = createFileRoute('/process')({
       {
         name: 'description',
         content:
-          'How RelentNet diagnoses workflow friction, designs custom software systems, and stewards technology for owner-led businesses.',
+          'How RelentNet uses a diagnostic-led process to clarify workflow friction, prioritize the right operational problem, and build only what earns its place.',
       },
     ],
   }),
@@ -35,16 +35,23 @@ interface Phase {
 }
 
 export const processHero = {
-  headline: 'How We Turn Workflow Friction Into Operating Systems.',
-  body: 'We diagnose how the business actually runs, design the workflow, build custom software systems around it, and steward the technology after launch.',
-  cta: 'Map My Workflow',
+  headline: 'Diagnostic-Led Technology Stewardship.',
+  body: 'The workflow diagnostic clarifies what is broken before we build. From there, we prioritize the friction, design the right system, and steward the technology after launch.',
+  cta: 'Start With a Diagnostic',
+} as const
+
+export const processCta = {
+  headline: 'Start with diagnosis. Build from evidence.',
+  body: 'Share the operational friction first. The workflow diagnostic determines whether the next move is a system, automation, stewardship, or no build at all.',
+  label: 'Start With a Diagnostic',
+  to: '/diagnostic',
 } as const
 
 export const phases: Array<Phase> = [
   {
     number: '01',
-    label: 'Discover',
-    title: 'Discover the Workflow',
+    label: 'Diagnose',
+    title: 'Diagnose the Workflow',
     quote: 'We begin with how the business actually moves.',
     description:
       'We map intake, sales, fulfillment, communication, reporting, and the tools your team already relies on before recommending a build.',
@@ -58,8 +65,8 @@ export const phases: Array<Phase> = [
   },
   {
     number: '02',
-    label: 'Diagnose',
-    title: 'Diagnose the Friction',
+    label: 'Prioritize',
+    title: 'Prioritize the Friction',
     quote: 'The right system starts with the right problem.',
     description:
       'We identify duplicated effort, missed follow-ups, fragile handoffs, unclear reporting, and the points where disconnected software slows the business down.',
@@ -247,8 +254,8 @@ function Process() {
       {/* HERO */}
       <section className="min-h-screen flex flex-col justify-center items-center px-6 relative">
         <h1 className="relative z-10 font-serif text-5xl md:text-7xl lg:text-8xl text-center leading-[1.1] animate-fade-in-up">
-          How We Turn Workflow Friction Into{' '}
-          <span className="italic text-gold/90">Operating Systems.</span>
+          Diagnostic-Led{' '}
+          <span className="italic text-gold/90">Technology Stewardship.</span>
         </h1>
         <p
           className="mt-8 max-w-2xl text-center text-ink-sub font-light text-base md:text-lg leading-relaxed opacity-0 animate-fade-in-up"
@@ -256,6 +263,15 @@ function Process() {
         >
           {processHero.body}
         </p>
+
+        <Link
+          to="/diagnostic"
+          className="relative z-10 mt-10 inline-flex items-center justify-center gap-3 border border-gold bg-gold px-7 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold opacity-0 animate-fade-in-up"
+          style={{ animationDelay: '350ms' }}
+        >
+          {processHero.cta}
+          <ArrowRight className="size-4" />
+        </Link>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-pulse delay-1000 z-10">
@@ -276,8 +292,8 @@ function Process() {
             Every engagement follows the shape of the business.
             <br />
             <span className="text-black/15 dark:text-white/30">
-              Discover the workflow. Diagnose the friction. Build what should
-              exist.
+              Diagnose the workflow. Prioritize the friction. Build what earns
+              its place.
             </span>
           </p>
         </div>
@@ -298,11 +314,18 @@ function Process() {
         <p className="text-xs font-bold tracking-[0.3em] text-ink-muted uppercase mb-8">
           The Next Step
         </p>
+        <h2 className="font-serif text-4xl md:text-7xl max-w-4xl">
+          {processCta.headline}
+        </h2>
+        <p className="mt-6 max-w-2xl text-ink-muted text-sm md:text-base leading-relaxed">
+          {processCta.body}
+        </p>
         <Link
-          to="/inquire"
-          className="font-serif text-4xl md:text-7xl hover:italic hover:text-gold transition-all duration-300"
+          to={processCta.to}
+          className="mt-10 inline-flex items-center justify-center gap-3 border border-gold bg-gold px-7 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold"
         >
-          Begin the Process.
+          {processCta.label}
+          <ArrowRight className="size-4" />
         </Link>
       </section>
     </div>

@@ -21,11 +21,11 @@ import { siteConfig } from '@/site.config'
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'RelentNet | Custom Software Stewardship' },
+      { title: siteConfig.meta.title },
       {
         name: 'description',
         content:
-          'White-glove technology partnership for owner-led businesses. We diagnose operational friction, build custom software systems, and steward the technology long-term.',
+          'White-glove technology partnership for owner-led businesses. Start with a workflow diagnostic, then build and steward the technology worth creating.',
       },
     ],
   }),
@@ -45,8 +45,8 @@ interface ServiceLane {
 
 export const homepageHero = {
   headline: 'Your business has outgrown disconnected tools.',
-  body: 'RelentNet designs, builds, and stewards custom software systems for owners who need operations to move cleaner, faster, and with less friction.',
-  primaryCta: 'Map My Workflow',
+  body: 'RelentNet starts with a workflow diagnostic to map operational friction before prescribing software. When the path is clear, we design, build, and steward the technology worth creating.',
+  primaryCta: 'Start With a Workflow Diagnostic',
   secondaryCta: 'See Problems We Solve',
 } as const
 
@@ -61,54 +61,54 @@ export const operationalPains = [
 
 export const methodSteps: Array<MethodStep> = [
   {
-    title: 'Discover',
-    description:
-      'We listen closely to how the business actually runs: intake, sales, fulfillment, communication, and reporting.',
-  },
-  {
     title: 'Diagnose',
     description:
-      'We identify the bottlenecks, duplicated effort, missed opportunities, and fragile handoffs that software can remove.',
+      'We map how work actually moves through intake, sales, fulfillment, communication, reporting, and follow-up.',
+  },
+  {
+    title: 'Prioritize',
+    description:
+      'We separate symptoms from root friction and identify the opportunities most worth fixing first.',
   },
   {
     title: 'Design',
     description:
-      'We map the workflow, interface, data model, and implementation plan before a build ever begins.',
+      'We define the workflow, interface, data model, and implementation plan only after the problem is clear.',
   },
   {
     title: 'Build',
     description:
-      'We create the system with clean engineering, sharp interfaces, and enough flexibility to grow with the business.',
+      'When software is the right answer, we create the system with clean engineering and focused user experience.',
   },
   {
     title: 'Steward',
     description:
-      'We stay close after launch: hosting, monitoring, improvements, support, and continued strategic iteration.',
+      'We stay close after launch with hosting, monitoring, improvements, support, and continued strategic iteration.',
   },
 ]
 
 export const problemsSolved = [
   'Lead intake',
-  'Quoting workflows',
-  'Scheduling systems',
-  'Client portals',
-  'Reporting dashboards',
-  'Document operations',
-  'Automation layers',
-  'Internal tools',
+  'Manual handoffs',
+  'Disconnected tools',
+  'Follow-up loops',
+  'Reporting gaps',
+  'Client communication',
+  'Admin drag',
+  'Internal visibility',
 ] as const
 
 const serviceLanes: Array<ServiceLane> = [
   {
-    title: 'Workflow Discovery',
+    title: 'Workflow Diagnostic',
     description:
-      'Paid operational audits that turn unclear business friction into a concrete software opportunity map.',
+      'A focused first engagement that turns unclear business friction into a practical technology path.',
     icon: Search,
   },
   {
-    title: 'Custom Software Systems',
+    title: 'Build Recommendation',
     description:
-      'Portals, dashboards, intake tools, reporting systems, and internal workflows built around how the company actually operates.',
+      'A clear decision on whether the next move is a custom system, focused automation, stewardship, or no build at all.',
     icon: Workflow,
   },
   {
@@ -183,7 +183,7 @@ function HomeComponent() {
               style={{ animationDelay: '300ms' }}
             >
               <Link
-                to="/inquire"
+                to="/diagnostic"
                 className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-7 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold"
               >
                 {homepageHero.primaryCta}
@@ -418,7 +418,7 @@ function HomeComponent() {
             Start with the workflow
           </p>
           <Link
-            to="/inquire"
+            to="/diagnostic"
             className={`group font-serif text-4xl md:text-7xl hover:text-gold transition-all duration-300 ${
               ctaReveal.isRevealed ? 'animate-fade-in-up' : 'opacity-0'
             }`}
@@ -426,7 +426,7 @@ function HomeComponent() {
               ctaReveal.isRevealed ? { animationDelay: '150ms' } : undefined
             }
           >
-            Map My Workflow.
+            Start with the workflow. Build only what earns its place.
             <ArrowRight className="inline-block ml-4 size-8 md:size-12 text-gold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
           </Link>
           <p
@@ -437,8 +437,9 @@ function HomeComponent() {
               ctaReveal.isRevealed ? { animationDelay: '300ms' } : undefined
             }
           >
-            Bring the messy process, disconnected tools, and manual work. We
-            will help you find the leverage.
+            Share the operational friction, disconnected tools, and manual work
+            slowing the business down. We use that context to determine whether
+            a workflow diagnostic is the right first step.
           </p>
         </div>
       </section>

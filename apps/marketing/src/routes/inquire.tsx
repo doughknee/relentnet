@@ -9,11 +9,11 @@ import { siteConfig } from '@/site.config'
 export const Route = createFileRoute('/inquire')({
   head: () => ({
     meta: [
-      { title: 'Map Your Workflow | RelentNet Inquiry' },
+      { title: 'Request a Workflow Diagnostic | RelentNet' },
       {
         name: 'description',
         content:
-          'Start a workflow mapping conversation with RelentNet. Share the operational friction, disconnected tools, and custom software opportunity inside your business.',
+          'Request a RelentNet Workflow Diagnostic by sharing the operational friction, disconnected tools, and workflow context inside your business.',
       },
     ],
   }),
@@ -21,9 +21,9 @@ export const Route = createFileRoute('/inquire')({
 })
 
 export const inquiryContent = {
-  headline: 'Map Your Workflow.',
-  body: 'Tell us where the business feels slow, manual, disconnected, or hard to see. We will review the workflow context and determine the best next step for the operational friction.',
-  successTitle: 'Workflow Context Received.',
+  headline: 'Request a Workflow Diagnostic.',
+  body: 'Tell us where the business feels slow, manual, disconnected, or hard to see. We will use the diagnostic request to understand the operational friction before recommending the next step.',
+  successTitle: 'Diagnostic Request Received.',
   successBody:
     'We will review the workflow context, look for the clearest operational opportunity, and follow up with the best next step.',
 } as const
@@ -96,8 +96,8 @@ function Contact() {
           <div className="lg:col-span-5 space-y-12">
             <div className="animate-fade-in-up opacity-0">
               <h1 className="font-serif text-5xl md:text-6xl leading-[1.1] mb-6">
-                Map Your <br />
-                <span className="italic text-gold">Workflow.</span>
+                Request a <br />
+                <span className="italic text-gold">Diagnostic.</span>
               </h1>
               <p className="text-ink-sub font-light text-lg leading-relaxed">
                 {inquiryContent.body}
@@ -697,7 +697,7 @@ function Contact() {
                         fullWidth
                         disabled={!canSubmit || isSubmitting}
                       >
-                        {isSubmitting ? 'Sending...' : 'Request Consultation'}
+                        {isSubmitting ? 'Sending...' : 'Request Diagnostic'}
                       </Button>
                     )}
                   />

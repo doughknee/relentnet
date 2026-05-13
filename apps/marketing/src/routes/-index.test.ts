@@ -1,30 +1,26 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  homepageHero,
-  methodSteps,
-  operationalPains,
-  problemsSolved,
-} from './index'
+import { homepageHero, methodSteps, problemsSolved } from './index'
 
-describe('homepage positioning content', () => {
-  it('leads with workflow and custom software positioning', () => {
+describe('homepage positioning', () => {
+  it('leads with workflow diagnosis before custom software', () => {
     expect(homepageHero.headline).toBe(
       'Your business has outgrown disconnected tools.',
     )
-    expect(homepageHero.body).toContain('custom software systems')
-    expect(homepageHero.primaryCta).toBe('Map My Workflow')
+    expect(homepageHero.body).toContain('workflow diagnostic')
+    expect(homepageHero.body).toContain('before prescribing software')
+    expect(homepageHero.primaryCta).toBe('Start With a Workflow Diagnostic')
   })
 
-  it('names operational pain, method, and problems solved', () => {
-    expect(operationalPains).toContain('Spreadsheet chaos')
+  it('explains the diagnostic-to-stewardship path', () => {
     expect(methodSteps.map((step) => step.title)).toEqual([
-      'Discover',
       'Diagnose',
+      'Prioritize',
       'Design',
       'Build',
       'Steward',
     ])
-    expect(problemsSolved).toContain('Client portals')
+    expect(problemsSolved).toContain('Reporting gaps')
+    expect(problemsSolved).toContain('Manual handoffs')
   })
 })

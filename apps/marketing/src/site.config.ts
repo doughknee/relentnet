@@ -9,9 +9,9 @@ export const siteConfig = {
   },
   regions: ['Tennessee', 'Louisiana', 'Georgia', 'Florida'],
   meta: {
-    title: 'RelentNet | Custom Software Stewardship',
+    title: 'RelentNet | Workflow Diagnostic & Technology Stewardship',
     description:
-      'White-glove technology partnership for owner-led businesses. We diagnose workflow friction, build custom software systems, and steward the technology long-term.',
+      'White-glove technology partnership for owner-led businesses. We diagnose operational friction with a workflow diagnostic, then clarify what technology is worth building.',
     ogImage: '/logo512.png',
   },
   social: {

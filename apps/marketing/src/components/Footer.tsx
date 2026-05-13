@@ -25,8 +25,8 @@ export function Footer() {
         <p>{regionsShort}</p>
       </div>
       <div className="flex gap-6 mt-6 md:mt-0">
-        <Link to="/inquire" className="hover:text-gold transition-colors">
-          Map Workflow
+        <Link to="/diagnostic" className="hover:text-gold transition-colors">
+          Diagnostic
         </Link>
         <Link to="/portal" className="hover:text-gold transition-colors">
           Client Portal

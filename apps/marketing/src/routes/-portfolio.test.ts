@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest'
 
-import { caseStudies } from './portfolio'
+import { caseStudies, portfolioCta, portfolioIntro } from './portfolio'
 
-describe('work case studies', () => {
-  it('presents work as workflow outcomes instead of iframe previews', () => {
-    expect(caseStudies.length).toBeGreaterThanOrEqual(4)
-    expect(caseStudies.every((study) => study.problem.length > 0)).toBe(true)
+describe('portfolio case studies', () => {
+  it('frames work as diagnosed friction becoming useful systems', () => {
+    expect(portfolioIntro.headline).toContain('Diagnosed friction')
+    expect(portfolioIntro.body).toContain('workflow diagnostic')
+    expect(caseStudies).toHaveLength(5)
     expect(caseStudies.every((study) => study.diagnosis.length > 0)).toBe(true)
-    expect(caseStudies.every((study) => study.build.length > 0)).toBe(true)
-    expect(caseStudies.every((study) => study.outcome.length > 0)).toBe(true)
-    expect(
-      caseStudies.some((study) => study.systemType.includes('Workflow')),
-    ).toBe(true)
+  })
+
+  it('routes the final CTA to the workflow diagnostic', () => {
+    expect(portfolioCta.to).toBe('/diagnostic')
+    expect(portfolioCta.label).toBe('Start With a Diagnostic')
   })
 })

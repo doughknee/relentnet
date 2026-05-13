@@ -8,7 +8,7 @@ export const Route = createFileRoute('/portfolio')({
       {
         name: 'description',
         content:
-          'Outcome-focused case studies showing how RelentNet identifies workflow friction and builds custom software systems for owner-led businesses.',
+          'Diagnostic-first proof from RelentNet case studies, showing how diagnosed workflow friction becomes useful systems and clearer operations.',
       },
     ],
   }),
@@ -26,6 +26,21 @@ interface CaseStudy {
   build: string
   outcome: string
 }
+
+export const portfolioIntro = {
+  headlinePrefix: 'Diagnosed friction.',
+  headlineAccent: 'Useful systems.',
+  headlineSuffix: 'Clearer operations.',
+  headline: 'Diagnosed friction. Useful systems. Clearer operations.',
+  body: 'These case studies show the same pattern behind the workflow diagnostic: understand the operational friction, clarify the system worth creating, then build what helps the business move cleaner.',
+} as const
+
+export const portfolioCta = {
+  headline: 'See the friction in your own operation?',
+  body: 'Start with a workflow diagnostic before deciding what should be built.',
+  label: 'Start With a Diagnostic',
+  to: '/diagnostic',
+} as const
 
 export const caseStudies: Array<CaseStudy> = [
   {
@@ -199,14 +214,17 @@ function Portfolio() {
           Workflow problems solved
         </p>
         <h1 className="font-serif text-5xl md:text-7xl lg:text-9xl leading-[1.05] animate-fade-in-up">
-          The <span className="italic text-gold/90">Work.</span>
+          {portfolioIntro.headlinePrefix}{' '}
+          <span className="italic text-gold/90">
+            {portfolioIntro.headlineAccent}
+          </span>{' '}
+          {portfolioIntro.headlineSuffix}
         </h1>
         <p
           className="mt-8 max-w-2xl text-ink-muted text-sm md:text-lg font-light leading-relaxed opacity-0 animate-fade-in-up"
           style={{ animationDelay: '200ms' }}
         >
-          Not iframe previews. Proof that we can study a business, find the
-          operational leverage, and build the system around it.
+          {portfolioIntro.body}
         </p>
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-pulse delay-1000 z-10">
           <span className="text-[10px] uppercase tracking-widest text-gold">
@@ -224,12 +242,18 @@ function Portfolio() {
         <p className="text-xs font-bold tracking-[0.3em] text-ink-muted uppercase mb-8">
           Your bottleneck, next
         </p>
+        <h2 className="font-serif text-4xl md:text-7xl max-w-4xl">
+          {portfolioCta.headline}
+        </h2>
+        <p className="mt-6 max-w-2xl text-ink-muted text-sm md:text-base leading-relaxed">
+          {portfolioCta.body}
+        </p>
         <Link
-          to="/inquire"
-          className="group font-serif text-4xl md:text-7xl hover:text-gold transition-all duration-300"
+          to={portfolioCta.to}
+          className="group mt-10 inline-flex items-center justify-center gap-3 border border-gold bg-gold px-7 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold"
         >
-          Map My Workflow.
-          <ArrowRight className="inline-block ml-4 size-8 md:size-12 text-gold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+          {portfolioCta.label}
+          <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </section>
     </div>

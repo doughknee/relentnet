@@ -4,8 +4,27 @@ import { useState } from 'react'
 
 import { ThemeToggle } from '@/components/ThemeToggle'
 
-const linkClasses =
-  'hover:text-gold transition-colors duration-300 [&.active]:text-gold'
+export const linkClasses = 'hover:text-gold transition-colors duration-300'
+export const activeLinkClasses = 'text-gold'
+export const activeCtaClasses = 'bg-gold text-black border-gold'
+
+const ctaClasses =
+  'border border-line px-6 py-3 text-xs tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500'
+
+const mobileCtaClasses =
+  'border border-line px-8 py-4 text-sm tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500'
+
+export const primaryNavItems = [
+  { label: 'Diagnostic', to: '/diagnostic' },
+  { label: 'Process', to: '/process' },
+  { label: 'Work', to: '/portfolio' },
+  { label: 'Portal', to: '/portal' },
+] as const
+
+export const utilityCta = {
+  label: 'Start Diagnostic',
+  to: '/diagnostic',
+} as const
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,25 +44,29 @@ export function Header() {
 
       {/* Desktop Center — absolutely positioned for true centering */}
       <div className="hidden md:flex gap-12 text-xs tracking-[0.15em] uppercase opacity-80 absolute left-1/2 -translate-x-1/2">
-        <Link to="/process" className={linkClasses}>
-          Process
-        </Link>
-        <Link to="/portfolio" className={linkClasses}>
-          The Work
-        </Link>
-        <Link to="/portal" className={linkClasses}>
-          Portal
-        </Link>
+        {primaryNavItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={linkClasses}
+            activeProps={{ className: activeLinkClasses }}
+            activeOptions={{ exact: true }}
+          >
+            {item.label}
+          </Link>
+        ))}
       </div>
 
       {/* Desktop Right — utility + CTA */}
       <div className="hidden md:flex items-center gap-6">
         <ThemeToggle />
         <Link
-          to="/inquire"
-          className="border border-line px-6 py-3 text-xs tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500 [&.active]:bg-gold [&.active]:text-black [&.active]:border-gold"
+          to={utilityCta.to}
+          className={ctaClasses}
+          activeProps={{ className: activeCtaClasses }}
+          activeOptions={{ exact: true }}
         >
-          Inquire
+          {utilityCta.label}
         </Link>
       </div>
 
@@ -65,25 +88,36 @@ export function Header() {
         }`}
       >
         <div className="flex flex-col gap-12 text-center text-xl tracking-[0.2em] uppercase font-light items-center">
-          <Link to="/" onClick={closeMenu} className={linkClasses}>
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className={linkClasses}
+            activeProps={{ className: activeLinkClasses }}
+            activeOptions={{ exact: true }}
+          >
             Home
           </Link>
-          <Link to="/process" onClick={closeMenu} className={linkClasses}>
-            Process
-          </Link>
-          <Link to="/portfolio" onClick={closeMenu} className={linkClasses}>
-            The Work
-          </Link>
-          <Link to="/portal" onClick={closeMenu} className={linkClasses}>
-            Client Portal
-          </Link>
+          {primaryNavItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={closeMenu}
+              className={linkClasses}
+              activeProps={{ className: activeLinkClasses }}
+              activeOptions={{ exact: true }}
+            >
+              {item.label === 'Portal' ? 'Client Portal' : item.label}
+            </Link>
+          ))}
           <ThemeToggle />
           <Link
-            to="/inquire"
+            to={utilityCta.to}
             onClick={closeMenu}
-            className="border border-line px-8 py-4 text-sm tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500 [&.active]:bg-gold [&.active]:text-black [&.active]:border-gold"
+            className={mobileCtaClasses}
+            activeProps={{ className: activeCtaClasses }}
+            activeOptions={{ exact: true }}
           >
-            Inquire
+            {utilityCta.label}
           </Link>
         </div>
       </div>

@@ -14,6 +14,7 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as InquireRouteImport } from './routes/inquire'
+import { Route as DiagnosticRouteImport } from './routes/diagnostic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalIndexRouteImport } from './routes/legal/index'
 import { Route as LegalDocIdRouteImport } from './routes/legal/$docId'
@@ -43,6 +44,11 @@ const InquireRoute = InquireRouteImport.update({
   path: '/inquire',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiagnosticRoute = DiagnosticRouteImport.update({
+  id: '/diagnostic',
+  path: '/diagnostic',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,6 +67,7 @@ const LegalDocIdRoute = LegalDocIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/portfolio': typeof PortfolioRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/portfolio': typeof PortfolioRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/portfolio': typeof PortfolioRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/portfolio'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/portfolio'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/portfolio'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DiagnosticRoute: typeof DiagnosticRoute
   InquireRoute: typeof InquireRoute
   PortalRoute: typeof PortalRoute
   PortfolioRoute: typeof PortfolioRoute
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InquireRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/diagnostic': {
+      id: '/diagnostic'
+      path: '/diagnostic'
+      fullPath: '/diagnostic'
+      preLoaderRoute: typeof DiagnosticRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,6 +217,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DiagnosticRoute: DiagnosticRoute,
   InquireRoute: InquireRoute,
   PortalRoute: PortalRoute,
   PortfolioRoute: PortfolioRoute,

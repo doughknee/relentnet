@@ -9,7 +9,7 @@ export const Route = createFileRoute('/portal')({
       {
         name: 'description',
         content:
-          'Secure access for active RelentNet clients. Prospects can start with a workflow mapping inquiry.',
+          'Secure access for active RelentNet clients. Prospects should start with a workflow diagnostic before requesting a build.',
       },
     ],
   }),
@@ -20,8 +20,8 @@ export const portalContent = {
   headline: 'Client Access',
   body: 'Secure access for active RelentNet clients with systems, support, and stewardship already in motion.',
   prospectBody:
-    'If you are not a client yet, start by sharing the workflow or operational friction you want mapped.',
-  prospectCta: 'Start with a workflow map',
+    'If you are not a client yet, start with a workflow diagnostic so we can understand the operational friction before recommending a build.',
+  prospectCta: 'Start with a workflow diagnostic',
 } as const
 
 function Portal() {
@@ -89,7 +89,7 @@ function Portal() {
             {portalContent.prospectBody}
           </p>
           <Link
-            to="/inquire"
+            to="/diagnostic"
             className="mt-4 inline-flex text-xs uppercase tracking-widest text-gold hover:underline"
           >
             {portalContent.prospectCta}

@@ -1,22 +1,27 @@
 import { describe, expect, it } from 'vitest'
 
-import { phases, processHero } from './process'
+import { phases, processCta, processHero } from './process'
 
 describe('process route content', () => {
-  it('positions the process around workflow diagnosis and stewardship', () => {
-    expect(processHero.headline).toContain('How We Turn Workflow Friction')
-    expect(processHero.body).toContain('diagnose')
-    expect(processHero.body).toContain('custom software systems')
-    expect(processHero.body).toContain('steward')
+  it('positions process as diagnostic-led stewardship', () => {
+    expect(processHero.headline).toContain('Diagnostic-Led')
+    expect(processHero.body).toContain('workflow diagnostic')
+    expect(processHero.body).toContain('before we build')
+    expect(processHero.cta).toBe('Start With a Diagnostic')
   })
 
-  it('covers discover, diagnose, design, build, and steward phases', () => {
+  it('keeps diagnose, prioritize, design, build, and steward phases', () => {
     expect(phases.map((phase) => phase.title)).toEqual([
-      'Discover the Workflow',
-      'Diagnose the Friction',
+      'Diagnose the Workflow',
+      'Prioritize the Friction',
       'Design the System',
       'Build the Operating Layer',
       'Steward the Technology',
     ])
+  })
+
+  it('routes the final CTA to the workflow diagnostic', () => {
+    expect(processCta.to).toBe('/diagnostic')
+    expect(processCta.label).toBe('Start With a Diagnostic')
   })
 })
