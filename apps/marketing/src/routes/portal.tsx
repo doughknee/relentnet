@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
@@ -8,12 +8,21 @@ export const Route = createFileRoute('/portal')({
       { title: 'Client Portal | RelentNet' },
       {
         name: 'description',
-        content: 'Secure client access for RelentNet services.',
+        content:
+          'Secure access for active RelentNet clients. Prospects can start with a workflow mapping inquiry.',
       },
     ],
   }),
   component: Portal,
 })
+
+export const portalContent = {
+  headline: 'Client Access',
+  body: 'Secure access for active RelentNet clients with systems, support, and stewardship already in motion.',
+  prospectBody:
+    'If you are not a client yet, start by sharing the workflow or operational friction you want mapped.',
+  prospectCta: 'Start with a workflow map',
+} as const
 
 function Portal() {
   return (
@@ -24,7 +33,7 @@ function Portal() {
             Client <span className="italic text-gold">Access</span>
           </h1>
           <p className="text-ink-sub text-sm font-light">
-            Enter your credentials to manage your account.
+            {portalContent.body}
           </p>
         </div>
 
@@ -73,6 +82,18 @@ function Portal() {
           >
             Forgot Password?
           </a>
+        </div>
+
+        <div className="mt-8 border-t border-line-faint pt-6 text-center">
+          <p className="text-xs leading-relaxed text-ink-muted">
+            {portalContent.prospectBody}
+          </p>
+          <Link
+            to="/inquire"
+            className="mt-4 inline-flex text-xs uppercase tracking-widest text-gold hover:underline"
+          >
+            {portalContent.prospectCta}
+          </Link>
         </div>
       </div>
     </div>

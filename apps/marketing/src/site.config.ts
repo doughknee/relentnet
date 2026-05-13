@@ -9,9 +9,9 @@ export const siteConfig = {
   },
   regions: ['Tennessee', 'Louisiana', 'Georgia', 'Florida'],
   meta: {
-    title: 'RelentNet | Bespoke Digital Stewardship',
+    title: 'RelentNet | Custom Software Stewardship',
     description:
-      'Bespoke digital creation and white-glove website management. We build digital legacies with radical human attention.',
+      'White-glove technology partnership for owner-led businesses. We diagnose workflow friction, build custom software systems, and steward the technology long-term.',
     ogImage: '/logo512.png',
   },
   social: {

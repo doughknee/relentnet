@@ -9,16 +9,24 @@ import { siteConfig } from '@/site.config'
 export const Route = createFileRoute('/inquire')({
   head: () => ({
     meta: [
-      { title: 'Initiate Stewardship | RelentNet Executive Inquire' },
+      { title: 'Map Your Workflow | RelentNet Inquiry' },
       {
         name: 'description',
         content:
-          'Transition your digital vision from abstract to absolute. Request a private consultation for bespoke development and concierge infrastructure management.',
+          'Start a workflow mapping conversation with RelentNet. Share the operational friction, disconnected tools, and custom software opportunity inside your business.',
       },
     ],
   }),
   component: Contact,
 })
+
+export const inquiryContent = {
+  headline: 'Map Your Workflow.',
+  body: 'Tell us where the business feels slow, manual, disconnected, or hard to see. We will review the workflow context and determine the best next step for the operational friction.',
+  successTitle: 'Workflow Context Received.',
+  successBody:
+    'We will review the workflow context, look for the clearest operational opportunity, and follow up with the best next step.',
+} as const
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState(false)
@@ -30,7 +38,11 @@ function Contact() {
       companyName: '',
       email: '',
       currentUrl: '',
-      projectNature: 'new_build' as 'new_build' | 'rebuild' | 'management',
+      projectNature: 'workflow_discovery' as
+        | 'workflow_discovery'
+        | 'custom_system'
+        | 'stewardship'
+        | 'not_sure',
       hasDeadline: false,
       deadlineDate: '',
       vision: '',
@@ -84,13 +96,11 @@ function Contact() {
           <div className="lg:col-span-5 space-y-12">
             <div className="animate-fade-in-up opacity-0">
               <h1 className="font-serif text-5xl md:text-6xl leading-[1.1] mb-6">
-                Start the <br />
-                <span className="italic text-gold">Conversation.</span>
+                Map Your <br />
+                <span className="italic text-gold">Workflow.</span>
               </h1>
               <p className="text-ink-sub font-light text-lg leading-relaxed">
-                You have a vision. We have the architecture to build it. Tell us
-                about your project, and we will determine if RelentNet is the
-                right steward for your digital legacy.
+                {inquiryContent.body}
               </p>
             </div>
 
@@ -164,10 +174,11 @@ function Contact() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-serif">Message Received.</h3>
+                <h3 className="text-2xl font-serif">
+                  {inquiryContent.successTitle}
+                </h3>
                 <p className="text-ink-sub max-w-md">
-                  Your vision has been received. A senior partner will review
-                  your inquiry and contact you within 24 hours.
+                  {inquiryContent.successBody}
                 </p>
                 <button
                   onClick={() => setIsSuccess(false)}
@@ -188,7 +199,7 @@ function Contact() {
                 {/* STEP 1: BASICS */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-serif italic text-black/25 dark:text-white/50 border-b border-line-faint pb-2">
-                    01. The Basics
+                    01. Business Context
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <form.Field
@@ -211,7 +222,7 @@ function Contact() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="John Doe"
+                            placeholder="Full name"
                           />
                           {field.state.meta.errors.length ? (
                             <em className="text-xs text-red-500">
@@ -241,7 +252,7 @@ function Contact() {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="Relentless Industries"
+                            placeholder="Company or organization"
                           />
                           {field.state.meta.errors.length ? (
                             <em className="text-xs text-red-500">
@@ -295,7 +306,7 @@ function Contact() {
                           htmlFor={field.name}
                           className="text-xs uppercase tracking-widest text-ink-muted"
                         >
-                          Current Website
+                          Current Website or Tool URL
                         </label>
                         <Input
                           id={field.name}
@@ -303,7 +314,7 @@ function Contact() {
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="https://..."
+                          placeholder="Existing site, portal, CRM, spreadsheet, or tool link"
                         />
                         {field.state.meta.errors.length ? (
                           <em className="text-xs text-red-500">
@@ -318,7 +329,7 @@ function Contact() {
                 {/* STEP 2: THE PROJECT */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-serif italic text-black/25 dark:text-white/50 border-b border-line-faint pb-2">
-                    02. The Project
+                    02. Workflow Friction
                   </h3>
 
                   <form.Field
@@ -329,23 +340,25 @@ function Contact() {
                           htmlFor={field.name}
                           className="text-xs uppercase tracking-widest text-ink-muted"
                         >
-                          Current State *
+                          Best Starting Point *
                         </label>
                         <div className="space-y-2">
                           {[
                             {
-                              label: 'New Build (I do not have a website yet)',
-                              value: 'new_build',
+                              label: 'Workflow discovery',
+                              value: 'workflow_discovery',
                             },
                             {
-                              label:
-                                'Rebuild & Elevate (I want to replace my current site)',
-                              value: 'rebuild',
+                              label: 'Custom software system',
+                              value: 'custom_system',
                             },
                             {
-                              label:
-                                'Management Takeover (I need better hosting/updates)',
-                              value: 'management',
+                              label: 'Technology stewardship',
+                              value: 'stewardship',
+                            },
+                            {
+                              label: 'Not sure yet',
+                              value: 'not_sure',
                             },
                           ].map((option) => (
                             <label
@@ -358,7 +371,9 @@ function Contact() {
                                 value={option.value}
                                 checked={field.state.value === option.value}
                                 onChange={() =>
-                                  field.handleChange(option.value as any)
+                                  field.handleChange(
+                                    option.value as typeof field.state.value,
+                                  )
                                 }
                                 className="accent-gold"
                               />
@@ -385,7 +400,7 @@ function Contact() {
                             className="w-4 h-4 accent-gold bg-inset border-line"
                           />
                           <span className="text-sm text-ink-sub">
-                            Is there a firm deadline for this project?
+                            Is there a firm urgency for this workflow?
                           </span>
                         </label>
                       </div>
@@ -408,7 +423,7 @@ function Contact() {
                                 htmlFor={field.name}
                                 className="text-xs uppercase tracking-widest text-ink-muted"
                               >
-                                Target Launch Date *
+                                Urgency Date *
                               </label>
                               <Input
                                 id={field.name}
@@ -446,7 +461,8 @@ function Contact() {
                           htmlFor={field.name}
                           className="text-xs uppercase tracking-widest text-ink-muted"
                         >
-                          The Vision *
+                          What workflow, tool, or operational problem should we
+                          understand? *
                         </label>
                         <Textarea
                           id={field.name}
@@ -454,7 +470,7 @@ function Contact() {
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="Tell us about your goals, design preferences, or the specific problems you are trying to solve..."
+                          placeholder="Describe the workflow pain, disconnected tools, reporting gaps, or manual process slowing the business down."
                           rows={4}
                         />
                         {field.state.meta.errors.length ? (

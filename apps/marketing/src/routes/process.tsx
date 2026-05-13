@@ -13,11 +13,11 @@ import type { LucideIcon } from 'lucide-react'
 export const Route = createFileRoute('/process')({
   head: () => ({
     meta: [
-      { title: 'The Discipline | Our Bespoke Creation Process' },
+      { title: 'Process | RelentNet Workflow Stewardship' },
       {
         name: 'description',
         content:
-          'A rigorous architectural methodology for custom application development. From strategic discovery to long-term stewardship. No friction, just execution.',
+          'How RelentNet diagnoses workflow friction, designs custom software systems, and stewards technology for owner-led businesses.',
       },
     ],
   }),
@@ -34,65 +34,85 @@ interface Phase {
   icon: LucideIcon
 }
 
-const phases: Array<Phase> = [
+export const processHero = {
+  headline: 'How We Turn Workflow Friction Into Operating Systems.',
+  body: 'We diagnose how the business actually runs, design the workflow, build custom software systems around it, and steward the technology after launch.',
+  cta: 'Map My Workflow',
+} as const
+
+export const phases: Array<Phase> = [
   {
     number: '01',
-    label: 'Phase 01',
-    title: 'Discovery & Strategy',
-    quote:
-      'We don\u2019t start building until we understand what success looks like.',
+    label: 'Discover',
+    title: 'Discover the Workflow',
+    quote: 'We begin with how the business actually moves.',
     description:
-      'We begin by listening. We map the terrain of your industry, identify your unique value proposition, and define the architectural requirements necessary to support your long-term goals.',
+      'We map intake, sales, fulfillment, communication, reporting, and the tools your team already relies on before recommending a build.',
     deliverables: [
-      'Stakeholder interviews & needs analysis',
-      'Competitive landscape audit',
-      'Requirements architecture',
-      'Strategic roadmap & milestones',
+      'Workflow interviews',
+      'Current-tool inventory',
+      'Operational pain map',
+      'Opportunity summary',
     ],
     icon: Compass,
   },
   {
     number: '02',
-    label: 'Phase 02',
-    title: 'Design & Architecture',
-    quote: 'Function precedes form, yet form defines feeling.',
+    label: 'Diagnose',
+    title: 'Diagnose the Friction',
+    quote: 'The right system starts with the right problem.',
     description:
-      'We prototype high-fidelity interfaces that align with your brand identity while engineering a scalable backend infrastructure designed to grow with your business.',
+      'We identify duplicated effort, missed follow-ups, fragile handoffs, unclear reporting, and the points where disconnected software slows the business down.',
     deliverables: [
-      'Wireframes & interactive prototyping',
-      'Visual identity system',
-      'Component architecture',
-      'Responsive design across every breakpoint',
+      'Bottleneck analysis',
+      'Data and handoff review',
+      'Risk and priority notes',
+      'Recommended system scope',
     ],
     icon: Layers,
   },
   {
     number: '03',
-    label: 'Phase 03',
-    title: 'Development & Refinement',
-    quote: 'Every line of code is an investment in your future.',
+    label: 'Design',
+    title: 'Design the System',
+    quote: 'A clear workflow becomes a clear interface.',
     description:
-      'Clean code is our craft. We build with modern frameworks, ensuring speed, security, and accessibility. Rigorous testing eliminates friction before it ever reaches your audience.',
+      'We define the screens, data model, permissions, automations, and implementation sequence before production development begins.',
     deliverables: [
-      'Production-grade implementation',
-      'Performance optimization & auditing',
-      'Accessibility compliance (WCAG 2.2)',
-      'Cross-browser & device QA',
+      'Workflow blueprint',
+      'Interface direction',
+      'Data model outline',
+      'Implementation roadmap',
+    ],
+    icon: Layers,
+  },
+  {
+    number: '04',
+    label: 'Build',
+    title: 'Build the Operating Layer',
+    quote: 'The software should fit the business, not the other way around.',
+    description:
+      'We build portals, dashboards, internal tools, automations, and reporting systems with clean engineering and focused user experience.',
+    deliverables: [
+      'Production implementation',
+      'Responsive interface build',
+      'Integration and workflow testing',
+      'Launch preparation',
     ],
     icon: Terminal,
   },
   {
-    number: '04',
-    label: 'Phase 04',
-    title: 'Launch & Stewardship',
-    quote: 'The launch is not the finish line. It\u2019s the starting line.',
+    number: '05',
+    label: 'Steward',
+    title: 'Steward the Technology',
+    quote: 'The launch is the start of the operating relationship.',
     description:
-      'Deployment is not the end. We provide white-glove support, handling updates, security monitoring, and content changes so you can focus on leading your business.',
+      'We stay close after launch with hosting, monitoring, maintenance, security support, and ongoing improvements as the business changes.',
     deliverables: [
-      'Deployment & infrastructure monitoring',
-      'Security patching & updates',
-      'Content management & revisions',
-      'Ongoing performance optimization',
+      'Hosting and monitoring',
+      'Security and dependency care',
+      'Support and iteration',
+      'Ongoing roadmap guidance',
     ],
     icon: ShieldCheck,
   },
@@ -226,15 +246,15 @@ function Process() {
     <div className="min-h-screen overflow-hidden">
       {/* HERO */}
       <section className="min-h-screen flex flex-col justify-center items-center px-6 relative">
-        <h1 className="relative z-10 font-serif text-5xl md:text-7xl lg:text-9xl text-center leading-[1.1] animate-fade-in-up">
-          The <span className="italic text-gold/90">Discipline.</span>
+        <h1 className="relative z-10 font-serif text-5xl md:text-7xl lg:text-8xl text-center leading-[1.1] animate-fade-in-up">
+          How We Turn Workflow Friction Into{' '}
+          <span className="italic text-gold/90">Operating Systems.</span>
         </h1>
         <p
-          className="mt-8 max-w-xl text-center text-ink-sub font-light text-base md:text-lg leading-relaxed opacity-0 animate-fade-in-up"
+          className="mt-8 max-w-2xl text-center text-ink-sub font-light text-base md:text-lg leading-relaxed opacity-0 animate-fade-in-up"
           style={{ animationDelay: '200ms' }}
         >
-          Our process is not a checklist. It is a rigorous methodology designed
-          to translate your abstract vision into a concrete digital legacy.
+          {processHero.body}
         </p>
 
         {/* Scroll indicator */}
@@ -253,10 +273,11 @@ function Process() {
             The Approach
           </h2>
           <p className="font-serif text-2xl md:text-4xl leading-snug max-w-3xl mx-auto animate-fade-in-up opacity-0 delay-200">
-            Every engagement follows four phases.
+            Every engagement follows the shape of the business.
             <br />
             <span className="text-black/15 dark:text-white/30">
-              No shortcuts. No handoffs. No surprises.
+              Discover the workflow. Diagnose the friction. Build what should
+              exist.
             </span>
           </p>
         </div>
