@@ -1,9 +1,10 @@
-# AGENTS.md — RelentNet v3
+# AGENTS.md — RelentNet
 
 ## Project Overview
 
-RelentNet is a client-facing marketing and inquiry site for a bespoke web development agency.
-SPA built with React 19, Vite 7, TanStack Router (file-based routing), TanStack Form,
+RelentNet is a monorepo for RelentNet-owned apps, shared packages, templates, and deployment configuration.
+The current production app is `apps/marketing`, a client-facing marketing and inquiry site.
+The marketing app is an SPA built with React 19, Vite 7, TanStack Router (file-based routing), TanStack Form,
 Tailwind CSS 4, and TypeScript in strict mode. No SSR — this is a client-only Vite app.
 
 ## Tech Stack
@@ -26,13 +27,16 @@ Tailwind CSS 4, and TypeScript in strict mode. No SSR — this is a client-only 
 
 ```sh
 npm run dev         # Start dev server on port 3000
-npm run build       # Production build (vite build && tsc)
+npm run build       # Production build for apps/marketing
 npm run preview     # Preview production build
-npm run test        # Run all tests (vitest run)
+npm run test        # Run all tests (vitest run --passWithNoTests)
 npm run lint        # Run ESLint
+npm run typecheck   # Run TypeScript check
 npm run format      # Run Prettier
 npm run check       # Auto-fix: prettier --write . && eslint --fix
 ```
+
+Root commands proxy to the `@relentnet/marketing` workspace. Use `npm run <script> -w @relentnet/marketing` when you need to run a workspace script directly.
 
 ### Running a single test
 
@@ -47,35 +51,33 @@ Note: No `vitest.config.ts` exists — Vitest uses the Vite config directly.
 ## Project Structure
 
 ```
-src/
-├── components/          # Reusable UI components
-│   ├── ui/              # Primitives (Button, Input, Textarea)
-│   ├── legal/           # Legal document content components
-│   ├── Header.tsx       # Fixed nav with mobile menu
-│   ├── Footer.tsx       # Site footer
-│   ├── NotFound.tsx     # 404 page
-│   └── StarParticles.tsx
-├── data/                # Static data (legalDocs.ts)
-├── routes/              # TanStack file-based routes
-│   ├── __root.tsx       # Root layout (Header, Footer, Outlet, Devtools)
-│   ├── index.tsx        # Home page
-│   ├── inquire.tsx      # Contact form (TanStack Form)
-│   ├── portfolio.tsx    # Portfolio / case studies
-│   ├── process.tsx      # Process page
-│   ├── portal.tsx       # Client portal
-│   ├── sow.tsx          # Statement of work
-│   └── legal/           # Legal docs (dynamic $docId route)
-├── site.config.ts       # Centralized site metadata & contact info
-├── styles.css           # Tailwind import + custom animations
-├── main.tsx             # App entry point (router setup)
-├── routeTree.gen.ts     # Auto-generated — DO NOT edit
-└── reportWebVitals.ts   # Web vitals reporting
+apps/
+├── marketing/           # Current public RelentNet site
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── data/        # Static data (legalDocs.ts)
+│   │   ├── routes/      # TanStack file-based routes
+│   │   ├── site.config.ts
+│   │   ├── styles.css
+│   │   ├── main.tsx
+│   │   ├── routeTree.gen.ts # Auto-generated — DO NOT edit
+│   │   └── reportWebVitals.ts
+│   ├── public/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── portal/              # Reserved for future client portal
+packages/                # Reserved for future shared packages
+templates/               # Reserved for future project starters
+compose.yaml             # Docker Compose / Coolify entrypoint
 ```
 
 ## Routing
 
 - **File-based routing** via `@tanstack/router-plugin/vite` with `autoCodeSplitting: true`.
-- `src/routeTree.gen.ts` is auto-generated — never edit it manually.
+- `apps/marketing/src/routeTree.gen.ts` is auto-generated — never edit it manually.
 - Each route file exports `Route` created with `createFileRoute('/path')`.
 - Route components are defined as named functions (not arrow-function default exports).
 - Use `<Link to="/path">` from `@tanstack/react-router` for navigation.
@@ -120,7 +122,7 @@ import type { ISourceOptions } from '@tsparticles/engine'
 - **Named function exports** for components: `export function Button() {}`.
 - Route page components use plain named functions (not exported): `function HomeComponent() {}`.
 - One exception: `StarParticles` uses `export default` (arrow function) — prefer named exports for new code.
-- UI primitives live in `src/components/ui/` and extend native HTML element props via interfaces.
+- UI primitives live in `apps/marketing/src/components/ui/` and extend native HTML element props via interfaces.
 - Props interfaces use `interface` (not `type`), extending native HTML attributes where applicable.
 
 ### TypeScript
@@ -146,7 +148,7 @@ import type { ISourceOptions } from '@tsparticles/engine'
 
 ### Styling
 
-- Tailwind CSS 4 with `@import 'tailwindcss'` in `src/styles.css`.
+- Tailwind CSS 4 with `@import 'tailwindcss'` in `apps/marketing/src/styles.css`.
 - Custom theme tokens defined in `@theme {}` block: `--color-gold`, `--color-gold-dim`.
 - Dark theme by default (background `#050505`, text `#e5e5e5`).
 - Utility classes inline on elements — no separate CSS modules or styled-components.
@@ -162,12 +164,12 @@ import type { ISourceOptions } from '@tsparticles/engine'
 
 ### Site Configuration
 
-All site metadata, contact info, and regional data is centralized in `src/site.config.ts`.
+All site metadata, contact info, and regional data is centralized in `apps/marketing/src/site.config.ts`.
 Always reference `siteConfig` instead of hardcoding values for domain, email, phone, or regions.
 
 ## Do NOT
 
-- Edit `src/routeTree.gen.ts` — it is auto-generated by the router plugin.
+- Edit `apps/marketing/src/routeTree.gen.ts` — it is auto-generated by the router plugin.
 - Add SSR or migrate to TanStack Start unless explicitly requested.
 - Use default exports for new components (exception: existing `StarParticles`).
 - Hardcode site metadata — use `siteConfig` from `src/site.config.ts`.
