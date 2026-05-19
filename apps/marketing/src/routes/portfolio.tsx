@@ -86,23 +86,23 @@ function CaseStudySection({
                 </div>
               )}
 
-              <a
-                href={study.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-8 inline-flex items-center gap-2 text-sm text-gold uppercase tracking-widest hover:gap-3 transition-all duration-300"
-              >
-                View live site
-                <ExternalLink className="size-4" />
-              </a>
               <Link
                 to="/portfolio/$slug"
                 params={{ slug: study.slug }}
-                className="mt-3 inline-flex items-center gap-2 text-sm text-ink uppercase tracking-widest hover:text-gold transition-colors"
+                className="mt-8 inline-flex items-center gap-2 text-sm text-gold uppercase tracking-widest hover:gap-3 transition-all duration-300"
               >
                 Read the case study
                 <ArrowRight className="size-4" />
               </Link>
+              <a
+                href={study.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-2 text-sm text-ink-muted uppercase tracking-widest hover:text-ink transition-colors"
+              >
+                View live site
+                <ExternalLink className="size-4" />
+              </a>
             </div>
           </div>
 
