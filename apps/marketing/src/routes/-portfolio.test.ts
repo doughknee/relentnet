@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { portfolioCta, portfolioIntro } from './portfolio'
 import { caseStudies } from '@/data/caseStudies'
 
+
 describe('portfolio case studies', () => {
   it('frames work as diagnosed friction becoming useful systems', () => {
     expect(portfolioIntro.headline).toContain('Diagnosed friction')

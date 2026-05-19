@@ -1,8 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowRight, ExternalLink } from 'lucide-react'
 
-import { caseStudies } from '@/data/caseStudies'
-import type { CaseStudy } from '@/data/caseStudies'
+import type {CaseStudy} from '@/data/caseStudies';
+import {  caseStudies } from '@/data/caseStudies'
 
 export const Route = createFileRoute('/portfolio')({
   head: () => ({
