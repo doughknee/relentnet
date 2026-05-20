@@ -75,67 +75,98 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
   {
     slug: 'scrollr',
     name: 'Scrollr',
-    url: 'https://myscrollr.relentnet.dev',
-    industry: 'Trading & Analytics',
-    systemType: 'Workflow Platform',
+    url: 'https://myscrollr.com',
+    industry: 'Consumer Software',
+    systemType: 'Cross-Platform Desktop Product',
     summary: {
       problem:
-        'Market signals, ticker behavior, and user preferences were scattered across disconnected surfaces instead of one operational product experience.',
+        'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
       diagnosis:
-        'The product needed a configurable signal workflow that could serve analysts and traders without forcing every user into the same dashboard.',
+        'The build was unsalvageable, but the underlying idea was bigger than a Chrome extension for sports. The product needed to be reframed as a configurable, cross-platform live-data ticker with room to grow beyond a single domain.',
       build:
-        'A SaaS-style signal ticker with personalized dashboards, real-time data presentation, and extension-ready product architecture.',
+        'A complete redesign and rebuild: native desktop app, decoupled channel architecture, multi-source real-time pipeline, and a community-extensible plugin model that lets new data sources ship without disturbing the rest of the product.',
       outcome:
-        'Scrollr became a sharper product system: easier to explain, easier to demo, and better aligned with how traders actually consume signals.',
+        'Scrollr has reached beta with the original founders. The product now reads as a coherent platform rather than a fragile sports extension — installable on macOS, Windows, and Linux, open-source, and architected to keep growing.',
     },
     hero: {
       tagline:
-        'A configurable signal workflow that fits how traders and analysts actually consume the market.',
+        'A quiet, always-visible desktop ticker for live scores, prices, headlines, and fantasy — rebuilt from a brittle Chrome extension into a cross-platform native product.',
       image: {
         src: '/scrollr_portfolio.png',
-        alt: 'Scrollr dashboard preview',
+        alt: 'Scrollr desktop ticker preview',
         width: 1440,
         height: 810,
       },
     },
     atAGlance: {
-      role: 'Product design, build, hosting',
+      engagementYear: '2024–present',
+      role: 'Product strategy, design, full-stack engineering, devops, hosting, ongoing stewardship',
+      stack: [
+        'Tauri v2',
+        'React 19',
+        'Vite 7',
+        'TanStack Router',
+        'Tailwind 4',
+        'Go (Fiber)',
+        'Rust (tokio)',
+        'PostgreSQL',
+        'Redis',
+        'Sequin CDC',
+        'Logto',
+      ],
     },
     story: {
       problem: [
         p(
-          'Scrollr started life as a collection of useful surfaces — a signal ticker here, a watchlist there, a settings panel somewhere else — without a workflow holding them together. Users had to assemble the product in their heads each time they opened it.',
+          'Daniel, a RelentNet co-founder, first met the Scrollr team at an incubator pop-up where they were openly looking for a developer partner. Phil and three partners had raised funding around a clear vision — a fantasy sports ticker bar that sat at the edge of the screen while you watched a game in a browser — and had paid several developers across two earlier builds to get there.',
         ),
         p(
-          'For an audience that lives inside fast-moving market data, fragmented surfaces are not just inelegant. They make it harder to trust the data, harder to compare signals over time, and harder to explain to a new user what Scrollr actually is.',
+          'What they had to show for it was a Chrome-extension-only product, useful only inside the browser, useful only during sports seasons, and structurally fragile. Each round of paid work had left behind a different developer\u2019s code, none of it stitched together cleanly, none of it in source control or organized in a way the team could keep growing on.',
+        ),
+        p(
+          'The team was not short on vision or commitment. They were short on a foundation that could carry it.',
         ),
       ],
       diagnosis: [
         p(
-          'The workflow diagnostic showed that traders and analysts were not looking for more features. They were looking for one place where their preferred signals lived, behaved consistently, and could be reconfigured without losing context.',
+          'Daniel was the first one to look at the codebase and call the shot: this would have to be a full rebuild. Brandon, the other RelentNet co-founder, came in for a second look specifically to see what could be salvaged — and arrived at the same conclusion. The Firebase-bound architecture was too rigid and too tangled to extend; every additional fix would be paying interest on the wrong foundation.',
         ),
         p(
-          'The right move was not to add more dashboards. It was to make a single, configurable signal workflow the spine of the product and let everything else reorganize around it.',
+          'The deeper diagnosis was about scope, not just code. A ticker that lived inside a browser and only ran during sports seasons was a much smaller product than what the team was actually capable of shipping. The real opportunity was to decouple the ticker from the browser, broaden it past sports, and design the system so new data sources could be added without rebuilding the product each time.',
         ),
       ],
       build: [
         p(
-          'We rebuilt Scrollr around personalized dashboards, real-time signal presentation, and an extension-ready product architecture so new signal types could be added without disturbing the workflow users had already shaped.',
+          'Over the months that followed, we sat down with the original idea and reshaped it. RSS feeds for live headlines, market data for finance, fantasy league integration, and a desktop-native shell that could run alongside any application — not just a browser tab. The product\u2019s identity moved from "Chrome extension for sports" to "always-visible desktop ticker for whatever data matters to you."',
         ),
         p(
-          'Ticker behavior, preferences, and data presentation were unified under one configuration model. The product began behaving like an operational tool rather than a collection of widgets.',
+          'The architecture we landed on is intentionally decoupled. A Go core API handles routing, authentication via self-hosted Logto, and real-time delivery over per-user Redis pub/sub channels streamed to clients via Server-Sent Events. Rust services ingest from each source on their own schedules — TwelveData WebSockets for market data, ESPN for sports, RSS feeds for news, Yahoo for fantasy — normalize the data, and write to PostgreSQL. Sequin watches the database for changes and fires CDC webhooks back into the core, which fans them out to the right users.',
+        ),
+        p(
+          'The client is a Tauri v2 native app wrapping a React 19 + Vite 7 + TanStack Router frontend, with a daisyUI-based theme system and Motion-driven animations. It installs on macOS, Windows, and Linux. The ticker can be docked to any edge of the screen, with adjustable density, scroll speed, row count, and nine theme palettes.',
+        ),
+        p(
+          'The hardest decision was committing to a channel architecture where each data source — sports, finance, news, fantasy — is a fully self-contained unit with its own Go API, Rust service, dashboard tab, and feed component. No shared code between channels. That decision cost more upfront, but it is the reason new channels can ship today without touching the rest of the product, and the reason community contributors can add their own.',
         ),
       ],
       outcome: [
         p(
-          'Scrollr is easier to explain in a sentence, easier to demo, and easier to extend. The product reads as a coherent system instead of a feature inventory, which is the version of the product that actually compounds value for the people using it.',
+          'Scrollr is in beta and preparing for launch. The original founders, Phil included, have stayed close throughout and have been openly happy with both the product and the partnership. The version of Scrollr that exists today is the version they were trying to fund into existence on the first two attempts — a real product, not a brittle extension.',
+        ),
+        p(
+          'The product is open source on GitHub, runs natively on three platforms, ships with a free tier and a paid "Uplink" plan, and has a Discord community organized around it. The architecture earned its place: each new channel ships independently, and the team can talk about the product as a platform rather than as a single sports widget.',
+        ),
+      ],
+      stewardship: [
+        p(
+          'Two years in, the engagement is ongoing. RelentNet continues to design and build new channels and features, hosts the production stack on self-hosted Coolify infrastructure, monitors and maintains the services, and stays close to the Scrollr team as the product moves from beta toward launch.',
         ),
       ],
     },
     meta: {
       title: 'Scrollr Case Study | RelentNet',
       description:
-        'How RelentNet rebuilt Scrollr around a configurable signal workflow that fits how traders actually consume market data.',
+        'How RelentNet rebuilt Scrollr from a fragile Chrome-extension fantasy ticker into a cross-platform native desktop product with a decoupled, CDC-driven real-time architecture.',
     },
   },
   {
