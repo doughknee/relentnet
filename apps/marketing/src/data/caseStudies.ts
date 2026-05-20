@@ -40,6 +40,11 @@ export interface CaseStudyAtAGlance {
   role?: string
   stack?: ReadonlyArray<string>
   metrics?: ReadonlyArray<CaseStudyMetric>
+  /**
+   * Compact inline quote rendered inside the At-a-glance strip. For a
+   * full-width pull quote with photo/role styling, populate the
+   * top-level `pullquote` field on CaseStudy instead.
+   */
   quote?: CaseStudyQuote
 }
 
@@ -56,6 +61,40 @@ export interface CaseStudyMeta {
   description: string
 }
 
+/**
+ * One named category of work delivered on the engagement. Renders
+ * inside CaseStudyServices as a column with bulleted sub-items, the
+ * same convention used by Instrument, Ramotion, and most peer agencies.
+ */
+export interface CaseStudyServiceCategory {
+  label: string
+  items: ReadonlyArray<string>
+}
+
+/**
+ * Press, awards, or third-party validation. `href` is optional so we
+ * can list a recognition even without a link target.
+ */
+export interface CaseStudyRecognition {
+  label: string
+  detail?: string
+  href?: string
+}
+
+/**
+ * Page-scale pull quote with attribution metadata. Distinct from the
+ * inline `quote` StoryBlock variant which lives mid-narrative; this one
+ * is its own section.
+ */
+export interface CaseStudyPullquote {
+  text: string
+  attribution: {
+    name: string
+    role: string
+    company?: string
+  }
+}
+
 export interface CaseStudy {
   slug: string
   name: string
@@ -64,8 +103,16 @@ export interface CaseStudy {
   systemType: string
   summary: CaseStudySummary
   hero: CaseStudyHero
+  /**
+   * 2\u20133 sentence elevator pitch shown directly under the hero, before
+   * any structured section. Frames the entire case for skimmers.
+   */
+  elevatorPitch?: string
   atAGlance: CaseStudyAtAGlance
   story: CaseStudyStory
+  pullquote?: CaseStudyPullquote
+  services?: ReadonlyArray<CaseStudyServiceCategory>
+  recognition?: ReadonlyArray<CaseStudyRecognition>
   meta: CaseStudyMeta
 }
 
@@ -98,6 +145,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         height: 954,
       },
     },
+    elevatorPitch:
+      'Scrollr arrived as a fragile, fantasy-football Chrome extension built by a rotating cast of contractors. Two years later it ships as an open-source, cross-platform desktop product with a multi-channel real-time pipeline — the version of the product the founders had been trying to build all along.',
     atAGlance: {
       engagementYear: '2024–present',
       role: 'Product strategy, design, full-stack engineering, devops, hosting, ongoing stewardship',
@@ -229,6 +278,44 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         },
       ],
     },
+    services: [
+      {
+        label: 'Strategy',
+        items: [
+          'Codebase audit and rebuild recommendation',
+          'Product scope reframing',
+          'Channel architecture design',
+          'Roadmap planning',
+        ],
+      },
+      {
+        label: 'Design & Engineering',
+        items: [
+          'Cross-platform desktop UI (Tauri v2 + React 19)',
+          'Go core API and SSE delivery layer',
+          'Rust ingestion services per data source',
+          'PostgreSQL schema and CDC pipeline',
+          'Nine-palette theme system with light and dark variants',
+        ],
+      },
+      {
+        label: 'Operations',
+        items: [
+          'Self-hosted Coolify infrastructure',
+          'Logto-based authentication and authorization',
+          'Production monitoring and maintenance',
+          'Ongoing iteration as the product moves toward launch',
+        ],
+      },
+    ],
+    recognition: [
+      {
+        label: 'Open source on GitHub',
+        detail:
+          'Scrollr ships under AGPL-3.0 with the full codebase public for inspection, fork, and contribution.',
+        href: 'https://github.com/brandon-relentnet/myscrollr',
+      },
+    ],
     meta: {
       title: 'Scrollr Case Study | RelentNet',
       description:

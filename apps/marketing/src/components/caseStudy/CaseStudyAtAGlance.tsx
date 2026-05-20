@@ -13,6 +13,12 @@ interface FactRow {
   value: string
 }
 
+/**
+ * Quiet fact strip that sits below the hero (or below the metrics
+ * band when metrics exist). Renders facts and stack tags; the heavier
+ * metrics row and pull quote moved out into their own dedicated
+ * components so each can earn its own visual weight.
+ */
 export function CaseStudyAtAGlance({
   atAGlance,
   industry,
@@ -35,8 +41,6 @@ export function CaseStudyAtAGlance({
   }
 
   const stack = atAGlance.stack ?? []
-  const metrics = atAGlance.metrics ?? []
-  const quote = atAGlance.quote
 
   return (
     <section
@@ -94,56 +98,6 @@ export function CaseStudyAtAGlance({
               ))}
             </ul>
           </div>
-        ) : null}
-
-        {metrics.length > 0 ? (
-          <div
-            className={`mt-12 grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))] ${
-              isRevealed ? 'animate-fade-in-up' : 'opacity-0'
-            }`}
-            style={isRevealed ? { animationDelay: '300ms' } : undefined}
-          >
-            {metrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="border border-line bg-card p-6"
-              >
-                <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
-                  {metric.label}
-                </p>
-                <p className="mt-3 font-serif text-3xl text-ink-em">
-                  {metric.value}
-                </p>
-                {metric.context ? (
-                  <p className="mt-2 text-xs text-ink-muted">
-                    {metric.context}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        {quote ? (
-          <figure
-            className={`mt-12 max-w-3xl ${
-              isRevealed ? 'animate-fade-in-up' : 'opacity-0'
-            }`}
-            style={isRevealed ? { animationDelay: '400ms' } : undefined}
-          >
-            <blockquote className="font-serif italic text-xl md:text-2xl text-ink-sub leading-relaxed">
-              <span className="text-gold mr-1" aria-hidden="true">
-                &ldquo;
-              </span>
-              {quote.text}
-              <span className="text-gold ml-1" aria-hidden="true">
-                &rdquo;
-              </span>
-            </blockquote>
-            <figcaption className="mt-4 text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
-              {quote.attribution}
-            </figcaption>
-          </figure>
         ) : null}
       </div>
     </section>

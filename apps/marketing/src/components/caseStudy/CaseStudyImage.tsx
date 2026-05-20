@@ -5,9 +5,12 @@ interface CaseStudyImageProps {
   priority?: boolean
 }
 
-export function CaseStudyImage({ image, priority = false }: CaseStudyImageProps) {
+export function CaseStudyImage({
+  image,
+  priority = false,
+}: CaseStudyImageProps) {
   return (
-    <figure className="my-10 border border-line-faint bg-inset overflow-hidden">
+    <figure className="border border-line-faint bg-inset overflow-hidden">
       <img
         src={image.src}
         alt={image.alt}

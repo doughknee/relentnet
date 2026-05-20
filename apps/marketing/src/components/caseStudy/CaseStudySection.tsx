@@ -115,26 +115,34 @@ interface StoryBlocksProps {
 }
 
 function StoryBlocks({ blocks }: StoryBlocksProps) {
+  // Paragraphs and pull quotes stay constrained for readability
+  // (`max-w-2xl`); images escape the column so they can breathe at the
+  // section's full width. Each block carries its own width treatment
+  // instead of inheriting from a single wrapper.
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6">
       {blocks.map((block, index) => {
         switch (block.type) {
           case 'p':
             return (
               <p
                 key={index}
-                className="text-ink-sub leading-relaxed text-base md:text-lg"
+                className="max-w-2xl text-ink-sub leading-relaxed text-base md:text-lg"
               >
                 {block.text}
               </p>
             )
           case 'image':
-            return <CaseStudyImage key={index} image={block.image} />
+            return (
+              <div key={index} className="my-12 md:my-16">
+                <CaseStudyImage image={block.image} />
+              </div>
+            )
           case 'quote':
             return (
               <figure
                 key={index}
-                className="border-l-2 border-gold/40 pl-6 my-8"
+                className="max-w-2xl border-l-2 border-gold/40 pl-6 my-8"
               >
                 <blockquote className="font-serif italic text-xl md:text-2xl text-ink-sub leading-relaxed">
                   {block.text}
