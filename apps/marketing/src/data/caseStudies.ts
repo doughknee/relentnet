@@ -277,6 +277,32 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           items: [{ label: 'Logto' }],
         },
       ],
+      metrics: [
+        {
+          label: 'Platform reach',
+          from: 'Chrome extension only',
+          to: 'macOS · Windows · Linux',
+          context:
+            'Tauri v2 native binaries. No browser dependency, no session loss when the tab closes.',
+        },
+        {
+          label: 'Architecture',
+          from: 'Firebase monolith',
+          to: 'Decoupled channels',
+          context:
+            'Per-source Rust services, Go core, PostgreSQL + Sequin CDC, SSE delivery.',
+        },
+        {
+          label: 'Source availability',
+          from: 'Closed, contractor-owned',
+          to: 'Open source · AGPL-3.0',
+          context: 'Full codebase public on GitHub for inspection and contribution.',
+        },
+      ],
+      global: {
+        label: 'Cloudflare Global CDN',
+        logoSrc: '/logos/cloudflare.svg',
+      },
     },
     story: {
       problem: [
