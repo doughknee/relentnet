@@ -115,4 +115,23 @@ describe('caseStudies data', () => {
       }
     }
   })
+
+  it('classifies every case study with an engagementType', () => {
+    for (const study of caseStudies) {
+      expect(
+        ['product', 'operations', 'platform'],
+        `${study.slug} must declare a valid engagementType`,
+      ).toContain(study.engagementType)
+    }
+  })
+
+  it('promotes exactly one case study via featured: true', () => {
+    const featuredSlugs = caseStudies
+      .filter((s) => s.featured === true)
+      .map((s) => s.slug)
+    expect(
+      featuredSlugs,
+      'exactly one case study may be featured',
+    ).toHaveLength(1)
+  })
 })

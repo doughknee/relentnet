@@ -119,12 +119,18 @@ export interface CaseStudyPullquote {
   }
 }
 
+export type EngagementType = 'product' | 'operations' | 'platform'
+
 export interface CaseStudy {
   slug: string
   name: string
   url: string
   industry: string
   systemType: string
+  /** Classifies the engagement for the index "By engagement type" tabs. */
+  engagementType: EngagementType
+  /** Promote to the index "Featured engagement" band. Exactly one true. */
+  featured?: boolean
   summary: CaseStudySummary
   hero: CaseStudyHero
   /**
@@ -149,6 +155,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     url: 'https://myscrollr.com',
     industry: 'Consumer Software',
     systemType: 'Cross-Platform Desktop Product',
+    engagementType: 'product',
+    featured: true,
     summary: {
       problem:
         'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
@@ -370,6 +378,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     url: 'https://cambridgebg.com',
     industry: 'Commercial Construction',
     systemType: 'Sales Enablement System',
+    engagementType: 'operations',
     summary: {
       problem:
         'A high-trust construction firm needed a digital presence that matched the quality of its work and helped serious prospects understand capability quickly.',
@@ -436,6 +445,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     url: 'https://courtcommand.app',
     industry: 'Sports Technology',
     systemType: 'Real-Time Operations Engine',
+    engagementType: 'platform',
     summary: {
       problem:
         'Broadcast-style sports environments cannot tolerate lag, unclear state, or fragile manual scorekeeping workflows.',
@@ -493,6 +503,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     url: 'https://vm-homes.com',
     industry: 'Real Estate',
     systemType: 'Client Experience Platform',
+    engagementType: 'platform',
     summary: {
       problem:
         'The team needed more than a polished website; they needed a premium buyer experience that could support property search and neighborhood trust.',
@@ -556,6 +567,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     url: 'https://starkids.relentnet.dev',
     industry: 'Nonprofit',
     systemType: 'Mission Communication System',
+    engagementType: 'operations',
     summary: {
       problem:
         'A mission-driven organization needed to explain programs, trust, and impact without overwhelming donors or families.',
