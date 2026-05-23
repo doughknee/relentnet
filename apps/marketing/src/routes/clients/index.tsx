@@ -2,14 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { ClientsBuildingTogether } from '@/components/clients/ClientsBuildingTogether'
 import { ClientsBySize } from '@/components/clients/ClientsBySize'
+import { ClientsBySolution } from '@/components/clients/ClientsBySolution'
+import { ClientsByUseCase } from '@/components/clients/ClientsByUseCase'
 import { ClientsFeaturedTiles } from '@/components/clients/ClientsFeaturedTiles'
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
 import { ClientsLogoStrip } from '@/components/clients/ClientsLogoStrip'
 import { ClientsMeasurableResults } from '@/components/clients/ClientsMeasurableResults'
-import {
-  ClosingCtaPanels,
-  clientsCta,
-} from '@/components/clients/ClosingCtaPanels'
+import { ClosingCtaPair, clientsCta } from '@/components/clients/ClosingCtaPair'
 
 export const Route = createFileRoute('/clients/')({
   head: () => ({
@@ -39,7 +38,9 @@ function ClientsIndex() {
       <ClientsLogoStrip />
       <ClientsBySize />
       <ClientsBuildingTogether />
-      <ClosingCtaPanels />
+      <ClientsByUseCase />
+      <ClientsBySolution />
+      <ClosingCtaPair />
     </div>
   )
 }
