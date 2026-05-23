@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
 import { ClientsPortraitGrid } from '@/components/clients/ClientsPortraitGrid'
+import { ClientsResultsBand } from '@/components/clients/ClientsResultsBand'
 
 export const Route = createFileRoute('/clients/')({
   head: () => ({
@@ -38,6 +39,8 @@ function ClientsIndex() {
       <div id={PORTRAIT_GRID_ID}>
         <ClientsPortraitGrid />
       </div>
+
+      <ClientsResultsBand />
     </div>
   )
 }
