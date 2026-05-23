@@ -38,6 +38,7 @@ Everything else — layouts, type scale, alignment, section rhythm, card chrome,
 Per user direction: "Use placeholder when in doubt or don't have info for that area." The user will fill placeholder content later.
 
 **Conventions:**
+
 - Placeholder case studies are added to `caseStudies.ts` with slug pattern `placeholder-1`, `placeholder-2`, etc.
 - All placeholder copy is bracketed: `[Company name]`, `[Industry]`, `[Outcome with hard number]`.
 - Placeholder images use a generated SVG at `apps/marketing/public/case-studies/placeholder/portrait.svg` (gray-on-gray with centered label "Case study coming soon").
@@ -45,6 +46,7 @@ Per user direction: "Use placeholder when in doubt or don't have info for that a
 - The `companySize: 'startup' | 'growth' | 'enterprise'` field is left unset on real studies and set to `'placeholder'` on placeholder studies — the user assigns sizes later.
 
 **Count of placeholders needed:**
+
 - Band 2 (featured tile row, 6 tiles): 5 real + 1 placeholder = **1 placeholder**
 - Band 4 (size-tabs grid, 3 tabs × 3 cards = 9 cards): 0 real assigned + 9 placeholders = **9 placeholders** (assignment of real studies to tabs happens when user fills the `companySize` field, which displaces a placeholder)
 - Band 6 (deep-dive tabs, 5 customers): all 5 real, no placeholders
@@ -63,6 +65,7 @@ The structure mirrors Stripe's `/customers` page in order:
 **Layout:** Left-aligned. Eyebrow + h1 + descriptive paragraph + two-button CTA row.
 
 **Wireframe:**
+
 ```
 [ Eyebrow: "Customer stories" — small uppercase gold ]
 [ H1: very large serif, left-aligned, max-w-4xl ]
@@ -71,6 +74,7 @@ The structure mirrors Stripe's `/customers` page in order:
 ```
 
 **Copy:**
+
 - Eyebrow: `Customer stories`
 - H1: `The diagnostic-first studio behind systems that move cleaner.`
 - Paragraph: `We're building a practice for ambitious operators who would rather understand the friction in their workflow than buy more software to mask it. Our engagements turn diagnosed friction into useful systems that help real businesses move cleaner — across construction, consumer software, sports tech, real estate, and nonprofits.`
@@ -78,6 +82,7 @@ The structure mirrors Stripe's `/customers` page in order:
 - Secondary CTA: `Start a Diagnostic` → `/diagnostic` (replaces Stripe's "Contact sales")
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 pt-32 md:pt-40 pb-16 md:pb-20`
 - Inner: `max-w-7xl mx-auto`
 - Eyebrow: `text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-6`
@@ -92,6 +97,7 @@ The structure mirrors Stripe's `/customers` page in order:
 **Layout:** Single-row flex / grid of 6 tiles. Mobile: 1-column stacked. Tablet: 2-column. Desktop (`lg:`): 6-column row at equal width.
 
 **Tile composition (each):**
+
 ```
 [ Full-color portrait image (3:4 aspect) ]
   [ Bottom-left overlay: ]
@@ -104,6 +110,7 @@ The structure mirrors Stripe's `/customers` page in order:
 **Image source:** Each `CaseStudy` already has `hero.image`. For tiles, we use a new optional `portraitImage?: { src, alt, width, height }` field with portrait aspect; falls back to `hero.image` cropped if absent. Placeholder uses `/case-studies/placeholder/portrait.svg`.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-16 md:py-20`
 - Inner: `max-w-7xl mx-auto`
 - Grid: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-px bg-line-faint`
@@ -123,6 +130,7 @@ The `gap-px bg-line-faint` trick uses a 1px gap with a colored parent background
 **Layout:** Section header (small eyebrow + large h2) then a 4-column row of stat blocks. Mobile: 2×2 grid; tablet+: 4-column.
 
 **Wireframe:**
+
 ```
 [ Eyebrow: "Measurable results" ]
 [ H2: large serif headline, left-aligned ]
@@ -132,6 +140,7 @@ The `gap-px bg-line-faint` trick uses a 1px gap with a colored parent background
 ```
 
 **Copy:**
+
 - Eyebrow: `Measurable results`
 - H2: `Diagnosed friction becomes useful systems.`
 - Stats (real per-customer numbers from existing data):
@@ -141,6 +150,7 @@ The `gap-px bg-line-faint` trick uses a 1px gap with a colored parent background
 The data file gains a new field `featuredStat?: { value: string; description: string }` on each `CaseStudy`. The component picks the 4 entries with non-null `featuredStat` to render this section, falling back to placeholders.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint`
 - Inner: `max-w-7xl mx-auto`
 - Eyebrow: `text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-3`
@@ -158,6 +168,7 @@ The data file gains a new field `featuredStat?: { value: string; description: st
 **Data:** Reuse the existing `clientLogos.ts` data (8 sample SVGs flagged `isSample: true`). User replaces with real logos later.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-12 md:py-16 border-t border-b border-line-faint`
 - Inner: `max-w-7xl mx-auto`
 - List: `flex flex-wrap items-center justify-center md:justify-between gap-x-12 gap-y-6 text-ink-muted`
@@ -171,6 +182,7 @@ The data file gains a new field `featuredStat?: { value: string; description: st
 **Mirrors:** Stripe `/customers` "Companies of all sizes around the world use Stripe" — section heading + 3 tabs (`Startup` / `Growth` / `Enterprise`) + a grid of 3 mini case-study cards per tab.
 
 **Layout:**
+
 ```
 [ Eyebrow: "Customers by size" ]
 [ H2: large serif ]
@@ -181,11 +193,13 @@ The data file gains a new field `featuredStat?: { value: string; description: st
 ```
 
 Each mini card has:
+
 - One or two big stats (serif, large)
 - A "Stack used" tag list (3 visible + "+N more" link)
 - A landscape image at the bottom
 
 **Wireframe (single card):**
+
 ```
 [ Stat 1 (huge serif) ]
 [ — label ]
@@ -199,6 +213,7 @@ Stack used
 ```
 
 **Data:**
+
 - Add `companySize?: 'startup' | 'growth' | 'enterprise' | 'placeholder'` to `CaseStudy`.
 - Set all 5 real studies to `'placeholder'` initially (user assigns later).
 - Generate 9 placeholder studies with `companySize` distributed evenly: 3 startup / 3 growth / 3 enterprise.
@@ -208,6 +223,7 @@ When a user reassigns a real study's `companySize` from `'placeholder'` to (say)
 **Tab classes (NOT a WAI-ARIA tab pattern):** Per the previous review's recommendation, use `role="group"` + `aria-pressed` buttons, not `role="tab"`.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint`
 - Eyebrow: `text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3`
 - H2: `font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-12 md:mb-16`
@@ -229,6 +245,7 @@ When a user reassigns a real study's `companySize` from `'placeholder'` to (say)
 **Mirrors:** Stripe `/customers` "Building together / We partner with customers to build breakthrough products" — section heading + 4 customer tabs (Lyft / Instacart / Shopify / Flexport), each revealing a Challenge/Solution two-column block + product tags + a large product mockup image.
 
 **Layout:**
+
 ```
 [ Eyebrow: "Building together" ]
 [ H2: large serif ]
@@ -254,11 +271,13 @@ Stripe uses a vertical tab list on the left side of the pane on desktop. We mirr
 **Data:** All 5 real case studies (Scrollr, CBG, CourtCommand, VM Homes, Star Kids). Each renders its `summary.problem` / `summary.build` and stack from `atAGlance.stack`. The huge mockup image is `hero.image` (or `hero.beats[0].image` if present).
 
 **Copy:**
+
 - Eyebrow: `Building together`
 - H2: `We partner with operators to build breakthrough systems.`
 - Paragraph: `Every engagement starts with a diagnostic. Every system we build is scoped to the friction we found. The case studies below show how that played out across five very different operations.`
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint bg-surface backdrop-blur-xs`
 - H2: `font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-6`
 - Paragraph: `text-ink-sub text-base md:text-lg leading-relaxed max-w-2xl mb-16 md:mb-20`
@@ -280,6 +299,7 @@ Stripe uses a vertical tab list on the left side of the pane on desktop. We mirr
 **Layout:** 3-column grid on `lg:`, single column on mobile. Each panel is a left-aligned text block + CTA link.
 
 **Copy:**
+
 - **Panel 1 — Ready to get started?**
   - H3: `Ready to diagnose your friction?`
   - Body: `Start with a workflow diagnostic before deciding what should be built. We listen first.`
@@ -294,6 +314,7 @@ Stripe uses a vertical tab list on the left side of the pane on desktop. We mirr
   - CTA: `Inquire` → `/inquire`
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint`
 - Grid: `grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 max-w-7xl mx-auto`
 - Panel: `flex flex-col`
@@ -312,6 +333,7 @@ The structure mirrors Stripe's `/customers/figma`:
 **Mirrors:** Top of `/customers/figma`. Headline + descriptive paragraph + company logo positioned to the right (or as accent).
 
 **Layout:**
+
 ```
 [ Breadcrumb: Customers / Figma ]
 
@@ -321,11 +343,13 @@ The structure mirrors Stripe's `/customers/figma`:
 ```
 
 For us:
+
 - Breadcrumb: `Clients / [Company name]`
 - H1: A short headline derived from the engagement (e.g., for Scrollr: `Scrollr shipped to three native platforms in twelve weeks.`). We add a new field `detailHeadline?: string` on `CaseStudy`; falls back to current `hero.tagline` if unset.
 - Body paragraph: Currently `hero.tagline` — for the Stripe match this becomes 2-3 sentences. We add `detailBody?: string` on `CaseStudy`; falls back to combining `hero.tagline` + `summary.problem`.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 pt-32 md:pt-40 pb-12 md:pb-16`
 - Inner: `max-w-7xl mx-auto`
 - Breadcrumb wrapper: `mb-12 text-xs uppercase tracking-[0.2em] text-ink-muted`
@@ -340,11 +364,13 @@ For us:
 **Layout:** Inline flex of pills.
 
 For us:
+
 - Pills are stack items from `atAGlance.stack[].items`, flattened. Show first 6, "+ N more" for the rest. Same disclosure pattern as the old `CaseStudyStackCard`, but inline.
 - Add a `region` pill (e.g., `US` or `Global`) — comes from a new `CaseStudy.region?: string` field. If unset, omit the pill.
 - Add a `companySize` pill (`Startup` / `Growth` / `Enterprise`). If `companySize === 'placeholder'` or unset, omit.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-8 border-t border-b border-line-faint`
 - Inner: `max-w-7xl mx-auto`
 - Eyebrow: `text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-4`
@@ -361,6 +387,7 @@ For us:
 **Layout:** Vertical stack of 3-5 stat entries. Each entry: huge serif number + one-line label below. No horizontal grid here; just stacked.
 
 **Wireframe:**
+
 ```
 [ Stat value, huge serif ]
 [ — label, sub-copy ]
@@ -375,6 +402,7 @@ For us:
 **Data:** Comes from existing `atAGlance.metrics` (the field already supports flat and delta shapes). If a case study has 0 hard metrics, this section renders nothing (don't show a placeholder section — the entire band is conditional).
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-16 md:py-24`
 - Inner: `max-w-3xl` (narrower than the page max-w to keep the stats reading vertically without sprawl)
 - Stat block: `mb-12 last:mb-0`
@@ -389,12 +417,14 @@ For us:
 **Layout:** Single short block — h3 + CTA link only. No body copy.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-12 border-t border-line-faint`
 - Inner: `max-w-3xl`
 - H3: `font-serif text-2xl md:text-3xl mb-6`
 - CTA: standard primary button style
 
 **Copy:**
+
 - H3: `Ready to diagnose your friction?`
 - CTA: `Start a Diagnostic` → `/diagnostic`
 
@@ -407,6 +437,7 @@ For us:
 **Data:** Comes from `hero.image`. If empty, render nothing.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-12 md:py-16`
 - Inner: `max-w-7xl mx-auto`
 - Image: `w-full aspect-video object-cover`
@@ -418,6 +449,7 @@ For us:
 **Layout:** Single-column. Each section header is a large left-aligned `<h2>`. Body is `<p>` paragraphs.
 
 **Structure (each):**
+
 ```
 ## Challenge
 paragraph (from summary.problem)
@@ -434,15 +466,18 @@ paragraph
 ```
 
 **Data:**
+
 - "Challenge" body: existing `summary.problem`
 - "Solution" body: existing `summary.build`
 - "Results": a new `results?: Array<{ headline: string; body: string }>` field on `CaseStudy`. If unset, fall back to a single result derived from `summary.outcome`. The Stripe Figma page has 3 results — we mirror that count when content exists, fewer otherwise.
 
 The existing 5-phase narrative on the current detail page (`narrative.sections[]` with Challenge/Diagnosis/Solution/Results/Stewardship) is collapsed:
+
 - Diagnosis content folds into Challenge (or merged into Solution intro — implementation can choose; spec leaves room)
 - Stewardship is dropped from the detail page entirely — it's not in Stripe's pattern. (User can reintroduce later if needed.)
 
 **Classes:**
+
 - Section wrapper: `relative z-10 px-6 md:px-12 py-12 md:py-16`
 - Inner: `max-w-3xl`
 - H2: `font-serif text-3xl md:text-5xl mb-8`
@@ -458,6 +493,7 @@ The existing 5-phase narrative on the current detail page (`narrative.sections[]
 **Data:** Existing `pullquote?: { text, author, role }` field. If unset, render nothing.
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-16 md:py-24 border-t border-line-faint`
 - Inner: `max-w-3xl`
 - Quote: `font-serif italic text-2xl md:text-3xl lg:text-4xl leading-snug text-ink mb-8`
@@ -473,6 +509,7 @@ The existing 5-phase narrative on the current detail page (`narrative.sections[]
 **Data:** Surface the 2 case studies adjacent to the current one (using the existing prev/next nav data already on the detail page).
 
 **Classes:**
+
 - Section: `relative z-10 px-6 md:px-12 py-20 md:py-24 border-t border-line-faint`
 - Inner: `max-w-7xl mx-auto`
 - Eyebrow: `text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-8`
@@ -524,6 +561,7 @@ interface CaseStudy {
 All 5 existing real case studies are updated to set `companySize: 'placeholder'` (user assigns later) and leave the other new fields unset where we don't have content.
 
 Placeholder case studies use:
+
 - `companySize`: distributed evenly across startup/growth/enterprise (3 of each)
 - `portraitImage.src`: `/case-studies/placeholder/portrait.svg`
 - `hero.image.src`: `/case-studies/placeholder/landscape.svg`
@@ -532,6 +570,7 @@ Placeholder case studies use:
 ## Components — full inventory
 
 **Deletions (no longer used after this rewrite):**
+
 - `apps/marketing/src/components/clients/ClientsPortraitGrid.tsx`
 - `apps/marketing/src/components/clients/ClientsResultsBand.tsx`
 - `apps/marketing/src/components/clients/ClientsByEngagementType.tsx`
@@ -544,6 +583,7 @@ Placeholder case studies use:
 - `apps/marketing/src/components/caseStudy/CaseStudyHeroCycler.tsx` + .test.tsx (cycler not used in new layout)
 
 **Retained from current code:**
+
 - `apps/marketing/src/components/clients/ClientsHero.tsx` (rewritten — same name, new internals)
 - `apps/marketing/src/components/clients/ClientsLogoWall.tsx` (renamed to `ClientsLogoStrip.tsx`, restyled)
 - `apps/marketing/src/components/BrandIcon.tsx` (no changes)
@@ -553,6 +593,7 @@ Placeholder case studies use:
 - `apps/marketing/src/data/clientLogos.ts` (no changes)
 
 **New components (clients/ index page):**
+
 - `ClientsHero.tsx` — Section 1
 - `ClientsFeaturedTiles.tsx` — Section 2
 - `ClientsMeasurableResults.tsx` — Section 3
@@ -562,6 +603,7 @@ Placeholder case studies use:
 - `ClosingCtaPanels.tsx` — Section 7 (used on both index and detail page)
 
 **New components (caseStudy/ detail page):**
+
 - `CaseStudyDetailHero.tsx` — Section A (replaces existing `CaseStudyHero`)
 - `CaseStudyProductsRow.tsx` — Section B
 - `CaseStudyBigStats.tsx` — Section C
@@ -572,6 +614,7 @@ Placeholder case studies use:
 - `CaseStudyReadMore.tsx` — Section H (replaces existing `CaseStudyNav`)
 
 **New placeholder asset:**
+
 - `apps/marketing/public/case-studies/placeholder/portrait.svg` (3:4)
 - `apps/marketing/public/case-studies/placeholder/landscape.svg` (16:9)
 
@@ -602,17 +645,17 @@ The legacy `portfolioIntro` / `portfolioCta` test exports are removed; the `-cli
 
 After implementation, verify the following on the preview deployment:
 
-| URL                              | Expected |
-|----------------------------------|----------|
-| `/clients`                       | Seven sections render top-to-bottom in spec order. Left-aligned, square edges, no italic accents in the H1. |
-| `/clients/scrollr`               | Nine sections (A-I) render top-to-bottom. Single-column body, no rail/stack-card. |
+| URL                                 | Expected                                                                                                         |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `/clients`                          | Seven sections render top-to-bottom in spec order. Left-aligned, square edges, no italic accents in the H1.      |
+| `/clients/scrollr`                  | Nine sections (A-I) render top-to-bottom. Single-column body, no rail/stack-card.                                |
 | `/clients/cambridge-building-group` | Nine sections; conditional sections (B Products row, C Big stats, G Pullquote) render only when data is present. |
-| `/clients/courtcommand`          | Same conditional behavior. |
-| `/clients/vm-homes`              | Same conditional behavior. |
-| `/clients/star-kids`             | Same conditional behavior. |
-| `/clients/placeholder-1`         | Renders cleanly with bracketed placeholder copy and gray placeholder images. |
-| `/clients/nonexistent-slug`      | 404 via `notFound()`. |
-| `/portfolio` (legacy)            | 301 → `/clients` (already in place from prior plan). |
+| `/clients/courtcommand`             | Same conditional behavior.                                                                                       |
+| `/clients/vm-homes`                 | Same conditional behavior.                                                                                       |
+| `/clients/star-kids`                | Same conditional behavior.                                                                                       |
+| `/clients/placeholder-1`            | Renders cleanly with bracketed placeholder copy and gray placeholder images.                                     |
+| `/clients/nonexistent-slug`         | 404 via `notFound()`.                                                                                            |
+| `/portfolio` (legacy)               | 301 → `/clients` (already in place from prior plan).                                                             |
 
 ## Out of scope
 

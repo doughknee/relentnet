@@ -40,7 +40,9 @@ function ClientDetail() {
       <CaseStudyInlineCta />
       <CaseStudyHeroImage study={study} />
       <CaseStudyNarrative study={study} />
-      {study.pullquote ? <CaseStudyPullquote pullquote={study.pullquote} /> : null}
+      {study.pullquote ? (
+        <CaseStudyPullquote pullquote={study.pullquote} />
+      ) : null}
       <CaseStudyReadMore currentSlug={study.slug} />
       <ClosingCtaPanels />
     </article>

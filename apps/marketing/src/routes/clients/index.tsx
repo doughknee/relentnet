@@ -6,7 +6,10 @@ import { ClientsFeaturedTiles } from '@/components/clients/ClientsFeaturedTiles'
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
 import { ClientsLogoStrip } from '@/components/clients/ClientsLogoStrip'
 import { ClientsMeasurableResults } from '@/components/clients/ClientsMeasurableResults'
-import { ClosingCtaPanels, clientsCta } from '@/components/clients/ClosingCtaPanels'
+import {
+  ClosingCtaPanels,
+  clientsCta,
+} from '@/components/clients/ClosingCtaPanels'
 
 export const Route = createFileRoute('/clients/')({
   head: () => ({

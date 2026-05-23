@@ -50,8 +50,12 @@ export function ClosingCtaPanels() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 max-w-7xl mx-auto">
         {PANELS.map((panel) => (
           <div key={panel.headline} className="flex flex-col">
-            <h3 className="font-serif text-3xl md:text-4xl mb-4">{panel.headline}</h3>
-            <p className="text-ink-sub text-base leading-relaxed mb-6">{panel.body}</p>
+            <h3 className="font-serif text-3xl md:text-4xl mb-4">
+              {panel.headline}
+            </h3>
+            <p className="text-ink-sub text-base leading-relaxed mb-6">
+              {panel.body}
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-auto">
               <Link
                 to={panel.primaryTo}

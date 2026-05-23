@@ -10,7 +10,10 @@ export function ClientsLogoStrip() {
       <div className="max-w-7xl mx-auto">
         <ul className="flex flex-wrap items-center justify-center md:justify-between gap-x-12 gap-y-6 text-ink-muted">
           {clientLogos.map((logo) => (
-            <li key={logo.name} className="opacity-60 hover:opacity-100 transition-opacity">
+            <li
+              key={logo.name}
+              className="opacity-60 hover:opacity-100 transition-opacity"
+            >
               <img
                 src={logo.logoSrc}
                 alt={logo.name}

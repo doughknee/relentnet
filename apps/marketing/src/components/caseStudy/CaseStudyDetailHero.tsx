@@ -15,12 +15,16 @@ interface CaseStudyDetailHeroProps {
  */
 export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
   const headline = study.detailHeadline ?? study.hero.tagline
-  const body = study.detailBody ?? `${study.hero.tagline} ${study.summary.problem}`
+  const body =
+    study.detailBody ?? `${study.hero.tagline} ${study.summary.problem}`
 
   return (
     <section className="relative z-10 px-6 md:px-12 pt-32 md:pt-40 pb-12 md:pb-16">
       <div className="max-w-7xl mx-auto">
-        <nav className="mb-12 text-xs uppercase tracking-[0.2em] text-ink-muted" aria-label="Breadcrumb">
+        <nav
+          className="mb-12 text-xs uppercase tracking-[0.2em] text-ink-muted"
+          aria-label="Breadcrumb"
+        >
           <Link to="/clients" className="hover:text-gold transition-colors">
             Clients
           </Link>

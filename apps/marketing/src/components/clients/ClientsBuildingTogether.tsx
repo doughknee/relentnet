@@ -11,9 +11,14 @@ import { caseStudies } from '@/data/caseStudies'
  * as authentic depth rather than promised depth.
  */
 export function ClientsBuildingTogether() {
-  const realStudies = caseStudies.filter((s) => !s.slug.startsWith('placeholder-'))
-  const [activeSlug, setActiveSlug] = useState<string>(realStudies[0]?.slug ?? '')
-  const active = realStudies.find((s) => s.slug === activeSlug) ?? realStudies[0]
+  const realStudies = caseStudies.filter(
+    (s) => !s.slug.startsWith('placeholder-'),
+  )
+  const [activeSlug, setActiveSlug] = useState<string>(
+    realStudies[0]?.slug ?? '',
+  )
+  const active =
+    realStudies.find((s) => s.slug === activeSlug) ?? realStudies[0]
 
   // Runtime guard: realStudies can be empty if every case study has a
   // placeholder slug. TS narrows realStudies[0] to CaseStudy (not undefined)
@@ -40,7 +45,11 @@ export function ClientsBuildingTogether() {
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          <div role="group" aria-label="Select a case study" className="lg:col-span-3">
+          <div
+            role="group"
+            aria-label="Select a case study"
+            className="lg:col-span-3"
+          >
             {realStudies.map((study) => {
               const isActive = study.slug === activeSlug
               return (

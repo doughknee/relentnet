@@ -68,11 +68,15 @@ export function ClientsBySize() {
         </div>
 
         {visible.length === 0 ? (
-          <p className="text-sm text-ink-muted">No case studies assigned to this size yet.</p>
+          <p className="text-sm text-ink-muted">
+            No case studies assigned to this size yet.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {visible.map((study) => {
-              const stack = (study.atAGlance.stack ?? []).flatMap((c) => c.items)
+              const stack = (study.atAGlance.stack ?? []).flatMap(
+                (c) => c.items,
+              )
               const visibleStack = stack.slice(0, 3)
               const moreCount = Math.max(0, stack.length - visibleStack.length)
               return (
@@ -109,7 +113,9 @@ export function ClientsBySize() {
                           </li>
                         ))}
                         {moreCount > 0 ? (
-                          <li className="text-xs text-gold">+ {moreCount} more</li>
+                          <li className="text-xs text-gold">
+                            + {moreCount} more
+                          </li>
                         ) : null}
                       </ul>
                     </>

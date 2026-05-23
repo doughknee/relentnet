@@ -36,7 +36,9 @@ export function ClientsFeaturedTiles() {
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-serif text-2xl text-white">{study.name}</h3>
+                  <h3 className="font-serif text-2xl text-white">
+                    {study.name}
+                  </h3>
                   <span className="mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white group-hover:text-gold transition-colors">
                     Read story →
                   </span>

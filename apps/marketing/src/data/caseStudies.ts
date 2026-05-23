@@ -198,7 +198,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     featured: true,
     featuredStat: {
       value: '1 → 3',
-      description: 'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
+      description:
+        'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
     },
     summary: {
       problem:

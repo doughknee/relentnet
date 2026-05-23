@@ -30,6 +30,7 @@ All plan tasks commit to `feat/clients-stripe-mirror`. PR #9 (`feat/case-studies
 ## Task 1: Generate placeholder image assets + add CaseStudy data-model fields
 
 **Files:**
+
 - Create: `apps/marketing/public/case-studies/placeholder/portrait.svg`
 - Create: `apps/marketing/public/case-studies/placeholder/landscape.svg`
 - Modify: `apps/marketing/src/data/caseStudies.ts`
@@ -95,6 +96,7 @@ Note `companySize` is REQUIRED (no `?`). Every existing case study below must ad
 In `apps/marketing/src/data/caseStudies.ts`, find each of the 5 existing entries inside `caseStudies` (slugs: `scrollr`, `cambridge-building-group`, `courtcommand`, `vm-homes`, `star-kids`). For each, add `companySize: 'placeholder',` near the top of the entry (e.g., right after the `featured` line, or right after `engagementType`).
 
 Example (for the `scrollr` entry near line 176–177):
+
 ```ts
     engagementType: 'product',
     featured: true,
@@ -179,6 +181,7 @@ In `apps/marketing/src/data/caseStudies.ts`, after the closing `]` of the existi
 ```
 
 Generate 6 placeholders with these `slug` + `companySize` values:
+
 1. `placeholder-1` → `companySize: 'startup'`, `engagementType: 'product'`
 2. `placeholder-2` → `companySize: 'startup'`, `engagementType: 'operations'`
 3. `placeholder-3` → `companySize: 'startup'`, `engagementType: 'platform'`
@@ -193,23 +196,27 @@ Each gets a unique `name` (`[Company One]` through `[Company Six]`), but otherwi
 In `apps/marketing/src/data/caseStudies.test.ts`, add a new test inside the existing `describe('caseStudies data', ...)` block:
 
 ```ts
-  it('every case study has a companySize set', () => {
-    for (const study of caseStudies) {
-      expect(study.companySize).toBeDefined()
-      expect(['startup', 'growth', 'enterprise', 'placeholder']).toContain(study.companySize)
-    }
-  })
+it('every case study has a companySize set', () => {
+  for (const study of caseStudies) {
+    expect(study.companySize).toBeDefined()
+    expect(['startup', 'growth', 'enterprise', 'placeholder']).toContain(
+      study.companySize,
+    )
+  }
+})
 
-  it('placeholder studies are marked with placeholder slugs', () => {
-    const placeholders = caseStudies.filter((s) => s.slug.startsWith('placeholder-'))
-    expect(placeholders.length).toBeGreaterThanOrEqual(6)
-    for (const p of placeholders) {
-      expect(p.companySize).not.toBe('placeholder')
-    }
-  })
+it('placeholder studies are marked with placeholder slugs', () => {
+  const placeholders = caseStudies.filter((s) =>
+    s.slug.startsWith('placeholder-'),
+  )
+  expect(placeholders.length).toBeGreaterThanOrEqual(6)
+  for (const p of placeholders) {
+    expect(p.companySize).not.toBe('placeholder')
+  }
+})
 ```
 
-The second test enforces that placeholder *entries* have a concrete `companySize` (not `'placeholder'`) — `'placeholder'` is reserved for real studies that haven't been assigned a size yet.
+The second test enforces that placeholder _entries_ have a concrete `companySize` (not `'placeholder'`) — `'placeholder'` is reserved for real studies that haven't been assigned a size yet.
 
 - [ ] **Step 1.8: Run tests, typecheck, build**
 
@@ -228,6 +235,7 @@ git commit -m "feat(clients): seed CaseStudy data-model fields + 6 placeholders 
 ## Task 2: Build `ClientsHero` (Section 1) — left-aligned hero with two CTAs
 
 **Files:**
+
 - Modify: `apps/marketing/src/components/clients/ClientsHero.tsx`
 
 - [ ] **Step 2.1: Replace the entire file content**
@@ -302,6 +310,7 @@ git commit -m "feat(clients): rewrite hero left-aligned Stripe-style (no italic 
 ## Task 3: Build `ClientsFeaturedTiles` (Section 2) — 6-tile portrait grid
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsFeaturedTiles.tsx`
 
 - [ ] **Step 3.1: Write the component**
@@ -345,7 +354,9 @@ export function ClientsFeaturedTiles() {
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-serif text-2xl text-white">{study.name}</h3>
+                  <h3 className="font-serif text-2xl text-white">
+                    {study.name}
+                  </h3>
                   <span className="mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white group-hover:text-gold transition-colors">
                     Read story →
                   </span>
@@ -377,6 +388,7 @@ git commit -m "feat(clients): featured tile row with 6 portrait tiles + overlay"
 ## Task 4: Build `ClientsMeasurableResults` (Section 3) — 4 huge stats
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsMeasurableResults.tsx`
 
 - [ ] **Step 4.1: Write the component**
@@ -445,6 +457,7 @@ git commit -m "feat(clients): measurable-results band with 4 huge stats"
 ## Task 5: Build `ClientsLogoStrip` (Section 4) — flat horizontal logo row
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsLogoStrip.tsx`
 - Delete: `apps/marketing/src/components/clients/ClientsLogoWall.tsx`
 
@@ -463,7 +476,10 @@ export function ClientsLogoStrip() {
       <div className="max-w-7xl mx-auto">
         <ul className="flex flex-wrap items-center justify-center md:justify-between gap-x-12 gap-y-6 text-ink-muted">
           {clientLogos.map((logo) => (
-            <li key={logo.name} className="opacity-60 hover:opacity-100 transition-opacity">
+            <li
+              key={logo.name}
+              className="opacity-60 hover:opacity-100 transition-opacity"
+            >
               <img
                 src={logo.logoSrc}
                 alt={logo.name}
@@ -502,6 +518,7 @@ git commit -m "feat(clients): rename LogoWall to LogoStrip; restyle as Stripe fl
 ## Task 6: Build `ClientsBySize` (Section 5) — Startup/Growth/Enterprise tab grid
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsBySize.tsx`
 
 - [ ] **Step 6.1: Write the component**
@@ -577,11 +594,15 @@ export function ClientsBySize() {
         </div>
 
         {visible.length === 0 ? (
-          <p className="text-sm text-ink-muted">No case studies assigned to this size yet.</p>
+          <p className="text-sm text-ink-muted">
+            No case studies assigned to this size yet.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {visible.map((study) => {
-              const stack = (study.atAGlance.stack ?? []).flatMap((c) => c.items)
+              const stack = (study.atAGlance.stack ?? []).flatMap(
+                (c) => c.items,
+              )
               const visibleStack = stack.slice(0, 3)
               const moreCount = Math.max(0, stack.length - visibleStack.length)
               return (
@@ -618,7 +639,9 @@ export function ClientsBySize() {
                           </li>
                         ))}
                         {moreCount > 0 ? (
-                          <li className="text-xs text-gold">+ {moreCount} more</li>
+                          <li className="text-xs text-gold">
+                            + {moreCount} more
+                          </li>
                         ) : null}
                       </ul>
                     </>
@@ -662,6 +685,7 @@ git commit -m "feat(clients): customers-by-size tab grid (Startup/Growth/Enterpr
 ## Task 7: Build `ClientsBuildingTogether` (Section 6) — vertical tab deep-dive
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsBuildingTogether.tsx`
 
 - [ ] **Step 7.1: Write the component**
@@ -680,9 +704,14 @@ import { caseStudies } from '@/data/caseStudies'
  * as authentic depth rather than promised depth.
  */
 export function ClientsBuildingTogether() {
-  const realStudies = caseStudies.filter((s) => !s.slug.startsWith('placeholder-'))
-  const [activeSlug, setActiveSlug] = useState<string>(realStudies[0]?.slug ?? '')
-  const active = realStudies.find((s) => s.slug === activeSlug) ?? realStudies[0]
+  const realStudies = caseStudies.filter(
+    (s) => !s.slug.startsWith('placeholder-'),
+  )
+  const [activeSlug, setActiveSlug] = useState<string>(
+    realStudies[0]?.slug ?? '',
+  )
+  const active =
+    realStudies.find((s) => s.slug === activeSlug) ?? realStudies[0]
 
   if (!active) return null
 
@@ -704,7 +733,11 @@ export function ClientsBuildingTogether() {
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          <div role="group" aria-label="Select a case study" className="lg:col-span-3">
+          <div
+            role="group"
+            aria-label="Select a case study"
+            className="lg:col-span-3"
+          >
             {realStudies.map((study) => {
               const isActive = study.slug === activeSlug
               return (
@@ -795,6 +828,7 @@ git commit -m "feat(clients): building-together vertical-tab deep-dive"
 ## Task 8: Build `ClosingCtaPanels` (Section 7 / Section I) — 3-panel closing CTA
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClosingCtaPanels.tsx`
 
 - [ ] **Step 8.1: Write the component**
@@ -852,8 +886,12 @@ export function ClosingCtaPanels() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 max-w-7xl mx-auto">
         {PANELS.map((panel) => (
           <div key={panel.headline} className="flex flex-col">
-            <h3 className="font-serif text-3xl md:text-4xl mb-4">{panel.headline}</h3>
-            <p className="text-ink-sub text-base leading-relaxed mb-6">{panel.body}</p>
+            <h3 className="font-serif text-3xl md:text-4xl mb-4">
+              {panel.headline}
+            </h3>
+            <p className="text-ink-sub text-base leading-relaxed mb-6">
+              {panel.body}
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-auto">
               <Link
                 to={panel.primaryTo}
@@ -898,6 +936,7 @@ git commit -m "feat(clients): 3-panel closing CTA block (used on index + detail)
 ## Task 9: Delete obsolete components
 
 **Files:**
+
 - Delete (8 files):
   - `apps/marketing/src/components/clients/ClientsPortraitGrid.tsx`
   - `apps/marketing/src/components/clients/ClientsResultsBand.tsx`
@@ -934,7 +973,7 @@ git rm apps/marketing/src/components/caseStudy/CaseStudyStackCard.test.tsx
 - [ ] **Step 9.2: Typecheck**
 
 Run: `npm run typecheck`
-Expected: errors in `routes/clients/index.tsx` (still imports the deleted clients/* components) and `routes/clients/$slug.tsx` (still imports `CaseStudyStatsRail` / `CaseStudyStackCard`). These are expected intermediate state; Tasks 11 + 16 fix them.
+Expected: errors in `routes/clients/index.tsx` (still imports the deleted clients/\* components) and `routes/clients/$slug.tsx` (still imports `CaseStudyStatsRail` / `CaseStudyStackCard`). These are expected intermediate state; Tasks 11 + 16 fix them.
 
 - [ ] **Step 9.3: Commit**
 
@@ -947,6 +986,7 @@ git commit -m "chore(clients): remove obsolete components replaced by Stripe-mir
 ## Task 10: Build `CaseStudyDetailHero` (Section A) — detail page hero
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyDetailHero.tsx`
 
 - [ ] **Step 10.1: Write the component**
@@ -969,12 +1009,16 @@ interface CaseStudyDetailHeroProps {
  */
 export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
   const headline = study.detailHeadline ?? study.hero.tagline
-  const body = study.detailBody ?? `${study.hero.tagline} ${study.summary.problem}`
+  const body =
+    study.detailBody ?? `${study.hero.tagline} ${study.summary.problem}`
 
   return (
     <section className="relative z-10 px-6 md:px-12 pt-32 md:pt-40 pb-12 md:pb-16">
       <div className="max-w-7xl mx-auto">
-        <nav className="mb-12 text-xs uppercase tracking-[0.2em] text-ink-muted" aria-label="Breadcrumb">
+        <nav
+          className="mb-12 text-xs uppercase tracking-[0.2em] text-ink-muted"
+          aria-label="Breadcrumb"
+        >
           <Link to="/clients" className="hover:text-gold transition-colors">
             Clients
           </Link>
@@ -1010,6 +1054,7 @@ git commit -m "feat(clients): detail-page hero (Section A)"
 ## Task 11: Wire `routes/clients/index.tsx` to use new components
 
 **Files:**
+
 - Modify: `apps/marketing/src/routes/clients/index.tsx`
 
 - [ ] **Step 11.1: Replace the entire file**
@@ -1023,7 +1068,10 @@ import { ClientsFeaturedTiles } from '@/components/clients/ClientsFeaturedTiles'
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
 import { ClientsLogoStrip } from '@/components/clients/ClientsLogoStrip'
 import { ClientsMeasurableResults } from '@/components/clients/ClientsMeasurableResults'
-import { ClosingCtaPanels, clientsCta } from '@/components/clients/ClosingCtaPanels'
+import {
+  ClosingCtaPanels,
+  clientsCta,
+} from '@/components/clients/ClosingCtaPanels'
 
 export const Route = createFileRoute('/clients/')({
   head: () => ({
@@ -1063,10 +1111,12 @@ function ClientsIndex() {
 
 Run: `npm run typecheck && npm run test && npm run build`
 Expected:
+
 - Typecheck: errors remain only in `routes/clients/$slug.tsx`.
 - Tests: `-clients.test.ts` should pass — `clientsIntro.headline` contains "Diagnosed friction" (still in the body or new headline)? **Check the test file's expectations first.**
 
 The test file currently expects:
+
 - `clientsIntro.headline` to contain `'Diagnosed friction'` — fails with new headline
 - `clientsIntro.body` to contain `'workflow diagnostic'` — passes (new body keeps that phrase)
 - `caseStudies` to have length 5 — fails (now 11 after Task 1)
@@ -1104,6 +1154,7 @@ describe('clients case studies', () => {
 ```
 
 Changes from the existing test:
+
 - First test: `.toLowerCase().toContain('diagnostic')` instead of literal `'Diagnosed friction'` (forward-compatible with the new headline)
 - First test: `toBeGreaterThanOrEqual(5)` instead of hard-coded `toHaveLength(5)` (lets us add placeholders without re-updating the test)
 - Second test: also uses `.toLowerCase().toContain('diagnostic')` for the CTA label
@@ -1120,6 +1171,7 @@ git commit -m "feat(clients): wire index page to Stripe-mirror sections"
 ## Task 12: Build `CaseStudyProductsRow` (Section B) — pill row
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyProductsRow.tsx`
 
 - [ ] **Step 12.1: Write the component**
@@ -1162,8 +1214,14 @@ export function CaseStudyProductsRow({ study }: CaseStudyProductsRowProps) {
         </p>
         <ul className="flex flex-wrap gap-x-6 gap-y-3 items-center">
           {visibleItems.map((item) => (
-            <li key={item.label} className="flex items-center gap-2 text-sm text-ink-sub">
-              <BrandIcon slug={item.iconSlug} className="size-4 text-ink-muted" />
+            <li
+              key={item.label}
+              className="flex items-center gap-2 text-sm text-ink-sub"
+            >
+              <BrandIcon
+                slug={item.iconSlug}
+                className="size-4 text-ink-muted"
+              />
               <span>{item.label}</span>
             </li>
           ))}
@@ -1212,6 +1270,7 @@ git commit -m "feat(clients): detail-page products-used pill row (Section B)"
 ## Task 13: Build `CaseStudyBigStats` (Section C) — vertical stat list
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyBigStats.tsx`
 
 - [ ] **Step 13.1: Write the component**
@@ -1260,7 +1319,11 @@ export function CaseStudyBigStats({ study }: CaseStudyBigStatsProps) {
             )}
             <p className="mt-4 text-base md:text-lg text-ink-sub leading-relaxed">
               {metric.label}
-              {metric.context ? <span className="block mt-1 text-sm text-ink-muted">{metric.context}</span> : null}
+              {metric.context ? (
+                <span className="block mt-1 text-sm text-ink-muted">
+                  {metric.context}
+                </span>
+              ) : null}
             </p>
           </div>
         ))}
@@ -1289,6 +1352,7 @@ git commit -m "feat(clients): detail-page big-stats vertical list (Section C)"
 ## Task 14: Build `CaseStudyInlineCta` + `CaseStudyHeroImage` (Sections D + E)
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyInlineCta.tsx`
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyHeroImage.tsx`
 
@@ -1374,6 +1438,7 @@ git commit -m "feat(clients): detail-page inline CTA + hero image (Sections D, E
 ## Task 15: Build `CaseStudyNarrative` (Section F) + `CaseStudyReadMore` (Section H)
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyNarrative.tsx`
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyReadMore.tsx`
 
@@ -1390,7 +1455,10 @@ function renderBlocks(blocks: ReadonlyArray<StoryBlock>) {
   return blocks.map((block, idx) => {
     if (block.type === 'p') {
       return (
-        <p key={idx} className="text-ink text-base md:text-lg leading-relaxed mb-6">
+        <p
+          key={idx}
+          className="text-ink text-base md:text-lg leading-relaxed mb-6"
+        >
           {block.text}
         </p>
       )
@@ -1405,16 +1473,22 @@ function renderBlocks(blocks: ReadonlyArray<StoryBlock>) {
             loading="lazy"
           />
           {block.image.caption ? (
-            <figcaption className="mt-3 text-sm text-ink-muted">{block.image.caption}</figcaption>
+            <figcaption className="mt-3 text-sm text-ink-muted">
+              {block.image.caption}
+            </figcaption>
           ) : null}
         </figure>
       )
     }
     return (
       <blockquote key={idx} className="my-8 border-l-2 border-gold pl-6">
-        <p className="font-serif italic text-xl md:text-2xl text-ink leading-snug">{block.text}</p>
+        <p className="font-serif italic text-xl md:text-2xl text-ink leading-snug">
+          {block.text}
+        </p>
         {block.attribution ? (
-          <cite className="mt-3 block text-sm text-ink-muted not-italic">{block.attribution}</cite>
+          <cite className="mt-3 block text-sm text-ink-muted not-italic">
+            {block.attribution}
+          </cite>
         ) : null}
       </blockquote>
     )
@@ -1491,13 +1565,16 @@ interface CaseStudyReadMoreProps {
  * Mirrors Stripe /customers/figma's 2-up read-more band.
  */
 export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
-  const realStudies = caseStudies.filter((s) => !s.slug.startsWith('placeholder-'))
+  const realStudies = caseStudies.filter(
+    (s) => !s.slug.startsWith('placeholder-'),
+  )
   const idx = realStudies.findIndex((s) => s.slug === currentSlug)
   if (idx === -1 || realStudies.length < 2) return null
 
   const prev = realStudies[(idx - 1 + realStudies.length) % realStudies.length]
   const next = realStudies[(idx + 1) % realStudies.length]
-  const tiles: ReadonlyArray<CaseStudy> = prev.slug === next.slug ? [next] : [prev, next]
+  const tiles: ReadonlyArray<CaseStudy> =
+    prev.slug === next.slug ? [next] : [prev, next]
 
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-24 border-t border-line-faint">
@@ -1556,6 +1633,7 @@ git commit -m "feat(clients): detail-page narrative + read-more tiles (Sections 
 ## Task 16: Wire `routes/clients/$slug.tsx` to use new components
 
 **Files:**
+
 - Modify: `apps/marketing/src/routes/clients/$slug.tsx`
 
 - [ ] **Step 16.1: Replace the entire file content**
@@ -1605,7 +1683,9 @@ function ClientDetail() {
       <CaseStudyInlineCta />
       <CaseStudyHeroImage study={study} />
       <CaseStudyNarrative study={study} />
-      {study.pullquote ? <CaseStudyPullquote pullquote={study.pullquote} /> : null}
+      {study.pullquote ? (
+        <CaseStudyPullquote pullquote={study.pullquote} />
+      ) : null}
       <CaseStudyReadMore currentSlug={study.slug} />
       <ClosingCtaPanels />
     </article>
@@ -1616,8 +1696,9 @@ function ClientDetail() {
 - [ ] **Step 16.2: Verify `CaseStudyPullquote` accepts the pullquote prop**
 
 Check the current `apps/marketing/src/components/caseStudy/CaseStudyPullquote.tsx` signature. If it takes `pullquote: CaseStudyPullquote`, no changes. If it takes the study and reads `study.pullquote` itself, either:
-  - Pass `study={study}` in the JSX above, or
-  - Refactor the existing component to take just the pullquote object (preferred).
+
+- Pass `study={study}` in the JSX above, or
+- Refactor the existing component to take just the pullquote object (preferred).
 
 Look at the file. If it currently takes a `study` prop, change the call site to `<CaseStudyPullquote study={study} />` to match.
 
@@ -1638,6 +1719,7 @@ git commit -m "feat(clients): wire detail page to Stripe-mirror sections (single
 ## Task 17a: Restyle `CaseStudyPullquote` left-aligned (Stripe-style)
 
 **Files:**
+
 - Modify: `apps/marketing/src/components/caseStudy/CaseStudyPullquote.tsx`
 
 The existing pullquote is centered with a giant decorative `"` glyph. Stripe's is left-aligned, no decorative glyph, and lives inside a `max-w-3xl` block. Restyle to match.
@@ -1651,33 +1733,36 @@ Run: `Read apps/marketing/src/components/caseStudy/CaseStudyPullquote.tsx`
 Replace the `return (...)` block with:
 
 ```tsx
-  return (
-    <section ref={ref} className="relative z-10 px-6 md:px-12 py-16 md:py-24 border-t border-line-faint">
-      <figure className="max-w-3xl">
-        <blockquote
-          className={`font-serif italic text-2xl md:text-3xl lg:text-4xl leading-snug text-ink ${
-            isRevealed ? 'animate-fade-in-up' : 'opacity-0'
-          }`}
-        >
-          {text}
-        </blockquote>
-        <figcaption
-          className={`mt-8 flex flex-col gap-1 ${
-            isRevealed ? 'animate-fade-in-up' : 'opacity-0'
-          }`}
-          style={isRevealed ? { animationDelay: '120ms' } : undefined}
-        >
-          <span className="text-sm uppercase tracking-[0.2em] text-ink-muted">
-            {attribution.name}
-          </span>
-          <span className="text-sm text-ink-muted">
-            {attribution.role}
-            {attribution.company ? ` · ${attribution.company}` : ''}
-          </span>
-        </figcaption>
-      </figure>
-    </section>
-  )
+return (
+  <section
+    ref={ref}
+    className="relative z-10 px-6 md:px-12 py-16 md:py-24 border-t border-line-faint"
+  >
+    <figure className="max-w-3xl">
+      <blockquote
+        className={`font-serif italic text-2xl md:text-3xl lg:text-4xl leading-snug text-ink ${
+          isRevealed ? 'animate-fade-in-up' : 'opacity-0'
+        }`}
+      >
+        {text}
+      </blockquote>
+      <figcaption
+        className={`mt-8 flex flex-col gap-1 ${
+          isRevealed ? 'animate-fade-in-up' : 'opacity-0'
+        }`}
+        style={isRevealed ? { animationDelay: '120ms' } : undefined}
+      >
+        <span className="text-sm uppercase tracking-[0.2em] text-ink-muted">
+          {attribution.name}
+        </span>
+        <span className="text-sm text-ink-muted">
+          {attribution.role}
+          {attribution.company ? ` · ${attribution.company}` : ''}
+        </span>
+      </figcaption>
+    </figure>
+  </section>
+)
 ```
 
 The `<span aria-hidden="true">` opening-quote decoration is removed. The container drops `text-center` and `mx-auto`, and switches to `max-w-3xl` (no center) to left-align.
@@ -1696,11 +1781,12 @@ git commit -m "refactor(clients): pullquote left-aligned Stripe-style (no decora
 
 ---
 
-## Task 17: Clean up remaining obsolete caseStudy/* components
+## Task 17: Clean up remaining obsolete caseStudy/\* components
 
 The current detail page also uses these components which are NOT in the new layout. Check whether they're still referenced (e.g., from the homepage or process page) before deleting.
 
 **Files (potentially obsolete — verify before deleting):**
+
 - `apps/marketing/src/components/caseStudy/CaseStudyHero.tsx` (old hero, replaced by `CaseStudyDetailHero`)
 - `apps/marketing/src/components/caseStudy/CaseStudySection.tsx` (old narrative section, replaced by `CaseStudyNarrative`)
 - `apps/marketing/src/components/caseStudy/CaseStudyElevatorPitch.tsx` (not in new layout)
@@ -1720,6 +1806,7 @@ rg "CaseStudyHero\b|CaseStudySection\b|CaseStudyElevatorPitch|CaseStudyServices|
 ```
 
 For each component above:
+
 - If it's only referenced in its own file + its test, it's safe to delete.
 - If something else (route, another component) uses it, leave it.
 
@@ -1768,6 +1855,7 @@ The pullquote component is permitted to use `italic` since pullquotes are italic
 - [ ] **Step 18.3: Verify routes layout dimensions**
 
 Visit `/clients` and `/clients/scrollr` in the dev server and confirm:
+
 - Hero is left-aligned, not centered
 - Featured tile row shows 6 tiles in a single row on lg:
 - Stats are huge serif numbers
@@ -1789,17 +1877,17 @@ Expected: all clean.
 
 - [ ] **Step 18.5: Manual smoke matrix**
 
-| URL                                   | Expected |
-|---------------------------------------|----------|
-| `/clients`                            | 7 sections in spec order, left-aligned, square edges |
-| `/clients/scrollr`                    | 9 sections (A–I), single column, products row, big stats, narrative |
-| `/clients/cambridge-building-group`   | Same; conditional sections suppressed where data missing |
-| `/clients/courtcommand`               | Same |
-| `/clients/vm-homes`                   | Same |
-| `/clients/star-kids`                  | Same |
-| `/clients/placeholder-1`              | Renders with bracketed copy + gray placeholder images |
-| `/clients/nonexistent-slug`           | 404 |
-| `/portfolio` (legacy)                 | Still 301 → `/clients` (nginx redirect persists) |
+| URL                                 | Expected                                                            |
+| ----------------------------------- | ------------------------------------------------------------------- |
+| `/clients`                          | 7 sections in spec order, left-aligned, square edges                |
+| `/clients/scrollr`                  | 9 sections (A–I), single column, products row, big stats, narrative |
+| `/clients/cambridge-building-group` | Same; conditional sections suppressed where data missing            |
+| `/clients/courtcommand`             | Same                                                                |
+| `/clients/vm-homes`                 | Same                                                                |
+| `/clients/star-kids`                | Same                                                                |
+| `/clients/placeholder-1`            | Renders with bracketed copy + gray placeholder images               |
+| `/clients/nonexistent-slug`         | 404                                                                 |
+| `/portfolio` (legacy)               | Still 301 → `/clients` (nginx redirect persists)                    |
 
 - [ ] **Step 18.6: Final commit (if anything needs it)**
 
@@ -1916,6 +2004,7 @@ After completing every task in order, look at the spec and the plan with fresh e
 **Placeholder scan:** Search for `TODO`, `TBD`, `implement later`. None present in this plan; every step has concrete code or a concrete command.
 
 **Type consistency:**
+
 - `CaseStudy.companySize` is required (no `?`) — set on all 5 real studies in Task 1.4 and on all 6 placeholders in Task 1.6.
 - `CaseStudy.featuredStat` is optional — set on Scrollr and all 6 placeholders, unset elsewhere.
 - `ClientsHero` exports `clientsIntro` with `.headline` and `.body` — consumed by `-clients.test.ts` (Task 11 updates the test to match the new headline).
