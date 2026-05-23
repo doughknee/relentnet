@@ -50,12 +50,12 @@ export function CaseStudyStatsRail({ atAGlance }: CaseStudyStatsRailProps) {
           </h2>
           {facts.map((fact) => (
             <div key={fact.label}>
-              <dt className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
+              <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
                 {fact.label}
-              </dt>
-              <dd className="mt-1 font-serif text-base text-ink-em">
+              </p>
+              <p className="mt-1 font-serif text-base text-ink-em">
                 {fact.value}
-              </dd>
+              </p>
             </div>
           ))}
         </section>
@@ -86,23 +86,23 @@ function MetricEntry({ metric }: { metric: CaseStudyMetric }) {
     <div>
       {isDelta ? (
         <>
-          <dt className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
             {metric.label}
-          </dt>
-          <dd className="mt-2 font-serif text-2xl md:text-3xl text-ink-em leading-tight">
+          </p>
+          <p className="mt-2 font-serif text-2xl md:text-3xl text-ink-em leading-tight">
             <span className="text-ink-muted">{metric.from}</span>
             <span className="mx-2 text-gold">→</span>
             <span>{metric.to}</span>
-          </dd>
+          </p>
         </>
       ) : (
         <>
-          <dt className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted">
             {metric.label}
-          </dt>
-          <dd className="mt-2 font-serif text-3xl md:text-4xl text-ink-em leading-none">
+          </p>
+          <p className="mt-2 font-serif text-3xl md:text-4xl text-ink-em leading-none">
             {metric.value}
-          </dd>
+          </p>
         </>
       )}
       {metric.context ? (

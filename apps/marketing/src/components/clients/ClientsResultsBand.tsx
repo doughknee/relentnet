@@ -9,7 +9,7 @@ interface AggregateMetric {
 }
 
 /**
- * Aggregated proof across the portfolio. Today, drawn from a small
+ * Aggregated proof across the client engagements. Today, drawn from a small
  * hand-curated list. As more case studies populate hard numbers, this
  * band can switch to programmatic derivation from `caseStudies[].atAGlance.metrics`.
  */

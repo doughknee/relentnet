@@ -36,7 +36,7 @@ export function ClientsByIndustry() {
         </h2>
 
         <div
-          role="tablist"
+          role="group"
           aria-label="Filter by industry"
           className="flex flex-wrap gap-2 border-b border-line mb-10"
         >
@@ -45,8 +45,7 @@ export function ClientsByIndustry() {
             return (
               <button
                 key={industry}
-                role="tab"
-                aria-selected={isActive}
+                aria-pressed={isActive}
                 type="button"
                 onClick={() => setActive(industry)}
                 className={`px-4 py-3 text-xs uppercase tracking-[0.2em] border-b-2 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${

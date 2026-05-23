@@ -29,7 +29,7 @@ describe('caseStudies data', () => {
     }
   })
 
-  it('preserves summary copy for the portfolio index', () => {
+  it('preserves summary copy for the clients index', () => {
     for (const study of caseStudies) {
       expect(study.summary.problem.length).toBeGreaterThan(0)
       expect(study.summary.diagnosis.length).toBeGreaterThan(0)
