@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
+import { ClientsLogoWall } from '@/components/clients/ClientsLogoWall'
 import { ClientsPortraitGrid } from '@/components/clients/ClientsPortraitGrid'
 import { ClientsResultsBand } from '@/components/clients/ClientsResultsBand'
 
@@ -41,6 +42,8 @@ function ClientsIndex() {
       </div>
 
       <ClientsResultsBand />
+
+      <ClientsLogoWall />
     </div>
   )
 }
