@@ -31,12 +31,33 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
           <span className="mx-2">/</span>
           <span className="text-ink">{study.name}</span>
         </nav>
-        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] max-w-4xl">
-          {headline}
-        </h1>
-        <p className="mt-8 max-w-2xl text-ink-sub text-base md:text-lg leading-relaxed">
-          {body}
-        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="lg:col-span-9">
+            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] max-w-4xl">
+              {headline}
+            </h1>
+            <p className="mt-8 max-w-2xl text-ink-sub text-base md:text-lg leading-relaxed">
+              {body}
+            </p>
+          </div>
+          <div
+            data-testid="detail-hero-logo"
+            className="lg:col-span-3 lg:pt-4 flex items-center lg:items-start"
+          >
+            {study.atAGlance.global?.logoSrc ? (
+              <img
+                src={study.atAGlance.global.logoSrc}
+                alt={`${study.name} logo`}
+                className="h-10 md:h-12 w-auto opacity-80"
+                loading="eager"
+              />
+            ) : (
+              <span className="text-sm uppercase tracking-[0.2em] text-ink-muted">
+                {study.name}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   )
