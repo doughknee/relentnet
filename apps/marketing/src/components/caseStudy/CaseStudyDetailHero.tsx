@@ -52,7 +52,7 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
                 loading="eager"
               />
             ) : (
-              <span className="text-sm uppercase tracking-[0.2em] text-ink-muted">
+              <span className="hidden lg:inline text-sm uppercase tracking-[0.2em] text-ink-muted">
                 {study.name}
               </span>
             )}
