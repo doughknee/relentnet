@@ -23,7 +23,9 @@ describe('CaseStudyRegionStrip', () => {
   })
 
   it('renders nothing when both are absent/placeholder', () => {
-    const { container } = render(<CaseStudyRegionStrip companySize="placeholder" />)
+    const { container } = render(
+      <CaseStudyRegionStrip companySize="placeholder" />,
+    )
     expect(container.firstChild).toBeNull()
   })
 })

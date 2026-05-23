@@ -22,9 +22,7 @@ function renderRouted(ui: React.ReactElement) {
 describe('ClientsByUseCase', () => {
   it('renders 3 tabs for engagement types', () => {
     renderRouted(<ClientsByUseCase />)
-    expect(
-      screen.getByRole('button', { name: /product/i }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /product/i })).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /operations/i }),
     ).toBeInTheDocument()

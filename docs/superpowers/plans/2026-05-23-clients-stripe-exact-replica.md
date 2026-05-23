@@ -8,10 +8,35 @@
 
 **Tech Stack:** React 19, TanStack Router (file-based), Tailwind CSS 4, Vitest, Testing Library. Existing project conventions (named functions, no semis, single quotes, `@/` alias) apply.
 
+**Conventions discovered during execution (Task 1) — apply to ALL subsequent tasks:**
+
+1. **Run vitest from the `apps/marketing` workspace, not the repo root.** Path aliases (`@/`) are configured in `apps/marketing/vitest.config.ts`; commands like `npx vitest run apps/marketing/src/...` from the repo root will fail with `Cannot find package '@/data/caseStudies'`. The correct invocation in every Step that says `npx vitest run ...` is to **`cd apps/marketing && npx vitest run src/components/...`** (drop the leading `apps/marketing/` and run from the workspace). The same applies to lint: `cd apps/marketing && npx eslint <file>` or `npm run lint -w @relentnet/marketing` from the root.
+
+2. **Local eslint `import/order` wants RELATIVE (`../`) imports BEFORE `@/` aliased imports.** This is the OPPOSITE of the global AGENTS.md guidance. Pattern in this codebase's test files:
+
+   ```ts
+   // 1. third-party
+   import { render, screen } from '@testing-library/react'
+   import { describe, expect, it } from 'vitest'
+
+   // 2. relative
+   import { CaseStudyDetailHero } from '../CaseStudyDetailHero'
+
+   // 3. @/ aliased
+   import { caseStudies } from '@/data/caseStudies'
+   import { routeTree } from '@/routeTree.gen'
+   ```
+
+   Subagents: do not "fix" this order. Match it.
+
 **IMPORTANT — test helper for components that render TanStack `<Link>`:** In `@tanstack/react-router` v1.x, `RouterProvider` ignores its `children` prop and hardcodes its own `<Matches />` tree, so wrapping a component under test in `<RouterProvider>{ui}</RouterProvider>` renders nothing. Use `RouterContextProvider` instead — it provides the router context AND renders children. Pattern:
 
 ```tsx
-import { RouterContextProvider, createMemoryHistory, createRouter } from '@tanstack/react-router'
+import {
+  RouterContextProvider,
+  createMemoryHistory,
+  createRouter,
+} from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
 
 function renderWithRouter(ui: React.ReactElement) {
@@ -19,32 +44,36 @@ function renderWithRouter(ui: React.ReactElement) {
     routeTree,
     history: createMemoryHistory({ initialEntries: ['/'] }),
   })
-  return render(<RouterContextProvider router={router}>{ui}</RouterContextProvider>)
+  return render(
+    <RouterContextProvider router={router}>{ui}</RouterContextProvider>,
+  )
 }
 ```
 
 Use this helper in EVERY test below that touches a `<Link>` component (Tasks 6, 7, 8, and any others). Where the original task body said `RouterProvider`, substitute `RouterContextProvider`. Component tests that do NOT render `<Link>` can `render(...)` directly without the helper.
 
 **Reference pages:**
+
 - Index target: `https://stripe.com/customers`
 - Detail target: `https://stripe.com/customers/figma`
 
 **Exact section orders being matched:**
 
-| Index (Stripe `/customers`)                       | Detail (Stripe `/customers/figma`)            |
-| ------------------------------------------------- | --------------------------------------------- |
-| 1. Hero (eyebrow + H1 + body + 2 buttons)         | 1. Breadcrumb + H1 + body + customer logo     |
-| 2. Featured portrait tile row (6 tiles)           | 2. Products used (vertical list)              |
-| 3. Measurable results (4 huge stats)              | 3. Region + tier strip (Global, Enterprise)   |
-| 4. Logo strip (flat horizontal)                   | 4. Big stats stack (3–4 vertical, huge)       |
-| 5. Customers by size (tabs + 3-card grid)         | 5. Inline CTA ("Ready to get started?")       |
-| 6. Building together (vertical tabs + deep-dive)  | 6. Big landscape hero image                   |
+| Index (Stripe `/customers`)                       | Detail (Stripe `/customers/figma`)               |
+| ------------------------------------------------- | ------------------------------------------------ |
+| 1. Hero (eyebrow + H1 + body + 2 buttons)         | 1. Breadcrumb + H1 + body + customer logo        |
+| 2. Featured portrait tile row (6 tiles)           | 2. Products used (vertical list)                 |
+| 3. Measurable results (4 huge stats)              | 3. Region + tier strip (Global, Enterprise)      |
+| 4. Logo strip (flat horizontal)                   | 4. Big stats stack (3–4 vertical, huge)          |
+| 5. Customers by size (tabs + 3-card grid)         | 5. Inline CTA ("Ready to get started?")          |
+| 6. Building together (vertical tabs + deep-dive)  | 6. Big landscape hero image                      |
 | 7. **Customers by use case (tabs + tile mosaic)** | 7. Narrative — ## Challenge / Solution / Results |
-| 8. **Customers by solution (chips + decorative)** | 8. Pullquote                                  |
-| 9. **CTA pair (2 tiles, replaces 3-panel)**       | 9. "Read more customer stories" (2 tiles)     |
-|                                                   | 10. **CTA pair (2 tiles, replaces 3-panel)**  |
+| 8. **Customers by solution (chips + decorative)** | 8. Pullquote                                     |
+| 9. **CTA pair (2 tiles, replaces 3-panel)**       | 9. "Read more customer stories" (2 tiles)        |
+|                                                   | 10. **CTA pair (2 tiles, replaces 3-panel)**     |
 
 **Decisions locked from brainstorm:**
+
 - Mirror BOTH missing index sections (use case + solution).
 - Replace 3-panel `ClosingCtaPanels` with a 2-tile `ClosingCtaPair` on both pages.
 - Build tabbed sections **separately** (no shared `<TabbedSection>` primitive in this pass).
@@ -98,6 +127,7 @@ Use this helper in EVERY test below that touches a `<Link>` component (Tasks 6, 
 ## Task 1: Detail hero — add customer logo column
 
 **Files:**
+
 - Modify: `apps/marketing/src/components/caseStudy/CaseStudyDetailHero.tsx`
 - Test: `apps/marketing/src/components/caseStudy/__tests__/CaseStudyDetailHero.test.tsx` (create if absent; otherwise update)
 
@@ -108,10 +138,15 @@ Use this helper in EVERY test below that touches a `<Link>` component (Tasks 6, 
 - [ ] **Step 1: Write failing test for two-column layout**
 
 `apps/marketing/src/components/caseStudy/__tests__/CaseStudyDetailHero.test.tsx`
+
 ```tsx
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { createRouter, createMemoryHistory, RouterProvider } from '@tanstack/react-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  RouterProvider,
+} from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
 import { CaseStudyDetailHero } from '../CaseStudyDetailHero'
 import { caseStudies } from '@/data/caseStudies'
@@ -126,7 +161,9 @@ function renderWithRouter(ui: React.ReactElement) {
 
 describe('CaseStudyDetailHero', () => {
   it('renders the customer logo slot with the study name when no logoSrc is provided', () => {
-    const study = caseStudies.find((s) => s.slug === 'cambridge-building-group')!
+    const study = caseStudies.find(
+      (s) => s.slug === 'cambridge-building-group',
+    )!
     renderWithRouter(<CaseStudyDetailHero study={study} />)
     const logoSlot = screen.getByTestId('detail-hero-logo')
     expect(logoSlot).toHaveTextContent(study.name)
@@ -213,6 +250,7 @@ git commit -m "feat(clients): add customer logo column to detail hero (Stripe-ex
 ## Task 2: Detail "Products used" row — flip horizontal pills to vertical stacked list
 
 **Files:**
+
 - Modify: `apps/marketing/src/components/caseStudy/CaseStudyProductsRow.tsx`
 - Test: `apps/marketing/src/components/caseStudy/__tests__/CaseStudyProductsRow.test.tsx` (create or update)
 
@@ -225,6 +263,7 @@ git commit -m "feat(clients): add customer logo column to detail hero (Stripe-ex
 - [ ] **Step 1: Write failing test for vertical stacking**
 
 `apps/marketing/src/components/caseStudy/__tests__/CaseStudyProductsRow.test.tsx`
+
 ```tsx
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
@@ -295,10 +334,7 @@ export function CaseStudyProductsRow({ study }: CaseStudyProductsRowProps) {
         <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-4">
           Products used
         </p>
-        <ul
-          aria-label="Products used"
-          className="flex flex-col gap-3"
-        >
+        <ul aria-label="Products used" className="flex flex-col gap-3">
           {visibleItems.map((item) => (
             <li
               key={item.label}
@@ -347,6 +383,7 @@ git commit -m "refactor(clients): products-used row vertical-stacked (Stripe-exa
 ## Task 3: Detail region + tier strip — new component
 
 **Files:**
+
 - Create: `apps/marketing/src/components/caseStudy/CaseStudyRegionStrip.tsx`
 - Test: `apps/marketing/src/components/caseStudy/__tests__/CaseStudyRegionStrip.test.tsx`
 
@@ -381,7 +418,9 @@ describe('CaseStudyRegionStrip', () => {
   })
 
   it('renders nothing when both are absent/placeholder', () => {
-    const { container } = render(<CaseStudyRegionStrip companySize="placeholder" />)
+    const { container } = render(
+      <CaseStudyRegionStrip companySize="placeholder" />,
+    )
     expect(container.firstChild).toBeNull()
   })
 })
@@ -454,10 +493,12 @@ git commit -m "feat(clients): add region/tier strip to detail page (Stripe-exact
 ## Task 4: Detail narrative — fix double-render of outcome
 
 **Files:**
+
 - Modify: `apps/marketing/src/components/caseStudy/CaseStudyNarrative.tsx`
 - Test: `apps/marketing/src/components/caseStudy/__tests__/CaseStudyNarrative.test.tsx` (create or update)
 
 **Bug:** When `study.results` is **unset**, the component currently:
+
 1. Falls back to a single `resultEntries` of `{ headline: 'Outcome', body: study.summary.outcome }` and renders that h3 + body.
 2. Then ALSO checks `study.story.outcome.length > 0 && !study.results` and renders the outcome story blocks AGAIN below.
 
@@ -478,13 +519,19 @@ describe('CaseStudyNarrative', () => {
     const study = caseStudies.find((s) => s.slug === 'scrollr')!
     render(<CaseStudyNarrative study={study} />)
     // No synthetic h3 "Outcome"
-    expect(screen.queryByRole('heading', { level: 3, name: /^outcome$/i })).toBeNull()
+    expect(
+      screen.queryByRole('heading', { level: 3, name: /^outcome$/i }),
+    ).toBeNull()
     // Results h2 present
-    expect(screen.getByRole('heading', { level: 2, name: /^results$/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: /^results$/i }),
+    ).toBeInTheDocument()
     // First outcome paragraph is rendered
     const firstOutcome = study.story.outcome.find((b) => b.type === 'p')
     if (firstOutcome && firstOutcome.type === 'p') {
-      expect(screen.getByText(new RegExp(firstOutcome.text.slice(0, 30)))).toBeInTheDocument()
+      expect(
+        screen.getByText(new RegExp(firstOutcome.text.slice(0, 30))),
+      ).toBeInTheDocument()
     }
   })
 
@@ -497,8 +544,12 @@ describe('CaseStudyNarrative', () => {
       ],
     }
     render(<CaseStudyNarrative study={study} />)
-    expect(screen.getByRole('heading', { level: 3, name: 'A' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 3, name: 'B' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'A' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'B' }),
+    ).toBeInTheDocument()
     expect(screen.getByText('Body A')).toBeInTheDocument()
     expect(screen.getByText('Body B')).toBeInTheDocument()
   })
@@ -525,20 +576,18 @@ return (
       {renderBlocks(solutionBlocks)}
 
       <h2 className="font-serif text-3xl md:text-5xl mb-8 mt-16">Results</h2>
-      {study.results ? (
-        study.results.map((result, idx) => (
-          <div key={idx}>
-            <h3 className="font-serif text-xl md:text-2xl mb-4 mt-12 first:mt-0">
-              {result.headline}
-            </h3>
-            <p className="text-ink text-base md:text-lg leading-relaxed mb-6">
-              {result.body}
-            </p>
-          </div>
-        ))
-      ) : (
-        renderBlocks(study.story.outcome)
-      )}
+      {study.results
+        ? study.results.map((result, idx) => (
+            <div key={idx}>
+              <h3 className="font-serif text-xl md:text-2xl mb-4 mt-12 first:mt-0">
+                {result.headline}
+              </h3>
+              <p className="text-ink text-base md:text-lg leading-relaxed mb-6">
+                {result.body}
+              </p>
+            </div>
+          ))
+        : renderBlocks(study.story.outcome)}
     </div>
   </section>
 )
@@ -563,6 +612,7 @@ git commit -m "fix(clients): narrative results no longer double-renders outcome"
 ## Task 5: Solutions data — new constant
 
 **Files:**
+
 - Create: `apps/marketing/src/data/clientSolutions.ts`
 - Test: `apps/marketing/src/data/clientSolutions.test.ts`
 
@@ -725,6 +775,7 @@ git commit -m "feat(clients): add clientSolutions data for by-solution section"
 ## Task 6: ClientsByUseCase — tabbed image mosaic section
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsByUseCase.tsx`
 - Test: `apps/marketing/src/components/clients/__tests__/ClientsByUseCase.test.tsx`
 
@@ -740,7 +791,11 @@ Headline: `We accelerate growth for all types of operations.`
 ```tsx
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { createRouter, createMemoryHistory, RouterProvider } from '@tanstack/react-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  RouterProvider,
+} from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
 import { ClientsByUseCase } from '../ClientsByUseCase'
 
@@ -756,8 +811,12 @@ describe('ClientsByUseCase', () => {
   it('renders 3 tabs for engagement types', () => {
     renderRouted(<ClientsByUseCase />)
     expect(screen.getByRole('button', { name: /product/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /operations/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /platform/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /operations/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /platform/i }),
+    ).toBeInTheDocument()
   })
 
   it('switches the tile grid when a different tab is clicked', () => {
@@ -772,7 +831,9 @@ describe('ClientsByUseCase', () => {
     renderRouted(<ClientsByUseCase />)
     const links = screen.getAllByRole('link')
     // At least one tile link to /clients/$slug
-    expect(links.some((l) => l.getAttribute('href')?.startsWith('/clients/'))).toBe(true)
+    expect(
+      links.some((l) => l.getAttribute('href')?.startsWith('/clients/')),
+    ).toBe(true)
   })
 })
 ```
@@ -856,7 +917,8 @@ export function ClientsByUseCase() {
             {tiles.map((study, index) => {
               const image = study.hero.image ?? study.portraitImage
               // Alternate aspect for mosaic feel
-              const aspectClass = index % 2 === 0 ? 'aspect-[16/10]' : 'aspect-[4/3]'
+              const aspectClass =
+                index % 2 === 0 ? 'aspect-[16/10]' : 'aspect-[4/3]'
               return (
                 <Link
                   key={study.slug}
@@ -914,6 +976,7 @@ git commit -m "feat(clients): add by-engagement-type tabbed mosaic (Stripe-exact
 ## Task 7: ClientsBySolution — chips + decorative imagery section
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClientsBySolution.tsx`
 - Test: `apps/marketing/src/components/clients/__tests__/ClientsBySolution.test.tsx`
 
@@ -932,7 +995,11 @@ Note its public props and adapt the component to use it correctly. If it accepts
 ```tsx
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { createRouter, createMemoryHistory, RouterProvider } from '@tanstack/react-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  RouterProvider,
+} from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
 import { ClientsBySolution } from '../ClientsBySolution'
 import { clientSolutions } from '@/data/clientSolutions'
@@ -949,7 +1016,9 @@ describe('ClientsBySolution', () => {
   it('renders every solution as a link', () => {
     renderRouted(<ClientsBySolution />)
     clientSolutions.forEach((s) => {
-      expect(screen.getByRole('link', { name: new RegExp(s.label, 'i') })).toBeInTheDocument()
+      expect(
+        screen.getByRole('link', { name: new RegExp(s.label, 'i') }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -1074,12 +1143,14 @@ git commit -m "feat(clients): add by-solution chips + decorative imagery (Stripe
 ## Task 8: ClosingCtaPair — new 2-tile bottom CTA
 
 **Files:**
+
 - Create: `apps/marketing/src/components/clients/ClosingCtaPair.tsx`
 - Test: `apps/marketing/src/components/clients/__tests__/ClosingCtaPair.test.tsx`
 
 **Stripe reference:** Bottom of both `/customers` and `/customers/figma`. Two side-by-side cells (stacking on mobile), each with a small headline + 1-line body + single ghost-style link. Stripe's are: "Always know what you'll pay → Pricing details" and "Start your integration → API reference".
 
 **Our 2 tiles:**
+
 1. Title `Always know what you'll pay`, body `Fixed-fee diagnostic. Transparent engagement pricing after. No mystery retainers.`, button `Start a Diagnostic` → `/diagnostic`.
 2. Title `Start a conversation`, body `Tell us about your business and we'll point you to the highest-friction surface to start on.`, button `Inquire` → `/inquire`.
 
@@ -1090,7 +1161,11 @@ Also export `clientsCta` (same shape as the old constant) so existing `index.tes
 ```tsx
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { createRouter, createMemoryHistory, RouterProvider } from '@tanstack/react-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  RouterProvider,
+} from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
 import { ClosingCtaPair, clientsCta } from '../ClosingCtaPair'
 
@@ -1222,6 +1297,7 @@ git commit -m "feat(clients): add 2-tile bottom CTA pair (Stripe-exact)"
 ## Task 9: Wire index route to new section order
 
 **Files:**
+
 - Modify: `apps/marketing/src/routes/clients/index.tsx`
 - Note: Index test lives at `apps/marketing/src/routes/-clients.test.ts` (dash-prefix excludes from route tree). It currently asserts only `clientsCta.to === '/diagnostic'` and `clientsCta.label.toLowerCase().includes('diagnostic')`. `ClosingCtaPair`'s first tile satisfies both, so no test edit required.
 
@@ -1306,6 +1382,7 @@ git commit -m "feat(clients): wire index to Stripe-exact section order"
 ## Task 10: Wire detail route to new section order + remove old ClosingCtaPanels
 
 **Files:**
+
 - Modify: `apps/marketing/src/routes/clients/$slug.tsx`
 - Note: There is no detail-route test file (route tests for this slug live, if anywhere, inside data tests). After `npx rg ClosingCtaPanels apps/marketing` you will know every test that needs touching.
 - Delete: `apps/marketing/src/components/clients/ClosingCtaPanels.tsx`
@@ -1382,6 +1459,7 @@ function ClientDetail() {
 - [ ] **Step 3: Delete the obsolete ClosingCtaPanels**
 
 Run:
+
 ```bash
 rm apps/marketing/src/components/clients/ClosingCtaPanels.tsx
 test -f apps/marketing/src/components/clients/ClosingCtaPanels.test.tsx && rm apps/marketing/src/components/clients/ClosingCtaPanels.test.tsx || true
@@ -1432,10 +1510,12 @@ Expected: PASS — every test green.
 
 Run: `npm run dev` (in a separate terminal)
 Manually open:
+
 - `http://localhost:3000/clients` — confirm section order matches the table at the top of this plan.
 - `http://localhost:3000/clients/scrollr` — confirm section order matches the detail-page table.
 
 Walk through every section and compare side-by-side with the Stripe references:
+
 - `https://stripe.com/customers`
 - `https://stripe.com/customers/figma`
 

@@ -15,7 +15,9 @@ function renderRouted(ui: React.ReactElement) {
     routeTree,
     history: createMemoryHistory({ initialEntries: ['/clients'] }),
   })
-  return render(<RouterContextProvider router={router}>{ui}</RouterContextProvider>)
+  return render(
+    <RouterContextProvider router={router}>{ui}</RouterContextProvider>,
+  )
 }
 
 describe('ClientsBySolution', () => {
