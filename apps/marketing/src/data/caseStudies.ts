@@ -162,6 +162,26 @@ export interface CaseStudy {
   services?: ReadonlyArray<CaseStudyServiceCategory>
   recognition?: ReadonlyArray<CaseStudyRecognition>
   meta: CaseStudyMeta
+  /** Used by the index featured-tile band; falls back to hero.image cropped. */
+  portraitImage?: CaseStudyImage
+
+  /** One huge stat surfaced in the index "Measurable results" band. */
+  featuredStat?: { value: string; description: string }
+
+  /** Pill in the detail-page "Products used" row. Falls back to omitted. */
+  region?: string
+
+  /** Drives the index "Customers by size" tab grouping. */
+  companySize: 'startup' | 'growth' | 'enterprise' | 'placeholder'
+
+  /** Detail-page hero headline. Falls back to hero.tagline. */
+  detailHeadline?: string
+
+  /** Detail-page body paragraph. Falls back to combining hero.tagline + summary.problem. */
+  detailBody?: string
+
+  /** Detail-page Results section entries. Falls back to a single entry derived from summary.outcome. */
+  results?: ReadonlyArray<{ headline: string; body: string }>
 }
 
 const p = (text: string): StoryBlock => ({ type: 'p', text })
@@ -174,7 +194,12 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Consumer Software',
     systemType: 'Cross-Platform Desktop Product',
     engagementType: 'product',
+    companySize: 'placeholder',
     featured: true,
+    featuredStat: {
+      value: '1 → 3',
+      description: 'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
+    },
     summary: {
       problem:
         'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
@@ -470,6 +495,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Commercial Construction',
     systemType: 'Sales Enablement System',
     engagementType: 'operations',
+    companySize: 'placeholder',
     summary: {
       problem:
         'A high-trust construction firm needed a digital presence that matched the quality of its work and helped serious prospects understand capability quickly.',
@@ -537,6 +563,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Sports Technology',
     systemType: 'Real-Time Operations Engine',
     engagementType: 'platform',
+    companySize: 'placeholder',
     summary: {
       problem:
         'Broadcast-style sports environments cannot tolerate lag, unclear state, or fragile manual scorekeeping workflows.',
@@ -595,6 +622,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Real Estate',
     systemType: 'Client Experience Platform',
     engagementType: 'platform',
+    companySize: 'placeholder',
     summary: {
       problem:
         'The team needed more than a polished website; they needed a premium buyer experience that could support property search and neighborhood trust.',
@@ -659,6 +687,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Nonprofit',
     systemType: 'Mission Communication System',
     engagementType: 'operations',
+    companySize: 'placeholder',
     summary: {
       problem:
         'A mission-driven organization needed to explain programs, trust, and impact without overwhelming donors or families.',
@@ -705,6 +734,318 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       title: 'Star Kids Case Study | RelentNet',
       description:
         'How RelentNet built a focused mission communication system for the Star Kids nonprofit.',
+    },
+  },
+  {
+    slug: 'placeholder-1',
+    name: '[Company One]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'product',
+    companySize: 'startup',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company One] | RelentNet Case Study',
+      description: '[Meta description.]',
+    },
+  },
+  {
+    slug: 'placeholder-2',
+    name: '[Company Two]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'operations',
+    companySize: 'startup',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company Two] | RelentNet Case Study',
+      description: '[Meta description.]',
+    },
+  },
+  {
+    slug: 'placeholder-3',
+    name: '[Company Three]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'platform',
+    companySize: 'startup',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company Three] | RelentNet Case Study',
+      description: '[Meta description.]',
+    },
+  },
+  {
+    slug: 'placeholder-4',
+    name: '[Company Four]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'product',
+    companySize: 'growth',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company Four] | RelentNet Case Study',
+      description: '[Meta description.]',
+    },
+  },
+  {
+    slug: 'placeholder-5',
+    name: '[Company Five]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'operations',
+    companySize: 'growth',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company Five] | RelentNet Case Study',
+      description: '[Meta description.]',
+    },
+  },
+  {
+    slug: 'placeholder-6',
+    name: '[Company Six]',
+    url: 'https://example.com',
+    industry: '[Industry]',
+    systemType: '[System type]',
+    engagementType: 'platform',
+    companySize: 'enterprise',
+    featuredStat: {
+      value: '[Big number]',
+      description: '[One-line attribution of what changed at the client.]',
+    },
+    summary: {
+      problem: '[Describe the friction in the operation before we engaged.]',
+      diagnosis: '[Describe what the diagnostic surfaced.]',
+      build: '[Describe what we shipped.]',
+      outcome: '[Describe the measurable change.]',
+    },
+    hero: {
+      tagline: '[Short single-sentence tagline.]',
+      image: {
+        src: '/case-studies/placeholder/landscape.svg',
+        alt: 'Case study placeholder image',
+        width: 1600,
+        height: 900,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/placeholder/portrait.svg',
+      alt: 'Case study placeholder image',
+      width: 600,
+      height: 800,
+    },
+    atAGlance: {
+      stack: [
+        {
+          category: '[Layer]',
+          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
+        },
+      ],
+    },
+    story: {
+      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
+      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
+      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
+      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
+    },
+    meta: {
+      title: '[Company Six] | RelentNet Case Study',
+      description: '[Meta description.]',
     },
   },
 ]

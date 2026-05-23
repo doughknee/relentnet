@@ -7,7 +7,7 @@ describe('clients case studies', () => {
   it('frames work as diagnosed friction becoming useful systems', () => {
     expect(clientsIntro.headline).toContain('Diagnosed friction')
     expect(clientsIntro.body).toContain('workflow diagnostic')
-    expect(caseStudies).toHaveLength(5)
+    expect(caseStudies).toHaveLength(11)
     expect(
       caseStudies.every((study) => study.summary.diagnosis.length > 0),
     ).toBe(true)

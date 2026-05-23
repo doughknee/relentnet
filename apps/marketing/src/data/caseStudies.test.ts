@@ -7,8 +7,8 @@ import {
 } from './caseStudies'
 
 describe('caseStudies data', () => {
-  it('has exactly 5 entries', () => {
-    expect(caseStudies).toHaveLength(5)
+  it('has exactly 11 entries', () => {
+    expect(caseStudies).toHaveLength(11)
   })
 
   it('has unique URL-safe slugs', () => {
@@ -170,6 +170,25 @@ describe('caseStudies data', () => {
         new Set(refs).size,
         `${study.slug} hero beats must not repeat a sectionRef (got [${refs.join(', ')}])`,
       ).toBe(refs.length)
+    }
+  })
+
+  it('every case study has a companySize set', () => {
+    for (const study of caseStudies) {
+      expect(study.companySize).toBeDefined()
+      expect(['startup', 'growth', 'enterprise', 'placeholder']).toContain(
+        study.companySize,
+      )
+    }
+  })
+
+  it('placeholder studies are marked with a concrete companySize', () => {
+    const placeholders = caseStudies.filter((s) =>
+      s.slug.startsWith('placeholder-'),
+    )
+    expect(placeholders.length).toBeGreaterThanOrEqual(6)
+    for (const p of placeholders) {
+      expect(p.companySize).not.toBe('placeholder')
     }
   })
 })
