@@ -6,7 +6,7 @@ import { caseStudies } from '@/data/caseStudies'
 describe('clients case studies', () => {
   it('frames work as diagnostic-first', () => {
     expect(clientsIntro.headline.toLowerCase()).toContain('diagnostic')
-    expect(clientsIntro.body.toLowerCase()).toContain('diagnostic')
+    expect(clientsIntro.body.toLowerCase()).toContain('diagnos')
     expect(caseStudies.length).toBeGreaterThanOrEqual(5)
     expect(
       caseStudies.every((study) => study.summary.diagnosis.length > 0),

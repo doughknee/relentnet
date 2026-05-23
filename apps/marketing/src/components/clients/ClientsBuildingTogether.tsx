@@ -15,6 +15,11 @@ export function ClientsBuildingTogether() {
   const [activeSlug, setActiveSlug] = useState<string>(realStudies[0]?.slug ?? '')
   const active = realStudies.find((s) => s.slug === activeSlug) ?? realStudies[0]
 
+  // Runtime guard: realStudies can be empty if every case study has a
+  // placeholder slug. TS narrows realStudies[0] to CaseStudy (not undefined)
+  // because noUncheckedIndexedAccess is off, but the value is genuinely
+  // optional at runtime.
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!active) return null
 
   const stack = (active.atAGlance.stack ?? []).flatMap((c) => c.items)
