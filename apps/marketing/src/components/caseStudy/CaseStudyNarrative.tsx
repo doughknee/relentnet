@@ -22,7 +22,9 @@ function renderBlocks(blocks: ReadonlyArray<StoryBlock>) {
           <img
             src={block.image.src}
             alt={block.image.alt}
-            className="w-full aspect-video object-cover"
+            width={block.image.width}
+            height={block.image.height}
+            className="w-full h-auto border border-line-faint"
             loading="lazy"
           />
           {block.image.caption ? (
