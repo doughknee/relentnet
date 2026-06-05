@@ -162,7 +162,7 @@ function HomeComponent() {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 relative">
+      <section className="min-h-screen flex flex-col justify-start md:justify-center pt-32 md:pt-0 px-6 md:px-12 relative">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-8">
             <p className="text-gold text-[10px] tracking-[0.35em] uppercase font-bold mb-8 animate-fade-in-up">
