@@ -15,31 +15,56 @@ interface ClientsHeroProps {
   scrollTargetId: string
 }
 
+/**
+ * Per-client brand palette for the hero profile tiles. Drawn from each
+ * client's own product/site identity so the collage reads as branded cards
+ * rather than a row of screenshots. `accent` colors the wordmark + monogram.
+ */
+const BRANDS: Record<string, { from: string; to: string; accent?: string }> = {
+  scrollr: { from: '#4f46e5', to: '#0b1020' },
+  'cambridge-building-group': {
+    from: '#13294b',
+    to: '#081019',
+    accent: '#e1be4c',
+  },
+  courtcommand: { from: '#0891b2', to: '#06212e' },
+  'vm-homes': { from: '#0d9488', to: '#062420' },
+}
+const FALLBACK_BRAND = { from: '#3f3f46', to: '#18181b' }
+
 function HeroTile({ study }: { study: CaseStudy }) {
-  const image = study.portraitImage ?? study.hero.image
+  const brand = BRANDS[study.slug] ?? FALLBACK_BRAND
+  const wordmark = brand.accent ?? '#ffffff'
   return (
     <Link
       to="/clients/$slug"
       params={{ slug: study.slug }}
-      className="group relative block aspect-[3/4] overflow-hidden border border-line-faint bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      className="group relative block aspect-[4/5] overflow-hidden border border-line-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      style={{ backgroundImage: `linear-gradient(150deg, ${brand.from}, ${brand.to})` }}
     >
-      {image ? (
-        <img
-          src={image.src}
-          alt={image.alt}
-          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-          loading="eager"
-        />
-      ) : null}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-        <h2 className="font-serif text-lg md:text-xl text-white leading-tight">
-          {study.name}
-        </h2>
-        <span className="mt-2 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-white/90 group-hover:text-gold transition-colors">
-          Read story
-          <ArrowRight className="size-3" />
-        </span>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-10 -right-3 font-serif leading-none text-[10rem] select-none transition-transform duration-500 group-hover:scale-110"
+        style={{ color: `${wordmark}1f` }}
+      >
+        {study.name.charAt(0)}
+      </span>
+      <div className="absolute inset-0 flex flex-col justify-between p-5">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-white/55">
+          {study.industry}
+        </p>
+        <div>
+          <h2
+            className="font-serif text-2xl leading-tight"
+            style={{ color: wordmark }}
+          >
+            {study.name}
+          </h2>
+          <span className="mt-2 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-white/80 transition-colors group-hover:text-gold">
+            Read story
+            <ArrowRight className="size-3" />
+          </span>
+        </div>
       </div>
     </Link>
   )
