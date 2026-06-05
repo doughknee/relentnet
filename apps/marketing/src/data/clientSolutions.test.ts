@@ -7,19 +7,20 @@ describe('clientSolutions', () => {
     expect(clientSolutions).toHaveLength(8)
   })
 
-  it('every solution has label, href, and decorative image source', () => {
+  it('every solution has a label, an internal href, and a blurb', () => {
     clientSolutions.forEach((s) => {
       expect(typeof s.label).toBe('string')
       expect(s.label.length).toBeGreaterThan(0)
       expect(s.href).toMatch(/^\//)
-      expect(s.image.src).toMatch(/^\//)
-      expect(s.image.alt.length).toBeGreaterThan(0)
+      expect(typeof s.blurb).toBe('string')
+      expect(s.blurb.length).toBeGreaterThan(0)
     })
   })
 
-  it('image filenames reference real public assets (case-study or portfolio)', () => {
+  it('uses only known internal route targets', () => {
+    const routes = ['/diagnostic', '/process', '/inquire', '/clients']
     clientSolutions.forEach((s) => {
-      expect(s.image.src).toMatch(/(case-studies|portfolio|logos)/)
+      expect(routes).toContain(s.href)
     })
   })
 })

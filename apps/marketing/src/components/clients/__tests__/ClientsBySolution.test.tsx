@@ -30,12 +30,10 @@ describe('ClientsBySolution', () => {
     })
   })
 
-  it('renders at least one decorative image with alt text', () => {
+  it('renders a blurb for every solution', () => {
     renderRouted(<ClientsBySolution />)
-    const images = screen.getAllByRole('img')
-    expect(images.length).toBeGreaterThan(0)
-    images.forEach((img) => {
-      expect(img.getAttribute('alt')).toBeTruthy()
+    clientSolutions.forEach((s) => {
+      expect(screen.getByText(s.blurb)).toBeInTheDocument()
     })
   })
 
