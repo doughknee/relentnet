@@ -201,6 +201,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       description:
         'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
     },
+    detailHeadline:
+      'How RelentNet rebuilt Scrollr into a cross-platform product.',
     summary: {
       problem:
         'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
@@ -862,6 +864,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       description:
         'MLS-synced property search across six Tampa Bay submarkets, from downtown St. Pete to the Gulf beaches.',
     },
+    detailHeadline:
+      'A premium, MLS-integrated home search for the Tampa Bay coast.',
     summary: {
       problem:
         'A St. Pete Beach real-estate team needed more than a polished website; they needed a premium buyer experience with live local inventory that earned trust before a buyer ever reached out.',

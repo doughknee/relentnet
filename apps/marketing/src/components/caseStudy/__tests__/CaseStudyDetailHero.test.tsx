@@ -21,20 +21,22 @@ function renderWithRouter(ui: React.ReactElement) {
 }
 
 describe('CaseStudyDetailHero', () => {
-  it('renders the customer logo slot with the study name when no logoSrc is provided', () => {
+  it('renders the detailHeadline as the h1 when provided', () => {
     const study = caseStudies.find(
       (s) => s.slug === 'cambridge-building-group',
     )!
     renderWithRouter(<CaseStudyDetailHero study={study} />)
-    const logoSlot = screen.getByTestId('detail-hero-logo')
-    expect(logoSlot).toHaveTextContent(study.name)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      study.detailHeadline!,
+    )
   })
 
-  it('renders the global partner logo as a meta-card row when provided', () => {
-    const study = caseStudies.find((s) => s.slug === 'scrollr')!
+  it('falls back to hero.tagline when no detailHeadline is set', () => {
+    const base = caseStudies.find((s) => s.slug === 'scrollr')!
+    const study = { ...base, detailHeadline: undefined }
     renderWithRouter(<CaseStudyDetailHero study={study} />)
-    expect(
-      screen.getByRole('img', { name: study.atAGlance.global!.label }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      study.hero.tagline,
+    )
   })
 })
