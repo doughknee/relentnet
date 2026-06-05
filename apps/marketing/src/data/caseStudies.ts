@@ -610,25 +610,47 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         p(
           'Everything else — typography, project imagery, contact paths — needed to serve that one job.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/cambridge-building-group/track-record.webp',
+            alt: 'Cambridge Building Group track-record timeline — founded 2015, the Nashville Shores project, tornado-recovery rebuilds, and an unlimited Tennessee license',
+            caption:
+              'The credibility was always there — founded 2015, an unlimited Tennessee license, 350+ projects. The work was surfacing it.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
       build: [
         p(
           'The engagement grew into two pieces of software. The first is the public marketing site — built on React 19, TanStack Router, Tailwind 4, and Motion — with deliberate visual hierarchy and conversion-focused inquiry paths, so a prospect at the top of the funnel and one ready to talk both find the right next step.',
         ),
-        p(
-          'The second is an internal AP portal. Vendor invoices arrive through a Postmark inbound email address or a manual upload, and Claude vision extracts the fields. A project manager reviews each one, and approved invoices post straight to QuickBooks Online as Bills — PDF attached, project tagged. It runs on FastAPI and PostgreSQL behind self-hosted Logto auth, with Cloudflare R2 for document storage, deployed on Coolify.',
-        ),
         {
           type: 'image',
           image: {
-            src: '/case-studies/cambridge-building-group/hero.webp',
-            alt: 'Cambridge Building Group marketing site hero, leading with Est. 2015, 120+ years combined experience, and 350+ projects completed',
+            src: '/case-studies/cambridge-building-group/values.webp',
+            alt: 'The Cambridge Building Group core-values section — Communication, Urgency, Integrity, Technology, Innovation, and Safety in a tabbed navy-and-gold layout',
             caption:
-              'The marketing site leads with the record, not the brochure — a decade in business, 350+ projects, and an unlimited Tennessee license.',
+              'The rebuilt site leads with how the firm works — its core values laid out plainly, in the firm’s own navy-and-gold identity.',
             width: 1600,
-            height: 1000,
+            height: 956,
           },
         },
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/cambridge-building-group/services.webp',
+            alt: 'Cambridge Building Group services section — commercial, hospitality, industrial, multifamily, select residential, and pre-engineered metal buildings',
+            caption:
+              'Six service areas laid out so a prospect can self-qualify before they ever pick up the phone.',
+            width: 1600,
+            height: 956,
+          },
+        },
+        p(
+          'The second is an internal AP portal. Vendor invoices arrive through a Postmark inbound email address or a manual upload, and Claude vision extracts the fields. A project manager reviews each one, and approved invoices post straight to QuickBooks Online as Bills — PDF attached, project tagged. It runs on FastAPI and PostgreSQL behind self-hosted Logto auth, with Cloudflare R2 for document storage, deployed on Coolify.',
+        ),
       ],
       outcome: [
         p(
@@ -894,14 +916,47 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         p(
           'We built a premium digital storefront with IDX property search synced to the MFRMLS feed, so current listings appear inside the VM Homes brand with live prices, beds, baths, and square footage. Search is organized by the six Tampa Bay submarkets the team works — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach — alongside neighborhood guidance and client-first conversion paths.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/listings.webp',
+            alt: 'VM Homes "VM Exclusives" listings — Tampa Bay properties with photos, prices, and bed/bath/square-footage details',
+            caption:
+              'Live MFRMLS listings render inside the VM Homes brand — prices, beds, baths, and square footage, with no hand-off to a generic portal.',
+            width: 1600,
+            height: 956,
+          },
+        },
         p(
           'Buyers can move from browsing live inventory to a real conversation without ever feeling chased, and the team can point a prospect at the exact slice of the market that fits them.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/areas.webp',
+            alt: 'VM Homes "Search By Area" — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach',
+            caption:
+              'Search is organized by the six submarkets the team actually works — from downtown St. Pete to the Gulf beaches.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
       outcome: [
         p(
           'The site works as both a brand asset and a practical client-acquisition tool. Buyers get clarity and live inventory early; the team gets better conversations when those buyers raise their hand.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/expertise.webp',
+            alt: 'VM Homes "Expertise You Can Trust" section, with a chat-with-an-expert call to action',
+            caption:
+              'The brand stays front and center — a premium experience that earns trust before a buyer ever reaches out.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
     },
     meta: {

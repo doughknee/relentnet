@@ -21,10 +21,10 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
     label: 'Diagnose workflow friction',
     href: '/diagnostic',
     image: {
-      src: '/case-studies/scrollr/legacy-ticker-bar.webp',
-      alt: 'Diagnostic surface: legacy Scrollr ticker bar showing the friction we audited',
-      width: 1920,
-      height: 112,
+      src: '/case-studies/vm-homes/listings.webp',
+      alt: 'VM Homes live MLS listings, built into the brand after diagnosing the buyer journey',
+      width: 1600,
+      height: 956,
     },
   },
   {
@@ -51,10 +51,10 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
     label: 'Stage credibility for sales',
     href: '/process',
     image: {
-      src: '/cbg_portfolio.png',
-      alt: 'Cambridge Building Group marketing site preview',
-      width: 1440,
-      height: 810,
+      src: '/case-studies/cambridge-building-group/values.webp',
+      alt: 'Cambridge Building Group core-values section in the firm’s navy-and-gold identity',
+      width: 1600,
+      height: 956,
     },
   },
   {
@@ -71,10 +71,10 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
     label: 'Operate real-time infrastructure',
     href: '/process',
     image: {
-      src: '/case-studies/scrollr/ticker-all-detailed-dark.webp',
-      alt: 'Scrollr real-time multi-channel ticker output',
-      width: 1465,
-      height: 62,
+      src: '/case-studies/courtcommand/hero.webp',
+      alt: 'CourtCommand, a real-time pickleball tournament and broadcast platform on a Go and Redis core',
+      width: 1600,
+      height: 1000,
     },
   },
   {
