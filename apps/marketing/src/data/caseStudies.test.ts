@@ -7,8 +7,8 @@ import {
 } from './caseStudies'
 
 describe('caseStudies data', () => {
-  it('has exactly 11 entries', () => {
-    expect(caseStudies).toHaveLength(11)
+  it('has exactly 5 live entries', () => {
+    expect(caseStudies).toHaveLength(5)
   })
 
   it('has unique URL-safe slugs', () => {
@@ -173,22 +173,27 @@ describe('caseStudies data', () => {
     }
   })
 
-  it('every case study has a companySize set', () => {
+  it('every live case study has a concrete companySize', () => {
     for (const study of caseStudies) {
       expect(study.companySize).toBeDefined()
-      expect(['startup', 'growth', 'enterprise', 'placeholder']).toContain(
-        study.companySize,
-      )
+      expect(['startup', 'growth', 'enterprise']).toContain(study.companySize)
     }
   })
 
-  it('placeholder studies are marked with a concrete companySize', () => {
-    const placeholders = caseStudies.filter((s) =>
-      s.slug.startsWith('placeholder-'),
+  it('ships no placeholder studies on the live site', () => {
+    const placeholders = caseStudies.filter(
+      (s) => s.slug.startsWith('placeholder-') || s.companySize === 'placeholder',
     )
-    expect(placeholders.length).toBeGreaterThanOrEqual(6)
-    for (const p of placeholders) {
-      expect(p.companySize).not.toBe('placeholder')
+    expect(placeholders).toHaveLength(0)
+  })
+
+  it('covers every "customers by size" tab with at least one study', () => {
+    for (const size of ['startup', 'growth', 'enterprise'] as const) {
+      const inTab = caseStudies.filter((s) => s.companySize === size)
+      expect(
+        inTab.length,
+        `the "${size}" size tab must have at least one case study`,
+      ).toBeGreaterThan(0)
     }
   })
 })
