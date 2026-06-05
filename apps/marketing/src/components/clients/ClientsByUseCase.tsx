@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
+import { ClientBrandTile } from './ClientBrandTile'
 import type { EngagementType } from '@/data/caseStudies'
 import { caseStudies } from '@/data/caseStudies'
 
@@ -14,7 +14,7 @@ const TILES_PER_TAB = 6
 
 /**
  * "Customers by engagement type" — 3 tabs (Product / Operations / Platform)
- * swap a 2-column mixed-aspect image mosaic. Mirrors Stripe /customers's
+ * swap a grid of branded client profile tiles. Mirrors Stripe /customers's
  * "Customers by use case" section structurally.
  */
 export function ClientsByUseCase() {
@@ -66,43 +66,18 @@ export function ClientsByUseCase() {
             No case studies in this category yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-line-faint">
-            {tiles.map((study, index) => {
-              const image = study.hero.image ?? study.portraitImage
-              const aspectClass =
-                index % 2 === 0 ? 'aspect-[16/10]' : 'aspect-[4/3]'
-              return (
-                <Link
-                  key={study.slug}
-                  to="/clients/$slug"
-                  params={{ slug: study.slug }}
-                  className="group relative block overflow-hidden bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-                >
-                  {image ? (
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className={`${aspectClass} w-full object-cover transition duration-500 group-hover:scale-[1.03]`}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className={`${aspectClass} w-full bg-inset`} />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/80">
-                      {study.industry}
-                    </p>
-                    <h3 className="mt-2 font-serif text-2xl text-white">
-                      {study.name}
-                    </h3>
-                    <span className="mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white group-hover:text-gold transition-colors">
-                      Read story →
-                    </span>
-                  </div>
-                </Link>
-              )
-            })}
+          <div
+            className={`grid grid-cols-1 gap-px bg-line-faint ${
+              tiles.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-2'
+            }`}
+          >
+            {tiles.map((study) => (
+              <ClientBrandTile
+                key={study.slug}
+                study={study}
+                className="h-64 md:h-72"
+              />
+            ))}
           </div>
         )}
       </div>
