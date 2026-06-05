@@ -17,7 +17,7 @@ describe('Header navigation', () => {
     expect(primaryNavItems.map((item) => item.label)).toEqual([
       'Diagnostic',
       'Process',
-      'Work',
+      'Clients',
       'Portal',
     ])
     expect(utilityCta).toEqual({ label: 'Start Diagnostic', to: '/diagnostic' })

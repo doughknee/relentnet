@@ -19,7 +19,7 @@ function LegalIndex() {
     <div className="min-h-screen">
       <div className="pt-48 pb-20 px-6 md:px-20 relative z-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="font-serif text-5xl md:text-7xl leading-[1.1] animate-fade-in-up opacity-0">
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl leading-[1.1] animate-fade-in-up opacity-0">
             Legal <span className="italic text-gold">Documentation.</span>
           </h1>
           <p

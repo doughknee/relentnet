@@ -17,7 +17,7 @@ const mobileCtaClasses =
 export const primaryNavItems = [
   { label: 'Diagnostic', to: '/diagnostic' },
   { label: 'Process', to: '/process' },
-  { label: 'Work', to: '/portfolio' },
+  { label: 'Clients', to: '/clients' },
   { label: 'Portal', to: '/portal' },
 ] as const
 

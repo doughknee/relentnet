@@ -162,7 +162,7 @@ function HomeComponent() {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 relative">
+      <section className="min-h-screen flex flex-col justify-start md:justify-center pt-32 md:pt-0 px-6 md:px-12 relative">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-8">
             <p className="text-gold text-[10px] tracking-[0.35em] uppercase font-bold mb-8 animate-fade-in-up">
@@ -190,7 +190,7 @@ function HomeComponent() {
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                to="/portfolio"
+                to="/clients"
                 className="inline-flex items-center justify-center gap-3 border border-line px-7 py-4 text-sm uppercase tracking-widest text-ink transition-all duration-300 hover:border-gold hover:text-gold"
               >
                 {homepageHero.secondaryCta}
@@ -398,7 +398,7 @@ function HomeComponent() {
           </div>
           <div className="mt-12 text-center">
             <Link
-              to="/portfolio"
+              to="/clients"
               className="inline-flex items-center gap-3 text-gold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300"
             >
               See problems we have solved

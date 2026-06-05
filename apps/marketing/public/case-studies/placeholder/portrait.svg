@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-label="Case study placeholder image">
+  <rect x="0" y="0" width="600" height="800" fill="#1a1a1a"/>
+  <rect x="2" y="2" width="596" height="796" fill="none" stroke="#2a2a2a" stroke-width="2"/>
+  <text x="300" y="380" text-anchor="middle" font-family="serif" font-size="32" fill="#666">Case study</text>
+  <text x="300" y="430" text-anchor="middle" font-family="serif" font-size="32" fill="#666">coming soon</text>
+</svg>
