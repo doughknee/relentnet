@@ -66,28 +66,26 @@ export function CaseStudyNarrative({ study }: CaseStudyNarrativeProps) {
   const solutionBlocks = study.story.build
 
   return (
-    <section className="relative z-10 px-6 md:px-12 py-12 md:py-16">
-      <div className="max-w-3xl">
-        <h2 className="font-serif text-3xl md:text-5xl mb-8">Challenge</h2>
-        {renderBlocks(challengeBlocks)}
+    <div className="max-w-2xl">
+      <h2 className="font-serif text-3xl md:text-4xl mb-8">Challenge</h2>
+      {renderBlocks(challengeBlocks)}
 
-        <h2 className="font-serif text-3xl md:text-5xl mb-8 mt-16">Solution</h2>
-        {renderBlocks(solutionBlocks)}
+      <h2 className="font-serif text-3xl md:text-4xl mb-8 mt-16">Solution</h2>
+      {renderBlocks(solutionBlocks)}
 
-        <h2 className="font-serif text-3xl md:text-5xl mb-8 mt-16">Results</h2>
-        {study.results
-          ? study.results.map((result, idx) => (
-              <div key={idx}>
-                <h3 className="font-serif text-xl md:text-2xl mb-4 mt-12 first:mt-0">
-                  {result.headline}
-                </h3>
-                <p className="text-ink text-base md:text-lg leading-relaxed mb-6">
-                  {result.body}
-                </p>
-              </div>
-            ))
-          : renderBlocks(study.story.outcome)}
-      </div>
-    </section>
+      <h2 className="font-serif text-3xl md:text-4xl mb-8 mt-16">Results</h2>
+      {study.results
+        ? study.results.map((result, idx) => (
+            <div key={idx}>
+              <h3 className="font-serif text-xl md:text-2xl mb-4 mt-12 first:mt-0">
+                {result.headline}
+              </h3>
+              <p className="text-ink text-base md:text-lg leading-relaxed mb-6">
+                {result.body}
+              </p>
+            </div>
+          ))
+        : renderBlocks(study.story.outcome)}
+    </div>
   )
 }
