@@ -826,17 +826,6 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         p(
           'CourtCommand is two products in one codebase: the management platform (tournaments, leagues, brackets, live scoring, scheduling, and player/team/organization management) and a standalone broadcast-overlay suite with themeable graphics that read live from the same engine and sell bundled or on their own.',
         ),
-        {
-          type: 'image',
-          image: {
-            src: '/case-studies/courtcommand/hero.webp',
-            alt: 'CourtCommand homepage — "Pickleball Tournament & League Management" with tournaments, leagues, and venues',
-            caption:
-              'The public platform: tournaments, leagues, and live scores over the same real-time core that drives the broadcast overlays.',
-            width: 1600,
-            height: 1000,
-          },
-        },
       ],
       outcome: [
         p(
