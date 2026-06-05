@@ -3,31 +3,41 @@ import { useMemo, useState } from 'react'
 
 import { caseStudies } from '@/data/caseStudies'
 
-const TABS = [
+const ALL_TABS = [
   { id: 'startup', label: 'Startup' },
   { id: 'growth', label: 'Growth' },
   { id: 'enterprise', label: 'Enterprise' },
 ] as const
 
-type SizeTabId = (typeof TABS)[number]['id']
+type SizeTabId = (typeof ALL_TABS)[number]['id']
+
+// Only surface tiers we actually have live case studies for, so the section
+// never renders an empty tab. As the roster grows, tiers reappear automatically.
+const TABS = ALL_TABS.filter((tab) =>
+  caseStudies.some((s) => s.companySize === tab.id),
+)
 
 const CARDS_PER_TAB = 3
 
 /**
- * "Customers by size" — 3 tabs (Startup / Growth / Enterprise) over a 3-card grid.
- * Each card shows the case study's first stat (or featuredStat), a flat stack
- * tag list with "+N more", and a landscape image at the bottom.
+ * "Customers by size" — a tab per populated size tier (Startup / Growth /
+ * Enterprise) over a 3-card grid. Each card shows the case study's first stat
+ * (or featuredStat), a flat stack tag list with "+N more", and a landscape
+ * image at the bottom.
  *
- * Real studies displace placeholder studies in their assigned tab. Each tab
- * always renders exactly CARDS_PER_TAB cards.
+ * Tiers with no live case study are not rendered as tabs.
  */
 export function ClientsBySize() {
-  const [active, setActive] = useState<SizeTabId>('startup')
+  const [active, setActive] = useState<SizeTabId>(
+    TABS[0]?.id ?? 'startup',
+  )
 
   const visible = useMemo(() => {
     const inTab = caseStudies.filter((s) => s.companySize === active)
     return inTab.slice(0, CARDS_PER_TAB)
   }, [active])
+
+  if (TABS.length === 0) return null
 
   return (
     <section

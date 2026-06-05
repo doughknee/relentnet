@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 export const clientsIntro = {
   eyebrow: 'Customer stories',
   headline: 'The diagnostic-first studio behind systems that move cleaner.',
-  body: "We're building a practice for ambitious operators who would rather understand the friction in their workflow than buy more software to mask it. Our engagements turn diagnosed friction into useful systems that help real businesses move cleaner — across construction, consumer software, sports tech, real estate, and nonprofits.",
+  body: "We're building a practice for ambitious operators who would rather understand the friction in their workflow than buy more software to mask it. Our engagements turn diagnosed friction into useful systems that help real businesses move cleaner — across construction, consumer software, sports tech, and real estate.",
 } as const
 
 interface ClientsHeroProps {

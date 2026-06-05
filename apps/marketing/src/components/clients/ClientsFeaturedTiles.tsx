@@ -6,7 +6,7 @@ import { caseStudies } from '@/data/caseStudies'
  * Featured tile row — portrait tiles with image + logo overlay + read-story link.
  * Mirrors Stripe /customers's top featured row.
  *
- * Renders every live case study (currently 5). Each tile uses portraitImage if
+ * Renders every live case study (currently 4). Each tile uses portraitImage if
  * set, falling back to hero.image. Stripe uses 3:4 portrait crops with
  * bottom-aligned overlay.
  */
@@ -17,7 +17,7 @@ export function ClientsFeaturedTiles() {
   return (
     <section className="relative z-10 px-6 md:px-12 py-16 md:py-20">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-px bg-line-faint">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-line-faint">
           {tiles.map((study, index) => {
             const image = study.portraitImage ?? study.hero.image
             return (
