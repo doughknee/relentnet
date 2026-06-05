@@ -29,7 +29,7 @@ function ClientDetail() {
   const { study } = Route.useLoaderData()
 
   return (
-    <article className="min-h-screen overflow-hidden">
+    <article className="min-h-screen">
       <CaseStudyDetailHero study={study} />
       <CaseStudyStoryLayout study={study} />
       {study.pullquote ? (
