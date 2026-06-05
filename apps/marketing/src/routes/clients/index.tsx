@@ -4,9 +4,7 @@ import { ClientsBuildingTogether } from '@/components/clients/ClientsBuildingTog
 import { ClientsBySize } from '@/components/clients/ClientsBySize'
 import { ClientsBySolution } from '@/components/clients/ClientsBySolution'
 import { ClientsByUseCase } from '@/components/clients/ClientsByUseCase'
-import { ClientsFeaturedTiles } from '@/components/clients/ClientsFeaturedTiles'
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
-import { ClientsLogoStrip } from '@/components/clients/ClientsLogoStrip'
 import { ClientsMeasurableResults } from '@/components/clients/ClientsMeasurableResults'
 import { ClosingCtaPair, clientsCta } from '@/components/clients/ClosingCtaPair'
 
@@ -33,9 +31,7 @@ function ClientsIndex() {
   return (
     <div className="min-h-screen overflow-hidden">
       <ClientsHero scrollTargetId={ALL_STORIES_ID} />
-      <ClientsFeaturedTiles />
       <ClientsMeasurableResults />
-      <ClientsLogoStrip />
       <ClientsBySize />
       <ClientsBuildingTogether />
       <ClientsByUseCase />

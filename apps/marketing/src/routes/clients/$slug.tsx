@@ -1,14 +1,9 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
-import { CaseStudyBigStats } from '@/components/caseStudy/CaseStudyBigStats'
 import { CaseStudyDetailHero } from '@/components/caseStudy/CaseStudyDetailHero'
-import { CaseStudyHeroImage } from '@/components/caseStudy/CaseStudyHeroImage'
-import { CaseStudyInlineCta } from '@/components/caseStudy/CaseStudyInlineCta'
-import { CaseStudyNarrative } from '@/components/caseStudy/CaseStudyNarrative'
-import { CaseStudyProductsRow } from '@/components/caseStudy/CaseStudyProductsRow'
 import { CaseStudyPullquote } from '@/components/caseStudy/CaseStudyPullquote'
 import { CaseStudyReadMore } from '@/components/caseStudy/CaseStudyReadMore'
-import { CaseStudyRegionStrip } from '@/components/caseStudy/CaseStudyRegionStrip'
+import { CaseStudyStoryLayout } from '@/components/caseStudy/CaseStudyStoryLayout'
 import { ClosingCtaPair } from '@/components/clients/ClosingCtaPair'
 import { caseStudies } from '@/data/caseStudies'
 
@@ -34,17 +29,9 @@ function ClientDetail() {
   const { study } = Route.useLoaderData()
 
   return (
-    <article className="min-h-screen overflow-hidden">
+    <article className="min-h-screen">
       <CaseStudyDetailHero study={study} />
-      <CaseStudyProductsRow study={study} />
-      <CaseStudyRegionStrip
-        region={study.region}
-        companySize={study.companySize}
-      />
-      <CaseStudyBigStats study={study} />
-      <CaseStudyInlineCta />
-      <CaseStudyHeroImage study={study} />
-      <CaseStudyNarrative study={study} />
+      <CaseStudyStoryLayout study={study} />
       {study.pullquote ? (
         <CaseStudyPullquote pullquote={study.pullquote} />
       ) : null}

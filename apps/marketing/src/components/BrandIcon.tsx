@@ -54,7 +54,7 @@ export function BrandIcon({ slug, label, className }: BrandIconProps) {
       aria-label={label}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      className={className ?? 'size-4 fill-current text-ink-sub'}
+      className={`fill-current ${className ?? 'size-4 text-ink-sub'}`}
     >
       <path d={icon.path} />
     </svg>

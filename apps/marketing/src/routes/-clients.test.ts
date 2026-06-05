@@ -7,7 +7,7 @@ describe('clients case studies', () => {
   it('frames work as diagnostic-first', () => {
     expect(clientsIntro.headline.toLowerCase()).toContain('diagnostic')
     expect(clientsIntro.body.toLowerCase()).toContain('diagnos')
-    expect(caseStudies.length).toBeGreaterThanOrEqual(5)
+    expect(caseStudies.length).toBeGreaterThanOrEqual(3)
     expect(
       caseStudies.every((study) => study.summary.diagnosis.length > 0),
     ).toBe(true)

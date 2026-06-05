@@ -124,7 +124,7 @@ const outcomeCards: Array<OutcomeCard> = [
 function Diagnostic() {
   return (
     <div className="min-h-screen overflow-hidden">
-      <section className="relative min-h-screen px-6 md:px-12 flex items-center">
+      <section className="relative min-h-screen px-6 md:px-12 flex items-start md:items-center pt-32 md:pt-0">
         <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
           <div className="lg:col-span-8">
             <p className="text-gold text-[10px] tracking-[0.35em] uppercase font-bold mb-8 animate-fade-in-up">

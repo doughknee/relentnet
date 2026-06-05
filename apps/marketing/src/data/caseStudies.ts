@@ -194,13 +194,15 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     industry: 'Consumer Software',
     systemType: 'Cross-Platform Desktop Product',
     engagementType: 'product',
-    companySize: 'placeholder',
+    companySize: 'startup',
     featured: true,
     featuredStat: {
       value: '1 → 3',
       description:
         'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
     },
+    detailHeadline:
+      'How RelentNet rebuilt Scrollr into a cross-platform product.',
     summary: {
       problem:
         'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
@@ -494,31 +496,105 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     name: 'Cambridge Building Group',
     url: 'https://cambridgebg.com',
     industry: 'Commercial Construction',
-    systemType: 'Sales Enablement System',
+    systemType: 'Marketing Site + AP Automation',
     engagementType: 'operations',
-    companySize: 'placeholder',
+    companySize: 'enterprise',
+    region: 'Nashville, TN',
+    featuredStat: {
+      value: 'Email → QBO',
+      description:
+        'Vendor invoices route from inbox to QuickBooks Bills automatically — Claude-vision extraction, PM approval, PDF and project attached.',
+    },
+    detailHeadline:
+      'A credibility-first front door, and an AP pipeline that runs itself.',
     summary: {
       problem:
-        'A high-trust construction firm needed a digital presence that matched the quality of its work and helped serious prospects understand capability quickly.',
+        'A decade-old Nashville commercial builder had a web presence that undersold the firm, plus an accounts-payable process that ran on manual invoice entry across hundreds of active projects.',
       diagnosis:
-        'The site needed to reduce sales friction by making credibility, project quality, and company positioning immediately clear.',
+        'Two jobs, not one: the site had to make credibility legible in seconds for serious prospects, and the back office needed vendor invoices to stop being keyed in by hand.',
       build:
-        'A commanding marketing system with streamlined messaging, professional visual hierarchy, and conversion-focused inquiry paths.',
+        'A credibility-first marketing site plus an internal software hub — including an AP portal that reads vendor invoices with Claude vision, routes them through PM review, and posts them to QuickBooks Online as Bills.',
       outcome:
-        'The company gained a more credible front door for high-value commercial opportunities and a cleaner way to support sales conversations.',
+        'Cambridge now opens with its real track record and runs an invoice pipeline that moves from inbox to QuickBooks with the PDF attached and the project tagged.',
     },
     hero: {
       tagline:
-        'A commanding front door for high-value commercial construction opportunities.',
+        'A commanding front door for high-value commercial construction opportunities — backed by a back office that no longer keys in invoices by hand.',
       image: {
-        src: '/cbg_portfolio.png',
-        alt: 'Cambridge Building Group homepage preview',
-        width: 1440,
-        height: 810,
+        src: '/case-studies/cambridge-building-group/hero.webp',
+        alt: 'Cambridge Building Group homepage — "Building Nashville’s Future" over a navy-and-gold hero noting Est. 2015, 120+ years combined experience, and 350+ projects completed',
+        width: 1600,
+        height: 1000,
       },
     },
+    portraitImage: {
+      src: '/case-studies/cambridge-building-group/portrait.webp',
+      alt: 'Cambridge Building Group hero, portrait crop',
+      width: 900,
+      height: 1200,
+    },
     atAGlance: {
-      role: 'Marketing site, messaging, hosting',
+      engagementYear: '2025–present',
+      role: 'Marketing site, internal software hub, AP automation, hosting',
+      stack: [
+        {
+          category: 'Marketing Site',
+          items: [
+            { label: 'React 19', iconSlug: 'react' },
+            { label: 'TanStack Router' },
+            { label: 'Tailwind 4', iconSlug: 'tailwindcss' },
+            { label: 'Motion' },
+            { label: 'Vite 7', iconSlug: 'vite' },
+          ],
+        },
+        {
+          category: 'Invoice Portal',
+          items: [
+            { label: 'FastAPI', iconSlug: 'fastapi' },
+            { label: 'PostgreSQL 16', iconSlug: 'postgresql' },
+            { label: 'SQLAlchemy 2' },
+            { label: 'Alembic' },
+          ],
+        },
+        {
+          category: 'AI & Integrations',
+          items: [
+            { label: 'Claude (vision)', iconSlug: 'anthropic' },
+            { label: 'QuickBooks Online', iconSlug: 'quickbooks' },
+            { label: 'Postmark' },
+          ],
+        },
+        {
+          category: 'Ops & Storage',
+          items: [
+            { label: 'Logto' },
+            { label: 'Cloudflare R2', iconSlug: 'cloudflare' },
+            { label: 'Coolify' },
+          ],
+        },
+      ],
+      metrics: [
+        {
+          label: 'Accounts payable',
+          from: 'Manual invoice entry',
+          to: 'Inbox → QuickBooks',
+          context:
+            'Vendor invoices arrive by email or upload, get parsed by Claude vision, pass a PM review, and post to QuickBooks Online as Bills with the PDF and project attached.',
+        },
+        {
+          label: 'Sales presence',
+          from: 'Underbuilt web presence',
+          to: 'Credibility-first site',
+          context:
+            'The site opens on the firm’s real record — established 2015, 350+ projects completed, and an unlimited Tennessee contractor license.',
+        },
+        {
+          label: 'Build stack',
+          value: 'React 19 + FastAPI',
+          context:
+            'The same modern stack RelentNet runs in-house, self-hosted on Coolify with Cloudflare R2 storage.',
+        },
+      ],
     },
     story: {
       problem: [
@@ -536,25 +612,95 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         p(
           'Everything else — typography, project imagery, contact paths — needed to serve that one job.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/cambridge-building-group/track-record.webp',
+            alt: 'Cambridge Building Group track-record timeline — founded 2015, the Nashville Shores project, tornado-recovery rebuilds, and an unlimited Tennessee license',
+            caption:
+              'The credibility was always there — founded 2015, an unlimited Tennessee license, 350+ projects. The work was surfacing it.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
       build: [
         p(
-          'We built a marketing system with deliberate visual hierarchy, streamlined messaging, and conversion-focused inquiry paths. The structure was designed so that a prospect at the top of the funnel and a prospect ready to talk both find the right next step.',
+          'The engagement grew into two pieces of software. The first is the public marketing site — built on React 19, TanStack Router, Tailwind 4, and Motion — with deliberate visual hierarchy and conversion-focused inquiry paths, so a prospect at the top of the funnel and one ready to talk both find the right next step.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/cambridge-building-group/values.webp',
+            alt: 'The Cambridge Building Group core-values section — Communication, Urgency, Integrity, Technology, Innovation, and Safety in a tabbed navy-and-gold layout',
+            caption:
+              'The rebuilt site leads with how the firm works — its core values laid out plainly, in the firm’s own navy-and-gold identity.',
+            width: 1600,
+            height: 956,
+          },
+        },
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/cambridge-building-group/services.webp',
+            alt: 'Cambridge Building Group services section — commercial, hospitality, industrial, multifamily, select residential, and pre-engineered metal buildings',
+            caption:
+              'Six service areas laid out so a prospect can self-qualify before they ever pick up the phone.',
+            width: 1600,
+            height: 956,
+          },
+        },
         p(
-          'The result reads as a commercial firm that takes itself seriously, which is the version of the firm we wanted serious prospects to meet first.',
+          'The second is an internal AP portal. Vendor invoices arrive through a Postmark inbound email address or a manual upload, and Claude vision extracts the fields. A project manager reviews each one, and approved invoices post straight to QuickBooks Online as Bills — PDF attached, project tagged. It runs on FastAPI and PostgreSQL behind self-hosted Logto auth, with Cloudflare R2 for document storage, deployed on Coolify.',
         ),
       ],
       outcome: [
         p(
-          'Cambridge gained a cleaner front door for high-value commercial opportunities. Sales conversations have more to lean on, and the brand is no longer underselling the work behind it.',
+          'Cambridge now opens with its real track record and runs accounts payable as a pipeline rather than a data-entry chore. Invoices move from inbox to QuickBooks with a human in the loop only where judgment is needed, and the brand finally matches the quality of the work behind it.',
         ),
       ],
     },
+    services: [
+      {
+        label: 'Strategy',
+        items: [
+          'Sales-credibility positioning',
+          'AP workflow diagnosis',
+          'Information architecture',
+        ],
+      },
+      {
+        label: 'Design & Engineering',
+        items: [
+          'Marketing site (React 19 + TanStack)',
+          'Internal AP portal with Claude-vision extraction',
+          'QuickBooks Online integration',
+          'Logto authentication',
+        ],
+      },
+      {
+        label: 'Operations',
+        items: [
+          'Self-hosted Coolify infrastructure',
+          'Cloudflare R2 document storage',
+          'Ongoing iteration and hosting',
+        ],
+      },
+    ],
+    results: [
+      {
+        headline: 'Invoices that post themselves',
+        body: 'Vendor invoices arrive by email, get read by Claude vision, pass a PM’s review, and land in QuickBooks Online as Bills with the PDF attached and the project tagged.',
+      },
+      {
+        headline: 'A front door that matches the work',
+        body: 'The marketing site leads with the firm’s record — a decade in business, 350+ projects, and an unlimited Tennessee contractor license.',
+      },
+    ],
     meta: {
       title: 'Cambridge Building Group Case Study | RelentNet',
       description:
-        'How RelentNet built a sales-enablement marketing system for a high-trust commercial construction firm.',
+        'How RelentNet built Cambridge Building Group a credibility-first marketing site and an internal AP portal that reads vendor invoices with Claude vision and posts them to QuickBooks Online.',
     },
   },
   {
@@ -562,58 +708,135 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     name: 'CourtCommand',
     url: 'https://courtcommand.app',
     industry: 'Sports Technology',
-    systemType: 'Real-Time Operations Engine',
+    systemType: 'Real-Time Tournament Platform',
     engagementType: 'platform',
-    companySize: 'placeholder',
+    companySize: 'startup',
+    featuredStat: {
+      value: '170+',
+      description:
+        'API endpoints behind a Go and Redis real-time core powering brackets, live scoring, and broadcast overlays.',
+    },
+    detailHeadline:
+      'A low-latency operating layer for live pickleball.',
     summary: {
       problem:
-        'Broadcast-style sports environments cannot tolerate lag, unclear state, or fragile manual scorekeeping workflows.',
+        'Running a pickleball tournament or league means juggling brackets, schedules, live scores, and broadcast graphics — usually across spreadsheets and fragile, generic tools that desync under game-day pressure.',
       diagnosis:
-        'The system needed to behave like operational infrastructure: fast, multi-tenant, synchronized, and simple under pressure.',
+        'This was an infrastructure problem before a UI one: the platform had to be fast, multi-tenant, and synchronized across every surface — scorer, schedule, and broadcast overlay alike.',
       build:
-        'A low-latency referee engine and sports ticker designed around real-time score synchronization and live event workflows.',
+        'A pickleball tournament and league platform on a Go + Redis real-time core, paired with a standalone, themeable broadcast-overlay suite — two products sharing one backend.',
       outcome:
-        'CourtCommand became a purpose-built operating layer for sports presentation instead of another generic scoreboard interface.',
+        'CourtCommand reads as purpose-built operating infrastructure for live pickleball: tournaments, leagues, live scoring, and broadcast graphics, not another generic scoreboard skin.',
     },
     hero: {
       tagline:
-        'A low-latency operating layer for live sports, designed for the people running the room.',
+        'Tournaments, leagues, live scoring, and broadcast overlays for pickleball — on one low-latency platform built for the people running the room.',
+      image: {
+        src: '/case-studies/courtcommand/hero.webp',
+        alt: 'CourtCommand homepage — "Pickleball Tournament & League Management" with tournaments, leagues, and venues',
+        width: 1600,
+        height: 1000,
+      },
+    },
+    portraitImage: {
+      src: '/case-studies/courtcommand/portrait.webp',
+      alt: 'CourtCommand homepage, portrait crop',
+      width: 900,
+      height: 1200,
     },
     atAGlance: {
-      role: 'Product design, build, hosting',
+      role: 'Product architecture, backend engineering, real-time infrastructure, hosting',
+      stack: [
+        {
+          category: 'Core',
+          items: [
+            { label: 'Go 1.24 (Chi v5)', iconSlug: 'go' },
+            { label: 'sqlc' },
+            { label: 'Goose migrations' },
+          ],
+        },
+        {
+          category: 'Data & Realtime',
+          items: [
+            { label: 'PostgreSQL 17', iconSlug: 'postgresql' },
+            { label: 'Redis 7', iconSlug: 'redis' },
+            { label: 'WebSockets' },
+          ],
+        },
+        {
+          category: 'Client',
+          items: [
+            { label: 'React 19', iconSlug: 'react' },
+            { label: 'Vite', iconSlug: 'vite' },
+            { label: 'TanStack Router' },
+            { label: 'Tailwind 4', iconSlug: 'tailwindcss' },
+          ],
+        },
+        {
+          category: 'Ops',
+          items: [
+            { label: 'Docker Compose', iconSlug: 'docker' },
+            { label: 'Coolify' },
+          ],
+        },
+      ],
+      metrics: [
+        {
+          label: 'Match engine',
+          value: 'Go + Redis',
+          context:
+            '170+ API endpoints and six WebSocket channels keep brackets, scores, and broadcast overlays synchronized in real time.',
+        },
+        {
+          label: 'Backend hardening',
+          value: '62 automated tests',
+          context:
+            'Built across eight implementation phases and 29 database migrations before any UI shipped.',
+        },
+        {
+          label: 'Product surface',
+          from: 'Manual scorekeeping',
+          to: 'Tournaments + broadcast',
+          context:
+            'Tournament and league management plus a standalone, themeable broadcast-overlay suite, sold bundled or on its own.',
+        },
+      ],
     },
     story: {
       problem: [
         p(
-          'Live sports environments do not forgive sluggish software. A referee, a scorekeeper, and a broadcast operator are all making decisions in seconds, and the tools they reach for need to behave like infrastructure, not like apps.',
+          'Running a pickleball tournament or league does not forgive sluggish software. Organizers juggle brackets, seeding, schedules, live scores, and broadcast graphics in real time, and the tools they reach for — usually spreadsheets and generic scoreboard apps — leave too much room for desynchronization and ambiguous state.',
         ),
         p(
-          'Generic scoreboard interfaces and manual scorekeeping workflows leave too much room for desynchronization, ambiguous state, and the small frictions that compound on game day.',
+          'A scorer, a schedule, and a broadcast overlay all reading from different sources is how game day falls apart. The job was to make one source of truth that every surface trusts.',
         ),
       ],
       diagnosis: [
         p(
-          'The diagnostic framed CourtCommand as an operations problem first and a product problem second. The system needed to be fast, multi-tenant, synchronized across every surface, and simple to operate under pressure.',
+          'We framed CourtCommand as an operations problem first and a product problem second. It had to be fast, multi-tenant, and synchronized across every surface, with a backend that could be trusted before a single screen was designed.',
         ),
         p(
-          'Everything else — UI, theming, configuration — had to defer to those operational requirements.',
+          'That meant building the engine first: tournaments, leagues, seasons, brackets, live scoring, and scheduling as a hardened API, with the broadcast overlay treated as a first-class consumer of the same real-time data rather than a bolt-on.',
         ),
       ],
       build: [
         p(
-          'We built a low-latency referee engine and sports ticker around real-time score synchronization. Game state lives in one place, every connected surface stays consistent, and the operator interface is simple enough to run during a live event.',
+          'The backend is a Go 1.24 service (Chi v5 router) over PostgreSQL 17, with type-safe queries generated by sqlc and migrations embedded via Goose. Redis 7 handles pub/sub, sessions, and rate limiting, and six WebSocket channels push live state to every connected client. It landed as 170+ endpoints across eight implementation phases, 29 migrations, and 62 automated tests before the UI work began.',
+        ),
+        p(
+          'CourtCommand is two products in one codebase: the management platform (tournaments, leagues, brackets, live scoring, scheduling, and player/team/organization management) and a standalone broadcast-overlay suite with themeable graphics that read live from the same engine and sell bundled or on their own.',
         ),
       ],
       outcome: [
         p(
-          'CourtCommand reads as a purpose-built operating layer for live sports, not another scoreboard skin. The product is shaped by the demands of a real game-day room.',
+          'CourtCommand reads as purpose-built operating infrastructure for live pickleball, not a scoreboard skin. With the real-time core complete and the public platform live, the product is shaped by the demands of an actual game-day room.',
         ),
       ],
     },
     meta: {
       title: 'CourtCommand Case Study | RelentNet',
       description:
-        'How RelentNet built CourtCommand as a low-latency operating layer for live sports presentation.',
+        'How RelentNet built CourtCommand — a real-time pickleball tournament, league, and broadcast-overlay platform on a Go and Redis core with 170+ API endpoints.',
     },
   },
   {
@@ -621,39 +844,68 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     name: 'VM Homes',
     url: 'https://vm-homes.com',
     industry: 'Real Estate',
-    systemType: 'Client Experience Platform',
+    systemType: 'MLS-Integrated Search Platform',
     engagementType: 'platform',
-    companySize: 'placeholder',
+    companySize: 'startup',
+    region: 'St. Pete Beach, FL',
+    featuredStat: {
+      value: '6 markets',
+      description:
+        'MLS-synced property search across six Tampa Bay submarkets, from downtown St. Pete to the Gulf beaches.',
+    },
+    detailHeadline:
+      'A premium, MLS-integrated home search for the Tampa Bay coast.',
     summary: {
       problem:
-        'The team needed more than a polished website; they needed a premium buyer experience that could support property search and neighborhood trust.',
+        'A St. Pete Beach real-estate team needed more than a polished website; they needed a premium buyer experience with live local inventory that earned trust before a buyer ever reached out.',
       diagnosis:
-        'Real estate prospects need clarity, confidence, and fast access to relevant inventory before they are ready to start a conversation.',
+        'Buyers in this segment evaluate quietly. They want clarity, confidence, and fast access to relevant listings — and bouncing them to a generic portal to see inventory was costing the team conversations.',
       build:
-        'A premium digital storefront with MLS-integrated property search, neighborhood guidance, and client-first conversion paths.',
+        'A premium digital storefront with MLS-integrated (IDX) property search synced to the MFRMLS feed, neighborhood guides for six Tampa Bay submarkets, and client-first conversion paths.',
       outcome:
-        'The site now works as both a brand asset and a practical client acquisition tool for buyers evaluating the St. Pete Beach market.',
+        'The site works as both a brand asset and a practical client-acquisition tool — live listings inside the VM Homes brand, organized around the markets the team actually works.',
     },
     hero: {
       tagline:
-        'A premium client experience for buyers evaluating the St. Pete Beach market.',
+        'A premium client experience for buyers evaluating the St. Pete Beach market — with live Tampa Bay inventory built right in.',
       image: {
-        src: '/vmh_portfolio.png',
-        alt: 'VM Homes site preview',
-        width: 1440,
-        height: 810,
+        src: '/case-studies/vm-homes/hero.webp',
+        alt: 'VM Homes homepage — "Real Estate Experts" over a Gulf-front aerial with a property search bar',
+        width: 1600,
+        height: 1000,
       },
     },
+    portraitImage: {
+      src: '/case-studies/vm-homes/portrait.webp',
+      alt: 'VM Homes homepage, portrait crop',
+      width: 900,
+      height: 1200,
+    },
     atAGlance: {
-      role: 'Product design, build, hosting',
+      role: 'Product design, build, MLS integration, hosting',
+      metrics: [
+        {
+          label: 'Property search',
+          from: 'No owned search experience',
+          to: 'MLS-integrated IDX',
+          context:
+            'Listings sync from the MFRMLS feed, so buyers browse live inventory without leaving the VM Homes brand.',
+        },
+        {
+          label: 'Markets covered',
+          value: 'Six Tampa Bay submarkets',
+          context:
+            'From North and South Tampa Bay to downtown St. Petersburg, the Gulf beaches, and St. Pete Beach.',
+        },
+      ],
     },
     story: {
       problem: [
         p(
-          'VM Homes did not need a brochure site. The team needed an experience their buyers could trust before reaching out — one that respected the price point of the homes and supported the trust the team had already built in the neighborhood.',
+          'VM Homes did not need a brochure site. The team needed an experience their buyers could trust before reaching out — one that respected the price point of the homes and the trust the team had already built around St. Pete Beach.',
         ),
         p(
-          'A polished website on its own would not have moved the needle. The buyer experience needed to do work.',
+          'A polished website on its own would not have moved the needle. The buyer experience needed to do work — and that meant putting live, relevant inventory in front of people, not sending them off to a generic portal.',
         ),
       ],
       diagnosis: [
@@ -661,392 +913,60 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'Buyers in this segment evaluate quietly. They want clarity, confidence, and fast access to relevant inventory before they ever introduce themselves. Anything friction-heavy in the early journey costs the team conversations that should have happened.',
         ),
         p(
-          'The diagnostic pointed at a client experience platform, not a marketing site.',
+          'The diagnostic pointed at an MLS-integrated search experience owned by the brand, not a marketing site that hands buyers off the moment they want to look at homes.',
         ),
       ],
       build: [
         p(
-          'We built a premium digital storefront with MLS-integrated property search, neighborhood guidance, and client-first conversion paths. Buyers can move from browsing to a real conversation without ever feeling chased.',
+          'We built a premium digital storefront with IDX property search synced to the MFRMLS feed, so current listings appear inside the VM Homes brand with live prices, beds, baths, and square footage. Search is organized by the six Tampa Bay submarkets the team works — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach — alongside neighborhood guidance and client-first conversion paths.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/listings.webp',
+            alt: 'VM Homes "VM Exclusives" listings — Tampa Bay properties with photos, prices, and bed/bath/square-footage details',
+            caption:
+              'Live MFRMLS listings render inside the VM Homes brand — prices, beds, baths, and square footage, with no hand-off to a generic portal.',
+            width: 1600,
+            height: 956,
+          },
+        },
+        p(
+          'Buyers can move from browsing live inventory to a real conversation without ever feeling chased, and the team can point a prospect at the exact slice of the market that fits them.',
+        ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/areas.webp',
+            alt: 'VM Homes "Search By Area" — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach',
+            caption:
+              'Search is organized by the six submarkets the team actually works — from downtown St. Pete to the Gulf beaches.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
       outcome: [
         p(
-          'The site works as both a brand asset and a practical client acquisition tool. Buyers get clarity early; the team gets better conversations when those buyers raise their hand.',
+          'The site works as both a brand asset and a practical client-acquisition tool. Buyers get clarity and live inventory early; the team gets better conversations when those buyers raise their hand.',
         ),
+        {
+          type: 'image',
+          image: {
+            src: '/case-studies/vm-homes/expertise.webp',
+            alt: 'VM Homes "Expertise You Can Trust" section, with a chat-with-an-expert call to action',
+            caption:
+              'The brand stays front and center — a premium experience that earns trust before a buyer ever reaches out.',
+            width: 1600,
+            height: 956,
+          },
+        },
       ],
     },
     meta: {
       title: 'VM Homes Case Study | RelentNet',
       description:
-        'How RelentNet built a premium client experience platform for VM Homes, supporting trust-led real estate in the St. Pete Beach market.',
-    },
-  },
-  {
-    slug: 'star-kids',
-    name: 'Star Kids',
-    url: 'https://starkids.relentnet.dev',
-    industry: 'Nonprofit',
-    systemType: 'Mission Communication System',
-    engagementType: 'operations',
-    companySize: 'placeholder',
-    summary: {
-      problem:
-        'A mission-driven organization needed to explain programs, trust, and impact without overwhelming donors or families.',
-      diagnosis:
-        'The experience needed to simplify complex service areas into a story people could understand and act on quickly.',
-      build:
-        'A focused nonprofit presence for education, healthcare, nutrition, and mentorship programs with clear paths to learn and support.',
-      outcome:
-        'The organization gained a clearer digital home for communicating purpose, programs, and credibility.',
-    },
-    hero: {
-      tagline:
-        'A clearer digital home for a mission with too many things to say at once.',
-    },
-    atAGlance: {
-      role: 'Marketing site, hosting',
-    },
-    story: {
-      problem: [
-        p(
-          'Star Kids does meaningful work across several program areas — education, healthcare, nutrition, mentorship — and the previous web presence let all of that flatten into noise. Donors, families, and partners all had to dig to find the part that mattered to them.',
-        ),
-        p(
-          'Mission-driven organizations live or die on clarity. Anything that asks the visitor to work too hard becomes a quiet barrier to support.',
-        ),
-      ],
-      diagnosis: [
-        p(
-          'The diagnostic showed that the answer was not more content. It was a clearer story: which programs exist, who they serve, how to support them, and how to learn more without being asked to commit before understanding.',
-        ),
-      ],
-      build: [
-        p(
-          'We built a focused presence that introduces each program area cleanly, surfaces the credibility behind the mission, and offers a direct path for donors and families to take the next step.',
-        ),
-      ],
-      outcome: [
-        p(
-          'Star Kids has a clearer digital home for communicating purpose, programs, and credibility. The work the team does is no longer competing with its own website.',
-        ),
-      ],
-    },
-    meta: {
-      title: 'Star Kids Case Study | RelentNet',
-      description:
-        'How RelentNet built a focused mission communication system for the Star Kids nonprofit.',
-    },
-  },
-  {
-    slug: 'placeholder-1',
-    name: '[Company One]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'product',
-    companySize: 'startup',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company One] | RelentNet Case Study',
-      description: '[Meta description.]',
-    },
-  },
-  {
-    slug: 'placeholder-2',
-    name: '[Company Two]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'operations',
-    companySize: 'startup',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company Two] | RelentNet Case Study',
-      description: '[Meta description.]',
-    },
-  },
-  {
-    slug: 'placeholder-3',
-    name: '[Company Three]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'platform',
-    companySize: 'startup',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company Three] | RelentNet Case Study',
-      description: '[Meta description.]',
-    },
-  },
-  {
-    slug: 'placeholder-4',
-    name: '[Company Four]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'product',
-    companySize: 'growth',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company Four] | RelentNet Case Study',
-      description: '[Meta description.]',
-    },
-  },
-  {
-    slug: 'placeholder-5',
-    name: '[Company Five]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'operations',
-    companySize: 'growth',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company Five] | RelentNet Case Study',
-      description: '[Meta description.]',
-    },
-  },
-  {
-    slug: 'placeholder-6',
-    name: '[Company Six]',
-    url: 'https://example.com',
-    industry: '[Industry]',
-    systemType: '[System type]',
-    engagementType: 'platform',
-    companySize: 'enterprise',
-    featuredStat: {
-      value: '[Big number]',
-      description: '[One-line attribution of what changed at the client.]',
-    },
-    summary: {
-      problem: '[Describe the friction in the operation before we engaged.]',
-      diagnosis: '[Describe what the diagnostic surfaced.]',
-      build: '[Describe what we shipped.]',
-      outcome: '[Describe the measurable change.]',
-    },
-    hero: {
-      tagline: '[Short single-sentence tagline.]',
-      image: {
-        src: '/case-studies/placeholder/landscape.svg',
-        alt: 'Case study placeholder image',
-        width: 1600,
-        height: 900,
-      },
-    },
-    portraitImage: {
-      src: '/case-studies/placeholder/portrait.svg',
-      alt: 'Case study placeholder image',
-      width: 600,
-      height: 800,
-    },
-    atAGlance: {
-      stack: [
-        {
-          category: '[Layer]',
-          items: [{ label: '[Tech 1]' }, { label: '[Tech 2]' }],
-        },
-      ],
-    },
-    story: {
-      problem: [{ type: 'p', text: '[Long-form challenge narrative.]' }],
-      diagnosis: [{ type: 'p', text: '[Long-form diagnosis narrative.]' }],
-      build: [{ type: 'p', text: '[Long-form build narrative.]' }],
-      outcome: [{ type: 'p', text: '[Long-form outcome narrative.]' }],
-    },
-    meta: {
-      title: '[Company Six] | RelentNet Case Study',
-      description: '[Meta description.]',
+        'How RelentNet built VM Homes an MLS-integrated (IDX) property-search platform for the St. Pete Beach and Tampa Bay market.',
     },
   },
 ]

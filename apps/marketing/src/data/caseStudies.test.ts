@@ -7,8 +7,8 @@ import {
 } from './caseStudies'
 
 describe('caseStudies data', () => {
-  it('has exactly 11 entries', () => {
-    expect(caseStudies).toHaveLength(11)
+  it('has exactly 4 live entries', () => {
+    expect(caseStudies).toHaveLength(4)
   })
 
   it('has unique URL-safe slugs', () => {
@@ -173,22 +173,27 @@ describe('caseStudies data', () => {
     }
   })
 
-  it('every case study has a companySize set', () => {
+  it('every live case study has a concrete companySize', () => {
     for (const study of caseStudies) {
       expect(study.companySize).toBeDefined()
-      expect(['startup', 'growth', 'enterprise', 'placeholder']).toContain(
-        study.companySize,
-      )
+      expect(['startup', 'growth', 'enterprise']).toContain(study.companySize)
     }
   })
 
-  it('placeholder studies are marked with a concrete companySize', () => {
-    const placeholders = caseStudies.filter((s) =>
-      s.slug.startsWith('placeholder-'),
+  it('ships no placeholder studies on the live site', () => {
+    const placeholders = caseStudies.filter(
+      (s) => s.slug.startsWith('placeholder-') || s.companySize === 'placeholder',
     )
-    expect(placeholders.length).toBeGreaterThanOrEqual(6)
-    for (const p of placeholders) {
-      expect(p.companySize).not.toBe('placeholder')
-    }
+    expect(placeholders).toHaveLength(0)
+  })
+
+  it('populates the "customers by size" section with at least one tier', () => {
+    // ClientsBySize only renders tabs for tiers that have a live study, so the
+    // invariant is that at least one tier is populated — not that all three are.
+    const tiers = ['startup', 'growth', 'enterprise'] as const
+    const populated = tiers.filter((size) =>
+      caseStudies.some((s) => s.companySize === size),
+    )
+    expect(populated.length).toBeGreaterThan(0)
   })
 })

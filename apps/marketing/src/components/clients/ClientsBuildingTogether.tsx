@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { Reveal } from '@/components/Reveal'
 import { caseStudies } from '@/data/caseStudies'
 
 /**
@@ -32,17 +33,19 @@ export function ClientsBuildingTogether() {
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint bg-surface backdrop-blur-xs">
       <div className="max-w-7xl mx-auto">
-        <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-3">
-          Building together
-        </p>
-        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-6">
-          We partner with operators to build breakthrough systems.
-        </h2>
-        <p className="text-ink-sub text-base md:text-lg leading-relaxed max-w-2xl mb-16 md:mb-20">
-          Every engagement starts with a diagnostic. Every system we build is
-          scoped to the friction we found. The case studies below show how that
-          played out across very different operations.
-        </p>
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-3">
+            Building together
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-6">
+            We partner with operators to build breakthrough systems.
+          </h2>
+          <p className="text-ink-sub text-base md:text-lg leading-relaxed max-w-2xl mb-16 md:mb-20">
+            Every engagement starts with a diagnostic. Every system we build is
+            scoped to the friction we found. The case studies below show how
+            that played out across very different operations.
+          </p>
+        </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           <div
@@ -70,7 +73,7 @@ export function ClientsBuildingTogether() {
             })}
           </div>
 
-          <div className="lg:col-span-9">
+          <div key={active.slug} className="lg:col-span-9 animate-fade-in-up">
             <h3 className="font-serif text-3xl md:text-4xl mb-8">
               How we built with {active.name}
             </h3>
