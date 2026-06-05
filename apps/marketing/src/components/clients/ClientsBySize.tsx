@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
+import { Reveal } from '@/components/Reveal'
 import { caseStudies } from '@/data/caseStudies'
 
 const ALL_TABS = [
@@ -45,12 +46,14 @@ export function ClientsBySize() {
       className="relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint"
     >
       <div className="max-w-7xl mx-auto">
-        <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
-          Customers by size
-        </p>
-        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-12 md:mb-16">
-          Companies of all sizes turn diagnosed friction into useful systems.
-        </h2>
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
+            Customers by size
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-12 md:mb-16">
+            Companies of all sizes turn diagnosed friction into useful systems.
+          </h2>
+        </Reveal>
 
         <div
           role="group"
@@ -82,7 +85,10 @@ export function ClientsBySize() {
             No case studies assigned to this size yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          <div
+            key={active}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 animate-fade-in-up"
+          >
             {visible.map((study) => {
               const stack = (study.atAGlance.stack ?? []).flatMap(
                 (c) => c.items,

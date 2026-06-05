@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
 import type { CaseStudy } from '@/data/caseStudies'
+import { Reveal } from '@/components/Reveal'
 
 interface CaseStudyDetailHeroProps {
   study: CaseStudy
@@ -24,7 +25,7 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
   return (
     <section className="relative z-10 px-6 md:px-12 pt-32 md:pt-40 pb-8 md:pb-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.2em]">
+        <Reveal className="mb-10 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.2em]">
           <nav className="text-ink-muted" aria-label="Breadcrumb">
             <Link to="/clients" className="hover:text-gold transition-colors">
               Clients
@@ -38,20 +39,24 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
           >
             All client stories
           </Link>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           <div className={image ? 'lg:col-span-7' : 'lg:col-span-12'}>
-            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
-              {headline}
-            </h1>
-            <p className="mt-8 max-w-2xl text-ink-sub text-base md:text-lg leading-relaxed">
-              {intro}
-            </p>
+            <Reveal delay={80}>
+              <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+                {headline}
+              </h1>
+            </Reveal>
+            <Reveal delay={160}>
+              <p className="mt-8 max-w-2xl text-ink-sub text-base md:text-lg leading-relaxed">
+                {intro}
+              </p>
+            </Reveal>
           </div>
 
           {image ? (
-            <div className="lg:col-span-5">
+            <Reveal delay={240} className="lg:col-span-5">
               <img
                 src={image.src}
                 alt={image.alt}
@@ -60,7 +65,7 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
                 className="w-full h-auto border border-line-faint"
                 loading="eager"
               />
-            </div>
+            </Reveal>
           ) : null}
         </div>
       </div>

@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 
+import { Reveal } from '@/components/Reveal'
+
 interface CtaTile {
   headline: string
   body: string
@@ -38,8 +40,8 @@ export function ClosingCtaPair() {
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 max-w-7xl mx-auto">
-        {TILES.map((tile) => (
-          <div key={tile.headline} className="flex flex-col">
+        {TILES.map((tile, i) => (
+          <Reveal key={tile.headline} delay={i * 120} className="flex flex-col">
             <h3 className="font-serif text-3xl md:text-4xl mb-4">
               {tile.headline}
             </h3>
@@ -53,7 +55,7 @@ export function ClosingCtaPair() {
               {tile.label}
               <ArrowRight className="size-4" />
             </Link>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>

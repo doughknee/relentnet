@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { ClientBrandTile } from './ClientBrandTile'
 import type { EngagementType } from '@/data/caseStudies'
+import { Reveal } from '@/components/Reveal'
 import { caseStudies } from '@/data/caseStudies'
 
 const TABS: ReadonlyArray<{ id: EngagementType; label: string }> = [
@@ -29,12 +30,14 @@ export function ClientsByUseCase() {
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint">
       <div className="max-w-7xl mx-auto">
-        <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
-          Customers by engagement type
-        </p>
-        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-12 md:mb-16">
-          We accelerate growth for all types of operations.
-        </h2>
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
+            Customers by engagement type
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-12 md:mb-16">
+            We accelerate growth for all types of operations.
+          </h2>
+        </Reveal>
 
         <div
           role="group"
@@ -67,7 +70,8 @@ export function ClientsByUseCase() {
           </p>
         ) : (
           <div
-            className={`grid grid-cols-1 gap-px bg-line-faint ${
+            key={active}
+            className={`grid grid-cols-1 gap-px bg-line-faint animate-fade-in-up ${
               tiles.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-2'
             }`}
           >

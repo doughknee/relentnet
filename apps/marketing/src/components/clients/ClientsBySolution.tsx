@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
+import { Reveal } from '@/components/Reveal'
 import { clientSolutions } from '@/data/clientSolutions'
 
 const SOLUTION_ICONS: Record<string, LucideIcon> = {
@@ -34,19 +35,25 @@ export function ClientsBySolution() {
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-28 border-t border-line-faint">
       <div className="max-w-7xl mx-auto">
-        <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
-          Customers by solution
-        </p>
-        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-6">
-          We obsess over diagnosed friction so our clients don't have to.
-        </h2>
-        <p className="text-ink-sub text-base md:text-lg leading-relaxed max-w-2xl mb-12 md:mb-16">
-          Every engagement starts with diagnosing the real source of operational
-          friction. We build the right system on top of that diagnosis — so you
-          stop stitching together band-aids and start moving cleaner.
-        </p>
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-3">
+            Customers by solution
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl max-w-3xl mb-6">
+            We obsess over diagnosed friction so our clients don't have to.
+          </h2>
+          <p className="text-ink-sub text-base md:text-lg leading-relaxed max-w-2xl mb-12 md:mb-16">
+            Every engagement starts with diagnosing the real source of
+            operational friction. We build the right system on top of that
+            diagnosis — so you stop stitching together band-aids and start
+            moving cleaner.
+          </p>
+        </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line-faint border border-line-faint">
+        <Reveal
+          delay={100}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line-faint border border-line-faint"
+        >
           {clientSolutions.map((s) => {
             const Icon = SOLUTION_ICONS[s.label] ?? Search
             return (
@@ -70,7 +77,7 @@ export function ClientsBySolution() {
               </Link>
             )
           })}
-        </div>
+        </Reveal>
       </div>
     </section>
   )

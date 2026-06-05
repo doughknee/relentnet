@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
 import type { CaseStudy } from '@/data/caseStudies'
+import { Reveal } from '@/components/Reveal'
 import { caseStudies } from '@/data/caseStudies'
 
 interface CaseStudyReadMoreProps {
@@ -27,10 +28,15 @@ export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
   return (
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-24 border-t border-line-faint">
       <div className="max-w-7xl mx-auto">
-        <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-8">
-          Read more customer stories
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-line-faint">
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-8">
+            Read more customer stories
+          </p>
+        </Reveal>
+        <Reveal
+          delay={100}
+          className="grid grid-cols-1 md:grid-cols-2 gap-px bg-line-faint"
+        >
           {tiles.map((tile) => (
             <Link
               key={tile.slug}
@@ -57,7 +63,7 @@ export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
               </div>
             </Link>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   )

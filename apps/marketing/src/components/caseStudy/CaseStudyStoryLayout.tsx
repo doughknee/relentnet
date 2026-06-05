@@ -4,6 +4,7 @@ import { ArrowRight, Building2, Globe } from 'lucide-react'
 import { CaseStudyNarrative } from './CaseStudyNarrative'
 import type { CaseStudy, CaseStudyMetric } from '@/data/caseStudies'
 import { BrandIcon } from '@/components/BrandIcon'
+import { Reveal } from '@/components/Reveal'
 
 interface CaseStudyStoryLayoutProps {
   study: CaseStudy
@@ -135,9 +136,9 @@ export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
           </div>
         </aside>
 
-        <div className="lg:col-span-8">
+        <Reveal className="lg:col-span-8">
           <CaseStudyNarrative study={study} />
-        </div>
+        </Reveal>
       </div>
     </section>
   )
