@@ -2,55 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://relentnet.com/</loc>
-    <lastmod>2026-02-22</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://relentnet.com/diagnostic</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://relentnet.com/process</loc>
-    <lastmod>2026-02-22</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://relentnet.com/clients</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://relentnet.com/inquire</loc>
-    <lastmod>2026-02-22</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://relentnet.com/portal</loc>
-    <lastmod>2026-02-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://relentnet.com/legal</loc>
-    <lastmod>2026-01-13</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://relentnet.com/clients/scrollr</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://relentnet.com/clients/cambridge-building-group</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://relentnet.com/clients/courtcommand</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://relentnet.com/clients/vm-homes</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://relentnet.com/legal/msa</loc>
-    <lastmod>2026-01-13</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://relentnet.com/legal/sow</loc>
-    <lastmod>2026-01-13</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://relentnet.com/legal/sha</loc>
-    <lastmod>2026-01-13</lastmod>
+    <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

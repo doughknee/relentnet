@@ -1,18 +1,19 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/portal')({
-  head: () => ({
-    meta: [
-      { title: 'Client Portal | RelentNet' },
-      {
-        name: 'description',
-        content:
-          'Secure access for active RelentNet clients. Prospects should start with a workflow diagnostic before requesting a build.',
-      },
-    ],
-  }),
+  // The portal is a gated login surface with no public content — keep it out
+  // of search indexes (and out of the sitemap).
+  head: () =>
+    seo({
+      title: 'Client Portal | RelentNet',
+      description:
+        'Secure access for active RelentNet clients. Prospects should start with a workflow diagnostic before requesting a build.',
+      path: '/portal',
+      noindex: true,
+    }),
   component: Portal,
 })
 

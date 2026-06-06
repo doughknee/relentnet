@@ -1,16 +1,14 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { legalDocs } from '../../data/legalDocs'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/legal/')({
-  head: () => ({
-    meta: [
-      { title: 'Legal Documents | RelentNet' },
-      {
-        name: 'description',
-        content: 'Access RelentNet\u2019s MSA, SOW, and Support Agreements.',
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: 'Legal Documents | RelentNet',
+      description: 'Access RelentNet\u2019s MSA, SOW, and Support Agreements.',
+      path: '/legal',
+    }),
   component: LegalIndex,
 })
 

@@ -5,6 +5,7 @@ import {
   SHAContent,
   SOWContent,
 } from '../../components/legal/LegalContents'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/legal/$docId')({
   loader: ({ params }) => {
@@ -16,15 +17,12 @@ export const Route = createFileRoute('/legal/$docId')({
     return doc
   },
   head: ({ loaderData }) => {
-    return {
-      meta: [
-        { title: `${loaderData?.title} | RelentNet` },
-        {
-          name: 'description',
-          content: loaderData?.description,
-        },
-      ],
-    }
+    if (!loaderData) return {}
+    return seo({
+      title: `${loaderData.title} | RelentNet`,
+      description: loaderData.description,
+      path: `/legal/${loaderData.id}`,
+    })
   },
   component: LegalDoc,
 })

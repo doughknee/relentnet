@@ -3,7 +3,6 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
-import reportWebVitals from './reportWebVitals.ts'
 
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { NotFound } from '@/components/NotFound'
@@ -41,8 +40,3 @@ if (rootElement && !rootElement.innerHTML) {
     </ThemeProvider>,
   )
 }
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
