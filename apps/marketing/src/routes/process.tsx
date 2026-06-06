@@ -10,17 +10,16 @@ import {
 
 import type { LucideIcon } from 'lucide-react'
 
+import { seo } from '@/lib/seo'
+
 export const Route = createFileRoute('/process')({
-  head: () => ({
-    meta: [
-      { title: 'Process | RelentNet Workflow Stewardship' },
-      {
-        name: 'description',
-        content:
-          'How RelentNet uses a diagnostic-led process to clarify workflow friction, prioritize the right operational problem, and build only what earns its place.',
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: 'Process | RelentNet Workflow Stewardship',
+      description:
+        'How RelentNet uses a diagnostic-led process to clarify workflow friction, prioritize the right operational problem, and build only what earns its place.',
+      path: '/process',
+    }),
   component: Process,
 })
 

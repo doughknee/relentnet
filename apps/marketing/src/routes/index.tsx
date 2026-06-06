@@ -17,18 +17,16 @@ import {
 import type { LucideIcon } from 'lucide-react'
 
 import { siteConfig } from '@/site.config'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/')({
-  head: () => ({
-    meta: [
-      { title: siteConfig.meta.title },
-      {
-        name: 'description',
-        content:
-          'White-glove technology partnership for owner-led businesses. Start with a workflow diagnostic, then build and steward the technology worth creating.',
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: siteConfig.meta.title,
+      description:
+        'White-glove technology partnership for owner-led businesses. Start with a workflow diagnostic, then build and steward the technology worth creating.',
+      path: '/',
+    }),
   component: HomeComponent,
 })
 

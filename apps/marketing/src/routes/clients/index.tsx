@@ -7,18 +7,16 @@ import { ClientsByUseCase } from '@/components/clients/ClientsByUseCase'
 import { ClientsHero, clientsIntro } from '@/components/clients/ClientsHero'
 import { ClientsMeasurableResults } from '@/components/clients/ClientsMeasurableResults'
 import { ClosingCtaPair, clientsCta } from '@/components/clients/ClosingCtaPair'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/clients/')({
-  head: () => ({
-    meta: [
-      { title: 'Our Clients | RelentNet Case Studies' },
-      {
-        name: 'description',
-        content:
-          'Diagnostic-first proof from RelentNet client engagements, showing how diagnosed workflow friction becomes useful systems and clearer operations.',
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: 'Our Clients | RelentNet Case Studies',
+      description:
+        'Diagnostic-first proof from RelentNet client engagements, showing how diagnosed workflow friction becomes useful systems and clearer operations.',
+      path: '/clients',
+    }),
   component: ClientsIndex,
 })
 

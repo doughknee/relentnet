@@ -5,20 +5,37 @@ import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { siteConfig } from '@/site.config'
+import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/inquire')({
-  head: () => ({
-    meta: [
-      { title: 'Request a Workflow Diagnostic | RelentNet' },
-      {
-        name: 'description',
-        content:
-          'Request a RelentNet Workflow Diagnostic by sharing the operational friction, disconnected tools, and workflow context inside your business.',
-      },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: 'Request a Workflow Diagnostic | RelentNet',
+      description:
+        'Request a RelentNet Workflow Diagnostic by sharing the operational friction, disconnected tools, and workflow context inside your business.',
+      path: '/inquire',
+    }),
   component: Contact,
 })
+
+const WEBHOOK_URL =
+  'https://n8n.relentnet.com/webhook/fe703944-aa84-4947-a491-0046d4c0f22a'
+const REQUEST_TIMEOUT_MS = 15000
+
+/** fetch() that aborts if the request outlives `timeoutMs`. */
+async function fetchWithTimeout(
+  input: string,
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(input, { ...init, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
 
 export const inquiryContent = {
   headline: 'Request a Workflow Diagnostic.',
@@ -53,37 +70,55 @@ function Contact() {
     },
     onSubmit: async ({ value }) => {
       setError(null)
-      try {
-        const response = await fetch(
-          'https://n8n.relentnet.com/webhook/fe703944-aa84-4947-a491-0046d4c0f22a',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(value),
-          },
-        )
+      const body = JSON.stringify(value)
+      // One retry, for transient network/timeout failures only. HTTP errors
+      // (the server responded) are not retried — the request reached n8n, so
+      // retrying would risk a duplicate lead.
+      const maxAttempts = 2
 
-        if (!response.ok) {
-          const responseBody = await response.text()
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          const response = await fetchWithTimeout(
+            WEBHOOK_URL,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body,
+            },
+            REQUEST_TIMEOUT_MS,
+          )
 
-          // N8N Workaround: If the workflow runs but lacks a response node, it returns 500 with this message.
-          // We treat this as a success since the data successfully reached the webhook.
-          if (
-            response.status === 500 &&
-            responseBody.includes('No Respond to Webhook node found')
-          ) {
-            setIsSuccess(true)
-            return
+          if (!response.ok) {
+            const responseBody = await response.text()
+
+            // N8N Workaround: If the workflow runs but lacks a response node, it returns 500 with this message.
+            // We treat this as a success since the data successfully reached the webhook.
+            if (
+              response.status === 500 &&
+              responseBody.includes('No Respond to Webhook node found')
+            ) {
+              setIsSuccess(true)
+              return
+            }
+
+            throw new Error(
+              `Failed to submit form: ${response.status} ${response.statusText}`,
+            )
           }
 
-          throw new Error(
-            `Failed to submit form: ${response.status} ${response.statusText}`,
-          )
+          setIsSuccess(true)
+          return
+        } catch (err) {
+          // AbortError = our timeout fired; TypeError = network failure. Both
+          // are transient and safe to retry while attempts remain.
+          const isTimeout = err instanceof DOMException && err.name === 'AbortError'
+          const isNetwork = err instanceof TypeError
+          if (attempt < maxAttempts && (isTimeout || isNetwork)) {
+            continue
+          }
+          setError('Something went wrong. Please try again later.')
+          return
         }
-
-        setIsSuccess(true)
-      } catch (err) {
-        setError('Something went wrong. Please try again later.')
       }
     },
   })
