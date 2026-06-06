@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useState,
@@ -12,6 +13,12 @@ import type { ReactNode } from 'react'
 import { ThemeContext } from '@/hooks/useTheme'
 
 const STORAGE_KEY = 'theme'
+
+// useLayoutEffect warns when run during server prerendering. Fall back to
+// useEffect on the server (where it's a no-op anyway — the inline bootstrap
+// script in __root sets the theme class before hydration).
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 function getStoredChoice(): ThemeChoice {
   try {
@@ -65,7 +72,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     choice === 'system' ? (systemIsDark ? 'dark' : 'light') : choice
 
   // Apply .dark class synchronously before paint to avoid intermediate states
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     applyTheme(effective)
   }, [effective])
 

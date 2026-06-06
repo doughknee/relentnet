@@ -17,6 +17,20 @@ class IntersectionObserverMock {
 }
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
+// jsdom defines `window` but not `matchMedia`, which ThemeProvider reads at
+// module load to track the OS color-scheme preference. Provide a minimal mock
+// so any suite that pulls in the theme provider can evaluate it.
+vi.stubGlobal('matchMedia', (query: string) => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  addListener: () => {},
+  removeListener: () => {},
+  dispatchEvent: () => false,
+}))
+
 // Auto-cleanup between tests. @testing-library/react only registers
 // this hook automatically when Vitest globals are enabled; we run with
 // globals: false, so we wire it up explicitly here.

@@ -13,7 +13,9 @@ RUN npm run build -w @relentnet/marketing
 
 FROM nginx:1.27-alpine AS runtime
 COPY apps/marketing/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/apps/marketing/dist /usr/share/nginx/html
+# SPA-mode build emits the static client into dist/client (the dist/server
+# bundle is only used at build time for prerendering — not shipped).
+COPY --from=build /app/apps/marketing/dist/client /usr/share/nginx/html
 
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
