@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -148,6 +148,25 @@ describe('proposals API', () => {
     expect((await revisit.json()).status).toBe('accepted')
   })
 
+  it('studio browsers never trigger the viewed transition', async () => {
+    const created = await createProposalOk()
+    const linkId = `${created.slug}-${created.token}`
+
+    // Signing into the studio marks the browser with a cookie.
+    const admin = await app.request('/api/admin/proposals', { headers: auth })
+    expect(admin.headers.get('set-cookie')).toContain('relentnet_studio=1')
+
+    // A visit carrying that cookie leaves the proposal untouched.
+    const internal = await app.request(`/api/p/${linkId}`, {
+      headers: { Cookie: 'relentnet_studio=1' },
+    })
+    expect((await internal.json()).status).toBe('sent')
+
+    // The client's first visit still counts.
+    const client = await app.request(`/api/p/${linkId}`)
+    expect((await client.json()).status).toBe('viewed')
+  })
+
   it('noteFrom governs the note section and rejects junk values', async () => {
     const none = await createProposalOk({ noteFrom: 'none', note: '' })
     expect(none.noteFrom).toBe('none')
@@ -158,6 +177,83 @@ describe('proposals API', () => {
 
     const junk = await createProposal({ noteFrom: 'craig' })
     expect(junk.status).toBe(400)
+  })
+
+  it('edits keep the link stable and reopen clears the response', async () => {
+    const created = await createProposalOk()
+    const linkId = `${created.slug}-${created.token}`
+
+    await app.request(`/api/p/${linkId}/respond`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'decline', feedback: 'Too soon.' }),
+    })
+
+    // Edit the project name and reopen: same slug and token, fresh status.
+    const revision = JSON.stringify({
+      clientName: created.clientName,
+      clientEmail: 'wcolley72@gmail.com',
+      projectName: 'Amelia Island Revised',
+      phase: 'Proposal',
+      note: '',
+      noteFrom: 'daniel',
+      sections: { note: true, scope: true, process: false, work: true },
+      quoteNumber: created.quoteNumber,
+      validUntil: created.validUntil,
+      lineItems: created.lineItems,
+      upfrontCents: 700000,
+      recurringCents: created.recurringCents,
+      pdfUrl: created.pdfUrl,
+      reopen: true,
+    })
+    const put = await app.request(`/api/admin/proposals/${created.id}`, {
+      method: 'PUT',
+      headers: { ...auth, 'Content-Type': 'application/json' },
+      body: revision,
+    })
+    expect(put.status).toBe(200)
+    const updated = await put.json()
+    expect(updated.slug).toBe(created.slug)
+    expect(updated.token).toBe(created.token)
+    expect(updated.status).toBe('sent')
+    expect(updated.feedback).toBeUndefined()
+
+    // The client's existing link serves the revision and can answer again.
+    const view = await app.request(`/api/p/${linkId}`)
+    const pub = await view.json()
+    expect(pub.projectName).toBe('Amelia Island Revised')
+    expect(pub.upfrontCents).toBe(700000)
+    expect(pub.status).toBe('viewed')
+
+    const missing = await app.request('/api/admin/proposals/nope', {
+      method: 'PUT',
+      headers: { ...auth, 'Content-Type': 'application/json' },
+      body: revision,
+    })
+    expect(missing.status).toBe(404)
+  })
+
+  it('deletes a proposal and its stored PDF', async () => {
+    const created = await createProposalOk()
+    const linkId = `${created.slug}-${created.token}`
+    const pdfName = created.pdfUrl.split('/').pop()!
+    const pdfPath = join(process.env.DATA_DIR!, 'files', pdfName)
+    expect(existsSync(pdfPath)).toBe(true)
+
+    const del = await app.request(`/api/admin/proposals/${created.id}`, {
+      method: 'DELETE',
+      headers: auth,
+    })
+    expect(del.status).toBe(200)
+
+    expect((await app.request(`/api/p/${linkId}`)).status).toBe(404)
+    expect(existsSync(pdfPath)).toBe(false)
+
+    const again = await app.request(`/api/admin/proposals/${created.id}`, {
+      method: 'DELETE',
+      headers: auth,
+    })
+    expect(again.status).toBe(404)
   })
 
   it('404s unknown links and rejects junk uploads', async () => {

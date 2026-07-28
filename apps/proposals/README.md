@@ -52,3 +52,7 @@ Proposals and uploaded PDFs live on a named Docker volume (`proposals-data`, mou
 ## Status lifecycle
 
 `sent` → `viewed` (first page load) → `accepted` | `declined` (feedback required). Decisions are immutable; revisits show the settled state. Each transition notifies the webhook.
+
+Your own visits don't count: any browser that has signed into the studio carries a cookie, and its visits to proposal pages never flip `sent` to `viewed` or ping the webhook. If you open a proposal on a device that has never opened the studio (say, your phone), sign into the studio there once first.
+
+Proposals are managed from the dashboard. Edit reopens the generator with everything prefilled; saving publishes to the same link the client already has (the address never changes). When a proposal has been answered, the editor offers "Reset to sent on save," which clears the response so the page asks again, which is how you send a revised quote after a decline and how you rerun test flows. Delete asks for a second click, is permanent, and cleans up the stored PDF.

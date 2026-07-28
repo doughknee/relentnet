@@ -70,5 +70,19 @@ export const api = {
   createProposal: (body: CreateProposalBody) =>
     request<Proposal & { url: string }>('/api/admin/proposals', json(body)),
 
+  updateProposal: (
+    id: string,
+    body: CreateProposalBody & { reopen: boolean },
+  ) =>
+    request<Proposal & { url: string }>(
+      `/api/admin/proposals/${encodeURIComponent(id)}`,
+      { ...json(body), method: 'PUT' },
+    ),
+
+  deleteProposal: (id: string) =>
+    request<{ ok: boolean }>(`/api/admin/proposals/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    }),
+
   listProposals: () => request<Array<Proposal>>('/api/admin/proposals'),
 }

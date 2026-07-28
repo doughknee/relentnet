@@ -1,10 +1,10 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm, useStore } from '@tanstack/react-form'
 import { useRef, useState } from 'react'
 
 import { slugify } from '../../shared/types'
 import type { NoteFrom, ParsedQuote, Phase, Proposal } from '../../shared/types'
-import { StudioHeader } from '@/components/StudioHeader'
+import { StudioError, StudioHeader } from '@/components/StudioHeader'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { api } from '@/lib/api'
@@ -12,8 +12,24 @@ import { GENERIC_NOTE, voiceOf } from '@/data/content'
 import { firstNameOf, fmtDate, fmtUsd } from '@/lib/format'
 
 export const Route = createFileRoute('/')({
-  head: () => ({ meta: [{ title: 'New Proposal · Proposal Studio' }] }),
-  component: Generator,
+  validateSearch: (search: Record<string, unknown>): { edit?: string } =>
+    typeof search.edit === 'string' ? { edit: search.edit } : {},
+  loaderDeps: ({ search }) => ({ edit: search.edit }),
+  loader: async ({ deps }) => {
+    if (!deps.edit) return null
+    return (await api.listProposals()).find((p) => p.id === deps.edit) ?? null
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData
+          ? 'Edit Proposal · Proposal Studio'
+          : 'New Proposal · Proposal Studio',
+      },
+    ],
+  }),
+  errorComponent: StudioError,
+  component: GeneratorRoute,
 })
 
 const PAGE_SECTION_LABELS = {
@@ -32,6 +48,30 @@ const NOTE_FROM_LABELS: Record<NoteFrom, string> = {
 const fieldLabel = 'text-[10px] tracking-[0.15em] uppercase text-ink-muted'
 const ghostBtn =
   'bg-transparent border border-white/15 text-ink text-[11px] tracking-[0.15em] uppercase px-5 py-3 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed'
+const goldBtn =
+  'border border-gold bg-gold text-black text-[11px] tracking-[0.15em] uppercase px-5 py-3 cursor-pointer transition-all duration-300 hover:bg-transparent hover:text-gold whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed'
+const chip = (isOn: boolean) =>
+  `text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border cursor-pointer transition-all duration-300 ${
+    isOn
+      ? 'bg-gold/10 border-gold/50 text-gold'
+      : 'bg-white/[0.02] border-line text-ink-muted'
+  }`
+
+/** The stored record already holds everything the parse step would produce. */
+function parsedFromProposal(p: Proposal): ParsedQuote {
+  return {
+    pdfUrl: p.pdfUrl,
+    fileName: `${p.quoteNumber || 'quote'}.pdf`,
+    quoteNumber: p.quoteNumber,
+    validUntil: p.validUntil,
+    clientName: p.clientName,
+    clientEmail: p.clientEmail,
+    projectName: p.projectName,
+    lineItems: p.lineItems,
+    upfrontCents: p.upfrontCents,
+    recurringCents: p.recurringCents,
+  }
+}
 
 function StepHeading({ number, title }: { number: string; title: string }) {
   return (
@@ -44,50 +84,78 @@ function StepHeading({ number, title }: { number: string; title: string }) {
   )
 }
 
-function Generator() {
-  const [parsed, setParsed] = useState<ParsedQuote | null>(null)
+function GeneratorRoute() {
+  const editing = Route.useLoaderData()
+  // Key by target so switching between proposals (or back to a blank "new
+  // proposal") re-seeds all local state instead of keeping stale prefills.
+  return <Generator key={editing?.id ?? 'new'} editing={editing} />
+}
+
+function Generator({ editing }: { editing: Proposal | null }) {
+  const router = useRouter()
+  const [parsed, setParsed] = useState<ParsedQuote | null>(() =>
+    editing ? parsedFromProposal(editing) : null,
+  )
   const [isParsing, setIsParsing] = useState(false)
   const [parseError, setParseError] = useState<string | null>(null)
-  const [noteFrom, setNoteFrom] = useState<NoteFrom>('both')
+  const [noteFrom, setNoteFrom] = useState<NoteFrom>(
+    editing?.noteFrom ?? 'both',
+  )
   const [sections, setSections] = useState({
-    scope: true,
-    process: true,
-    work: true,
+    scope: editing?.sections.scope ?? true,
+    process: editing?.sections.process ?? true,
+    work: editing?.sections.work ?? true,
   })
+  const [shouldReopen, setShouldReopen] = useState(false)
   const [created, setCreated] = useState<(Proposal & { url: string }) | null>(
     null,
   )
-  const [createError, setCreateError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
-  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const [isSaved, setIsSaved] = useState(false)
+  const flashTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  )
   const fileInput = useRef<HTMLInputElement>(null)
 
   const form = useForm({
     defaultValues: {
-      clientName: '',
-      clientEmail: '',
-      projectName: '',
-      phase: 'Proposal' as Phase,
-      note: '',
+      clientName: editing?.clientName ?? '',
+      clientEmail: editing?.clientEmail ?? '',
+      projectName: editing?.projectName ?? '',
+      phase: editing?.phase ?? ('Proposal' as Phase),
+      note: editing?.note ?? '',
     },
     onSubmit: async ({ value }) => {
       if (!parsed) return
-      setCreateError(null)
+      setSubmitError(null)
+      const body = {
+        ...value,
+        noteFrom,
+        sections: { note: noteFrom !== 'none', ...sections },
+        quoteNumber: parsed.quoteNumber,
+        validUntil: parsed.validUntil,
+        lineItems: parsed.lineItems,
+        upfrontCents: parsed.upfrontCents,
+        recurringCents: parsed.recurringCents,
+        pdfUrl: parsed.pdfUrl,
+      }
       try {
-        const proposal = await api.createProposal({
-          ...value,
-          noteFrom,
-          sections: { note: noteFrom !== 'none', ...sections },
-          quoteNumber: parsed.quoteNumber,
-          validUntil: parsed.validUntil,
-          lineItems: parsed.lineItems,
-          upfrontCents: parsed.upfrontCents,
-          recurringCents: parsed.recurringCents,
-          pdfUrl: parsed.pdfUrl,
-        })
-        setCreated(proposal)
+        if (editing) {
+          await api.updateProposal(editing.id, {
+            ...body,
+            reopen: shouldReopen,
+          })
+          setShouldReopen(false)
+          setIsSaved(true)
+          clearTimeout(flashTimer.current)
+          flashTimer.current = setTimeout(() => setIsSaved(false), 1600)
+          await router.invalidate()
+        } else {
+          setCreated(await api.createProposal(body))
+        }
       } catch (err) {
-        setCreateError(
+        setSubmitError(
           err instanceof Error ? err.message : 'Something went wrong.',
         )
       }
@@ -118,12 +186,20 @@ function Generator() {
     }
   }
 
+  const linkId = editing
+    ? `${editing.slug}-${editing.token}`
+    : created
+      ? `${created.slug}-${created.token}`
+      : `${slugify(values.projectName || 'client')}-········`
+  const hasLink = editing !== null || created !== null
+
   function copyLink() {
-    if (!created) return
-    navigator.clipboard.writeText(created.url).catch(() => {})
+    if (!hasLink) return
+    const url = created ? created.url : `${window.location.origin}/p/${linkId}`
+    navigator.clipboard.writeText(url).catch(() => {})
     setIsCopied(true)
-    clearTimeout(copyTimer.current)
-    copyTimer.current = setTimeout(() => setIsCopied(false), 1600)
+    clearTimeout(flashTimer.current)
+    flashTimer.current = setTimeout(() => setIsCopied(false), 1600)
   }
 
   const firstName = values.clientName
@@ -136,11 +212,8 @@ function Generator() {
   const sectionsOn =
     (noteFrom !== 'none' ? 1 : 0) +
     Object.values(sections).filter(Boolean).length
-  const linkId = created
-    ? `${created.slug}-${created.token}`
-    : `${slugify(values.projectName || 'client')}-········`
   const displayUrl = `ap.relentnet.com/p/${linkId}`
-  const canCreate =
+  const canSubmit =
     parsed !== null &&
     values.clientName.trim() !== '' &&
     values.clientEmail.trim() !== '' &&
@@ -155,11 +228,22 @@ function Generator() {
         <div className="flex flex-col gap-10">
           <div>
             <h1 className="font-serif font-normal text-[34px] mb-2">
-              New <span className="italic text-gold/90">Proposal</span>
+              {editing ? 'Edit' : 'New'}{' '}
+              <span className="italic text-gold/90">Proposal</span>
             </h1>
             <p className="text-[13px] text-ink-muted leading-[1.7]">
-              Drop a Stripe quote, add a personal note, and send a page that
-              sells the work, not just the number.
+              {editing ? (
+                <>
+                  Changes publish to the link {firstNameOf(editing.clientName)}{' '}
+                  already has. Current status:{' '}
+                  <span className="uppercase tracking-[0.1em] text-ink-sub">
+                    {editing.status}
+                  </span>
+                  .
+                </>
+              ) : (
+                'Drop a Stripe quote, add a personal note, and send a page that sells the work, not just the number.'
+              )}
             </p>
           </div>
 
@@ -177,28 +261,39 @@ function Generator() {
               }}
             />
             {!parsed ? (
-              <button
-                type="button"
-                onClick={() => fileInput.current?.click()}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault()
-                  void handleFile(e.dataTransfer.files[0])
-                }}
-                className="border border-dashed border-white/20 bg-white/[0.02] px-8 py-14 text-center cursor-pointer transition-all duration-300 hover:border-gold/60 hover:bg-gold/[0.03] w-full"
-              >
-                <div className="w-12 h-12 mx-auto mb-4 border border-white/15 flex items-center justify-center text-gold text-xl">
-                  ↑
-                </div>
-                <p className="text-sm text-ink mb-1.5">
-                  {isParsing
-                    ? 'Parsing the quote…'
-                    : 'Drop the Stripe quote PDF here'}
-                </p>
-                <p className="text-[11px] tracking-[0.15em] uppercase text-ink-faint">
-                  or click to browse · we extract the client &amp; line items
-                </p>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => fileInput.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    void handleFile(e.dataTransfer.files[0])
+                  }}
+                  className="border border-dashed border-white/20 bg-white/[0.02] px-8 py-14 text-center cursor-pointer transition-all duration-300 hover:border-gold/60 hover:bg-gold/[0.03] w-full"
+                >
+                  <div className="w-12 h-12 mx-auto mb-4 border border-white/15 flex items-center justify-center text-gold text-xl">
+                    ↑
+                  </div>
+                  <p className="text-sm text-ink mb-1.5">
+                    {isParsing
+                      ? 'Parsing the quote…'
+                      : 'Drop the Stripe quote PDF here'}
+                  </p>
+                  <p className="text-[11px] tracking-[0.15em] uppercase text-ink-faint">
+                    or click to browse · we extract the client &amp; line items
+                  </p>
+                </button>
+                {editing && (
+                  <button
+                    type="button"
+                    onClick={() => setParsed(parsedFromProposal(editing))}
+                    className="self-start bg-transparent border-none text-ink-muted text-[11px] tracking-[0.15em] uppercase cursor-pointer transition-colors duration-300 hover:text-gold"
+                  >
+                    Keep the current PDF
+                  </button>
+                )}
+              </>
             ) : (
               <>
                 <div className="border border-gold/30 bg-gold/[0.04] px-6 py-5 flex justify-between items-center gap-4">
@@ -343,11 +438,7 @@ function Generator() {
                       key={option}
                       type="button"
                       onClick={() => setNoteFrom(option)}
-                      className={`text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border cursor-pointer transition-all duration-300 ${
-                        noteFrom === option
-                          ? 'bg-gold/10 border-gold/50 text-gold'
-                          : 'bg-white/[0.02] border-line text-ink-muted'
-                      }`}
+                      className={chip(noteFrom === option)}
                     >
                       {NOTE_FROM_LABELS[option]}
                     </button>
@@ -390,11 +481,7 @@ function Generator() {
                     onClick={() =>
                       setSections((s) => ({ ...s, [key]: !s[key] }))
                     }
-                    className={`text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border cursor-pointer transition-all duration-300 ${
-                      sections[key]
-                        ? 'bg-gold/10 border-gold/50 text-gold'
-                        : 'bg-white/[0.02] border-line text-ink-muted'
-                    }`}
+                    className={chip(sections[key])}
                   >
                     {PAGE_SECTION_LABELS[key]}
                   </button>
@@ -403,16 +490,46 @@ function Generator() {
             </div>
           </section>
 
-          {/* Step 4: send */}
+          {/* Step 4: send / save */}
           <section className="flex flex-col gap-4">
-            <StepHeading number="04" title="Send" />
+            <StepHeading number="04" title={editing ? 'Save' : 'Send'} />
             <div className="border border-line-faint bg-card px-6 py-5 flex items-center gap-4 flex-wrap">
               <span
-                className={`flex-1 min-w-0 font-mono text-[13px] overflow-hidden text-ellipsis whitespace-nowrap ${created ? 'text-ink-sub' : 'text-ink-faint'}`}
+                className={`flex-1 min-w-0 font-mono text-[13px] overflow-hidden text-ellipsis whitespace-nowrap ${hasLink ? 'text-ink-sub' : 'text-ink-faint'}`}
               >
                 {displayUrl}
               </span>
-              {created ? (
+              {editing ? (
+                <div className="flex gap-3 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={copyLink}
+                    className={`${ghostBtn} ${isCopied ? 'border-gold text-gold' : ''}`}
+                  >
+                    {isCopied ? 'Copied ✓' : 'Copy Link'}
+                  </button>
+                  <a
+                    href={`/p/${linkId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={ghostBtn}
+                  >
+                    Open Page →
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => void form.handleSubmit()}
+                    disabled={!canSubmit || isSubmitting}
+                    className={`${goldBtn} ${isSaved ? 'bg-transparent text-gold' : ''}`}
+                  >
+                    {isSubmitting
+                      ? 'Saving…'
+                      : isSaved
+                        ? 'Saved ✓'
+                        : 'Save Changes'}
+                  </button>
+                </div>
+              ) : created ? (
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -422,10 +539,10 @@ function Generator() {
                     {isCopied ? 'Copied ✓' : 'Copy Link'}
                   </button>
                   <a
-                    href={`/p/${created.slug}-${created.token}`}
+                    href={`/p/${linkId}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="border border-gold bg-gold text-black text-[11px] tracking-[0.15em] uppercase px-5 py-3 transition-all duration-300 hover:bg-transparent hover:text-gold whitespace-nowrap"
+                    className={goldBtn}
                   >
                     Open Page →
                   </a>
@@ -434,20 +551,37 @@ function Generator() {
                 <button
                   type="button"
                   onClick={() => void form.handleSubmit()}
-                  disabled={!canCreate || isSubmitting}
-                  className="border border-gold bg-gold text-black text-[11px] tracking-[0.15em] uppercase px-5 py-3 cursor-pointer transition-all duration-300 hover:bg-transparent hover:text-gold whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+                  disabled={!canSubmit || isSubmitting}
+                  className={goldBtn}
                 >
                   {isSubmitting ? 'Creating…' : 'Create Proposal Link'}
                 </button>
               )}
             </div>
-            {createError && (
-              <p className="text-xs text-red-500">{createError}</p>
+            {editing && editing.status !== 'sent' && (
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setShouldReopen((r) => !r)}
+                  className={chip(shouldReopen)}
+                >
+                  Reset to sent on save
+                </button>
+                <span className="text-[11px] text-ink-faint">
+                  Clears their {editing.status} response so the page asks again.
+                  Good for revised quotes and testing.
+                </span>
+              </div>
+            )}
+            {submitError && (
+              <p className="text-xs text-red-500">{submitError}</p>
             )}
             <p className="text-[11px] text-ink-faint leading-[1.7]">
-              {created
-                ? 'The link is unique per proposal and unlisted. The page shows the official quote PDF and lets the client accept, or decline with feedback. Responses land in your '
-                : 'Drop a quote and fill in the client to generate the link. Responses will land in your '}
+              {editing
+                ? 'The address never changes when you edit, so the link the client already has always shows the latest version. Responses land in your '
+                : created
+                  ? 'The link is unique per proposal and unlisted. The page shows the official quote PDF and lets the client accept, or decline with feedback. Responses land in your '
+                  : 'Drop a quote and fill in the client to generate the link. Responses will land in your '}
               <Link
                 to="/dashboard"
                 className="text-ink-muted underline-offset-2 hover:text-gold transition-colors"
