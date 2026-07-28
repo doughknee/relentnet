@@ -716,8 +716,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       description:
         'API endpoints behind a Go and Redis real-time core powering brackets, live scoring, and broadcast overlays.',
     },
-    detailHeadline:
-      'A low-latency operating layer for live pickleball.',
+    detailHeadline: 'A low-latency operating layer for live pickleball.',
     summary: {
       problem:
         'Running a pickleball tournament or league means juggling brackets, schedules, live scores, and broadcast graphics — usually across spreadsheets and fragile, generic tools that desync under game-day pressure.',

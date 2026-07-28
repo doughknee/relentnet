@@ -1,0 +1,442 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <style>
+          html,
+          body {
+            margin: 0;
+            padding: 0;
+            background: #050505;
+          }
+          body {
+            -webkit-font-smoothing: antialiased;
+          }
+          ::selection {
+            background: #e1be4c;
+            color: #000;
+          }
+          a {
+            color: #e5e5e5;
+            text-decoration: none;
+          }
+          a:hover {
+            color: #e1be4c;
+          }
+        </style>
+      </helmet>
+
+      <div
+        style="
+          min-height: 100vh;
+          background: #050505;
+          color: #e5e5e5;
+          font-family:
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            'Segoe UI',
+            Helvetica,
+            Arial,
+            sans-serif;
+        "
+      >
+        <!-- ── Header ── -->
+        <nav
+          style="
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            z-index: 50;
+            background: rgba(23, 23, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          "
+        >
+          <div style="display: flex; align-items: baseline; gap: 16px">
+            <a
+              href="https://relentnet.com"
+              style="
+                font-family:
+                  ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                font-size: 18px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #e5e5e5;
+              "
+              ><span style="font-weight: 700; color: #e1be4c">Relent</span
+              >Net</a
+            >
+            <span
+              style="
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #737373;
+              "
+              >Proposal Studio</span
+            >
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px">
+            <div
+              style="
+                display: flex;
+                gap: 24px;
+                font-size: 11px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+              "
+            >
+              <a
+                href="Proposal Generator.dc.html"
+                style="color: #737373; transition: color 0.3s"
+                style-hover="color: #e1be4c;"
+                >New Proposal</a
+              >
+              <span style="color: #e1be4c">Dashboard</span>
+            </div>
+            <span
+              style="
+                font-size: 10px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: #525252;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 6px 12px;
+              "
+              >ap.relentnet.com · internal</span
+            >
+          </div>
+        </nav>
+
+        <main
+          style="
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 32px 96px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-end;
+              gap: 24px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h1
+                style="
+                  margin: 0 0 8px;
+                  font-family:
+                    ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                  font-weight: 400;
+                  font-size: 34px;
+                "
+              >
+                Proposal
+                <span style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                  >Dashboard</span
+                >
+              </h1>
+              <p
+                style="
+                  margin: 0;
+                  font-size: 13px;
+                  color: #737373;
+                  line-height: 1.7;
+                "
+              >
+                Every quote you've sent — who's viewed, who's accepted, and what
+                the no's said.
+              </p>
+            </div>
+            <a
+              href="Proposal Generator.dc.html"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                border: 1px dashed rgba(255, 255, 255, 0.2);
+                padding: 14px 24px;
+                font-size: 11px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: #a3a3a3;
+                transition: all 0.3s;
+                white-space: nowrap;
+              "
+              style-hover="border-color: rgba(225,190,76,0.6); color: #e1be4c;"
+              ><span style="color: #e1be4c; font-size: 14px">↑</span> Drop a
+              quote PDF · New proposal</a
+            >
+          </div>
+
+          <!-- ── Stats ── -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(5, 1fr);
+              gap: 16px;
+            "
+          >
+            <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="5">
+              <div
+                style="
+                  border: 1px solid rgba(255, 255, 255, 0.05);
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 20px 24px;
+                "
+              >
+                <p
+                  style="
+                    margin: 0 0 6px;
+                    font-size: 10px;
+                    letter-spacing: 0.2em;
+                    text-transform: uppercase;
+                    color: #737373;
+                  "
+                >
+                  {{ stat.label }}
+                </p>
+                <p style="{{ stat.valueStyle }}">{{ stat.value }}</p>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- ── Proposals table ── -->
+          <div
+            style="
+              border: 1px solid rgba(255, 255, 255, 0.05);
+              background: rgba(255, 255, 255, 0.02);
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 2.4fr 1.6fr 1fr 1fr 1.1fr 0.9fr;
+                gap: 16px;
+                padding: 14px 28px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 10px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #525252;
+              "
+            >
+              <span>Client / Project</span><span>Quote</span><span>Upfront</span
+              ><span>Sent</span><span>Status</span
+              ><span style="text-align: right">Actions</span>
+            </div>
+            <sc-for list="{{ rows }}" as="row" hint-placeholder-count="5">
+              <div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 2.4fr 1.6fr 1fr 1fr 1.1fr 0.9fr;
+                    gap: 16px;
+                    padding: 20px 28px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    align-items: center;
+                    transition: background 0.3s;
+                  "
+                  style-hover="background: rgba(255,255,255,0.02);"
+                >
+                  <div>
+                    <p style="margin: 0 0 3px; font-size: 14px; color: #ffffff">
+                      {{ row.client }}
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #737373">
+                      {{ row.project }}
+                    </p>
+                  </div>
+                  <span
+                    style="
+                      font-family:
+                        ui-monospace, SFMono-Regular, Menlo, monospace;
+                      font-size: 12px;
+                      color: #737373;
+                    "
+                    >{{ row.quote }}</span
+                  >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 17px;
+                      color: #e5e5e5;
+                    "
+                    >{{ row.amount }}</span
+                  >
+                  <span style="font-size: 12px; color: #737373"
+                    >{{ row.sent }}</span
+                  >
+                  <span
+                    ><span style="{{ row.pillStyle }}"
+                      >{{ row.status }}</span
+                    ></span
+                  >
+                  <div
+                    style="display: flex; justify-content: flex-end; gap: 8px"
+                  >
+                    <sc-if
+                      value="{{ row.hasFeedback }}"
+                      hint-placeholder-val="{{ false }}"
+                    >
+                      <button
+                        onClick="{{ row.toggleFeedback }}"
+                        style="{{ row.feedbackBtnStyle }}"
+                      >
+                        {{ row.feedbackLabel }}
+                      </button>
+                    </sc-if>
+                    <a
+                      href="Proposal Page.dc.html"
+                      target="_blank"
+                      style="
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        color: #737373;
+                        font-size: 10px;
+                        letter-spacing: 0.1em;
+                        text-transform: uppercase;
+                        padding: 8px 12px;
+                        transition: all 0.3s;
+                        white-space: nowrap;
+                      "
+                      style-hover="border-color: rgba(225,190,76,0.6); color: #e1be4c;"
+                      >Page →</a
+                    >
+                  </div>
+                </div>
+                <sc-if
+                  value="{{ row.feedbackOpen }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <div
+                    style="
+                      padding: 24px 28px 28px;
+                      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                      background: rgba(0, 0, 0, 0.25);
+                      display: grid;
+                      grid-template-columns: auto 1fr;
+                      gap: 20px;
+                      align-items: start;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 10px;
+                        letter-spacing: 0.2em;
+                        text-transform: uppercase;
+                        color: #525252;
+                        padding-top: 4px;
+                      "
+                      >Their feedback</span
+                    >
+                    <div>
+                      <p
+                        style="
+                          margin: 0 0 10px;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-style: italic;
+                          font-size: 16px;
+                          line-height: 1.6;
+                          color: #a3a3a3;
+                        "
+                      >
+                        &ldquo;{{ row.feedback }}&rdquo;
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 11px;
+                          letter-spacing: 0.1em;
+                          text-transform: uppercase;
+                          color: #525252;
+                        "
+                      >
+                        {{ row.feedbackMeta }}
+                      </p>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <p
+            style="margin: 0; font-size: 11px; color: #525252; line-height: 1.7"
+          >
+            Statuses update live: <span style="color: #737373">Sent</span> →
+            <span style="color: #737373">Viewed</span> when the link is first
+            opened, then <span style="color: #e1be4c">Accepted</span> or
+            <span style="color: #a3a3a3">Declined</span> when the client
+            responds. Declines always carry feedback.
+          </p>
+        </main>
+      </div>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"$preview": {"width": 1440, "height": 900}}'
+    >
+      class Component extends DCLogic {
+        state = { openFeedback: null };
+        data = [
+          { id: 'q1', client: 'Will Colley', project: 'Amelia Island Beach Condos', quote: 'QT-SHX6JT2B', amount: '$6,300', sent: 'Jul 28', status: 'Viewed', feedback: null },
+          { id: 'q2', client: 'Marcus Tran', project: 'Gulf Breeze Charters', quote: 'QT-K2M9PW4F', amount: '$8,400', sent: 'Jul 21', status: 'Accepted', feedback: null },
+          { id: 'q3', client: 'Dana Whitfield', project: 'Magnolia Family Dental', quote: 'QT-R7C3XL8N', amount: '$5,200', sent: 'Jul 14', status: 'Declined', feedback: 'The build looks great but the monthly hosting is more than we budgeted \u2014 could we start with the site only and revisit maintenance in Q4?', feedbackMeta: 'Declined Jul 17 \u00b7 revised quote QT-R7C3XL8N-R1 drafted' },
+          { id: 'q4', client: 'Ray Okafor', project: 'Hartwell Logistics Portal', quote: 'QT-B4V8QD2S', amount: '$14,800', sent: 'Jul 9', status: 'Accepted', feedback: null },
+          { id: 'q5', client: 'Susan Pell', project: 'Pell & Graves Law', quote: 'QT-N6J1TA9E', amount: '$4,900', sent: 'Jun 30', status: 'Sent', feedback: null },
+        ];
+        renderVals() {
+          const open = this.state.openFeedback;
+          const pill = (status) => {
+            const map = {
+              Accepted: ['rgba(225,190,76,0.12)', 'rgba(225,190,76,0.5)', '#e1be4c'],
+              Declined: ['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.2)', '#a3a3a3'],
+              Viewed: ['rgba(255,255,255,0.02)', 'rgba(255,255,255,0.12)', '#737373'],
+              Sent: ['transparent', 'rgba(255,255,255,0.1)', '#525252'],
+            };
+            const [bg, border, color] = map[status];
+            return `display: inline-block; background: ${bg}; border: 1px solid ${border}; color: ${color}; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px;`;
+          };
+          const accepted = this.data.filter(r => r.status === 'Accepted');
+          return {
+            stats: [
+              { label: 'Proposals sent', value: '5', valueStyle: 'margin: 0; font-family: ui-serif, Georgia, Cambria, \'Times New Roman\', serif; font-size: 30px; color: #ffffff;' },
+              { label: 'Awaiting response', value: '2', valueStyle: 'margin: 0; font-family: ui-serif, Georgia, Cambria, \'Times New Roman\', serif; font-size: 30px; color: #e5e5e5;' },
+              { label: 'Accepted', value: String(accepted.length), valueStyle: 'margin: 0; font-family: ui-serif, Georgia, Cambria, \'Times New Roman\', serif; font-size: 30px; color: #e1be4c;' },
+              { label: 'Declined', value: '1', valueStyle: 'margin: 0; font-family: ui-serif, Georgia, Cambria, \'Times New Roman\', serif; font-size: 30px; color: #737373;' },
+              { label: 'Accepted value', value: '$23.2k', valueStyle: 'margin: 0; font-family: ui-serif, Georgia, Cambria, \'Times New Roman\', serif; font-size: 30px; color: #e1be4c;' },
+            ],
+            rows: this.data.map(r => ({
+              ...r,
+              pillStyle: pill(r.status),
+              hasFeedback: !!r.feedback,
+              feedbackOpen: open === r.id,
+              feedbackLabel: open === r.id ? 'Hide' : 'Feedback',
+              feedbackBtnStyle: `background: ${open === r.id ? 'rgba(225,190,76,0.1)' : 'none'}; border: 1px solid ${open === r.id ? 'rgba(225,190,76,0.5)' : 'rgba(255,255,255,0.15)'}; color: ${open === r.id ? '#e1be4c' : '#a3a3a3'}; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 12px; cursor: pointer; font-family: inherit; transition: all 0.3s; white-space: nowrap;`,
+              toggleFeedback: () => this.setState(s => ({ openFeedback: s.openFeedback === r.id ? null : r.id })),
+            })),
+          };
+        }
+      }
+    </script>
+  </body>
+</html>

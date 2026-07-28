@@ -29,9 +29,7 @@ const CARDS_PER_TAB = 3
  * Tiers with no live case study are not rendered as tabs.
  */
 export function ClientsBySize() {
-  const [active, setActive] = useState<SizeTabId>(
-    TABS[0]?.id ?? 'startup',
-  )
+  const [active, setActive] = useState<SizeTabId>(TABS[0]?.id ?? 'startup')
 
   const visible = useMemo(() => {
     const inTab = caseStudies.filter((s) => s.companySize === active)

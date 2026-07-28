@@ -7,6 +7,11 @@ The current production app is `apps/marketing`, a client-facing marketing and in
 The marketing app is an SPA built with React 19, Vite 7, TanStack Router (file-based routing), TanStack Form,
 Tailwind CSS 4, and TypeScript in strict mode. No SSR — this is a client-only Vite app.
 
+`apps/proposals` is the Proposal Studio (ap.relentnet.com): the same frontend stack (dark-only, marketing
+design tokens) plus a small Hono API server in `apps/proposals/server/` that runs on Node 24's native
+TypeScript support and serves the built SPA, quote-PDF parsing, a JSON-file store, and Basic auth for the
+internal screens. See `apps/proposals/README.md` for commands and environment variables.
+
 ## Tech Stack
 
 | Layer      | Tool                                          |

@@ -101,7 +101,10 @@ export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
             {metrics.length > 0 ? (
               <dl className="space-y-6 pt-2">
                 {metrics.map((metric) => (
-                  <div key={metric.label} className="border-l-2 border-gold pl-5">
+                  <div
+                    key={metric.label}
+                    className="border-l-2 border-gold pl-5"
+                  >
                     <dd className="font-serif text-2xl text-ink-em leading-tight">
                       {isDelta(metric) ? (
                         <>

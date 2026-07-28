@@ -182,7 +182,8 @@ describe('caseStudies data', () => {
 
   it('ships no placeholder studies on the live site', () => {
     const placeholders = caseStudies.filter(
-      (s) => s.slug.startsWith('placeholder-') || s.companySize === 'placeholder',
+      (s) =>
+        s.slug.startsWith('placeholder-') || s.companySize === 'placeholder',
     )
     expect(placeholders).toHaveLength(0)
   })

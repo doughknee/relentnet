@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+/* ── Palette (dark only) ──
+   Proposal pages and the internal studio ship exclusively in the brand's dark
+   theme, so the marketing site's light palette and `.dark` variant are
+   intentionally absent. Values mirror apps/marketing/src/styles.css (.dark). */
+:root {
+  color-scheme: dark;
+
+  --th-page: #050505;
+  --th-surface: rgba(5, 5, 5, 0.2);
+  --th-card: rgba(255, 255, 255, 0.03);
+  --th-chrome: rgba(23, 23, 23, 0.8);
+  --th-inset: rgba(0, 0, 0, 0.2);
+  --th-overlay: rgba(5, 5, 5, 0.95);
+
+  --th-ink: #e5e5e5;
+  --th-ink-sub: #a3a3a3;
+  --th-ink-muted: #737373;
+  --th-ink-faint: #525252;
+  --th-ink-em: #ffffff;
+
+  --th-line: rgba(255, 255, 255, 0.1);
+  --th-line-faint: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Tailwind theme tokens (mirrors apps/marketing) ── */
+@theme {
+  /* Accent */
+  --color-gold: #e1be4c;
+  --color-gold-dim: #e1be4c10;
+
+  /* Surfaces */
+  --color-page: var(--th-page);
+  --color-surface: var(--th-surface);
+  --color-card: var(--th-card);
+  --color-chrome: var(--th-chrome);
+  --color-inset: var(--th-inset);
+  --color-overlay: var(--th-overlay);
+
+  /* Ink (text) */
+  --color-ink: var(--th-ink);
+  --color-ink-sub: var(--th-ink-sub);
+  --color-ink-muted: var(--th-ink-muted);
+  --color-ink-faint: var(--th-ink-faint);
+  --color-ink-em: var(--th-ink-em);
+
+  /* Borders */
+  --color-line: var(--th-line);
+  --color-line-faint: var(--th-line-faint);
+}
+
+/* Toggling the 640px inline PDF embed makes Chrome's scroll anchoring adopt
+   a node below the insertion and "helpfully" jump the viewport by the embed's
+   height. Nothing on these pages needs anchoring, so disable it. */
+html {
+  overflow-anchor: none;
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -29,7 +29,8 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
   {
     label: 'Stage credibility for sales',
     href: '/process',
-    blurb: 'A front door that makes capability legible in the first few seconds.',
+    blurb:
+      'A front door that makes capability legible in the first few seconds.',
   },
   {
     label: 'Build premium client experiences',
@@ -44,7 +45,8 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
   {
     label: 'Automate back-office operations',
     href: '/diagnostic',
-    blurb: 'Turn manual, error-prone busywork into pipelines that run themselves.',
+    blurb:
+      'Turn manual, error-prone busywork into pipelines that run themselves.',
   },
   {
     label: 'Steward systems over time',

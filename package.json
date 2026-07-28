@@ -13,9 +13,11 @@
     "dev": "npm run dev -w @relentnet/marketing",
     "build": "npm run build -w @relentnet/marketing",
     "preview": "npm run preview -w @relentnet/marketing",
-    "test": "npm run test -w @relentnet/marketing",
+    "test": "npm run test --workspaces",
     "lint": "npm run lint -w @relentnet/marketing",
-    "typecheck": "npm run typecheck -w @relentnet/marketing",
+    "typecheck": "npm run typecheck --workspaces",
+    "dev:proposals": "npm run dev -w @relentnet/proposals",
+    "build:proposals": "npm run build -w @relentnet/proposals",
     "format": "prettier --write .",
     "check": "prettier --write . && eslint --fix"
   },
