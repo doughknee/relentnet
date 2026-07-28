@@ -5,16 +5,19 @@ import { fileURLToPath } from 'node:url'
 import { Hono } from 'hono'
 import { basicAuth } from 'hono/basic-auth'
 import { bodyLimit } from 'hono/body-limit'
+import { getCookie, setCookie } from 'hono/cookie'
 import { serveStatic } from '@hono/node-server/serve-static'
 
 import { linkIdOf } from '../shared/types.ts'
 import {
   createProposal,
+  deleteProposal,
   filesDir,
   findByLinkId,
   listProposals,
   markViewed,
   recordResponse,
+  updateProposal,
 } from './store.ts'
 import { parseQuotePdf } from './stripeQuotePdf.ts'
 import { notify, publicOrigin } from './notify.ts'
@@ -53,6 +56,25 @@ const requireAuth: MiddlewareHandler = adminPassword
         c.text('Proposal Studio is disabled: set ADMIN_PASSWORD.', 503),
       )
 
+// Browsers that have signed into the studio carry this cookie, and their
+// visits to proposal pages never count as the client viewing (no status
+// change, no notification). Worst case if a client ever set it themselves:
+// we miss one "viewed" ping.
+const STUDIO_COOKIE = 'relentnet_studio'
+
+const markStudioBrowser: MiddlewareHandler = (c, next) => {
+  setCookie(c, STUDIO_COOKIE, '1', {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'Lax',
+    maxAge: 60 * 60 * 24 * 365,
+  })
+  return next()
+}
+
+const isStudioBrowser = (c: Parameters<MiddlewareHandler>[0]) =>
+  getCookie(c, STUDIO_COOKIE) === '1'
+
 function toPublic(p: Proposal): PublicProposal {
   const {
     id: _id,
@@ -73,7 +95,9 @@ app.get('/healthz', (c) => c.text('ok\n'))
 app.get('/api/p/:linkId', (c) => {
   const proposal = findByLinkId(c.req.param('linkId'))
   if (!proposal) return c.json({ error: 'Not found' }, 404)
-  if (markViewed(proposal.id)) notify('viewed', proposal)
+  if (!isStudioBrowser(c) && markViewed(proposal.id)) {
+    notify('viewed', proposal)
+  }
   return c.json(toPublic(proposal))
 })
 
@@ -120,7 +144,7 @@ app.get('/files/:name', (c) => {
 
 // ── Admin API ──
 
-app.use('/api/admin/*', requireAuth)
+app.use('/api/admin/*', requireAuth, markStudioBrowser)
 
 app.post(
   '/api/admin/quotes',
@@ -268,6 +292,23 @@ app.post('/api/admin/proposals', async (c) => {
 
 app.get('/api/admin/proposals', (c) => c.json(listProposals()))
 
+app.put('/api/admin/proposals/:id', async (c) => {
+  const body: unknown = await c.req.json().catch(() => null)
+  const input = validateCreate(body)
+  if (typeof input === 'string') return c.json({ error: input }, 400)
+  const reopen = (body as { reopen?: unknown }).reopen === true
+  const updated = updateProposal(c.req.param('id'), input, reopen)
+  if (!updated) return c.json({ error: 'Not found' }, 404)
+  return c.json({ ...updated, url: `${publicOrigin}/p/${linkIdOf(updated)}` })
+})
+
+app.delete('/api/admin/proposals/:id', (c) => {
+  if (!deleteProposal(c.req.param('id'))) {
+    return c.json({ error: 'Not found' }, 404)
+  }
+  return c.json({ ok: true })
+})
+
 // ── Static SPA (production build) ──
 // Internal documents sit behind the same Basic auth as the admin API; the
 // unlisted /p/* pages, hashed assets, and PDFs stay public.
@@ -282,7 +323,11 @@ if (existsSync(join(distDir, 'index.html'))) {
       pathname === '/index.html' ||
       pathname === '/dashboard' ||
       pathname.startsWith('/dashboard/')
-    return isInternalDoc ? requireAuth(c, next) : next()
+    return isInternalDoc
+      ? requireAuth(c, async () => {
+          await markStudioBrowser(c, next)
+        })
+      : next()
   })
   app.use(
     '*',

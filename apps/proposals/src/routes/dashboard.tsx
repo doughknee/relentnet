@@ -1,5 +1,5 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
+import { useRef, useState } from 'react'
 
 import { linkIdOf } from '../../shared/types'
 import type { Proposal, ProposalStatus } from '../../shared/types'
@@ -14,7 +14,10 @@ export const Route = createFileRoute('/dashboard')({
   component: Dashboard,
 })
 
-const rowGrid = 'grid grid-cols-[2.4fr_1.6fr_1fr_1fr_1.1fr_0.9fr] gap-4 px-7'
+const rowGrid = 'grid grid-cols-[2.2fr_1.4fr_0.9fr_0.8fr_1fr_1.7fr] gap-4 px-7'
+
+const actionBtn =
+  'border text-[10px] tracking-[0.1em] uppercase px-3 py-2 cursor-pointer transition-all duration-300 whitespace-nowrap'
 
 const pillStyles: Record<ProposalStatus, string> = {
   accepted: 'bg-gold/[0.12] border-gold/50 text-gold',
@@ -24,8 +27,33 @@ const pillStyles: Record<ProposalStatus, string> = {
 }
 
 function Dashboard() {
+  const router = useRouter()
   const proposals = Route.useLoaderData()
   const [openFeedbackId, setOpenFeedbackId] = useState<string | null>(null)
+  // Delete is two-click: first click arms this row, second click deletes.
+  const [armedDeleteId, setArmedDeleteId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const disarmTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  )
+
+  async function handleDelete(id: string) {
+    if (armedDeleteId !== id) {
+      setArmedDeleteId(id)
+      clearTimeout(disarmTimer.current)
+      disarmTimer.current = setTimeout(() => setArmedDeleteId(null), 3000)
+      return
+    }
+    clearTimeout(disarmTimer.current)
+    setIsDeleting(true)
+    try {
+      await api.deleteProposal(id)
+      await router.invalidate()
+    } finally {
+      setIsDeleting(false)
+      setArmedDeleteId(null)
+    }
+  }
 
   const accepted = proposals.filter((p) => p.status === 'accepted')
   const awaiting = proposals.filter(
@@ -99,7 +127,7 @@ function Dashboard() {
 
         {/* ── Proposals table ── */}
         <div className="border border-line-faint bg-white/[0.02] overflow-x-auto">
-          <div className="min-w-[860px]">
+          <div className="min-w-[960px]">
             <div
               className={`${rowGrid} py-3.5 border-b border-line text-[10px] tracking-[0.2em] uppercase text-ink-faint`}
             >
@@ -149,13 +177,13 @@ function Dashboard() {
                         {proposal.status}
                       </span>
                     </span>
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 flex-wrap">
                       {proposal.feedback && (
                         <button
                           onClick={() =>
                             setOpenFeedbackId(isOpen ? null : proposal.id)
                           }
-                          className={`border text-[10px] tracking-[0.1em] uppercase px-3 py-2 cursor-pointer transition-all duration-300 whitespace-nowrap ${
+                          className={`${actionBtn} ${
                             isOpen
                               ? 'bg-gold/10 border-gold/50 text-gold'
                               : 'bg-transparent border-white/15 text-ink-sub'
@@ -164,11 +192,29 @@ function Dashboard() {
                           {isOpen ? 'Hide' : 'Feedback'}
                         </button>
                       )}
+                      <Link
+                        to="/"
+                        search={{ edit: proposal.id }}
+                        className={`${actionBtn} border-line text-ink-muted hover:border-gold/60 hover:text-gold`}
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => void handleDelete(proposal.id)}
+                        disabled={isDeleting}
+                        className={`${actionBtn} ${
+                          armedDeleteId === proposal.id
+                            ? 'bg-red-500/10 border-red-500/50 text-red-400'
+                            : 'bg-transparent border-line text-ink-muted hover:border-red-500/40 hover:text-red-400'
+                        } disabled:opacity-50`}
+                      >
+                        {armedDeleteId === proposal.id ? 'Confirm?' : 'Delete'}
+                      </button>
                       <a
                         href={`/p/${linkIdOf(proposal)}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="border border-line text-ink-muted text-[10px] tracking-[0.1em] uppercase px-3 py-2 transition-all duration-300 hover:border-gold/60 hover:text-gold whitespace-nowrap"
+                        className={`${actionBtn} border-line text-ink-muted hover:border-gold/60 hover:text-gold`}
                       >
                         Page →
                       </a>

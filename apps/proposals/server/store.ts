@@ -3,6 +3,7 @@ import {
   mkdirSync,
   readFileSync,
   renameSync,
+  rmSync,
   writeFileSync,
 } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -108,6 +109,48 @@ export function recordResponse(
   p.respondedAt = new Date().toISOString()
   persist()
   return p
+}
+
+/** Drops the stored PDF once no remaining proposal points at it. */
+function deletePdfIfUnreferenced(pdfUrl: string) {
+  if (proposals.some((p) => p.pdfUrl === pdfUrl)) return
+  const name = /^\/files\/([a-f0-9]{16}\.pdf)$/.exec(pdfUrl)?.[1]
+  if (name) rmSync(join(filesDir, name), { force: true })
+}
+
+/**
+ * Replaces the editable fields. The id, slug, token, and sentAt never change,
+ * so the client's link survives every edit. `reopen` resets an answered
+ * proposal to `sent` and clears the response.
+ */
+export function updateProposal(
+  id: string,
+  input: CreateProposalInput,
+  reopen: boolean,
+): Proposal | undefined {
+  const p = proposals.find((x) => x.id === id)
+  if (!p) return undefined
+  const previousPdf = p.pdfUrl
+  Object.assign(p, input)
+  if (reopen) {
+    p.status = 'sent'
+    delete p.feedback
+    delete p.respondedAt
+    delete p.viewedAt
+  }
+  persist()
+  if (previousPdf !== p.pdfUrl) deletePdfIfUnreferenced(previousPdf)
+  return p
+}
+
+/** Permanent. Also removes the quote PDF when nothing else references it. */
+export function deleteProposal(id: string): boolean {
+  const index = proposals.findIndex((x) => x.id === id)
+  if (index === -1) return false
+  const [removed] = proposals.splice(index, 1)
+  persist()
+  deletePdfIfUnreferenced(removed.pdfUrl)
+  return true
 }
 
 /** Test-only: reset in-memory state (paired with a throwaway DATA_DIR). */
