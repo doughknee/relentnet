@@ -18,8 +18,7 @@ interface CaseStudyDetailHeroProps {
  */
 export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
   const headline = study.detailHeadline ?? study.hero.tagline
-  const intro =
-    study.detailBody ?? study.elevatorPitch ?? study.summary.problem
+  const intro = study.detailBody ?? study.elevatorPitch ?? study.summary.problem
   const image = study.hero.image
 
   return (

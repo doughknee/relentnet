@@ -1,0 +1,1809 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <style>
+          html,
+          body {
+            margin: 0;
+            padding: 0;
+            background: #050505;
+          }
+          body {
+            -webkit-font-smoothing: antialiased;
+          }
+          ::selection {
+            background: #e1be4c;
+            color: #000;
+          }
+          a {
+            color: #e5e5e5;
+            text-decoration: none;
+          }
+          a:hover {
+            color: #e1be4c;
+          }
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          @keyframes pulse {
+            0%,
+            100% {
+              opacity: 0.5;
+            }
+            50% {
+              opacity: 0.2;
+            }
+          }
+        </style>
+      </helmet>
+
+      <div
+        style="
+          min-height: 100vh;
+          background: #050505;
+          color: #e5e5e5;
+          font-family:
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            'Segoe UI',
+            Helvetica,
+            Arial,
+            sans-serif;
+          overflow: hidden;
+          position: relative;
+        "
+      >
+        <canvas
+          ref="{{ starsRef }}"
+          style="
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+          "
+        ></canvas>
+
+        <!-- ── Header (site chrome) ── -->
+        <nav
+          style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px;
+            z-index: 50;
+            background: rgba(5, 5, 5, 0.2);
+            backdrop-filter: blur(4px);
+          "
+        >
+          <a
+            href="https://relentnet.com"
+            style="
+              font-family: ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+              font-size: 20px;
+              letter-spacing: 0.2em;
+              text-transform: uppercase;
+              color: #e5e5e5;
+            "
+            ><span style="font-weight: 700; color: #e1be4c">Relent</span>Net</a
+          >
+          <a
+            href="#scope"
+            style="
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              padding: 12px 24px;
+              font-size: 12px;
+              letter-spacing: 0.1em;
+              text-transform: uppercase;
+              color: #e5e5e5;
+              transition: all 0.5s;
+            "
+            style-hover="background: #e1be4c; border-color: #e1be4c; color: #000;"
+            >Respond to Proposal</a
+          >
+        </nav>
+
+        <main style="position: relative; z-index: 10">
+          <!-- ── Hero ── -->
+          <section
+            style="
+              min-height: 100vh;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 120px 24px 80px;
+              position: relative;
+              text-align: center;
+            "
+          >
+            <p
+              style="
+                margin: 0 0 32px;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: #e1be4c;
+                animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+              "
+            >
+              Proposal &nbsp;·&nbsp; Prepared for {{ clientName }}
+            </p>
+            <h1
+              style="
+                margin: 0;
+                font-family:
+                  ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                font-weight: 400;
+                font-size: clamp(48px, 8vw, 96px);
+                line-height: 1.02;
+                max-width: 1100px;
+                animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+              "
+            >
+              {{ projectName }}
+              <span style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                >deserves a front door.</span
+              >
+            </h1>
+            <p
+              style="
+                margin: 32px 0 0;
+                max-width: 620px;
+                color: #a3a3a3;
+                font-weight: 300;
+                font-size: 18px;
+                line-height: 1.7;
+                opacity: 0;
+                animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 200ms
+                  forwards;
+              "
+            >
+              A custom website designed and built from discovery through launch
+              — then hosted, monitored, and cared for so it keeps earning
+              bookings long after day one.
+            </p>
+            <div
+              style="
+                display: flex;
+                gap: 16px;
+                margin-top: 40px;
+                flex-wrap: wrap;
+                justify-content: center;
+                opacity: 0;
+                animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 350ms
+                  forwards;
+              "
+            >
+              <a
+                href="#scope"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 12px;
+                  border: 1px solid #e1be4c;
+                  background: #e1be4c;
+                  padding: 16px 28px;
+                  font-size: 14px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.1em;
+                  color: #000;
+                  transition: all 0.3s;
+                "
+                style-hover="background: transparent; color: #e1be4c;"
+                >Review the Quote
+                <span style="font-size: 16px; line-height: 1">→</span></a
+              >
+              <a
+                href="#work"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  padding: 16px 28px;
+                  font-size: 14px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.1em;
+                  color: #e5e5e5;
+                  transition: all 0.5s;
+                "
+                style-hover="background: #e1be4c; border-color: #e1be4c; color: #000;"
+                >See Our Work</a
+              >
+            </div>
+            <p
+              style="
+                margin: 24px 0 0;
+                font-size: 11px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: #737373;
+                opacity: 0;
+                animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 500ms
+                  forwards;
+              "
+            >
+              Quote {{ quoteNumber }} · Valid until {{ validUntil }}
+            </p>
+            <div
+              style="
+                position: absolute;
+                bottom: 48px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                animation: pulse 2s ease-in-out infinite;
+              "
+            >
+              <span
+                style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.1em;
+                  color: #e1be4c;
+                "
+                >Scroll</span
+              >
+              <div
+                style="
+                  width: 1px;
+                  height: 48px;
+                  background: linear-gradient(to bottom, #e1be4c, transparent);
+                "
+              ></div>
+            </div>
+          </section>
+
+          <!-- ── Personal note ── -->
+          <section
+            style="
+              position: relative;
+              z-index: 10;
+              background: rgba(5, 5, 5, 0.2);
+              backdrop-filter: blur(4px);
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <div
+              style="
+                max-width: 880px;
+                margin: 0 auto;
+                padding: 100px 24px;
+                text-align: center;
+              "
+            >
+              <h2
+                style="
+                  margin: 0 0 32px;
+                  font-size: 12px;
+                  font-weight: 700;
+                  letter-spacing: 0.3em;
+                  text-transform: uppercase;
+                  color: #e1be4c;
+                "
+              >
+                A Note From Daniel
+              </h2>
+              <p
+                style="
+                  margin: 0 auto;
+                  font-family:
+                    ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                  font-size: clamp(22px, 3vw, 32px);
+                  line-height: 1.45;
+                  max-width: 760px;
+                "
+              >
+                &ldquo;{{ personalNote }}&rdquo;
+              </p>
+              <div
+                style="
+                  margin-top: 40px;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 6px;
+                "
+              >
+                <span
+                  style="
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 20px;
+                    color: #ffffff;
+                  "
+                  >Daniel Velez</span
+                >
+                <span
+                  style="
+                    font-size: 11px;
+                    letter-spacing: 0.2em;
+                    text-transform: uppercase;
+                    color: #737373;
+                  "
+                  >RelentNet · Winter Garden, FL · +1 858-859-1851</span
+                >
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Scope & Investment ── -->
+          <section id="scope" style="position: relative; z-index: 10">
+            <div style="max-width: 1152px; margin: 0 auto; padding: 128px 24px">
+              <span
+                style="
+                  display: block;
+                  font-family:
+                    ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                  font-size: clamp(80px, 10vw, 160px);
+                  line-height: 1;
+                  color: rgba(255, 255, 255, 0.03);
+                  user-select: none;
+                  margin-bottom: -48px;
+                "
+                >01</span
+              >
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: minmax(260px, 3fr) 9fr;
+                  gap: 64px;
+                  align-items: start;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >The Engagement</span
+                  >
+                  <h2
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: clamp(28px, 3vw, 36px);
+                    "
+                  >
+                    Scope &amp; Investment
+                  </h2>
+                  <p
+                    style="
+                      margin: 8px 0 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.7;
+                    "
+                  >
+                    Everything below is written into the Stripe quote — no
+                    surprises, no change-order theater. Accept it and we begin.
+                  </p>
+                  <div
+                    style="
+                      margin-top: 16px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 8px;
+                      font-size: 11px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #525252;
+                    "
+                  >
+                    <span>Quote &nbsp;{{ quoteNumber }}</span>
+                    <span>Valid until &nbsp;{{ validUntil }}</span>
+                    <span>Prepared for &nbsp;{{ clientName }}</span>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0">
+                  <div
+                    style="
+                      border: 1px solid rgba(255, 255, 255, 0.05);
+                      background: rgba(255, 255, 255, 0.03);
+                      padding: 36px 40px;
+                      display: grid;
+                      grid-template-columns: 1fr auto;
+                      gap: 24px;
+                    "
+                  >
+                    <div>
+                      <h3
+                        style="
+                          margin: 0 0 12px;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-weight: 400;
+                          font-size: 24px;
+                          color: #ffffff;
+                        "
+                      >
+                        Website Design &amp; Development
+                      </h3>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 14px;
+                          color: #a3a3a3;
+                          line-height: 1.7;
+                          max-width: 560px;
+                        "
+                      >
+                        Custom website design and build from discovery through
+                        launch. Mobile-first responsive, performance optimized,
+                        full on-page SEO and structured data, forms and
+                        third-party integrations, analytics, two revision
+                        rounds, 30 days post-launch support.
+                      </p>
+                    </div>
+                    <div style="text-align: right">
+                      <span
+                        style="
+                          display: block;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-size: 30px;
+                          color: #ffffff;
+                        "
+                        >$6,000</span
+                      >
+                      <span
+                        style="
+                          font-size: 10px;
+                          letter-spacing: 0.2em;
+                          text-transform: uppercase;
+                          color: #737373;
+                        "
+                        >One-time</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      border: 1px solid rgba(255, 255, 255, 0.05);
+                      border-top: none;
+                      background: rgba(255, 255, 255, 0.03);
+                      padding: 36px 40px;
+                      display: grid;
+                      grid-template-columns: 1fr auto;
+                      gap: 24px;
+                    "
+                  >
+                    <div>
+                      <h3
+                        style="
+                          margin: 0 0 12px;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-weight: 400;
+                          font-size: 24px;
+                          color: #ffffff;
+                        "
+                      >
+                        Managed Hosting &amp; Maintenance
+                      </h3>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 14px;
+                          color: #a3a3a3;
+                          line-height: 1.7;
+                          max-width: 560px;
+                        "
+                      >
+                        Managed hosting with SSL, CDN, and daily off-site
+                        backups. Software and security updates, uptime and
+                        malware monitoring, content updates on request, monthly
+                        traffic report, direct support. No contract — cancel
+                        anytime with 30 days notice.
+                      </p>
+                    </div>
+                    <div style="text-align: right">
+                      <span
+                        style="
+                          display: block;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-size: 30px;
+                          color: #ffffff;
+                        "
+                        >$300</span
+                      >
+                      <span
+                        style="
+                          font-size: 10px;
+                          letter-spacing: 0.2em;
+                          text-transform: uppercase;
+                          color: #737373;
+                        "
+                        >Per month</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      border: 1px solid rgba(255, 255, 255, 0.05);
+                      border-top: none;
+                      background: rgba(0, 0, 0, 0.2);
+                      padding: 20px 40px;
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      gap: 16px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 11px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #737373;
+                      "
+                      >Official quote · {{ quoteNumber }}.pdf</span
+                    >
+                    <div style="display: flex; gap: 12px">
+                      <button
+                        onClick="{{ togglePdf }}"
+                        style="
+                          background: none;
+                          border: 1px solid rgba(255, 255, 255, 0.15);
+                          color: #e5e5e5;
+                          font-size: 11px;
+                          letter-spacing: 0.15em;
+                          text-transform: uppercase;
+                          padding: 10px 18px;
+                          cursor: pointer;
+                          font-family: inherit;
+                          transition: all 0.3s;
+                        "
+                        style-hover="border-color: #e1be4c; color: #e1be4c;"
+                      >
+                        {{ pdfToggleLabel }}
+                      </button>
+                      <a
+                        href="{{ pdfUrl }}"
+                        target="_blank"
+                        style="
+                          border: 1px solid rgba(255, 255, 255, 0.15);
+                          color: #e5e5e5;
+                          font-size: 11px;
+                          letter-spacing: 0.15em;
+                          text-transform: uppercase;
+                          padding: 10px 18px;
+                          transition: all 0.3s;
+                          display: inline-flex;
+                          align-items: center;
+                        "
+                        style-hover="border-color: #e1be4c; color: #e1be4c;"
+                        >Download ↓</a
+                      >
+                    </div>
+                  </div>
+                  <sc-if
+                    value="{{ pdfOpen }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        border-top: none;
+                        background: #0a0a0a;
+                      "
+                    >
+                      <object
+                        data="{{ pdfUrl }}"
+                        type="application/pdf"
+                        style="width: 100%; height: 640px; display: block"
+                      >
+                        <p
+                          style="
+                            padding: 32px;
+                            margin: 0;
+                            font-size: 13px;
+                            color: #737373;
+                            text-align: center;
+                          "
+                        >
+                          PDF preview unavailable in this browser —
+                          <a
+                            href="{{ pdfUrl }}"
+                            target="_blank"
+                            style="color: #e1be4c"
+                            >open the quote</a
+                          >
+                          instead.
+                        </p>
+                      </object>
+                    </div>
+                  </sc-if>
+                  <sc-if
+                    value="{{ isPending }}"
+                    hint-placeholder-val="{{ true }}"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(225, 190, 76, 0.3);
+                        border-top: none;
+                        background: rgba(225, 190, 76, 0.06);
+                        padding: 28px 40px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 24px;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <div style="display: flex; gap: 48px">
+                        <div>
+                          <span
+                            style="
+                              display: block;
+                              font-size: 10px;
+                              letter-spacing: 0.2em;
+                              text-transform: uppercase;
+                              color: #737373;
+                              margin-bottom: 4px;
+                            "
+                            >Upfront total</span
+                          >
+                          <span
+                            style="
+                              font-family:
+                                ui-serif, Georgia, Cambria, 'Times New Roman',
+                                serif;
+                              font-size: 28px;
+                              color: #e1be4c;
+                            "
+                            >$6,300</span
+                          >
+                        </div>
+                        <div>
+                          <span
+                            style="
+                              display: block;
+                              font-size: 10px;
+                              letter-spacing: 0.2em;
+                              text-transform: uppercase;
+                              color: #737373;
+                              margin-bottom: 4px;
+                            "
+                            >Then</span
+                          >
+                          <span
+                            style="
+                              font-family:
+                                ui-serif, Georgia, Cambria, 'Times New Roman',
+                                serif;
+                              font-size: 28px;
+                              color: #e5e5e5;
+                            "
+                            >$300<span style="font-size: 14px; color: #737373"
+                              >/mo</span
+                            ></span
+                          >
+                        </div>
+                      </div>
+                      <div style="display: flex; gap: 12px; flex-wrap: wrap">
+                        <button
+                          onClick="{{ startDecline }}"
+                          style="
+                            background: none;
+                            border: 1px solid rgba(255, 255, 255, 0.15);
+                            color: #a3a3a3;
+                            font-size: 13px;
+                            letter-spacing: 0.1em;
+                            text-transform: uppercase;
+                            padding: 16px 24px;
+                            cursor: pointer;
+                            font-family: inherit;
+                            transition: all 0.3s;
+                          "
+                          style-hover="border-color: rgba(255,255,255,0.4); color: #e5e5e5;"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          onClick="{{ acceptQuote }}"
+                          style="
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 12px;
+                            border: 1px solid #e1be4c;
+                            background: #e1be4c;
+                            padding: 16px 28px;
+                            font-size: 13px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.1em;
+                            color: #000;
+                            cursor: pointer;
+                            font-family: inherit;
+                            transition: all 0.3s;
+                          "
+                          style-hover="background: transparent; color: #e1be4c;"
+                        >
+                          Accept Quote
+                          <span style="font-size: 15px; line-height: 1">→</span>
+                        </button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if
+                    value="{{ isDeclining }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-top: none;
+                        background: rgba(255, 255, 255, 0.02);
+                        padding: 32px 40px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                      "
+                    >
+                      <div>
+                        <h3
+                          style="
+                            margin: 0 0 6px;
+                            font-family:
+                              ui-serif, Georgia, Cambria, 'Times New Roman',
+                              serif;
+                            font-weight: 400;
+                            font-size: 20px;
+                            color: #ffffff;
+                          "
+                        >
+                          Not quite right?
+                        </h3>
+                        <p
+                          style="
+                            margin: 0;
+                            font-size: 13px;
+                            color: #737373;
+                            line-height: 1.7;
+                          "
+                        >
+                          Tell us what's off — scope, budget, timing — and we'll
+                          revise the quote or step aside gracefully. This goes
+                          straight to Daniel.
+                        </p>
+                      </div>
+                      <textarea
+                        value="{{ feedback }}"
+                        onChange="{{ setFeedback }}"
+                        rows="4"
+                        placeholder="What would need to change for this to work?"
+                        style="
+                          width: 100%;
+                          box-sizing: border-box;
+                          background: rgba(0, 0, 0, 0.2);
+                          border: 1px solid rgba(255, 255, 255, 0.1);
+                          padding: 14px;
+                          font-size: 14px;
+                          color: #e5e5e5;
+                          font-family: inherit;
+                          line-height: 1.6;
+                          outline: none;
+                          resize: vertical;
+                          transition: border-color 0.3s;
+                        "
+                        style-focus="border-color: #e1be4c;"
+                      ></textarea>
+                      <div
+                        style="
+                          display: flex;
+                          gap: 12px;
+                          justify-content: flex-end;
+                        "
+                      >
+                        <button
+                          onClick="{{ cancelDecline }}"
+                          style="
+                            background: none;
+                            border: none;
+                            color: #737373;
+                            font-size: 11px;
+                            letter-spacing: 0.15em;
+                            text-transform: uppercase;
+                            padding: 12px 16px;
+                            cursor: pointer;
+                            font-family: inherit;
+                            transition: color 0.3s;
+                          "
+                          style-hover="color: #e5e5e5;"
+                        >
+                          Back
+                        </button>
+                        <button
+                          onClick="{{ submitDecline }}"
+                          style="
+                            background: none;
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            color: #e5e5e5;
+                            font-size: 11px;
+                            letter-spacing: 0.15em;
+                            text-transform: uppercase;
+                            padding: 12px 24px;
+                            cursor: pointer;
+                            font-family: inherit;
+                            transition: all 0.3s;
+                          "
+                          style-hover="border-color: #e1be4c; color: #e1be4c;"
+                        >
+                          Send Feedback &amp; Decline
+                        </button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if
+                    value="{{ isAccepted }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(225, 190, 76, 0.5);
+                        border-top: none;
+                        background: rgba(225, 190, 76, 0.08);
+                        padding: 36px 40px;
+                        text-align: center;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 8px;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-size: 26px;
+                          color: #e1be4c;
+                        "
+                      >
+                        Quote accepted — welcome aboard, {{ clientFirstName }}.
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 13px;
+                          color: #a3a3a3;
+                          line-height: 1.7;
+                        "
+                      >
+                        Daniel will reach out within one business day with the
+                        invoice and discovery scheduling. Nothing is charged
+                        today.
+                      </p>
+                    </div>
+                  </sc-if>
+                  <sc-if
+                    value="{{ isDeclined }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(255, 255, 255, 0.15);
+                        border-top: none;
+                        background: rgba(255, 255, 255, 0.02);
+                        padding: 36px 40px;
+                        text-align: center;
+                      "
+                    >
+                      <p
+                        style="
+                          margin: 0 0 8px;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-size: 24px;
+                          color: #e5e5e5;
+                        "
+                      >
+                        Feedback sent — thank you.
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 13px;
+                          color: #737373;
+                          line-height: 1.7;
+                        "
+                      >
+                        Daniel has your notes and will follow up. If a revised
+                        scope makes sense, an updated quote will land at this
+                        same link.
+                      </p>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── How we work ── -->
+          <section
+            style="
+              position: relative;
+              z-index: 10;
+              background: rgba(5, 5, 5, 0.2);
+              backdrop-filter: blur(4px);
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <div style="max-width: 1152px; margin: 0 auto; padding: 112px 24px">
+              <div style="text-align: center; margin-bottom: 80px">
+                <h2
+                  style="
+                    margin: 0 0 24px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  How We Work
+                </h2>
+                <p
+                  style="
+                    margin: 0 auto;
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: clamp(26px, 3.5vw, 40px);
+                    line-height: 1.35;
+                    max-width: 720px;
+                  "
+                >
+                  Every engagement follows the shape of the business.<br /><span
+                    style="color: rgba(255, 255, 255, 0.3)"
+                    >Diagnose the workflow. Prioritize the friction. Build what
+                    earns its place.</span
+                  >
+                </p>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(5, 1fr);
+                  gap: 32px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: 24px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 56px;
+                      line-height: 1;
+                      color: rgba(255, 255, 255, 0.05);
+                      user-select: none;
+                    "
+                    >01</span
+                  >
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >Diagnose</span
+                  >
+                  <h3
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: 19px;
+                      color: #ffffff;
+                    "
+                  >
+                    Diagnose the Workflow
+                  </h3>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.65;
+                    "
+                  >
+                    We start with how bookings, inquiries, and guest
+                    communication actually move today.
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: 24px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 56px;
+                      line-height: 1;
+                      color: rgba(255, 255, 255, 0.05);
+                      user-select: none;
+                    "
+                    >02</span
+                  >
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >Prioritize</span
+                  >
+                  <h3
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: 19px;
+                      color: #ffffff;
+                    "
+                  >
+                    Prioritize the Friction
+                  </h3>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.65;
+                    "
+                  >
+                    The right system starts with the right problem — we find
+                    where guests drop off.
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: 24px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 56px;
+                      line-height: 1;
+                      color: rgba(255, 255, 255, 0.05);
+                      user-select: none;
+                    "
+                    >03</span
+                  >
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >Design</span
+                  >
+                  <h3
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: 19px;
+                      color: #ffffff;
+                    "
+                  >
+                    Design the System
+                  </h3>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.65;
+                    "
+                  >
+                    Screens, structure, and content mapped before a line of
+                    production code.
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: 24px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 56px;
+                      line-height: 1;
+                      color: rgba(255, 255, 255, 0.05);
+                      user-select: none;
+                    "
+                    >04</span
+                  >
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >Build</span
+                  >
+                  <h3
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: 19px;
+                      color: #ffffff;
+                    "
+                  >
+                    Build the Operating Layer
+                  </h3>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.65;
+                    "
+                  >
+                    Mobile-first, performance-optimized, SEO-complete — built to
+                    fit the business.
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    padding-top: 24px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-size: 56px;
+                      line-height: 1;
+                      color: rgba(255, 255, 255, 0.05);
+                      user-select: none;
+                    "
+                    >05</span
+                  >
+                  <span
+                    style="
+                      color: #e1be4c;
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                    "
+                    >Steward</span
+                  >
+                  <h3
+                    style="
+                      margin: 0;
+                      font-family:
+                        ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                      font-weight: 400;
+                      font-size: 19px;
+                      color: #ffffff;
+                    "
+                  >
+                    Steward the Technology
+                  </h3>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 13px;
+                      color: #737373;
+                      line-height: 1.65;
+                    "
+                  >
+                    Hosting, monitoring, updates, and support — launch is the
+                    start, not the end.
+                  </p>
+                </div>
+              </div>
+              <div style="text-align: center; margin-top: 64px">
+                <a
+                  href="https://relentnet.com/process"
+                  style="
+                    font-size: 12px;
+                    letter-spacing: 0.2em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                    border-bottom: 1px solid rgba(225, 190, 76, 0.3);
+                    padding-bottom: 4px;
+                  "
+                  style-hover="border-color: #e1be4c;"
+                  >See the full process →</a
+                >
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Selected work ── -->
+          <section id="work" style="position: relative; z-index: 10">
+            <div style="max-width: 1152px; margin: 0 auto; padding: 128px 24px">
+              <div style="margin-bottom: 64px">
+                <h2
+                  style="
+                    margin: 0 0 20px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Selected Work
+                </h2>
+                <p
+                  style="
+                    margin: 0;
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: clamp(28px, 4vw, 48px);
+                    line-height: 1.15;
+                    max-width: 760px;
+                  "
+                >
+                  Built for owners who
+                  <span
+                    style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                    >stake their name</span
+                  >
+                  on the result.
+                </p>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(3, 1fr);
+                  gap: 32px;
+                "
+              >
+                <a
+                  href="https://relentnet.com/clients/vm-homes"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    background: rgba(255, 255, 255, 0.03);
+                    color: #e5e5e5;
+                    transition: border-color 0.3s;
+                  "
+                  style-hover="border-color: rgba(225,190,76,0.4); color: #e5e5e5;"
+                >
+                  <div
+                    style="
+                      aspect-ratio: 16 / 10;
+                      overflow: hidden;
+                      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    "
+                  >
+                    <img
+                      src="assets/vm-homes-hero.webp"
+                      alt="VM Homes homepage with Gulf-front aerial and property search"
+                      style="
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: top;
+                        display: block;
+                      "
+                    />
+                  </div>
+                  <div
+                    style="
+                      padding: 28px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 10px;
+                      flex: 1;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 10px;
+                        letter-spacing: 0.2em;
+                        text-transform: uppercase;
+                        color: #737373;
+                      "
+                      >Real Estate — St. Pete Beach, FL</span
+                    >
+                    <h3
+                      style="
+                        margin: 0;
+                        font-family:
+                          ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                        font-weight: 400;
+                        font-size: 24px;
+                        color: #ffffff;
+                      "
+                    >
+                      VM Homes
+                    </h3>
+                    <p
+                      style="
+                        margin: 0;
+                        font-size: 13px;
+                        color: #a3a3a3;
+                        line-height: 1.65;
+                        flex: 1;
+                      "
+                    >
+                      A premium, MLS-integrated home search for the Tampa Bay
+                      coast — live listings inside the brand.
+                    </p>
+                    <span
+                      style="
+                        margin-top: 8px;
+                        font-size: 11px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #e1be4c;
+                      "
+                      >6 markets, live inventory</span
+                    >
+                  </div>
+                </a>
+                <a
+                  href="https://relentnet.com/clients/cambridge-building-group"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    background: rgba(255, 255, 255, 0.03);
+                    color: #e5e5e5;
+                    transition: border-color 0.3s;
+                  "
+                  style-hover="border-color: rgba(225,190,76,0.4); color: #e5e5e5;"
+                >
+                  <div
+                    style="
+                      aspect-ratio: 16 / 10;
+                      overflow: hidden;
+                      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    "
+                  >
+                    <img
+                      src="assets/cambridge-hero.webp"
+                      alt="Cambridge Building Group homepage hero"
+                      style="
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: top;
+                        display: block;
+                      "
+                    />
+                  </div>
+                  <div
+                    style="
+                      padding: 28px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 10px;
+                      flex: 1;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 10px;
+                        letter-spacing: 0.2em;
+                        text-transform: uppercase;
+                        color: #737373;
+                      "
+                      >Commercial Construction — Nashville, TN</span
+                    >
+                    <h3
+                      style="
+                        margin: 0;
+                        font-family:
+                          ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                        font-weight: 400;
+                        font-size: 24px;
+                        color: #ffffff;
+                      "
+                    >
+                      Cambridge Building Group
+                    </h3>
+                    <p
+                      style="
+                        margin: 0;
+                        font-size: 13px;
+                        color: #a3a3a3;
+                        line-height: 1.65;
+                        flex: 1;
+                      "
+                    >
+                      A credibility-first front door, backed by an AP pipeline
+                      that posts vendor invoices to QuickBooks itself.
+                    </p>
+                    <span
+                      style="
+                        margin-top: 8px;
+                        font-size: 11px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #e1be4c;
+                      "
+                      >Email → QBO, automated</span
+                    >
+                  </div>
+                </a>
+                <a
+                  href="https://relentnet.com/clients/scrollr"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    background: rgba(255, 255, 255, 0.03);
+                    color: #e5e5e5;
+                    transition: border-color 0.3s;
+                  "
+                  style-hover="border-color: rgba(225,190,76,0.4); color: #e5e5e5;"
+                >
+                  <div
+                    style="
+                      aspect-ratio: 16 / 10;
+                      overflow: hidden;
+                      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    "
+                  >
+                    <img
+                      src="assets/scrollr-hero.webp"
+                      alt="Scrollr desktop app showing live MLB scores"
+                      style="
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: top;
+                        display: block;
+                      "
+                    />
+                  </div>
+                  <div
+                    style="
+                      padding: 28px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 10px;
+                      flex: 1;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 10px;
+                        letter-spacing: 0.2em;
+                        text-transform: uppercase;
+                        color: #737373;
+                      "
+                      >Consumer Software</span
+                    >
+                    <h3
+                      style="
+                        margin: 0;
+                        font-family:
+                          ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                        font-weight: 400;
+                        font-size: 24px;
+                        color: #ffffff;
+                      "
+                    >
+                      Scrollr
+                    </h3>
+                    <p
+                      style="
+                        margin: 0;
+                        font-size: 13px;
+                        color: #a3a3a3;
+                        line-height: 1.65;
+                        flex: 1;
+                      "
+                    >
+                      A brittle Chrome extension rebuilt into a cross-platform
+                      native desktop product, now in beta.
+                    </p>
+                    <span
+                      style="
+                        margin-top: 8px;
+                        font-size: 11px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #e1be4c;
+                      "
+                      >1 → 3 platforms</span
+                    >
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Closing CTA ── -->
+          <section
+            style="
+              position: relative;
+              z-index: 10;
+              padding: 128px 24px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              text-align: center;
+            "
+          >
+            <p
+              style="
+                margin: 0 0 32px;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: #737373;
+              "
+            >
+              The Next Step
+            </p>
+            <h2
+              style="
+                margin: 0;
+                font-family:
+                  ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                font-weight: 400;
+                font-size: clamp(36px, 6vw, 72px);
+                max-width: 900px;
+                line-height: 1.1;
+              "
+            >
+              Ready when you are,
+              <span style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                >{{ clientFirstName }}.</span
+              >
+            </h2>
+            <p
+              style="
+                margin: 24px 0 0;
+                max-width: 620px;
+                color: #737373;
+                font-size: 15px;
+                line-height: 1.7;
+              "
+            >
+              Accept the quote and discovery begins this week. Questions first?
+              Call or reply — you will always talk to the person building your
+              site.
+            </p>
+            <a
+              href="#scope"
+              style="
+                margin-top: 40px;
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                border: 1px solid #e1be4c;
+                background: #e1be4c;
+                padding: 16px 28px;
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #000;
+                transition: all 0.3s;
+              "
+              style-hover="background: transparent; color: #e1be4c;"
+              >Respond to the Quote
+              <span style="font-size: 16px; line-height: 1">→</span></a
+            >
+            <span
+              style="
+                margin-top: 20px;
+                font-size: 11px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: #525252;
+              "
+              >Valid until {{ validUntil }} · Accept or decline in one
+              click</span
+            >
+          </section>
+        </main>
+
+        <!-- ── Footer (site chrome) ── -->
+        <footer
+          style="
+            padding: 48px 32px;
+            background: rgba(5, 5, 5, 0.2);
+            backdrop-filter: blur(4px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #737373;
+            position: relative;
+            z-index: 10;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              text-align: left;
+            "
+          >
+            <p style="margin: 0">© RelentNet 2026</p>
+            <p style="margin: 0">TN • LA • GA • FL</p>
+          </div>
+          <div style="display: flex; gap: 24px">
+            <a
+              href="https://relentnet.com/diagnostic"
+              style="color: #737373; transition: color 0.3s"
+              style-hover="color: #e1be4c;"
+              >Diagnostic</a
+            >
+            <a
+              href="https://relentnet.com/portal"
+              style="color: #737373; transition: color 0.3s"
+              style-hover="color: #e1be4c;"
+              >Client Portal</a
+            >
+            <a
+              href="https://relentnet.com/legal"
+              style="color: #737373; transition: color 0.3s"
+              style-hover="color: #e1be4c;"
+              >Legal</a
+            >
+          </div>
+        </footer>
+      </div>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"clientName": {"editor": "text", "default": "Will Colley", "tsType": "string", "section": "Client"}, "projectName": {"editor": "text", "default": "Amelia Island Beach Condos", "tsType": "string", "section": "Client"}, "personalNote": {"editor": "text", "default": "Will — vacation rental guests decide in seconds whether a property feels trustworthy. Amelia Island Beach Condos deserves a site that earns that trust instantly, books directly, and never sends a guest to a competitor&apos;s listing page. That&apos;s the site I want to build for you.", "tsType": "string", "section": "Client"}, "quoteNumber": {"editor": "text", "default": "QT-SHX6JT2B", "tsType": "string", "section": "Quote"}, "validUntil": {"editor": "text", "default": "Aug 27, 2026", "tsType": "string", "section": "Quote"}, "pdfUrl": {"editor": "text", "default": "assets/sample-quote.pdf", "tsType": "string", "section": "Quote"}, "showStars": {"editor": "boolean", "default": true, "tsType": "boolean", "section": "Page"}}'
+    >
+      class Component extends DCLogic {
+        starsRef = React.createRef();
+        state = { decision: 'pending', feedback: '', pdfOpen: false };
+        renderVals() {
+          const p = this.props;
+          const clientName = p.clientName ?? 'Will Colley';
+          const d = this.state.decision;
+          return {
+            starsRef: this.starsRef,
+            clientName,
+            clientFirstName: clientName.split(' ')[0],
+            projectName: p.projectName ?? 'Amelia Island Beach Condos',
+            quoteNumber: p.quoteNumber ?? 'QT-SHX6JT2B',
+            validUntil: p.validUntil ?? 'Aug 27, 2026',
+            pdfUrl: p.pdfUrl ?? 'assets/sample-quote.pdf',
+            pdfOpen: this.state.pdfOpen,
+            togglePdf: () => this.setState(s => ({ pdfOpen: !s.pdfOpen })),
+            pdfToggleLabel: this.state.pdfOpen ? 'Hide Quote PDF' : 'View Quote PDF',
+            isPending: d === 'pending', isDeclining: d === 'declining',
+            isAccepted: d === 'accepted', isDeclined: d === 'declined',
+            feedback: this.state.feedback,
+            setFeedback: (e) => this.setState({ feedback: e.target.value }),
+            acceptQuote: () => this.setState({ decision: 'accepted' }),
+            startDecline: () => this.setState({ decision: 'declining' }),
+            cancelDecline: () => this.setState({ decision: 'pending' }),
+            submitDecline: () => this.setState({ decision: 'declined' }),
+            personalNote: p.personalNote ?? 'Will — vacation rental guests decide in seconds whether a property feels trustworthy. Amelia Island Beach Condos deserves a site that earns that trust instantly, books directly, and never sends a guest to a competitor\u2019s listing page. That\u2019s the site I want to build for you.',
+          };
+        }
+        componentDidMount() {
+          const canvas = this.starsRef.current;
+          if (!canvas || (this.props.showStars ?? true) === false) return;
+          const ctx = canvas.getContext('2d');
+          const colors = ['#ffffff', '#ffffff', '#E1BE4C'];
+          let stars = [], w = 0, h = 0;
+          const resize = () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            const count = Math.round(120 * (w * h) / (1920 * 1080));
+            stars = Array.from({ length: Math.max(40, count) }, () => ({
+              x: Math.random() * w, y: Math.random() * h,
+              r: 1 + Math.random() * 2,
+              speed: 0.5 + Math.random(),
+              color: colors[Math.floor(Math.random() * colors.length)],
+              phase: Math.random() * Math.PI * 2,
+              twinkle: 0.5 + Math.random() * 0.5,
+            }));
+          };
+          resize();
+          this._onResize = resize;
+          window.addEventListener('resize', resize);
+          const tick = (t) => {
+            ctx.clearRect(0, 0, w, h);
+            for (const s of stars) {
+              s.y -= s.speed * 0.4;
+              if (s.y < -4) { s.y = h + 4; s.x = Math.random() * w; }
+              const a = 0.1 + 0.7 * Math.abs(Math.sin(s.phase + t * 0.0005 * s.twinkle));
+              ctx.globalAlpha = a;
+              ctx.fillStyle = s.color;
+              ctx.beginPath();
+              ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            this._raf = requestAnimationFrame(tick);
+          };
+          this._raf = requestAnimationFrame(tick);
+        }
+        componentWillUnmount() {
+          cancelAnimationFrame(this._raf);
+          window.removeEventListener('resize', this._onResize);
+        }
+      }
+    </script>
+  </body>
+</html>

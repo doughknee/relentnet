@@ -1,0 +1,995 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <style>
+          html,
+          body {
+            margin: 0;
+            padding: 0;
+            background: #050505;
+          }
+          body {
+            -webkit-font-smoothing: antialiased;
+          }
+          ::selection {
+            background: #e1be4c;
+            color: #000;
+          }
+          a {
+            color: #e5e5e5;
+            text-decoration: none;
+          }
+          a:hover {
+            color: #e1be4c;
+          }
+          input::placeholder,
+          textarea::placeholder {
+            color: #525252;
+          }
+        </style>
+      </helmet>
+
+      <div
+        style="
+          min-height: 100vh;
+          background: #050505;
+          color: #e5e5e5;
+          font-family:
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            'Segoe UI',
+            Helvetica,
+            Arial,
+            sans-serif;
+        "
+      >
+        <!-- ── Header ── -->
+        <nav
+          style="
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            z-index: 50;
+            background: rgba(23, 23, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          "
+        >
+          <div style="display: flex; align-items: baseline; gap: 16px">
+            <a
+              href="https://relentnet.com"
+              style="
+                font-family:
+                  ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                font-size: 18px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #e5e5e5;
+              "
+              ><span style="font-weight: 700; color: #e1be4c">Relent</span
+              >Net</a
+            >
+            <span
+              style="
+                font-size: 11px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #737373;
+              "
+              >Proposal Studio</span
+            >
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px">
+            <div
+              style="
+                display: flex;
+                gap: 24px;
+                font-size: 11px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+              "
+            >
+              <span style="color: #e1be4c">New Proposal</span>
+              <a
+                href="Proposal Dashboard.dc.html"
+                style="color: #737373; transition: color 0.3s"
+                style-hover="color: #e1be4c;"
+                >Dashboard</a
+              >
+            </div>
+            <span
+              style="
+                font-size: 10px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: #525252;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 6px 12px;
+              "
+              >ap.relentnet.com · internal</span
+            >
+          </div>
+        </nav>
+
+        <main
+          style="
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 32px 96px;
+            display: grid;
+            grid-template-columns: 5fr 4fr;
+            gap: 48px;
+            align-items: start;
+          "
+        >
+          <!-- ── Left: compose ── -->
+          <div style="display: flex; flex-direction: column; gap: 40px">
+            <div>
+              <h1
+                style="
+                  margin: 0 0 8px;
+                  font-family:
+                    ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                  font-weight: 400;
+                  font-size: 34px;
+                "
+              >
+                New
+                <span style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                  >Proposal</span
+                >
+              </h1>
+              <p
+                style="
+                  margin: 0;
+                  font-size: 13px;
+                  color: #737373;
+                  line-height: 1.7;
+                "
+              >
+                Drop a Stripe quote, add a personal note, and send a page that
+                sells the work — not just the number.
+              </p>
+            </div>
+
+            <!-- Step 1: quote -->
+            <section style="display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; align-items: baseline; gap: 12px">
+                <span
+                  style="
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 22px;
+                    color: rgba(255, 255, 255, 0.15);
+                  "
+                  >01</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Stripe Quote
+                </h2>
+              </div>
+              <sc-if
+                value="{{ showDropzone }}"
+                hint-placeholder-val="{{ true }}"
+              >
+                <div
+                  onClick="{{ simulateDrop }}"
+                  onDragOver="{{ preventDefault }}"
+                  onDrop="{{ onFileDrop }}"
+                  style="
+                    border: 1px dashed rgba(255, 255, 255, 0.2);
+                    background: rgba(255, 255, 255, 0.02);
+                    padding: 56px 32px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                  "
+                  style-hover="border-color: rgba(225,190,76,0.6); background: rgba(225,190,76,0.03);"
+                >
+                  <div
+                    style="
+                      width: 48px;
+                      height: 48px;
+                      margin: 0 auto 16px;
+                      border: 1px solid rgba(255, 255, 255, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: #e1be4c;
+                      font-size: 20px;
+                    "
+                  >
+                    ↑
+                  </div>
+                  <p style="margin: 0 0 6px; font-size: 14px; color: #e5e5e5">
+                    Drop the Stripe quote PDF here
+                  </p>
+                  <p
+                    style="
+                      margin: 0;
+                      font-size: 11px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #525252;
+                    "
+                  >
+                    or click to browse · we extract the client &amp; line items
+                  </p>
+                </div>
+              </sc-if>
+              <sc-if
+                value="{{ showParsed }}"
+                hint-placeholder-val="{{ false }}"
+              >
+                <div
+                  style="
+                    border: 1px solid rgba(225, 190, 76, 0.3);
+                    background: rgba(225, 190, 76, 0.04);
+                    padding: 20px 24px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 16px;
+                  "
+                >
+                  <div style="display: flex; align-items: center; gap: 16px">
+                    <div
+                      style="
+                        width: 40px;
+                        height: 40px;
+                        border: 1px solid rgba(225, 190, 76, 0.4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #e1be4c;
+                        font-size: 15px;
+                      "
+                    >
+                      ✓
+                    </div>
+                    <div>
+                      <p
+                        style="margin: 0 0 3px; font-size: 14px; color: #ffffff"
+                      >
+                        {{ fileName }}
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-size: 11px;
+                          letter-spacing: 0.1em;
+                          text-transform: uppercase;
+                          color: #737373;
+                        "
+                      >
+                        {{ quoteNumber }} · parsed {{ itemCount }} line items ·
+                        valid until {{ validUntil }}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick="{{ resetQuote }}"
+                    style="
+                      background: none;
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      color: #737373;
+                      font-size: 10px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      padding: 8px 14px;
+                      cursor: pointer;
+                      font-family: inherit;
+                      transition: all 0.3s;
+                    "
+                    style-hover="border-color: rgba(255,255,255,0.3); color: #e5e5e5;"
+                  >
+                    Replace
+                  </button>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                  "
+                >
+                  <sc-for
+                    list="{{ lineItems }}"
+                    as="item"
+                    hint-placeholder-count="2"
+                  >
+                    <div
+                      style="
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        background: rgba(255, 255, 255, 0.03);
+                        padding: 16px 20px;
+                      "
+                    >
+                      <p
+                        style="margin: 0 0 4px; font-size: 13px; color: #e5e5e5"
+                      >
+                        {{ item.name }}
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          font-family:
+                            ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                          font-size: 20px;
+                          color: #e1be4c;
+                        "
+                      >
+                        {{ item.price }}<span
+                          style="
+                            font-size: 12px;
+                            color: #737373;
+                            font-family: ui-sans-serif, system-ui, sans-serif;
+                          "
+                        >
+                          {{ item.cadence }}</span
+                        >
+                      </p>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </section>
+
+            <!-- Step 2: client -->
+            <section style="display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; align-items: baseline; gap: 12px">
+                <span
+                  style="
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 22px;
+                    color: rgba(255, 255, 255, 0.15);
+                  "
+                  >02</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Client &amp; Project
+                </h2>
+              </div>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+              >
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <label
+                    for="f-client"
+                    style="
+                      font-size: 10px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #737373;
+                    "
+                    >Client Name</label
+                  >
+                  <input
+                    id="f-client"
+                    value="{{ clientName }}"
+                    onChange="{{ setClientName }}"
+                    style="
+                      width: 100%;
+                      box-sizing: border-box;
+                      background: rgba(0, 0, 0, 0.2);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      padding: 12px;
+                      font-size: 14px;
+                      color: #e5e5e5;
+                      font-family: inherit;
+                      outline: none;
+                      transition: border-color 0.3s;
+                    "
+                    style-focus="border-color: #e1be4c;"
+                  />
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <label
+                    for="f-email"
+                    style="
+                      font-size: 10px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #737373;
+                    "
+                    >Email</label
+                  >
+                  <input
+                    id="f-email"
+                    value="{{ clientEmail }}"
+                    onChange="{{ setClientEmail }}"
+                    style="
+                      width: 100%;
+                      box-sizing: border-box;
+                      background: rgba(0, 0, 0, 0.2);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      padding: 12px;
+                      font-size: 14px;
+                      color: #e5e5e5;
+                      font-family: inherit;
+                      outline: none;
+                      transition: border-color 0.3s;
+                    "
+                    style-focus="border-color: #e1be4c;"
+                  />
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <label
+                    for="f-project"
+                    style="
+                      font-size: 10px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #737373;
+                    "
+                    >Project Name</label
+                  >
+                  <input
+                    id="f-project"
+                    value="{{ projectName }}"
+                    onChange="{{ setProjectName }}"
+                    style="
+                      width: 100%;
+                      box-sizing: border-box;
+                      background: rgba(0, 0, 0, 0.2);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      padding: 12px;
+                      font-size: 14px;
+                      color: #e5e5e5;
+                      font-family: inherit;
+                      outline: none;
+                      transition: border-color 0.3s;
+                    "
+                    style-focus="border-color: #e1be4c;"
+                  />
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <label
+                    for="f-phase"
+                    style="
+                      font-size: 10px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: #737373;
+                    "
+                    >Phase</label
+                  >
+                  <select
+                    id="f-phase"
+                    value="{{ phase }}"
+                    onChange="{{ setPhase }}"
+                    style="
+                      width: 100%;
+                      box-sizing: border-box;
+                      background: rgba(0, 0, 0, 0.2);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      padding: 12px;
+                      font-size: 14px;
+                      color: #e5e5e5;
+                      font-family: inherit;
+                      outline: none;
+                      appearance: none;
+                      cursor: pointer;
+                    "
+                  >
+                    <option value="Proposal">Proposal — new client</option>
+                    <option value="Kickoff">Kickoff — signed, starting</option>
+                    <option value="Invoice">Invoice — active engagement</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 3: personalize -->
+            <section style="display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; align-items: baseline; gap: 12px">
+                <span
+                  style="
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 22px;
+                    color: rgba(255, 255, 255, 0.15);
+                  "
+                  >03</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Personalize
+                </h2>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label
+                  for="f-note"
+                  style="
+                    font-size: 10px;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #737373;
+                  "
+                  >A note from you — shown in your voice, in serif</label
+                >
+                <textarea
+                  id="f-note"
+                  value="{{ note }}"
+                  onChange="{{ setNote }}"
+                  rows="4"
+                  style="
+                    width: 100%;
+                    box-sizing: border-box;
+                    background: rgba(0, 0, 0, 0.2);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 12px;
+                    font-size: 14px;
+                    color: #e5e5e5;
+                    font-family: inherit;
+                    line-height: 1.6;
+                    outline: none;
+                    resize: vertical;
+                    transition: border-color 0.3s;
+                  "
+                  style-focus="border-color: #e1be4c;"
+                ></textarea>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font-size: 10px;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #737373;
+                  "
+                  >Page sections</span
+                >
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <sc-for
+                    list="{{ sections }}"
+                    as="sec"
+                    hint-placeholder-count="4"
+                  >
+                    <button onClick="{{ sec.toggle }}" style="{{ sec.style }}">
+                      {{ sec.label }}
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 4: generate -->
+            <section style="display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; align-items: baseline; gap: 12px">
+                <span
+                  style="
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 22px;
+                    color: rgba(255, 255, 255, 0.15);
+                  "
+                  >04</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Send
+                </h2>
+              </div>
+              <div
+                style="
+                  border: 1px solid rgba(255, 255, 255, 0.05);
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 20px 24px;
+                  display: flex;
+                  align-items: center;
+                  gap: 16px;
+                "
+              >
+                <span
+                  style="
+                    flex: 1;
+                    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                    font-size: 13px;
+                    color: #a3a3a3;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                  "
+                  >{{ pageUrl }}</span
+                >
+                <button onClick="{{ copyLink }}" style="{{ copyBtnStyle }}">
+                  {{ copyLabel }}
+                </button>
+                <a
+                  href="Proposal Page.dc.html"
+                  target="_blank"
+                  style="
+                    border: 1px solid #e1be4c;
+                    background: #e1be4c;
+                    color: #000;
+                    font-size: 11px;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    padding: 12px 20px;
+                    transition: all 0.3s;
+                    white-space: nowrap;
+                  "
+                  style-hover="background: transparent; color: #e1be4c;"
+                  >Open Page →</a
+                >
+              </div>
+              <p
+                style="
+                  margin: 0;
+                  font-size: 11px;
+                  color: #525252;
+                  line-height: 1.7;
+                "
+              >
+                The link is unique per proposal and unlisted. The page shows the
+                official quote PDF and lets the client accept — or decline with
+                feedback. Responses land in your
+                <a href="Proposal Dashboard.dc.html" style="color: #737373"
+                  >dashboard</a
+                >.
+              </p>
+            </section>
+          </div>
+
+          <!-- ── Right: live preview ── -->
+          <aside
+            style="
+              position: sticky;
+              top: 96px;
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+            "
+          >
+            <span
+              style="
+                font-size: 10px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #525252;
+              "
+              >Live preview — what {{ clientFirstName }} sees</span
+            >
+            <div
+              style="
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: #0a0a0a;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  padding: 10px 14px;
+                  background: rgba(23, 23, 23, 0.8);
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                "
+              >
+                <span
+                  style="
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.12);
+                  "
+                ></span>
+                <span
+                  style="
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.12);
+                  "
+                ></span>
+                <span
+                  style="
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.12);
+                  "
+                ></span>
+                <span
+                  style="
+                    flex: 1;
+                    text-align: center;
+                    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                    font-size: 10px;
+                    color: #525252;
+                  "
+                  >{{ pageUrl }}</span
+                >
+              </div>
+              <div
+                style="
+                  padding: 48px 32px 40px;
+                  text-align: center;
+                  background: radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(225, 190, 76, 0.05),
+                    transparent 60%
+                  );
+                "
+              >
+                <p
+                  style="
+                    margin: 0 0 16px;
+                    font-size: 8px;
+                    font-weight: 700;
+                    letter-spacing: 0.3em;
+                    text-transform: uppercase;
+                    color: #e1be4c;
+                  "
+                >
+                  Proposal · Prepared for {{ clientName }}
+                </p>
+                <p
+                  style="
+                    margin: 0 auto;
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-size: 26px;
+                    line-height: 1.1;
+                    max-width: 340px;
+                    color: #e5e5e5;
+                  "
+                >
+                  {{ projectName }}
+                  <span
+                    style="font-style: italic; color: rgba(225, 190, 76, 0.9)"
+                    >deserves a front door.</span
+                  >
+                </p>
+                <div
+                  style="
+                    margin: 24px auto 0;
+                    display: inline-block;
+                    background: #e1be4c;
+                    color: #000;
+                    font-size: 8px;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    padding: 8px 16px;
+                  "
+                >
+                  Review the Quote →
+                </div>
+              </div>
+              <div
+                style="
+                  border-top: 1px solid rgba(255, 255, 255, 0.05);
+                  padding: 20px 24px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  text-align: left;
+                "
+              >
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 9px;
+                    letter-spacing: 0.2em;
+                    text-transform: uppercase;
+                    color: #525252;
+                  "
+                >
+                  A note from Daniel
+                </p>
+                <p
+                  style="
+                    margin: 0;
+                    font-family:
+                      ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                    font-style: italic;
+                    font-size: 12.5px;
+                    line-height: 1.6;
+                    color: #a3a3a3;
+                  "
+                >
+                  &ldquo;{{ notePreview }}&rdquo;
+                </p>
+              </div>
+              <div
+                style="
+                  border-top: 1px solid rgba(255, 255, 255, 0.05);
+                  padding: 16px 24px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div style="display: flex; gap: 24px">
+                  <div>
+                    <p
+                      style="
+                        margin: 0 0 2px;
+                        font-size: 8px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #525252;
+                      "
+                    >
+                      Upfront
+                    </p>
+                    <p
+                      style="
+                        margin: 0;
+                        font-family:
+                          ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                        font-size: 17px;
+                        color: #e1be4c;
+                      "
+                    >
+                      {{ upfrontTotal }}
+                    </p>
+                  </div>
+                  <div>
+                    <p
+                      style="
+                        margin: 0 0 2px;
+                        font-size: 8px;
+                        letter-spacing: 0.15em;
+                        text-transform: uppercase;
+                        color: #525252;
+                      "
+                    >
+                      Recurring
+                    </p>
+                    <p
+                      style="
+                        margin: 0;
+                        font-family:
+                          ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+                        font-size: 17px;
+                        color: #e5e5e5;
+                      "
+                    >
+                      {{ recurringTotal }}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  style="
+                    font-size: 8px;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #525252;
+                  "
+                  >{{ sectionSummary }}</span
+                >
+              </div>
+            </div>
+            <p
+              style="
+                margin: 0;
+                font-size: 11px;
+                color: #525252;
+                line-height: 1.7;
+                text-align: center;
+              "
+            >
+              Full page includes your process outline &amp; selected work.
+            </p>
+          </aside>
+        </main>
+      </div>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"$preview": {"width": 1440, "height": 960}}'
+    >
+      class Component extends DCLogic {
+        state = {
+          parsed: false, fileName: '',
+          clientName: '', clientEmail: '', projectName: '', phase: 'Proposal',
+          note: '',
+          sections: { note: true, scope: true, process: true, work: true },
+          copied: false,
+        };
+        sample = {
+          fileName: 'Quote-QT-SHX6JT2B-AmeliaIsland.pdf',
+          clientName: 'Will Colley', clientEmail: 'wcolley72@gmail.com',
+          projectName: 'Amelia Island Beach Condos',
+          note: 'Will \u2014 vacation rental guests decide in seconds whether a property feels trustworthy. Amelia Island Beach Condos deserves a site that earns that trust instantly. That\u2019s the site I want to build for you.',
+        };
+        renderVals() {
+          const s = this.state;
+          const chip = (on) => `background: ${on ? 'rgba(225,190,76,0.1)' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${on ? 'rgba(225,190,76,0.5)' : 'rgba(255,255,255,0.1)'}; color: ${on ? '#e1be4c' : '#737373'}; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 16px; cursor: pointer; font-family: inherit; transition: all 0.3s;`;
+          const toggle = (key) => () => this.setState(st => ({ sections: { ...st.sections, [key]: !st.sections[key] } }));
+          const labels = { note: 'Personal note', scope: 'Scope & investment', process: 'Our process', work: 'Selected work' };
+          const slug = (s.projectName || 'client').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          const note = s.note || 'Your note will appear here \u2014 written to the client, in your voice.';
+          const onCount = Object.values(s.sections).filter(Boolean).length;
+          return {
+            showDropzone: !s.parsed, showParsed: s.parsed,
+            fileName: s.fileName, quoteNumber: 'QT-SHX6JT2B', validUntil: 'Aug 27, 2026', itemCount: 2,
+            lineItems: [
+              { name: 'Website Design & Development', price: '$6,000', cadence: 'one-time' },
+              { name: 'Managed Hosting & Maintenance', price: '$300', cadence: '/ month' },
+            ],
+            clientName: s.clientName || 'Client name', clientFirstName: (s.clientName || 'the client').split(' ')[0],
+            clientEmail: s.clientEmail, projectName: s.projectName || 'Their project', phase: s.phase,
+            note: s.note,
+            notePreview: note.length > 160 ? note.slice(0, 157) + '\u2026' : note,
+            setClientName: (e) => this.setState({ clientName: e.target.value }),
+            setClientEmail: (e) => this.setState({ clientEmail: e.target.value }),
+            setProjectName: (e) => this.setState({ projectName: e.target.value }),
+            setPhase: (e) => this.setState({ phase: e.target.value }),
+            setNote: (e) => this.setState({ note: e.target.value }),
+            simulateDrop: () => this.loadSample(),
+            onFileDrop: (e) => { e.preventDefault(); this.loadSample(); },
+            preventDefault: (e) => e.preventDefault(),
+            resetQuote: () => this.setState({ parsed: false, fileName: '' }),
+            sections: Object.keys(labels).map(k => ({ label: labels[k], style: chip(s.sections[k]), toggle: toggle(k) })),
+            sectionSummary: onCount + ' of 4 sections',
+            pageUrl: 'ap.relentnet.com/p/' + (slug || 'client') + '-shx6jt2b',
+            upfrontTotal: s.parsed ? '$6,300' : '\u2014',
+            recurringTotal: s.parsed ? '$300/mo' : '\u2014',
+            copyLink: () => {
+              navigator.clipboard && navigator.clipboard.writeText('https://ap.relentnet.com/p/' + slug + '-shx6jt2b').catch(() => {});
+              this.setState({ copied: true });
+              clearTimeout(this._copyT);
+              this._copyT = setTimeout(() => this.setState({ copied: false }), 1600);
+            },
+            copyLabel: s.copied ? 'Copied ✓' : 'Copy Link',
+            copyBtnStyle: `background: none; border: 1px solid ${s.copied ? '#e1be4c' : 'rgba(255,255,255,0.15)'}; color: ${s.copied ? '#e1be4c' : '#e5e5e5'}; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 12px 20px; cursor: pointer; font-family: inherit; transition: all 0.3s; white-space: nowrap;`,
+          };
+        }
+        loadSample() {
+          this.setState({ parsed: true, ...this.sample });
+        }
+      }
+    </script>
+  </body>
+</html>

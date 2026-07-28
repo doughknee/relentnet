@@ -2,3 +2,6 @@ services:
   marketing:
     ports:
       - '${MARKETING_PORT:-3000}:80'
+  proposals:
+    ports:
+      - '${PROPOSALS_PORT:-3002}:80'

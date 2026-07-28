@@ -11,3 +11,6 @@ count.txt
 .worktrees/
 .superpowers/
 .coolify/
+
+# proposals local data
+.data/

@@ -7,3 +7,24 @@ services:
     expose:
       - '80'
     restart: unless-stopped
+
+  # Proposal Studio — ap.relentnet.com. The internal generator/dashboard stay
+  # 503 until PROPOSALS_ADMIN_PASSWORD is set in the Coolify environment.
+  proposals:
+    build:
+      context: .
+      dockerfile: apps/proposals/Dockerfile
+    image: relentnet-proposals:latest
+    expose:
+      - '80'
+    environment:
+      ADMIN_USER: ${PROPOSALS_ADMIN_USER:-daniel}
+      ADMIN_PASSWORD: ${PROPOSALS_ADMIN_PASSWORD:-}
+      NOTIFY_WEBHOOK_URL: ${PROPOSALS_NOTIFY_WEBHOOK_URL:-}
+      PUBLIC_ORIGIN: https://ap.relentnet.com
+    volumes:
+      - proposals-data:/data
+    restart: unless-stopped
+
+volumes:
+  proposals-data:

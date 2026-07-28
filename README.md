@@ -9,6 +9,7 @@ The current production application is the public marketing site in `apps/marketi
 ```txt
 apps/
   marketing/          # Public RelentNet site
+  proposals/          # Proposal Studio (ap.relentnet.com), see apps/proposals/README.md
 packages/             # Reserved for future shared packages
 templates/            # Reserved for future project starters
 docs/                 # Legal, process, sales, and operations docs

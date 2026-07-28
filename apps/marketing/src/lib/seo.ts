@@ -20,10 +20,13 @@ export interface SeoInput {
   noindex?: boolean
 }
 
-type MetaTag = { title: string } | { name: string; content: string } | {
-  property: string
-  content: string
-}
+type MetaTag =
+  | { title: string }
+  | { name: string; content: string }
+  | {
+      property: string
+      content: string
+    }
 
 export interface SeoHead {
   meta: Array<MetaTag>

@@ -111,7 +111,8 @@ function Contact() {
         } catch (err) {
           // AbortError = our timeout fired; TypeError = network failure. Both
           // are transient and safe to retry while attempts remain.
-          const isTimeout = err instanceof DOMException && err.name === 'AbortError'
+          const isTimeout =
+            err instanceof DOMException && err.name === 'AbortError'
           const isNetwork = err instanceof TypeError
           if (attempt < maxAttempts && (isTimeout || isNetwork)) {
             continue

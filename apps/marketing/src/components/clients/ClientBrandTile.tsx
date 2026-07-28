@@ -8,15 +8,13 @@ import type { CaseStudy } from '@/data/caseStudies'
  * brand-tinted surface — so the tiles sit inside the site's gold/ink palette
  * instead of fighting it. `accent` wins over `from` for the tint when set.
  */
-export const CLIENT_BRANDS: Record<
-  string,
-  { from: string; accent?: string }
-> = {
-  scrollr: { from: '#6366f1' },
-  'cambridge-building-group': { from: '#1e3a5f', accent: '#c79a2e' },
-  courtcommand: { from: '#0891b2' },
-  'vm-homes': { from: '#0d9488' },
-}
+export const CLIENT_BRANDS: Record<string, { from: string; accent?: string }> =
+  {
+    scrollr: { from: '#6366f1' },
+    'cambridge-building-group': { from: '#1e3a5f', accent: '#c79a2e' },
+    courtcommand: { from: '#0891b2' },
+    'vm-homes': { from: '#0d9488' },
+  }
 
 const FALLBACK_BRAND = { from: '#a3a3a3' }
 
@@ -60,8 +58,7 @@ export function ClientBrandTile({
         aria-hidden="true"
         className="absolute inset-0 hidden dark:block"
         style={{
-          backgroundImage:
-            'linear-gradient(155deg, #16171c 0%, #0a0b0e 100%)',
+          backgroundImage: 'linear-gradient(155deg, #16171c 0%, #0a0b0e 100%)',
         }}
       />
       <span
