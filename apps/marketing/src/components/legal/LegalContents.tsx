@@ -1,7 +1,7 @@
 import React from 'react'
 
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-gold text-xs font-bold tracking-[0.3em] uppercase mt-16 mb-6">
+  <h2 className="text-gold-text text-xs font-bold tracking-[0.3em] uppercase mt-16 mb-6">
     {children}
   </h2>
 )
@@ -373,7 +373,7 @@ export const SHAContent = () => (
       <P>Support requests must be submitted via designated channels.</P>
       <div className="overflow-x-auto border border-line rounded-sm mb-6">
         <table className="w-full text-left text-sm text-ink-sub">
-          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold">
+          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold-text">
             <tr>
               <th className="p-4 border-b border-line">Priority</th>
               <th className="p-4 border-b border-line">Description</th>
@@ -416,7 +416,7 @@ export const SHAContent = () => (
       <H2>5. Uptime SLA (Relentnet-Managed Only)</H2>
       <div className="overflow-x-auto border border-line rounded-sm mb-6">
         <table className="w-full text-left text-sm text-ink-sub">
-          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold">
+          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold-text">
             <tr>
               <th className="p-4 border-b border-line">Plan</th>
               <th className="p-4 border-b border-line">Monthly Uptime</th>
@@ -452,7 +452,7 @@ export const SHAContent = () => (
       </P>
       <div className="overflow-x-auto border border-line rounded-sm mb-6">
         <table className="w-full text-left text-sm text-ink-sub">
-          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold">
+          <thead className="bg-line-faint uppercase text-xs tracking-widest text-gold-text">
             <tr>
               <th className="p-4 border-b border-line">Monthly Uptime</th>
               <th className="p-4 border-b border-line">Credit</th>

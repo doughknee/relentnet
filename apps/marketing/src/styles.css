@@ -2,51 +2,70 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ── Light palette (default) ── */
+/* ── Light palette (default) — warm-shifted neutrals, v4 brand kit ── */
 :root {
   color-scheme: light dark;
 
-  --th-page: #fafafa;
-  --th-surface: rgba(255, 255, 255, 0.85);
-  --th-card: rgba(0, 0, 0, 0.03);
-  --th-chrome: rgba(245, 245, 245, 0.95);
-  --th-inset: #efefef;
-  --th-overlay: rgba(250, 250, 250, 0.95);
+  --th-page: #faf9f7;
+  --th-surface: rgba(250, 249, 247, 0.88);
+  --th-card: rgba(20, 16, 8, 0.03);
+  --th-chrome: rgba(241, 239, 235, 0.95);
+  --th-inset: #f1efeb;
+  --th-overlay: rgba(250, 249, 247, 0.95);
 
-  --th-ink: #1a1a1a;
-  --th-ink-sub: #525252;
-  --th-ink-muted: #737373;
-  --th-ink-faint: #a3a3a3;
-  --th-ink-em: #0a0a0a;
+  --th-ink: #191713;
+  --th-ink-sub: #54504a;
+  --th-ink-muted: #787369;
+  --th-ink-faint: #a8a297;
+  --th-ink-em: #0d0b08;
 
-  --th-line: rgba(0, 0, 0, 0.1);
-  --th-line-faint: rgba(0, 0, 0, 0.05);
+  --th-line: rgba(20, 16, 8, 0.12);
+  --th-line-faint: rgba(20, 16, 8, 0.06);
+  --th-watermark: rgba(20, 16, 8, 0.06);
+  --th-ghost: rgba(20, 16, 8, 0.2);
+  /* Gold for TEXT: #cbab45 is ~2:1 on cream — unreadable at label sizes.
+     Light theme deepens text gold to an ochre that passes 4.5:1; surfaces
+     (buttons, rules, tints) keep the true brand gold in both themes. */
+  --th-gold-text: #7d6420;
 }
 
 /* ── Dark palette ── */
 .dark {
-  --th-page: #050505;
-  --th-surface: rgba(5, 5, 5, 0.2);
-  --th-card: rgba(255, 255, 255, 0.03);
-  --th-chrome: rgba(23, 23, 23, 0.8);
-  --th-inset: rgba(0, 0, 0, 0.2);
-  --th-overlay: rgba(5, 5, 5, 0.95);
+  --th-page: #0a0908;
+  --th-surface: rgba(10, 9, 8, 0.75);
+  /* Bands recede into deeper black rather than lifting to grey */
+  --th-card: rgba(0, 0, 0, 0.3);
+  --th-chrome: rgba(25, 23, 19, 0.8);
+  --th-inset: rgba(0, 0, 0, 0.25);
+  --th-overlay: rgba(10, 9, 8, 0.95);
 
-  --th-ink: #e5e5e5;
-  --th-ink-sub: #a3a3a3;
-  --th-ink-muted: #737373;
-  --th-ink-faint: #525252;
-  --th-ink-em: #ffffff;
+  --th-ink: #e8e4dc;
+  --th-ink-sub: #a49e92;
+  --th-ink-muted: #79746a;
+  --th-ink-faint: #54504a;
+  --th-ink-em: #f7f3ea;
 
-  --th-line: rgba(255, 255, 255, 0.1);
-  --th-line-faint: rgba(255, 255, 255, 0.05);
+  /* Contrast floor: below ~0.2 alpha over #0a0908, hairlines fall under
+     what real panels can display and vanish entirely. */
+  --th-line: rgba(255, 250, 240, 0.28);
+  --th-line-faint: rgba(255, 250, 240, 0.12);
+  --th-watermark: rgba(255, 250, 240, 0.05);
+  --th-ghost: rgba(255, 250, 240, 0.28);
+  --th-gold-text: #cbab45;
 }
 
 /* ── Tailwind theme tokens ── */
 @theme {
-  /* Accent */
-  --color-gold: #e1be4c;
-  --color-gold-dim: #e1be4c10;
+  /* Accent (brand kit) */
+  --color-gold: #cbab45;
+  --color-gold-bright: #dfac0a;
+  --color-gold-deep: #6b5a24;
+  --color-gold-tint: rgba(203, 171, 69, 0.08);
+  --color-gold-dim: rgba(203, 171, 69, 0.08);
+  /* Button text on gold */
+  --color-gold-ink: #141008;
+  /* Theme-aware gold for text runs (see --th-gold-text) */
+  --color-gold-text: var(--th-gold-text);
 
   /* Surfaces */
   --color-page: var(--th-page);
@@ -63,16 +82,24 @@
   --color-ink-faint: var(--th-ink-faint);
   --color-ink-em: var(--th-ink-em);
 
-  /* Borders */
+  /* Borders + decoration */
   --color-line: var(--th-line);
   --color-line-faint: var(--th-line-faint);
+  --color-watermark: var(--th-watermark);
+  --color-ghost: var(--th-ghost);
+
+  /* Type */
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-brand: ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ── Animations ── */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px);
   }
 
   to {
@@ -83,7 +110,7 @@
 
 .animate-fade-in-up {
   opacity: 0;
-  animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: fadeInUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .delay-200 {
@@ -92,6 +119,34 @@
 
 .delay-500 {
   animation-delay: 500ms;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Let readers actually read the ticker */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease forwards;
 }
 
 @keyframes progress-fill {
@@ -108,6 +163,53 @@
   animation-name: progress-fill;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+}
+
+/* ── Drafting-paper grid (light theme only) ──
+   Dark theme gets the starfield; light theme gets graph paper. Coarse +
+   fine warm hairlines, painted as the page wrapper's own background so it
+   sits behind every section. */
+.page-grid {
+  background-image:
+    linear-gradient(to right, rgba(20, 16, 8, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 16, 8, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(20, 16, 8, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 16, 8, 0.02) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+}
+
+.dark .page-grid {
+  background-image: none;
+}
+
+/* ── Chromatic misregistration hover ──
+   The mark's plate-offset lockup, applied to container edges on hover:
+   gold ghost up-left, stronger echo down-right. Containers only — the
+   brand kit keeps the echo off letterforms. Pair with a transition-all
+   element (all CTAs have one) for the ease. */
+.chromatic-hover:hover {
+  box-shadow:
+    -3px -3px 0 rgba(203, 171, 69, 0.35),
+    3px 3px 0 rgba(203, 171, 69, 0.8);
+}
+
+/* ── Framed-screenshot scanline overlay ── */
+.scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(229, 229, 229, 0.03) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* ── Keyboard focus ── */
+:focus-visible {
+  outline: 1px solid var(--color-gold-text);
+  outline-offset: 2px;
 }
 
 /* ── Reduced motion ── */

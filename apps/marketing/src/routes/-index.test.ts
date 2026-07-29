@@ -1,26 +1,38 @@
 import { describe, expect, it } from 'vitest'
 
-import { homepageHero, methodSteps, problemsSolved } from './index'
+import { cases, marqueeItems, premise, steps } from './index'
+import { caseStudies } from '@/data/caseStudies'
 
-describe('homepage positioning', () => {
-  it('leads with workflow diagnosis before custom software', () => {
-    expect(homepageHero.headline).toBe(
-      'Your business has outgrown disconnected tools.',
-    )
-    expect(homepageHero.body).toContain('workflow diagnostic')
-    expect(homepageHero.body).toContain('before prescribing software')
-    expect(homepageHero.primaryCta).toBe('Start With a Workflow Diagnostic')
-  })
-
-  it('explains the diagnostic-to-stewardship path', () => {
-    expect(methodSteps.map((step) => step.title)).toEqual([
+describe('homepage content (v4)', () => {
+  it('walks diagnose → build → steward', () => {
+    expect(steps.map((step) => step.title)).toEqual([
       'Diagnose',
-      'Prioritize',
-      'Design',
       'Build',
       'Steward',
     ])
-    expect(problemsSolved).toContain('Reporting gaps')
-    expect(problemsSolved).toContain('Manual handoffs')
+  })
+
+  it('tabs cover the four case studies and link to real detail pages', () => {
+    expect(cases).toHaveLength(4)
+    const knownSlugs = new Set(caseStudies.map((study) => study.slug))
+    for (const c of cases) {
+      expect(knownSlugs).toContain(c.slug)
+      expect(c.image.startsWith('/case-studies/')).toBe(true)
+    }
+  })
+
+  it('leads with the three-answer premise, honest option included', () => {
+    expect(premise.answers.map((a) => a.title)).toEqual([
+      'Build',
+      'Connect',
+      'Don’t build yet',
+    ])
+    expect(premise.intro).toContain('free')
+  })
+
+  it('runs the eight designed pain points through the marquee', () => {
+    expect(marqueeItems).toHaveLength(8)
+    expect(marqueeItems).toContain('Spreadsheet chaos')
+    expect(marqueeItems).toContain('Manual handoffs')
   })
 })

@@ -38,7 +38,14 @@ export function Reveal({
       { threshold },
     )
     io.observe(el)
-    return () => io.disconnect()
+    // Fail open: if the observer never fires (hidden tab, prerender,
+    // screenshot runs), force everything visible rather than leaving
+    // content at opacity 0.
+    const failOpen = setTimeout(() => setShown(true), 2500)
+    return () => {
+      io.disconnect()
+      clearTimeout(failOpen)
+    }
   }, [threshold])
 
   return (

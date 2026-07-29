@@ -109,7 +109,7 @@ export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
                       {isDelta(metric) ? (
                         <>
                           <span className="text-ink-muted">{metric.from}</span>
-                          <span className="mx-2 text-gold">→</span>
+                          <span className="mx-2 text-gold-text">→</span>
                           <span>{metric.to}</span>
                         </>
                       ) : (
@@ -130,7 +130,7 @@ export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
               </h2>
               <Link
                 to="/diagnostic"
-                className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-6 py-3.5 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-6 py-3.5 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
               >
                 Start a Diagnostic
                 <ArrowRight className="size-4" />

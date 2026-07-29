@@ -1,121 +1,88 @@
 import { Link } from '@tanstack/react-router'
-import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
 
+import { BrandMark } from '@/components/BrandMark'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
-export const linkClasses = 'hover:text-gold transition-colors duration-300'
-export const activeLinkClasses = 'text-gold'
-export const activeCtaClasses = 'bg-gold text-black border-gold'
-
-const ctaClasses =
-  'border border-line px-6 py-3 text-xs tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500'
-
-const mobileCtaClasses =
-  'border border-line px-8 py-4 text-sm tracking-widest uppercase hover:bg-gold hover:border-gold hover:text-black transition-all duration-500'
+export const linkClasses = 'hover:text-gold-text transition-colors duration-300'
+export const activeLinkClasses = 'text-gold-text'
 
 export const primaryNavItems = [
   { label: 'Diagnostic', to: '/diagnostic' },
   { label: 'Process', to: '/process' },
-  { label: 'Clients', to: '/clients' },
+  { label: 'Client Work', to: '/clients' },
   { label: 'Portal', to: '/portal' },
 ] as const
 
 export const utilityCta = {
-  label: 'Start Diagnostic',
-  to: '/diagnostic',
+  label: 'Book a Free Diagnostic',
+  to: '/inquire',
 } as const
 
-export function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+/** 2px gold bar at the nav's bottom edge tracking scroll progress. */
+function ScrollProgress() {
+  const ref = useRef<HTMLSpanElement>(null)
 
-  const closeMenu = () => setIsOpen(false)
+  useEffect(() => {
+    const onScroll = () => {
+      const max =
+        document.documentElement.scrollHeight - window.innerHeight || 1
+      const fraction = Math.min(1, Math.max(0, window.scrollY / max))
+      if (ref.current) ref.current.style.transform = `scaleX(${fraction})`
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <nav className="fixed top-0 w-full flex justify-between items-center p-8 z-50 bg-surface backdrop-blur-xs text-ink">
-      {/* Logo */}
-      <Link
-        to="/"
-        className="text-xl tracking-[0.2em] font-serif uppercase z-50 relative"
-        onClick={closeMenu}
-      >
-        <span className="font-bold text-gold">Relent</span>Net
-      </Link>
+    <span
+      ref={ref}
+      aria-hidden="true"
+      className="absolute left-0 -bottom-px h-0.5 w-full bg-gold origin-left scale-x-0"
+    />
+  )
+}
 
-      {/* Desktop Center — absolutely positioned for true centering */}
-      <div className="hidden md:flex gap-12 text-xs tracking-[0.15em] uppercase opacity-80 absolute left-1/2 -translate-x-1/2">
-        {primaryNavItems.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className={linkClasses}
-            activeProps={{ className: activeLinkClasses }}
-            activeOptions={{ exact: true }}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </div>
+export function Header() {
+  return (
+    <nav className="sticky top-0 z-50 py-5 px-5 md:px-12 bg-surface backdrop-blur-[12px] border-b border-line-faint text-ink">
+      <ScrollProgress />
 
-      {/* Desktop Right — utility + CTA */}
-      <div className="hidden md:flex items-center gap-6">
-        <ThemeToggle />
+      {/* Inner row capped so logo/CTA stay connected on ultrawide monitors */}
+      <div className="max-w-[1600px] mx-auto flex flex-wrap justify-between items-center gap-y-2.5">
+        {/* Mark + wordmark */}
         <Link
-          to={utilityCta.to}
-          className={ctaClasses}
-          activeProps={{ className: activeCtaClasses }}
-          activeOptions={{ exact: true }}
+          to="/"
+          className="flex items-center gap-3 text-[19px] tracking-[0.2em] font-brand uppercase"
         >
-          {utilityCta.label}
+          <BrandMark className="w-[26px] text-gold-text" aria-hidden="true" />
+          <span>
+            <span className="font-bold text-gold-text">Relent</span>Net
+          </span>
         </Link>
-      </div>
 
-      {/* Mobile Menu Toggle */}
-      <button
-        className="md:hidden z-70 text-ink hover:text-gold transition-colors"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle menu"
-      >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-
-      {/* Mobile Navigation Overlay */}
-      <div
-        className={`fixed inset-0 w-screen h-screen bg-overlay backdrop-blur-xl z-60 flex flex-col justify-start pt-32 items-center gap-12 transition-all duration-500 ease-in-out ${
-          isOpen
-            ? 'opacity-100 visible'
-            : 'opacity-0 invisible pointer-events-none'
-        }`}
-      >
-        <div className="flex flex-col gap-12 text-center text-xl tracking-[0.2em] uppercase font-light items-center">
-          <Link
-            to="/"
-            onClick={closeMenu}
-            className={linkClasses}
-            activeProps={{ className: activeLinkClasses }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>
+        {/* Links — wrap to a full-width centered second line under 900px */}
+        <div className="flex gap-[26px] font-mono text-[13px] tracking-[0.12em] uppercase text-ink whitespace-nowrap max-[899px]:order-3 max-[899px]:w-full max-[899px]:justify-center">
           {primaryNavItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              onClick={closeMenu}
               className={linkClasses}
               activeProps={{ className: activeLinkClasses }}
               activeOptions={{ exact: true }}
             >
-              {item.label === 'Portal' ? 'Client Portal' : item.label}
+              {item.label}
             </Link>
           ))}
+        </div>
+
+        {/* Theme toggle + CTA */}
+        <div className="flex items-center gap-5">
           <ThemeToggle />
           <Link
             to={utilityCta.to}
-            onClick={closeMenu}
-            className={mobileCtaClasses}
-            activeProps={{ className: activeCtaClasses }}
-            activeOptions={{ exact: true }}
+            className="chromatic-hover bg-gold text-gold-ink px-[22px] py-[11px] whitespace-nowrap font-mono text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:bg-ink-em hover:text-page"
           >
             {utilityCta.label}
           </Link>

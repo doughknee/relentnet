@@ -18,7 +18,7 @@ function LegalIndex() {
       <div className="pt-48 pb-20 px-6 md:px-20 relative z-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl leading-[1.1] animate-fade-in-up opacity-0">
-            Legal <span className="italic text-gold">Documentation.</span>
+            Legal <span className="italic text-gold-text">Documentation.</span>
           </h1>
           <p
             className="mt-8 text-ink-sub font-light text-lg leading-relaxed animate-fade-in-up opacity-0"
@@ -42,14 +42,14 @@ function LegalIndex() {
             >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 className="font-serif text-2xl text-ink-em group-hover:text-gold transition-colors">
+                  <h2 className="font-serif text-2xl text-ink-em group-hover:text-gold-text transition-colors">
                     {doc.title}
                   </h2>
                   <p className="text-sm text-ink-muted mt-2">
                     {doc.description}
                   </p>
                 </div>
-                <div className="text-xs uppercase tracking-widest text-ink-faint group-hover:text-gold transition-colors whitespace-nowrap">
+                <div className="text-xs uppercase tracking-widest text-ink-faint group-hover:text-gold-text transition-colors whitespace-nowrap">
                   Updated {doc.lastUpdated} &rarr;
                 </div>
               </div>

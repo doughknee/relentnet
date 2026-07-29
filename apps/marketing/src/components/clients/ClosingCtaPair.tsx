@@ -13,7 +13,7 @@ interface CtaTile {
 const TILES: ReadonlyArray<CtaTile> = [
   {
     headline: "Always know what you'll pay",
-    body: 'Fixed-fee diagnostic. Transparent engagement pricing after. No mystery retainers.',
+    body: 'Free diagnostic. Transparent engagement pricing after. No mystery retainers.',
     label: 'Start a Diagnostic',
     to: '/diagnostic',
   },
@@ -50,7 +50,7 @@ export function ClosingCtaPair() {
             </p>
             <Link
               to={tile.to}
-              className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gold hover:gap-3 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+              className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gold-text hover:gap-3 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
             >
               {tile.label}
               <ArrowRight className="size-4" />
