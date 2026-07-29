@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { motion, useScroll } from 'motion/react'
 
 import { BrandMark } from '@/components/BrandMark'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -21,25 +21,13 @@ export const utilityCta = {
 
 /** 2px gold bar at the nav's bottom edge tracking scroll progress. */
 function ScrollProgress() {
-  const ref = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    const onScroll = () => {
-      const max =
-        document.documentElement.scrollHeight - window.innerHeight || 1
-      const fraction = Math.min(1, Math.max(0, window.scrollY / max))
-      if (ref.current) ref.current.style.transform = `scaleX(${fraction})`
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const { scrollYProgress } = useScroll()
 
   return (
-    <span
-      ref={ref}
+    <motion.span
       aria-hidden="true"
-      className="absolute left-0 -bottom-px h-0.5 w-full bg-gold origin-left scale-x-0"
+      className="absolute left-0 -bottom-px h-0.5 w-full bg-gold origin-left"
+      style={{ scaleX: scrollYProgress }}
     />
   )
 }

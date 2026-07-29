@@ -7,6 +7,7 @@ import {
 
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { MotionConfig } from 'motion/react'
 
 import type { ReactNode } from 'react'
 
@@ -94,7 +95,9 @@ function RootComponent() {
       <div className="min-h-screen bg-page page-grid text-ink font-sans selection:bg-gold selection:text-black">
         <StarParticles />
         <Header />
-        <main>
+        {/* min-h keeps the footer below the fold while the route chunk
+            mounts — otherwise it flashes at the top of the page on load. */}
+        <main className="min-h-screen">
           <Outlet />
         </main>
         <Footer />
@@ -128,7 +131,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        {/* reducedMotion="user" disables Motion transforms for users with a
+            reduced-motion preference, matching the global CSS rule. */}
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider>{children}</ThemeProvider>
+        </MotionConfig>
         <Scripts />
       </body>
     </html>

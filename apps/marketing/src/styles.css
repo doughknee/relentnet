@@ -40,7 +40,10 @@
   --th-overlay: rgba(10, 9, 8, 0.95);
 
   --th-ink: #e8e4dc;
-  --th-ink-sub: #a49e92;
+  /* Body-copy tier. ≈0.77 white-equivalent over the page black — anything
+     longer than one line must use this or brighter; muted/faint are for
+     single-line caps metadata only. */
+  --th-ink-sub: #c6c1b6;
   --th-ink-muted: #79746a;
   --th-ink-faint: #54504a;
   --th-ink-em: #f7f3ea;
@@ -146,7 +149,14 @@
 }
 
 .animate-fade-in {
+  opacity: 0;
   animation: fadeIn 0.25s ease forwards;
+}
+
+/* The particle engine initializes async and its canvas used to pop in
+   fully-formed ~half a second after first paint. Bloom it instead. */
+#tsparticles canvas {
+  animation: fadeIn 1.8s ease forwards;
 }
 
 @keyframes progress-fill {

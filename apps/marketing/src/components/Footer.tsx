@@ -28,7 +28,7 @@ export function Footer() {
               <span className="font-bold text-gold-text">Relent</span>Net
             </p>
           </div>
-          <p className="text-sm font-light leading-[1.65] text-ink-muted max-w-[300px]">
+          <p className="text-sm font-light leading-[1.65] text-ink-sub max-w-[300px]">
             Diagnostic-led technology stewardship for owner-led businesses.
           </p>
           <p className="mt-5 font-mono text-[10px] tracking-[0.25em] uppercase text-ink-faint">
