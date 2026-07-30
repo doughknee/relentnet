@@ -193,11 +193,18 @@ export const stats = [
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
 /**
- * Counter roll. Deliberately NOT the brand ease: [0.2,0.8,0.2,1] lands ~85%
- * of the count inside the first half, which reads as a snap rather than a
- * roll. easeOut spends far more of the duration in the legible middle.
+ * Counter roll: a critically damped spring, not an eased tween.
+ *
+ * A tween decelerates on paper but lands badly here. Counting up to a round
+ * figure means the last state before the target is 9,999, so every digit
+ * changes at once on the final step and the arrival reads as a snap however
+ * gentle the curve. A spring's velocity decays smoothly to zero, so the last
+ * counts arrive one at a time and the figure settles instead of landing.
+ *
+ * bounce: 0 keeps it critically damped, so it approaches the value without
+ * ever overshooting it.
  */
-const COUNT_EASE = 'easeOut' as const
+const COUNT_SPRING = { type: 'spring', bounce: 0 } as const
 
 /**
  * Scroll-in counter for a stat. It interpolates the VALUE rather than
@@ -246,8 +253,8 @@ function StatValue({
       return
     }
     const controls = animate(0, value, {
-      duration,
-      ease: COUNT_EASE,
+      ...COUNT_SPRING,
+      visualDuration: duration,
       onUpdate: setDisplay,
     })
     return () => controls.stop()
