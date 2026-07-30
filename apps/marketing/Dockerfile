@@ -6,7 +6,13 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY apps/marketing/package.json apps/marketing/package.json
 
-RUN npm ci
+# motion-plus resolves from Motion's private registry; auth comes in as a
+# BuildKit secret so the token never lands in an image layer. The config
+# delete runs in the same layer, so the snapshot is clean either way.
+RUN --mount=type=secret,id=motion_token \
+    npm config set "//api.motion.dev/npm/:_authToken" "$(cat /run/secrets/motion_token)" && \
+    npm ci && \
+    npm config delete "//api.motion.dev/npm/:_authToken"
 
 COPY . .
 RUN npm run build -w @relentnet/marketing
