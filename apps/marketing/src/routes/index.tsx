@@ -37,7 +37,7 @@ export const cases = [
     industry: 'Commercial construction',
     headline: 'Invoices that file themselves.',
     outcome:
-      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks — PDF and project attached.',
+      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks with the PDF and project attached.',
     statValue: 'Email → QBO',
     statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
     image: '/case-studies/cambridge-building-group/hero.webp',
@@ -45,7 +45,7 @@ export const cases = [
     // PLACEHOLDER quote — swap for Jason Hall's real words before ship (REL-92).
     quote:
       'Invoices used to eat my Fridays. Now they land in QuickBooks with the PDF attached, and all I do is approve.',
-    quoteAttribution: 'Jason Hall — Cambridge Building Group',
+    quoteAttribution: 'Jason Hall · Cambridge Building Group',
   },
   {
     label: 'Scrollr',
@@ -78,7 +78,7 @@ export const cases = [
     industry: 'Real estate',
     headline: 'A storefront that earns trust quietly.',
     outcome:
-      'Premium buyer experience with live MLS inventory inside the brand — no bouncing buyers to a generic portal.',
+      'Premium buyer experience with live MLS inventory inside the brand, so buyers never get bounced to a generic portal.',
     statValue: '6 markets',
     statDesc:
       'MLS-synced search across Tampa Bay, from downtown St. Pete to the Gulf beaches.',
@@ -565,7 +565,7 @@ function HomeComponent() {
             <Frame
               reveal
               scrambleCaption
-              caption={`Fig. 0${activeTab + 1} — ${activeCase.label}`}
+              caption={`Fig. 0${activeTab + 1} · ${activeCase.label}`}
             >
               {/* True crossfade: outgoing image fades while the incoming one
                   fades in over it, settling from a slight zoom so the swap
@@ -631,7 +631,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[340px_1fr] gap-12 min-[1024px]:gap-18 items-center">
           <Reveal>
-            <Frame reveal className="w-fit" caption="Fig. 05 — The builders">
+            <Frame reveal className="w-fit" caption="Fig. 05 · The builders">
               <img
                 src="/founder-photo.webp"
                 alt="The RelentNet founder"
