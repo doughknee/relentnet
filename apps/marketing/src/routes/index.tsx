@@ -3,7 +3,6 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
   LayoutGroup,
-  animate,
   motion,
   useInView,
   useReducedMotion,
@@ -194,33 +193,39 @@ export const stats = [
 /** The brand ease, matching every other entrance on the site. */
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
-/**
- * How often the climbing value is handed to AnimateNumber, in ms. The spring
- * updates every frame; handing over 60 changes a second would retarget the
- * reels before any of them travelled. At ~10 a second each handover is a big
- * enough jump that every column has real distance to cover.
- */
-const FEED_MS = 100
+/** Whole numbers unless a stat asks otherwise. Module-level so the object
+ *  identity is stable across renders. */
+const DEFAULT_NUMBER_FORMAT = { maximumFractionDigits: 0 } as const
+
+/** Beat between the spin and the rollover, in ms. Long enough that the first
+ *  phase lands before the carry starts, so the rollover reads as its own
+ *  moment rather than the tail of the spin. */
+const ROLLOVER_DELAY_MS = 1100
 
 /**
- * Scroll-in counter for a stat: AnimateNumber's reels, fed a climbing value.
+ * Scroll-in counter for a stat, run as two phases on AnimateNumber's defaults.
  *
  * AnimateNumber never visits the numbers in between. It reads the start and
- * end digit of each column and rotates each one independently, so how far a
- * reel travels depends only on its own two digits. Counting to 10,000 that
- * means one reel goes 0 to 1 and four go nowhere, because their start and end
- * are both zero. Proven by swapping the target to 9,999, where all four reels
- * spun. So the value itself has to climb: then every column is always moving
- * toward a digit it does not currently show.
+ * end digit of each column and rotates each independently, so how far a reel
+ * travels depends only on its own two digits. Counting straight to 10,000 that
+ * means one reel goes 0 to 1 and four go nowhere, since their start and end
+ * are both zero. Swapping the target to 9,999 made all four spin, which is
+ * what this exploits.
  *
- * The reels keep AnimateNumber's own default transition. Nothing here tunes
- * how a digit rotates, only how often it is given somewhere new to rotate to.
+ *   Phase one  0 to 9,999   every reel travels the full 0 to 9.
+ *   Phase two  9,999 to 10,000   every 9 carries to 0 and the leading 1
+ *                                arrives: an actual odometer rollover.
+ *
+ * Phase one's target is one unit in the last place the format shows, so this
+ * generalises: 40 spins to 39 then rolls, 99.99 spins to 99.98 then rolls.
+ *
+ * Nothing here tunes the animation. The reels keep AnimateNumber's own
+ * transition; the only inputs are two value changes and the beat between them.
  *
  * LayoutGroup and the `layout` wrapper come from Motion's Number counter
- * example, and are what make this viable at all: the figure gains digit
- * columns as it climbs, and inserting a column is a layout change. Animating
- * it is the difference between columns sliding in and columns snapping in one
- * at a time, which is how an earlier attempt at this failed.
+ * example. The figure gains digit columns as it climbs, and inserting a column
+ * is a layout change; animating it is the difference between columns sliding
+ * in and snapping in one at a time.
  *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
  * never see a 0. Reduced motion never leaves the final value.
@@ -229,13 +234,10 @@ function StatValue({
   value,
   suffix,
   format,
-  duration = 2.4,
 }: {
   value: number
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
-  /** Climb time in seconds. The hero figure runs longer than the spec rows. */
-  duration?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
@@ -244,10 +246,7 @@ function StatValue({
   const [display, setDisplay] = useState(value)
   useEffect(() => setHydrated(true), [])
 
-  // Whole numbers unless a stat asks otherwise, since a climbing value is a
-  // float and would otherwise render "1,263.973" on the way up. No padding:
-  // the column count is free to grow, which is what LayoutGroup is here for.
-  const numberFormat = format ?? { maximumFractionDigits: 0 }
+  const numberFormat = format ?? DEFAULT_NUMBER_FORMAT
 
   useEffect(() => {
     if (!hydrated || reducedMotion) return
@@ -255,22 +254,18 @@ function StatValue({
       setDisplay(0)
       return
     }
-    let lastFed = 0
-    const controls = animate(0, value, {
-      type: 'spring',
-      bounce: 0,
-      visualDuration: duration,
-      onUpdate: (v) => {
-        const now = performance.now()
-        if (now - lastFed < FEED_MS) return
-        lastFed = now
-        setDisplay(v)
-      },
-      // The feed throttle can swallow the last frame, so land the exact value.
-      onComplete: () => setDisplay(value),
-    })
-    return () => controls.stop()
-  }, [hydrated, inView, reducedMotion, value, duration])
+    // One unit in the last place the format renders, so the handoff is a carry
+    // rather than a jump.
+    const step = 10 ** -(numberFormat.maximumFractionDigits ?? 0)
+    const timers = [
+      // Re-assert zero in its own commit: a stat already in view at hydration
+      // never passed through it, and would otherwise count downward.
+      setTimeout(() => setDisplay(0), 0),
+      setTimeout(() => setDisplay(value - step), 40),
+      setTimeout(() => setDisplay(value), 40 + ROLLOVER_DELAY_MS),
+    ]
+    return () => timers.forEach(clearTimeout)
+  }, [hydrated, inView, reducedMotion, value, numberFormat])
 
   return (
     <LayoutGroup>
@@ -937,7 +932,6 @@ function HomeComponent() {
                   <StatValue
                     value={heroStat.value}
                     suffix={heroStat.suffix}
-                    duration={3}
                   />
                 </p>
                 <p className="mt-7 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
