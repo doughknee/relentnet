@@ -9,6 +9,7 @@ import {
   useScroll,
   useTransform,
 } from 'motion/react'
+import { AnimateNumber } from 'motion-plus/react'
 
 import { BrandMark, BrandMarkChromatic } from '@/components/BrandMark'
 import { CtaLink } from '@/components/CtaLink'
@@ -207,12 +208,32 @@ const EASE = [0.2, 0.8, 0.2, 1] as const
 const COUNT_SPRING = { type: 'spring', bounce: 0 } as const
 
 /**
- * Scroll-in counter for a stat. It interpolates the VALUE rather than
- * animating digits, which is the whole point: AnimateNumber transitions each
- * digit column independently along its shortest path, so counting to a round
- * number like 10,000 only ever moved the leading 1 while four trailing zeros
- * sat still. Interpolating means the figure passes through every value in
- * between and every column churns.
+ * How often the interpolated value is handed to AnimateNumber, in ms. The
+ * spring updates every frame, but pushing 60 changes a second would restart
+ * the reels' layout animation before any of them could travel. Feeding ~18 a
+ * second, each with a longer spin than the gap between them, keeps every reel
+ * permanently mid-rotation instead.
+ */
+const REEL_STEP_MS = 55
+
+/** One reel rotation. Longer than REEL_STEP_MS so spins overlap into a
+ *  continuous churn rather than landing between updates. */
+const REEL_SPIN = { duration: 0.25, ease: 'linear' } as const
+
+/**
+ * Scroll-in counter for a stat: AnimateNumber's digit reels, driven by an
+ * interpolated value.
+ *
+ * Both halves are load-bearing. AnimateNumber alone cannot count to a round
+ * figure, because it transitions each digit COLUMN along its own shortest
+ * path, so 0 to 10,000 moves the leading 1 and leaves four trailing zeros
+ * still. Interpolation alone loses the reels and just swaps text. Feeding the
+ * interpolated value through AnimateNumber gives both: the figure passes
+ * through every value on the way up, and the reels spin the whole time.
+ *
+ * trend={1} forces every digit to rotate upward. Left automatic, a digit
+ * takes the shortest route, so 0 to 9 wraps backwards by one step instead of
+ * spinning up through the eight digits between.
  *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
  * never see a 0. After hydration a stat still below the fold drops to zero
@@ -227,7 +248,7 @@ function StatValue({
 }: {
   value: number
   suffix?: string
-  format?: Intl.NumberFormatOptions
+  format?: React.ComponentProps<typeof AnimateNumber>['format']
   /** Roll time in seconds. The hero figure runs longer than the spec rows. */
   duration?: number
 }) {
@@ -241,8 +262,8 @@ function StatValue({
   // Whole numbers by default. Interpolating produces floats, so without this
   // a count to 10,000 renders "1,263.973" on the way up; stats that want
   // decimals (uptime) pass their own format.
-  const formatter = useMemo(
-    () => new Intl.NumberFormat('en-US', format ?? { maximumFractionDigits: 0 }),
+  const numberFormat = useMemo(
+    () => format ?? { maximumFractionDigits: 0 },
     [format],
   )
 
@@ -252,17 +273,32 @@ function StatValue({
       setDisplay(0)
       return
     }
+    let lastPush = 0
     const controls = animate(0, value, {
       ...COUNT_SPRING,
       visualDuration: duration,
-      onUpdate: setDisplay,
+      onUpdate: (v) => {
+        const now = performance.now()
+        if (now - lastPush < REEL_STEP_MS) return
+        lastPush = now
+        setDisplay(v)
+      },
+      // The throttle can swallow the final frame, so land the exact value.
+      onComplete: () => setDisplay(value),
     })
     return () => controls.stop()
   }, [hydrated, inView, reducedMotion, value, duration])
 
   return (
     <span ref={ref} className="whitespace-nowrap">
-      <span className="tabular-nums">{formatter.format(display)}</span>
+      <AnimateNumber
+        format={numberFormat}
+        trend={1}
+        transition={REEL_SPIN}
+        className="tabular-nums"
+      >
+        {display}
+      </AnimateNumber>
       {suffix ? <span className="text-gold-text">{suffix}</span> : null}
     </span>
   )
