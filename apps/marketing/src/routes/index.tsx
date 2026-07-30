@@ -397,7 +397,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow scramble className="mb-5">01 · The premise</Eyebrow>
+            <Eyebrow className="mb-5">01 · The premise</Eyebrow>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] max-w-[640px]">
@@ -450,7 +450,7 @@ function HomeComponent() {
           <div className="flex items-end justify-between gap-8 mb-14 flex-wrap">
             <div>
               <Reveal>
-                <Eyebrow scramble className="mb-5">02 · Client work</Eyebrow>
+                <Eyebrow className="mb-5">02 · Client work</Eyebrow>
               </Reveal>
               <Reveal delay={80}>
                 <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
@@ -624,7 +624,7 @@ function HomeComponent() {
           </Reveal>
           <div>
             <Reveal delay={80}>
-              <Eyebrow scramble className="mb-5">03 · Who you'll work with</Eyebrow>
+              <Eyebrow className="mb-5">03 · Who you'll work with</Eyebrow>
             </Reveal>
             <Reveal delay={160}>
               <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] mb-6">
@@ -665,7 +665,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow scramble className="mb-14">04 · How it works</Eyebrow>
+            <Eyebrow className="mb-14">04 · How it works</Eyebrow>
           </Reveal>
           <div className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-10">
             {steps.map((step, i) => (
@@ -710,7 +710,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow scramble className="mb-14">05 · The numbers</Eyebrow>
+            <Eyebrow className="mb-14">05 · The numbers</Eyebrow>
           </Reveal>
           {/* One motion beat: the grid fades in as a single unit while the
               numbers roll — no per-tile stagger before the count-up. */}
