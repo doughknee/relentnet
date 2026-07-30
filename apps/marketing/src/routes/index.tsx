@@ -298,7 +298,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-5">01 · The premise</Eyebrow>
+            <Eyebrow scramble className="mb-5">01 · The premise</Eyebrow>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] max-w-[640px]">
@@ -340,7 +340,7 @@ function HomeComponent() {
           <div className="flex items-end justify-between gap-8 mb-14 flex-wrap">
             <div>
               <Reveal>
-                <Eyebrow className="mb-5">02 · Client work</Eyebrow>
+                <Eyebrow scramble className="mb-5">02 · Client work</Eyebrow>
               </Reveal>
               <Reveal delay={80}>
                 <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
@@ -395,7 +395,7 @@ function HomeComponent() {
                 Read the case study →
               </Link>
             </div>
-            <Frame caption={`Fig. 0${activeTab + 1} — ${activeCase.label}`}>
+            <Frame reveal caption={`Fig. 0${activeTab + 1} — ${activeCase.label}`}>
               {/* True crossfade: outgoing image fades while the incoming one
                   fades in over it. The wrapper owns the aspect ratio so the
                   layout never jumps mid-swap. */}
@@ -434,7 +434,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[340px_1fr] gap-12 min-[1024px]:gap-18 items-center">
           <Reveal>
-            <Frame className="w-fit" caption="Fig. 05 — The builders">
+            <Frame reveal className="w-fit" caption="Fig. 05 — The builders">
               <img
                 src="/founder-photo.webp"
                 alt="The RelentNet founder"
@@ -446,7 +446,7 @@ function HomeComponent() {
           </Reveal>
           <div>
             <Reveal delay={80}>
-              <Eyebrow className="mb-5">03 · Who you'll work with</Eyebrow>
+              <Eyebrow scramble className="mb-5">03 · Who you'll work with</Eyebrow>
             </Reveal>
             <Reveal delay={160}>
               <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] mb-6">
@@ -487,7 +487,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-14">04 · How it works</Eyebrow>
+            <Eyebrow scramble className="mb-14">04 · How it works</Eyebrow>
           </Reveal>
           <div className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-10">
             {steps.map((step, i) => (
@@ -532,7 +532,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-14">05 · The numbers</Eyebrow>
+            <Eyebrow scramble className="mb-14">05 · The numbers</Eyebrow>
           </Reveal>
           <dl className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-px p-0.5 bg-line">
             {stats.map((stat, i) => (

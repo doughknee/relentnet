@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+
 import type { ReactNode } from 'react'
 
 /**
@@ -6,18 +9,49 @@ import type { ReactNode } from 'react'
  * image inside with `group-hover:scale-[1.03]` classes for the designed hover
  * zoom (the figure is the `group`). Optional `caption` renders a mono
  * "Fig. 01 — ..." line under the image.
+ *
+ * `reveal` adds a scroll-linked curtain (Motion's Scroll Image Reveal
+ * pattern): the plate opens from center via clip-path while the content
+ * settles from a slight zoom, both mapped to scroll progress. The curtain
+ * applies only after hydration — the prerendered HTML ships unclipped, so
+ * crawlers and no-JS visitors never see a closed curtain — and is skipped
+ * entirely under reduced motion (scroll-bound styles bypass MotionConfig,
+ * so the gate must be manual).
  */
 export function Frame({
   children,
   caption,
   className = '',
+  reveal = false,
 }: {
   children: ReactNode
   caption?: string
   className?: string
+  reveal?: boolean
 }) {
+  const ref = useRef<HTMLElement>(null)
+  const reducedMotion = useReducedMotion()
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+  // Curtain fully open at 40% of the figure's journey — roughly when it
+  // reaches the middle of the viewport on the way up.
+  const clipPath = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    ['inset(0% 50% 0% 50%)', 'inset(0% 0% 0% 0%)'],
+  )
+  const scale = useTransform(scrollYProgress, [0, 0.4], [1.15, 1])
+
+  const curtain = reveal && hydrated && !reducedMotion
+
   return (
     <figure
+      ref={ref}
       className={`group relative border border-line p-2.5 bg-page ${className}`}
     >
       {/* Drafting crop marks */}
@@ -37,13 +71,21 @@ export function Frame({
         aria-hidden="true"
         className="absolute -bottom-1.5 -right-1.5 w-3 h-3 border-b border-r border-gold-deep"
       />
-      <div className="overflow-hidden relative">
-        {children}
+      <motion.div
+        className="overflow-hidden relative"
+        style={curtain ? { clipPath } : undefined}
+      >
+        {/* Scale rides its own wrapper so the CSS hover zoom on the image
+            keeps its transform; scanlines stay outside the zoom (they're a
+            screen texture, not part of the plate). */}
+        <motion.div style={curtain ? { scale } : undefined}>
+          {children}
+        </motion.div>
         <span
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none scanlines"
         />
-      </div>
+      </motion.div>
       {caption && (
         <figcaption className="mt-2.5 font-mono text-[10px] tracking-[0.22em] uppercase text-ink-faint">
           {caption}

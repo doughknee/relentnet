@@ -12,6 +12,12 @@ const enableDevtools = process.env.npm_lifecycle_event === 'dev'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Dev tooling assigns PORT when it manages the server; default stays 3000
+  // for manual `npm run dev`.
+  server: {
+    host: '0.0.0.0',
+    port: Number(process.env.PORT) || 3000,
+  },
   plugins: [
     enableDevtools ? devtools() : null,
     // SPA mode: emits a static client build (dist/client) + a prerendered
