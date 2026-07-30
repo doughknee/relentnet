@@ -3,6 +3,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
   LayoutGroup,
+  animate,
   motion,
   useInView,
   useReducedMotion,
@@ -194,36 +195,82 @@ export const stats = [
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
 /**
- * Scroll-in counter for a stat: Motion+ AnimateNumber on its defaults, with
- * no transition, trend or format tuning of our own.
+ * How often the climbing value is handed to AnimateNumber, in ms. The spring
+ * updates every frame; handing over 60 changes a second would retarget the
+ * reels before any of them travelled. At ~10 a second each handover is a big
+ * enough jump that every column has real distance to cover.
+ */
+const FEED_MS = 100
+
+/**
+ * Scroll-in counter for a stat: AnimateNumber's reels, fed a climbing value.
  *
- * Wrapped the way Motion's own Number counter example wraps it: a LayoutGroup
- * around a `layout` container. Counting to 10,000 adds four digit columns, and
- * without the layout animation the element's width jumps each time one lands.
- * The wrapper animates that width instead, so the reels and the box they sit
- * in move together.
+ * AnimateNumber never visits the numbers in between. It reads the start and
+ * end digit of each column and rotates each one independently, so how far a
+ * reel travels depends only on its own two digits. Counting to 10,000 that
+ * means one reel goes 0 to 1 and four go nowhere, because their start and end
+ * are both zero. Proven by swapping the target to 9,999, where all four reels
+ * spun. So the value itself has to climb: then every column is always moving
+ * toward a digit it does not currently show.
  *
- * The only other thing around it is the trigger. The prerendered HTML carries
- * the FINAL value, so crawlers and no-JS readers never see a 0; after
- * hydration a stat still below the fold drops to zero offscreen and counts up
- * on first view. Reduced motion never leaves the final value.
+ * The reels keep AnimateNumber's own default transition. Nothing here tunes
+ * how a digit rotates, only how often it is given somewhere new to rotate to.
+ *
+ * LayoutGroup and the `layout` wrapper come from Motion's Number counter
+ * example, and are what make this viable at all: the figure gains digit
+ * columns as it climbs, and inserting a column is a layout change. Animating
+ * it is the difference between columns sliding in and columns snapping in one
+ * at a time, which is how an earlier attempt at this failed.
+ *
+ * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
+ * never see a 0. Reduced motion never leaves the final value.
  */
 function StatValue({
   value,
   suffix,
   format,
+  duration = 2.4,
 }: {
   value: number
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
+  /** Climb time in seconds. The hero figure runs longer than the spec rows. */
+  duration?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
   const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
+  const [display, setDisplay] = useState(value)
   useEffect(() => setHydrated(true), [])
 
-  const shown = !hydrated || reducedMotion || inView
+  // Whole numbers unless a stat asks otherwise, since a climbing value is a
+  // float and would otherwise render "1,263.973" on the way up. No padding:
+  // the column count is free to grow, which is what LayoutGroup is here for.
+  const numberFormat = format ?? { maximumFractionDigits: 0 }
+
+  useEffect(() => {
+    if (!hydrated || reducedMotion) return
+    if (!inView) {
+      setDisplay(0)
+      return
+    }
+    let lastFed = 0
+    const controls = animate(0, value, {
+      type: 'spring',
+      bounce: 0,
+      visualDuration: duration,
+      onUpdate: (v) => {
+        const now = performance.now()
+        if (now - lastFed < FEED_MS) return
+        lastFed = now
+        setDisplay(v)
+      },
+      // The feed throttle can swallow the last frame, so land the exact value.
+      onComplete: () => setDisplay(value),
+    })
+    return () => controls.stop()
+  }, [hydrated, inView, reducedMotion, value, duration])
 
   return (
     <LayoutGroup>
@@ -232,8 +279,8 @@ function StatValue({
         layout
         className="inline-flex items-baseline whitespace-nowrap"
       >
-        <AnimateNumber format={format} className="tabular-nums">
-          {shown ? value : 0}
+        <AnimateNumber format={numberFormat} className="tabular-nums">
+          {display}
         </AnimateNumber>
         {suffix ? <span className="text-gold-text">{suffix}</span> : null}
       </motion.span>
@@ -890,6 +937,7 @@ function HomeComponent() {
                   <StatValue
                     value={heroStat.value}
                     suffix={heroStat.suffix}
+                    duration={3}
                   />
                 </p>
                 <p className="mt-7 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
