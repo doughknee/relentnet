@@ -20,6 +20,7 @@ import { Frame } from '@/components/Frame'
 import { Reveal } from '@/components/Reveal'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
+import { countEase } from '@/lib/countEase'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/')({
@@ -218,14 +219,6 @@ const DIGIT_UPDATE_MS = 90
 const COUNT_DURATION = 4
 
 /**
- * The climb's curve. Brandon's harness imports a bespoke `countEase` that did
- * not come across with the snippet, so this stands in until it does: a hard
- * ease-out, quick off the mark and decaying into the target, which is the
- * "slow down as it gets closer" the earlier tweens never delivered.
- */
-const COUNT_EASE = [0.22, 1, 0.36, 1] as const
-
-/**
  * Scroll-in counter for a stat.
  *
  * A motion value climbs to the target, and its changes are handed to the reels
@@ -279,7 +272,7 @@ function StatValue({
     setDisplay(0)
     const controls = animate(count, value, {
       duration: reducedMotion ? 0.01 : COUNT_DURATION,
-      ease: COUNT_EASE,
+      ease: countEase,
     })
     return () => controls.stop()
   }, [hydrated, inView, reducedMotion, value, count])
