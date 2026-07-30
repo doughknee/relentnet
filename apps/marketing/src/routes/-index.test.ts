@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { cases, marqueeItems, premise, steps } from './index'
+import { cases, marqueeItems, premise, stats, steps } from './index'
 import { caseStudies } from '@/data/caseStudies'
 
 describe('homepage content (v4)', () => {
@@ -34,5 +34,11 @@ describe('homepage content (v4)', () => {
     expect(marqueeItems).toHaveLength(8)
     expect(marqueeItems).toContain('Spreadsheet chaos')
     expect(marqueeItems).toContain('Manual handoffs')
+  })
+
+  it('pins the four company-level stat claims', () => {
+    expect(
+      stats.map((s) => `${s.value}${'suffix' in s ? s.suffix : ''}`),
+    ).toEqual(['40+', '1000+', '99.9%', '4'])
   })
 })

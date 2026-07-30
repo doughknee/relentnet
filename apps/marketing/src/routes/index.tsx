@@ -1,6 +1,14 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Fragment, useEffect, useState } from 'react'
-import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react'
+import { AnimateNumber } from 'motion-plus/react'
 
 import { BrandMark, BrandMarkChromatic } from '@/components/BrandMark'
 import { CtaLink } from '@/components/CtaLink'
@@ -140,30 +148,76 @@ export const premise = {
   ],
 } as const
 
-const stats = [
+export const stats = [
   {
-    label: 'Scrollr',
-    value: '1 → 3',
+    label: 'Clients served',
+    value: 40,
+    suffix: '+',
     description:
-      'Scrollr rebuilt from one brittle Chrome extension into native apps on three platforms.',
+      'Owner-led businesses across construction, real estate, sports tech, and consumer software.',
   },
   {
-    label: 'Cambridge',
-    value: 'Email → QBO',
+    label: 'Hours of admin automated',
+    value: 1000,
+    suffix: '+',
     description:
-      'Cambridge’s vendor invoices flow to QuickBooks with zero manual entry.',
+      'Invoice filing, follow-ups, and handoffs — manual work now handled by systems we run.',
   },
   {
-    label: 'CourtCommand',
-    value: '170+',
-    description: 'API endpoints on CourtCommand’s real-time tournament core.',
+    label: 'Uptime across hosted systems',
+    value: 99.9,
+    suffix: '%',
+    format: { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+    description:
+      'We host, monitor, and answer for everything we build — around the clock.',
   },
   {
-    label: 'VM Homes',
-    value: '6 markets',
-    description: 'Live MLS search across Tampa Bay for VM Homes.',
+    label: 'Years in business',
+    value: 4,
+    description:
+      'Building, hosting, and stewarding for owner-led businesses since 2022.',
   },
 ] as const
+
+/** The brand ease, matching every other entrance on the site. */
+const EASE = [0.2, 0.8, 0.2, 1] as const
+
+/**
+ * Scroll-in odometer for a stat (Motion+ AnimateNumber). The prerendered
+ * HTML carries the FINAL value — crawlers and no-JS readers never see a 0 —
+ * then after hydration, tiles still below the fold snap to 0 offscreen and
+ * roll up on first view. Reduced motion never leaves the final value.
+ */
+function StatValue({
+  value,
+  suffix,
+  format,
+}: {
+  value: number
+  suffix?: string
+  format?: React.ComponentProps<typeof AnimateNumber>['format']
+}) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const reducedMotion = useReducedMotion()
+  const inView = useInView(ref, { once: true, amount: 0.5 })
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+
+  const shown = !hydrated || reducedMotion || inView
+
+  return (
+    <span ref={ref} className="whitespace-nowrap">
+      <AnimateNumber
+        format={format}
+        transition={{ duration: 1.2, ease: EASE }}
+        className="tabular-nums"
+      >
+        {shown ? value : 0}
+      </AnimateNumber>
+      {suffix ? <span className="text-gold-text">{suffix}</span> : null}
+    </span>
+  )
+}
 
 /**
  * Chromatic mark behind the hero's right side, dark theme + ≥640px only.
@@ -534,25 +588,29 @@ function HomeComponent() {
           <Reveal>
             <Eyebrow scramble className="mb-14">05 · The numbers</Eyebrow>
           </Reveal>
-          <dl className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-px p-0.5 bg-line">
-            {stats.map((stat, i) => (
-              <Reveal
-                key={stat.value}
-                delay={i * 100}
-                className="bg-page p-8 min-[768px]:p-10"
-              >
-                <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
-                  {stat.label}
-                </p>
-                <dd className="mt-4 font-serif text-[clamp(44px,4.5vw,64px)] text-ink-em leading-none whitespace-nowrap">
-                  {stat.value}
-                </dd>
-                <dt className="mt-2 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
-                  {stat.description}
-                </dt>
-              </Reveal>
-            ))}
-          </dl>
+          {/* One motion beat: the grid fades in as a single unit while the
+              numbers roll — no per-tile stagger before the count-up. */}
+          <Reveal delay={100}>
+            <dl className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-px p-0.5 bg-line">
+              {stats.map((stat) => (
+                <div key={stat.label} className="bg-page p-8 min-[768px]:p-10">
+                  <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-gold-text font-medium">
+                    {stat.label}
+                  </p>
+                  <dd className="mt-4 font-serif text-[clamp(44px,4.5vw,64px)] text-ink-em leading-none whitespace-nowrap">
+                    <StatValue
+                      value={stat.value}
+                      suffix={'suffix' in stat ? stat.suffix : undefined}
+                      format={'format' in stat ? stat.format : undefined}
+                    />
+                  </dd>
+                  <dt className="mt-2 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
+                    {stat.description}
+                  </dt>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
       </section>
 
