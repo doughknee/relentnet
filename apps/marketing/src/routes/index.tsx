@@ -2,9 +2,11 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
-  LayoutGroup,
+  animate,
   motion,
   useInView,
+  useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -197,38 +199,44 @@ const EASE = [0.2, 0.8, 0.2, 1] as const
  *  identity is stable across renders. */
 const DEFAULT_NUMBER_FORMAT = { maximumFractionDigits: 0 } as const
 
-/** Beat between the spin and the rollover, in ms. Long enough that the first
- *  phase lands before the carry starts, so the rollover reads as its own
- *  moment rather than the tail of the spin. */
-const ROLLOVER_DELAY_MS = 1100
+/**
+ * Reel timing, from Brandon's test harness. Deliberately tiny: each digit
+ * change has to LAND before the next value arrives. Every earlier attempt here
+ * used spins of 0.25s or more against a ~90ms feed, so the reels were
+ * permanently mid-flight and never resolved, which is what read as mush.
+ */
+const REEL_TRANSITION = {
+  layout: { duration: 0.07 },
+  opacity: { duration: 0.05, ease: 'linear' },
+  y: { type: 'spring', visualDuration: 0.07, bounce: 0.05 },
+} as const
+
+/** How often the climbing value is handed to the reels, in ms. */
+const DIGIT_UPDATE_MS = 90
+
+/** Total count time in seconds. */
+const COUNT_DURATION = 4
 
 /**
- * Scroll-in counter for a stat, run as two phases on AnimateNumber's defaults.
+ * The climb's curve. Brandon's harness imports a bespoke `countEase` that did
+ * not come across with the snippet, so this stands in until it does: a hard
+ * ease-out, quick off the mark and decaying into the target, which is the
+ * "slow down as it gets closer" the earlier tweens never delivered.
+ */
+const COUNT_EASE = [0.22, 1, 0.36, 1] as const
+
+/**
+ * Scroll-in counter for a stat.
  *
- * AnimateNumber never visits the numbers in between. It reads the start and
- * end digit of each column and rotates each independently, so how far a reel
- * travels depends only on its own two digits. Counting straight to 10,000 that
- * means one reel goes 0 to 1 and four go nowhere, since their start and end
- * are both zero. Swapping the target to 9,999 made all four spin, which is
- * what this exploits.
- *
- *   Phase one  0 to 9,999   every reel travels the full 0 to 9.
- *   Phase two  9,999 to 10,000   every 9 carries to 0 and the leading 1
- *                                arrives: an actual odometer rollover.
- *
- * Phase one's target is one unit in the last place the format shows, so this
- * generalises: 40 spins to 39 then rolls, 99.99 spins to 99.98 then rolls.
- *
- * Nothing here tunes the animation. The reels keep AnimateNumber's own
- * transition; the only inputs are two value changes and the beat between them.
- *
- * LayoutGroup and the `layout` wrapper come from Motion's Number counter
- * example. The figure gains digit columns as it climbs, and inserting a column
- * is a layout change; animating it is the difference between columns sliding
- * in and snapping in one at a time.
+ * A motion value climbs to the target, and its changes are handed to the reels
+ * on a throttle. The reels then run FAST (see REEL_TRANSITION), so each digit
+ * resolves before the next value lands. That pairing is the whole trick: the
+ * climb supplies distance for every column to travel, and the quick reels keep
+ * the motion legible instead of smearing.
  *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
- * never see a 0. Reduced motion never leaves the final value.
+ * never see a 0. Reduced motion collapses the climb to a hair over zero rather
+ * than branching, so the figure simply arrives.
  */
 function StatValue({
   value,
@@ -244,42 +252,53 @@ function StatValue({
   const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
   const [display, setDisplay] = useState(value)
+  const count = useMotionValue(0)
+  const lastDigitUpdate = useRef(0)
   useEffect(() => setHydrated(true), [])
 
   const numberFormat = format ?? DEFAULT_NUMBER_FORMAT
 
+  useMotionValueEvent(count, 'change', (latest) => {
+    const now = performance.now()
+    if (now - lastDigitUpdate.current < DIGIT_UPDATE_MS) return
+    lastDigitUpdate.current = now
+    setDisplay(latest)
+  })
+
+  // The throttle can swallow the last change, so land the exact figure.
+  useMotionValueEvent(count, 'animationComplete', () => setDisplay(value))
+
   useEffect(() => {
-    if (!hydrated || reducedMotion) return
+    if (!hydrated) return
     if (!inView) {
       setDisplay(0)
       return
     }
-    // One unit in the last place the format renders, so the handoff is a carry
-    // rather than a jump.
-    const step = 10 ** -(numberFormat.maximumFractionDigits ?? 0)
-    const timers = [
-      // Re-assert zero in its own commit: a stat already in view at hydration
-      // never passed through it, and would otherwise count downward.
-      setTimeout(() => setDisplay(0), 0),
-      setTimeout(() => setDisplay(value - step), 40),
-      setTimeout(() => setDisplay(value), 40 + ROLLOVER_DELAY_MS),
-    ]
-    return () => timers.forEach(clearTimeout)
-  }, [hydrated, inView, reducedMotion, value, numberFormat])
+    count.jump(0)
+    lastDigitUpdate.current = 0
+    setDisplay(0)
+    const controls = animate(count, value, {
+      duration: reducedMotion ? 0.01 : COUNT_DURATION,
+      ease: COUNT_EASE,
+    })
+    return () => controls.stop()
+  }, [hydrated, inView, reducedMotion, value, count])
 
   return (
-    <LayoutGroup>
-      <motion.span
-        ref={ref}
-        layout
-        className="inline-flex items-baseline whitespace-nowrap"
+    <span
+      ref={ref}
+      className="inline-flex items-baseline whitespace-nowrap"
+    >
+      <AnimateNumber
+        locales="en-US"
+        format={numberFormat}
+        transition={REEL_TRANSITION}
+        className="tabular-nums"
       >
-        <AnimateNumber format={numberFormat} className="tabular-nums">
-          {display}
-        </AnimateNumber>
-        {suffix ? <span className="text-gold-text">{suffix}</span> : null}
-      </motion.span>
-    </LayoutGroup>
+        {display}
+      </AnimateNumber>
+      {suffix ? <span className="text-gold-text">{suffix}</span> : null}
+    </span>
   )
 }
 
