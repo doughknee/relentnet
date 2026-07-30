@@ -249,9 +249,53 @@ function HeroGhostMark() {
   )
 }
 
+/**
+ * Case-panel swap. The outgoing panel fades as a block, then the incoming
+ * lines cascade in, so the copy changes with the same deliberateness as the
+ * screenshot crossfading beside it instead of hard-cutting.
+ */
+const panelVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } },
+  exit: { opacity: 0, transition: { duration: 0.16, ease: 'easeIn' } },
+} as const
+
+const panelLine = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+} as const
+
+/**
+ * Which tab a key press moves to, per the ARIA tabs pattern: arrows step and
+ * wrap at both ends, Home/End jump to the ends, anything else is not ours to
+ * handle (returns null so the event keeps its default behaviour).
+ */
+export function nextTabIndex(
+  key: string,
+  current: number,
+  count: number,
+): number | null {
+  const last = count - 1
+  if (key === 'ArrowRight') return current === last ? 0 : current + 1
+  if (key === 'ArrowLeft') return current === 0 ? last : current - 1
+  if (key === 'Home') return 0
+  if (key === 'End') return last
+  return null
+}
+
 function HomeComponent() {
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
+
+  /** Roving tabindex: selection follows focus, so moving also moves focus. */
+  function onTabKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    const next = nextTabIndex(event.key, activeTab, cases.length)
+    if (next === null) return
+    event.preventDefault()
+    setActiveTab(next)
+    tabRefs.current[next]?.focus()
+  }
 
   // Warm the other case-study heroes so tab swaps never flash empty
   useEffect(() => {
@@ -415,69 +459,137 @@ function HomeComponent() {
               </Reveal>
             </div>
             <Reveal delay={160}>
-              <div role="group" className="flex gap-2 flex-wrap">
-                {cases.map((c, i) => (
-                  <button
-                    key={c.slug}
-                    type="button"
-                    onClick={() => setActiveTab(i)}
-                    className={`font-mono text-[11px] tracking-[0.14em] uppercase px-[18px] py-[11px] cursor-pointer transition-all duration-200 border whitespace-nowrap ${
-                      i === activeTab
-                        ? 'border-gold bg-gold-tint text-gold-text'
-                        : 'border-line bg-transparent text-ink-muted'
-                    }`}
-                  >
-                    {c.label}
-                  </button>
-                ))}
+              <div
+                role="tablist"
+                aria-label="Client case studies"
+                onKeyDown={onTabKeyDown}
+                className="flex gap-2 flex-wrap"
+              >
+                {cases.map((c, i) => {
+                  const selected = i === activeTab
+                  return (
+                    <button
+                      key={c.slug}
+                      ref={(el) => {
+                        tabRefs.current[i] = el
+                      }}
+                      type="button"
+                      role="tab"
+                      id={`case-tab-${c.slug}`}
+                      aria-selected={selected}
+                      aria-controls="case-panel"
+                      tabIndex={selected ? 0 : -1}
+                      onClick={() => setActiveTab(i)}
+                      className={`relative font-mono text-[11px] tracking-[0.14em] uppercase px-[18px] py-[11px] cursor-pointer border whitespace-nowrap transition-colors duration-200 ${
+                        selected
+                          ? 'border-transparent text-gold-text'
+                          : 'border-line text-ink-muted hover:text-ink-sub'
+                      }`}
+                    >
+                      {/* Shared-layout indicator: the gold state physically
+                          slides between tabs rather than blinking across. */}
+                      {selected && (
+                        <motion.span
+                          layoutId="case-tab-indicator"
+                          aria-hidden="true"
+                          className="absolute inset-0 border border-gold bg-gold-tint"
+                          transition={{ duration: 0.4, ease: EASE }}
+                        />
+                      )}
+                      <span className="relative">{c.label}</span>
+                    </button>
+                  )
+                })}
               </div>
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center">
-            <div>
-              <p className="font-mono text-[11px] tracking-[0.26em] uppercase text-ink-faint font-medium mb-[18px]">
-                {activeCase.industry}
-              </p>
-              <h3 className="font-serif text-[clamp(32px,3.6vw,46px)] leading-[1.05] mb-[22px]">
-                {activeCase.headline}
-              </h3>
-              <p className="text-ink-sub font-light leading-[1.65] mb-8 max-w-[400px]">
-                {activeCase.outcome}
-              </p>
-              <div className="border-l border-line pl-6 mb-8">
-                <p className="font-serif text-[40px] leading-none text-gold-text">
-                  {activeCase.statValue}
-                </p>
-                <p className="mt-2.5 text-[13px] text-ink-sub max-w-[340px]">
-                  {activeCase.statDesc}
-                </p>
-              </div>
-              <Link
-                to="/clients/$slug"
-                params={{ slug: activeCase.slug }}
-                className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.15em] uppercase text-gold-text transition-all hover:gap-4"
+          <div
+            role="tabpanel"
+            id="case-panel"
+            aria-labelledby={`case-tab-${activeCase.slug}`}
+            className="grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center"
+          >
+            {/* initial={false} is load-bearing, not a nicety: without it the
+                first mount starts at the hidden variant, so the prerendered
+                HTML ships this copy at opacity 0 and anyone without JS (or
+                any crawler) sees an empty panel. */}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeCase.slug}
+                variants={panelVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
               >
-                Read the case study →
-              </Link>
-            </div>
-            <Frame reveal caption={`Fig. 0${activeTab + 1} — ${activeCase.label}`}>
+                <motion.p
+                  variants={panelLine}
+                  className="font-mono text-[11px] tracking-[0.26em] uppercase text-ink-faint font-medium mb-[18px]"
+                >
+                  {activeCase.industry}
+                </motion.p>
+                <motion.h3
+                  variants={panelLine}
+                  className="font-serif text-[clamp(32px,3.6vw,46px)] leading-[1.05] mb-[22px]"
+                >
+                  {activeCase.headline}
+                </motion.h3>
+                <motion.p
+                  variants={panelLine}
+                  className="text-ink-sub font-light leading-[1.65] mb-8 max-w-[400px]"
+                >
+                  {activeCase.outcome}
+                </motion.p>
+                <motion.div
+                  variants={panelLine}
+                  className="border-l border-line pl-6 mb-8"
+                >
+                  <p className="font-serif text-[40px] leading-none text-gold-text">
+                    {activeCase.statValue}
+                  </p>
+                  <p className="mt-2.5 text-[13px] text-ink-sub max-w-[340px]">
+                    {activeCase.statDesc}
+                  </p>
+                </motion.div>
+                <motion.div variants={panelLine}>
+                  <Link
+                    to="/clients/$slug"
+                    params={{ slug: activeCase.slug }}
+                    className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.15em] uppercase text-gold-text transition-all hover:gap-4"
+                  >
+                    Read the case study →
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
+            <Frame
+              reveal
+              scrambleCaption
+              caption={`Fig. 0${activeTab + 1} — ${activeCase.label}`}
+            >
               {/* True crossfade: outgoing image fades while the incoming one
-                  fades in over it. The wrapper owns the aspect ratio so the
-                  layout never jumps mid-swap. */}
+                  fades in over it, settling from a slight zoom so the swap
+                  reads as a plate being placed. The wrapper owns the aspect
+                  ratio so the layout never jumps mid-swap. */}
               <div className="relative aspect-[16/10]">
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={activeCase.slug}
-                    role="img"
-                    aria-label={activeCase.imageAlt}
-                    className="absolute inset-0 bg-cover bg-top transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
-                    style={{ backgroundImage: `url('${activeCase.image}')` }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0, scale: 1.04 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                  />
+                    transition={{ duration: 0.45, ease: EASE }}
+                  >
+                    {/* The CSS hover zoom keeps its own element so it never
+                        fights the entrance scale for `transform`. */}
+                    <div
+                      role="img"
+                      aria-label={activeCase.imageAlt}
+                      className="w-full h-full bg-cover bg-top transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+                      style={{ backgroundImage: `url('${activeCase.image}')` }}
+                    />
+                  </motion.div>
                 </AnimatePresence>
               </div>
             </Frame>

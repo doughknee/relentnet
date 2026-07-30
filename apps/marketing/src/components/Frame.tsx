@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react'
+
+import { Scramble } from '@/components/Scramble'
 
 import type { ReactNode } from 'react'
 
@@ -23,16 +31,25 @@ export function Frame({
   caption,
   className = '',
   reveal = false,
+  scrambleCaption = false,
 }: {
   children: ReactNode
   caption?: string
   className?: string
   reveal?: boolean
+  /** Decode the caption through random glyphs, and re-decode whenever it
+   *  changes. For frames whose caption swaps under the reader (a tabbed
+   *  gallery); a static caption gains nothing from it. */
+  scrambleCaption?: boolean
 }) {
   const ref = useRef<HTMLElement>(null)
   const reducedMotion = useReducedMotion()
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
+
+  // Not `once` — the caption re-decodes on every change, so it needs live
+  // visibility to avoid churning offscreen.
+  const inView = useInView(ref, { amount: 0.4 })
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -88,7 +105,12 @@ export function Frame({
       </motion.div>
       {caption && (
         <figcaption className="mt-2.5 font-mono text-[10px] tracking-[0.22em] uppercase text-ink-faint">
-          {caption}
+          {scrambleCaption ? (
+            // Keyed on the caption so a swap remounts and re-runs the decode.
+            <Scramble key={caption} text={caption} active={inView} />
+          ) : (
+            caption
+          )}
         </figcaption>
       )}
     </figure>
