@@ -106,7 +106,7 @@ export const steps = [
     num: 'iii.',
     title: 'Steward',
     description:
-      'We host, monitor, secure, and keep improving what we build. You talk to the people who wrote the code.',
+      'We host, monitor, secure, and keep improving what we build.',
     note: 'Ongoing: hosting, support, iteration',
   },
 ] as const
@@ -319,6 +319,50 @@ function DimensionRule() {
         {...tick}
       />
     </span>
+  )
+}
+
+/**
+ * The process axis: a drafting rule spanning the three stations, drawing left
+ * to right as the section arrives with a tick dropping at each step, so the
+ * flow reads as a sequence rather than three simultaneous fades.
+ *
+ * The tick row mirrors the steps row's flex geometry exactly (same `flex-1`,
+ * same gap), so ticks land on each column's leading edge without hard-coded
+ * percentages that would drift if the step count changed. The right end is
+ * deliberately left open: stewardship is ongoing, so the axis should not
+ * terminate.
+ *
+ * Decorative. The numerals and headings carry the order for assistive tech.
+ */
+function ProcessAxis({ count }: { count: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="hidden min-[768px]:block relative h-2 mb-10"
+    >
+      <motion.div
+        className="absolute inset-x-0 top-0 h-px bg-line origin-left"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 1, ease: EASE }}
+      />
+      <div className="absolute inset-0 flex gap-10">
+        {Array.from({ length: count }, (_, i) => (
+          <div key={i} className="flex-1 relative">
+            <motion.span
+              className="absolute left-0 top-0 w-px h-2 bg-gold-deep origin-top"
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              // Each tick lands as the drawing line reaches its station.
+              transition={{ duration: 0.3, ease: EASE, delay: i * 0.33 }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -751,18 +795,27 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-14">04 · How it works</Eyebrow>
+            <Eyebrow className="mb-10">04 · How it works</Eyebrow>
           </Reveal>
-          <div className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-10">
+          <ProcessAxis count={steps.length} />
+          <div className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-6 min-[768px]:gap-10">
             {steps.map((step, i) => (
               <Fragment key={step.title}>
+                {/* The stacked layout has no axis above it, so a vertical rule
+                    carries the sequence to phones, where it previously read as
+                    three unconnected blocks. */}
                 {i > 0 && (
-                  <div
+                  <motion.div
                     aria-hidden="true"
-                    className="hidden min-[768px]:block shrink-0 w-12 h-px bg-line mt-3.5"
+                    className="min-[768px]:hidden shrink-0 w-px h-8 bg-line origin-top"
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.5, ease: EASE }}
                   />
                 )}
-                <Reveal delay={i * 150} className="flex-1">
+                {/* Timed so each step lands just after the axis tick above it. */}
+                <Reveal delay={80 + i * 330} className="flex-1">
                   <span className="font-serif italic text-xl text-gold-text">
                     {step.num}
                   </span>
