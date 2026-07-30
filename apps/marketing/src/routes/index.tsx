@@ -92,14 +92,14 @@ export const steps = [
     num: 'i.',
     title: 'Diagnose',
     description:
-      'A free diagnostic maps how work actually moves through your business — and where it stalls.',
+      'A free diagnostic maps how work actually moves through your business, and where it stalls.',
     note: 'Deliverable: workflow map + priority list',
   },
   {
     num: 'ii.',
     title: 'Build',
     description:
-      'If software is the answer, we design and build it. If it isn’t, we say so — connect, simplify, or don’t build.',
+      'If software is the answer, we design and build it. If it isn’t, we say so: connect, simplify, or don’t build.',
     note: 'Deliverable: the system, or the no-build case',
   },
   {
@@ -162,7 +162,7 @@ export const stats = [
     value: 1000,
     suffix: '+',
     description:
-      'Invoice filing, follow-ups, and handoffs — manual work now handled by systems we run.',
+      'Invoice filing, follow-ups, and handoffs: manual work now handled by systems we run.',
   },
   {
     label: 'Uptime across hosted systems',
@@ -170,7 +170,7 @@ export const stats = [
     suffix: '%',
     format: { minimumFractionDigits: 1, maximumFractionDigits: 1 },
     description:
-      'We host, monitor, and answer for everything we build — around the clock.',
+      'We host, monitor, and answer for everything we build, around the clock.',
   },
   {
     label: 'Years in business',
@@ -699,7 +699,7 @@ function HomeComponent() {
               <Frame reveal caption="Fig. 05 · The builders">
                 <img
                   src="/founder-photo.webp"
-                  alt="The RelentNet builders"
+                  alt="Brandon Harris and Daniel Velez setting up a livestream at a wedding"
                   width={440}
                   height={480}
                   className="block w-full aspect-[11/12] object-cover transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
@@ -723,7 +723,7 @@ function HomeComponent() {
             <Reveal delay={240}>
               <p className="text-ink-sub font-light leading-[1.65] mb-7 max-w-[560px]">
                 When you call RelentNet, you talk to the people who design,
-                build, host, and monitor your system — before the diagnostic and
+                build, host, and monitor your system, before the diagnostic and
                 long after launch.
               </p>
             </Reveal>
