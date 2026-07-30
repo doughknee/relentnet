@@ -6,11 +6,17 @@ import { ScrambleText } from 'motion-plus/react'
  *  quiet instead of flashing punctuation noise at small mono sizes. */
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
-/* Hoisted deliberately: stagger() returns a NEW function every call, so
-   building it inline hands ScrambleText a changed prop on every render of the
-   parent and re-runs the decode. That made unrelated state changes (switching
-   a case-study tab) visibly re-scramble every label on the page. */
-const SCRAMBLE_DELAY = stagger(0.02)
+/* Staggering the DURATION, not the delay. A staggered `delay` makes each
+   character wait its turn before it starts churning, and a character that
+   has not started yet renders the settled target text — so swapping the
+   caption flashed the whole new string before scrambling it away. Staggering
+   the duration starts every character at once and cascades the REVEAL, which
+   is the effect we were after.
+
+   Hoisted because stagger() returns a NEW function every call: built inline
+   it hands ScrambleText a changed prop on every render of the parent, which
+   re-ran the decode on unrelated state changes. */
+const SCRAMBLE_DURATION = stagger(0.02, { startDelay: 0.5 })
 
 /**
  * Text that decodes through random glyphs, keeping Motion UI's accessibility
@@ -46,8 +52,7 @@ export function Scramble({
         aria-hidden="true"
         className="absolute inset-0"
         active={active && !reducedMotion}
-        duration={1}
-        delay={SCRAMBLE_DELAY}
+        duration={SCRAMBLE_DURATION}
         chars={SCRAMBLE_CHARS}
       >
         {text}
