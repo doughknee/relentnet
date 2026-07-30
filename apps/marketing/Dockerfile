@@ -6,11 +6,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY apps/marketing/package.json apps/marketing/package.json
 
-# motion-plus resolves from Motion's private registry; auth comes in as a
-# BuildKit secret so the token never lands in an image layer. The config
-# delete runs in the same layer, so the snapshot is clean either way.
-RUN --mount=type=secret,id=motion_token \
-    npm config set "//api.motion.dev/npm/:_authToken" "$(cat /run/secrets/motion_token)" && \
+# motion-plus resolves from Motion's private registry. Coolify supplies build
+# variables as --build-arg (not compose secrets), so auth arrives as an ARG.
+# Safe for the shipped image: this build stage is discarded and the runtime
+# stage's history never contains the token — it persists only in the build
+# host's local cache. The guard turns a missing token into a clear error
+# instead of npm's misleading "invalid token" E401.
+ARG MOTION_TOKEN
+RUN test -n "$MOTION_TOKEN" || { echo "MOTION_TOKEN build arg missing" >&2; exit 1; } && \
+    npm config set "//api.motion.dev/npm/:_authToken" "$MOTION_TOKEN" && \
     npm ci && \
     npm config delete "//api.motion.dev/npm/:_authToken"
 
