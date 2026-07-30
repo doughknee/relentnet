@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
+  LayoutGroup,
   motion,
   useInView,
   useReducedMotion,
@@ -196,8 +197,14 @@ const EASE = [0.2, 0.8, 0.2, 1] as const
  * Scroll-in counter for a stat: Motion+ AnimateNumber on its defaults, with
  * no transition, trend or format tuning of our own.
  *
- * The only thing wrapped around it is the trigger. The prerendered HTML
- * carries the FINAL value, so crawlers and no-JS readers never see a 0; after
+ * Wrapped the way Motion's own Number counter example wraps it: a LayoutGroup
+ * around a `layout` container. Counting to 10,000 adds four digit columns, and
+ * without the layout animation the element's width jumps each time one lands.
+ * The wrapper animates that width instead, so the reels and the box they sit
+ * in move together.
+ *
+ * The only other thing around it is the trigger. The prerendered HTML carries
+ * the FINAL value, so crawlers and no-JS readers never see a 0; after
  * hydration a stat still below the fold drops to zero offscreen and counts up
  * on first view. Reduced motion never leaves the final value.
  */
@@ -219,12 +226,18 @@ function StatValue({
   const shown = !hydrated || reducedMotion || inView
 
   return (
-    <span ref={ref} className="whitespace-nowrap">
-      <AnimateNumber format={format} className="tabular-nums">
-        {shown ? value : 0}
-      </AnimateNumber>
-      {suffix ? <span className="text-gold-text">{suffix}</span> : null}
-    </span>
+    <LayoutGroup>
+      <motion.span
+        ref={ref}
+        layout
+        className="inline-flex items-baseline whitespace-nowrap"
+      >
+        <AnimateNumber format={format} className="tabular-nums">
+          {shown ? value : 0}
+        </AnimateNumber>
+        {suffix ? <span className="text-gold-text">{suffix}</span> : null}
+      </motion.span>
+    </LayoutGroup>
   )
 }
 
