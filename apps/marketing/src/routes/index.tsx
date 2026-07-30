@@ -149,7 +149,31 @@ export const premise = {
   ],
 } as const
 
+/** The figure the section leads on: the one that measures delivered value. */
+export const heroStat = {
+  label: 'Hours of admin automated',
+  value: 10000,
+  suffix: '+',
+  description:
+    'Invoice filing, follow-ups, and handoffs: manual work now handled by systems we run.',
+} as const
+
+/**
+ * Supporting figures, read as a spec panel rather than as rivals to the hero
+ * number. Tenure is deliberately not a numeral: "4" next to "10,000+" invites
+ * a comparison it can only lose, while the same fact stated as a date reads as
+ * provenance.
+ */
 export const stats = [
+  {
+    label: 'Uptime across hosted systems',
+    value: 99.99,
+    suffix: '%',
+    // Two digits, or 99.99 rounds to a "100.0%" that claims perfect uptime.
+    format: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+    description:
+      'We host, monitor, and answer for everything we build, around the clock.',
+  },
   {
     label: 'Clients served',
     value: 40,
@@ -158,25 +182,10 @@ export const stats = [
       'Owner-led businesses across construction, real estate, sports tech, and consumer software.',
   },
   {
-    label: 'Hours of admin automated',
-    value: 1000,
-    suffix: '+',
+    label: 'In business',
+    value: 'Since 2022',
     description:
-      'Invoice filing, follow-ups, and handoffs: manual work now handled by systems we run.',
-  },
-  {
-    label: 'Uptime across hosted systems',
-    value: 99.9,
-    suffix: '%',
-    format: { minimumFractionDigits: 1, maximumFractionDigits: 1 },
-    description:
-      'We host, monitor, and answer for everything we build, around the clock.',
-  },
-  {
-    label: 'Years in business',
-    value: 4,
-    description:
-      'Building, hosting, and stewarding for owner-led businesses since 2022.',
+      'Building, hosting, and stewarding for owner-led businesses.',
   },
 ] as const
 
@@ -851,28 +860,53 @@ function HomeComponent() {
           <Reveal>
             <Eyebrow className="mb-14">05 · The numbers</Eyebrow>
           </Reveal>
-          {/* One motion beat: the grid fades in as a single unit while the
-              numbers roll — no per-tile stagger before the count-up. */}
+          {/* A drafting title block, not a dashboard. Four equal tiles asked
+              the reader to compare quantities that measure entirely different
+              things, which is what made the smaller ones look weak; giving one
+              figure the weight lets the rest read as specification. One motion
+              beat for the whole plate while the numbers roll. */}
           <Reveal delay={100}>
-            <dl className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-px p-0.5 bg-line">
-              {stats.map((stat) => (
-                <div key={stat.label} className="bg-page p-8 min-[768px]:p-10">
-                  <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-gold-text font-medium">
-                    {stat.label}
-                  </p>
-                  <dd className="mt-4 font-serif text-[clamp(44px,4.5vw,64px)] text-ink-em leading-none whitespace-nowrap">
-                    <StatValue
-                      value={stat.value}
-                      suffix={'suffix' in stat ? stat.suffix : undefined}
-                      format={'format' in stat ? stat.format : undefined}
-                    />
-                  </dd>
-                  <dt className="mt-2 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
-                    {stat.description}
-                  </dt>
-                </div>
-              ))}
-            </dl>
+            <div className="border border-line bg-page grid grid-cols-1 min-[900px]:grid-cols-[7fr_5fr]">
+              <div className="p-8 min-[768px]:p-12 border-b min-[900px]:border-b-0 min-[900px]:border-r border-line">
+                <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-gold-text font-medium">
+                  {heroStat.label}
+                </p>
+                <p className="mt-6 font-serif text-[clamp(58px,8vw,116px)] leading-[0.85] text-ink-em whitespace-nowrap">
+                  <StatValue value={heroStat.value} suffix={heroStat.suffix} />
+                </p>
+                <p className="mt-6 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[420px]">
+                  {heroStat.description}
+                </p>
+              </div>
+              <dl className="flex flex-col justify-center">
+                {stats.map((stat, i) => (
+                  <div
+                    key={stat.label}
+                    className={`grid grid-cols-[1fr_auto] items-baseline gap-x-5 px-8 min-[768px]:px-10 py-6 ${
+                      i > 0 ? 'border-t border-line' : ''
+                    }`}
+                  >
+                    <dt className="font-mono text-[11px] tracking-[0.2em] uppercase text-ink-muted">
+                      {stat.label}
+                    </dt>
+                    <dd className="font-serif text-[clamp(26px,2.6vw,36px)] leading-none text-gold-text whitespace-nowrap text-right">
+                      {typeof stat.value === 'number' ? (
+                        <StatValue
+                          value={stat.value}
+                          suffix={'suffix' in stat ? stat.suffix : undefined}
+                          format={'format' in stat ? stat.format : undefined}
+                        />
+                      ) : (
+                        stat.value
+                      )}
+                    </dd>
+                    <dd className="col-span-2 mt-2 text-[13px] font-light text-ink-sub leading-[1.55]">
+                      {stat.description}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </Reveal>
         </div>
       </section>

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   cases,
+  heroStat,
   marqueeItems,
   nextTabIndex,
   premise,
@@ -57,9 +58,19 @@ describe('homepage content (v4)', () => {
     expect(nextTabIndex('Tab', 1, n)).toBeNull()
   })
 
-  it('pins the four company-level stat claims', () => {
+  it('pins the company-level stat claims', () => {
+    expect(`${heroStat.value}${heroStat.suffix}`).toBe('10000+')
     expect(
       stats.map((s) => `${s.value}${'suffix' in s ? s.suffix : ''}`),
-    ).toEqual(['40+', '1000+', '99.9%', '4'])
+    ).toEqual(['99.99%', '40+', 'Since 2022'])
+  })
+
+  it('renders uptime to two decimals so 99.99 never rounds to 100', () => {
+    const uptime = stats.find((s) => s.label.startsWith('Uptime'))
+    if (!uptime || !('format' in uptime)) throw new Error('uptime stat missing')
+    expect(uptime.format.maximumFractionDigits).toBe(2)
+    expect(
+      new Intl.NumberFormat('en-US', uptime.format).format(uptime.value),
+    ).toBe('99.99')
   })
 })
