@@ -106,8 +106,11 @@ export function Frame({
       {caption && (
         <figcaption className="mt-2.5 font-mono text-[10px] tracking-[0.22em] uppercase text-ink-faint">
           {scrambleCaption ? (
-            // Keyed on the caption so a swap remounts and re-runs the decode.
-            <Scramble key={caption} text={caption} active={inView} />
+            // Deliberately NOT keyed on the caption: ScrambleText transitions
+            // between words on its own when children change. Remounting it
+            // instead paints the settled new caption for a frame before the
+            // decode starts, so the swap read as new text, churn, same text.
+            <Scramble text={caption} active={inView} />
           ) : (
             caption
           )}
