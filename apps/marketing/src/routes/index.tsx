@@ -128,12 +128,12 @@ export const marqueeItems = [
 
 export const premise = {
   intro:
-    'The diagnostic is free. It’s how we show you the way we think — and if software isn’t the answer, we’ll say so and you keep the map.',
+    'The diagnostic is free. It’s how we show you the way we think. If software isn’t the answer, we’ll say so, and you keep the map.',
   answers: [
     {
       num: 'Answer 01',
       title: 'Build',
-      body: 'The workflow justifies custom software. We design it, build it, host it — and prove it earns its place.',
+      body: 'The workflow justifies custom software. We design it, build it, host it, and prove it earns its place.',
     },
     {
       num: 'Answer 02',
@@ -143,7 +143,7 @@ export const premise = {
     {
       num: 'Answer 03 · No invoice',
       title: 'Don’t build yet',
-      body: 'The honest answer, more often than you’d think. You keep the workflow map. You skip the invoice for a build.',
+      body: 'The honest answer, more often than you’d think. You keep the workflow map, and you skip the invoice.',
       emphasized: true,
     },
   ],
@@ -291,7 +291,7 @@ function HomeComponent() {
             >
               <p className="max-w-[460px] text-ink-sub text-lg font-light leading-[1.6]">
                 One free diagnostic maps where your operation loses time. Then
-                we build only what earns its place — and run it for you.
+                we build only what earns its place, and we run it for you.
               </p>
               <div className="flex flex-wrap gap-3.5 shrink-0">
                 <CtaLink to="/inquire" arrow>
