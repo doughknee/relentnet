@@ -1,8 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
-  animate,
   motion,
   useInView,
   useReducedMotion,
@@ -194,124 +193,35 @@ export const stats = [
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
 /**
- * Counter roll: a critically damped spring, not an eased tween.
+ * Scroll-in counter for a stat: Motion+ AnimateNumber on its defaults, with
+ * no transition, trend or format tuning of our own.
  *
- * A tween decelerates on paper but lands badly here. Counting up to a round
- * figure means the last state before the target is 9,999, so every digit
- * changes at once on the final step and the arrival reads as a snap however
- * gentle the curve. A spring's velocity decays smoothly to zero, so the last
- * counts arrive one at a time and the figure settles instead of landing.
- *
- * bounce: 0 keeps it critically damped, so it approaches the value without
- * ever overshooting it.
- */
-const COUNT_SPRING = { type: 'spring', bounce: 0 } as const
-
-/**
- * How often the interpolated value is handed to AnimateNumber, in ms. The
- * spring updates every frame, but pushing 60 changes a second would restart
- * the reels' layout animation before any of them could travel. Feeding ~18 a
- * second, each with a longer spin than the gap between them, keeps every reel
- * permanently mid-rotation instead.
- */
-const REEL_STEP_MS = 90
-
-/** One reel rotation. Longer than REEL_STEP_MS so spins overlap into a
- *  continuous churn rather than landing between updates. */
-const REEL_SPIN = { duration: 0.3, ease: 'linear' } as const
-
-/**
- * Scroll-in counter for a stat: AnimateNumber's digit reels, driven by an
- * interpolated value.
- *
- * Both halves are load-bearing. AnimateNumber alone cannot count to a round
- * figure, because it transitions each digit COLUMN along its own shortest
- * path, so 0 to 10,000 moves the leading 1 and leaves four trailing zeros
- * still. Interpolation alone loses the reels and just swaps text. Feeding the
- * interpolated value through AnimateNumber gives both: the figure passes
- * through every value on the way up, and the reels spin the whole time.
- *
- * trend={1} forces every digit to rotate upward. Left automatic, a digit
- * takes the shortest route, so 0 to 9 wraps backwards by one step instead of
- * spinning up through the eight digits between.
- *
- * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
- * never see a 0. After hydration a stat still below the fold drops to zero
- * offscreen and counts up on first view. Reduced motion never leaves the
- * final value.
+ * The only thing wrapped around it is the trigger. The prerendered HTML
+ * carries the FINAL value, so crawlers and no-JS readers never see a 0; after
+ * hydration a stat still below the fold drops to zero offscreen and counts up
+ * on first view. Reduced motion never leaves the final value.
  */
 function StatValue({
   value,
   suffix,
   format,
-  duration = 2.2,
 }: {
   value: number
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
-  /** Roll time in seconds. The hero figure runs longer than the spec rows. */
-  duration?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
   const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
-  const [display, setDisplay] = useState(value)
   useEffect(() => setHydrated(true), [])
 
-  /**
-   * Whole numbers by default (interpolating produces floats, so a count to
-   * 10,000 would otherwise render "1,263.973" on the way up), and the integer
-   * column count pinned to the final figure's.
-   *
-   * The pin is what keeps the reels stable. A number climbing from 0 to 10,000
-   * gains a digit column four times over, and each insertion is a LAYOUT
-   * animation rather than a rotation, so the reels spend the count being
-   * structurally rebuilt while mid-spin. Padding to the final width means no
-   * column is ever added and the digits only ever rotate. The padding is
-   * invisible at rest, since the settled figure already fills its own width;
-   * it shows only while counting, which is what an odometer does anyway.
-   */
-  const numberFormat = useMemo(() => {
-    const integerDigits = Math.floor(Math.abs(value)).toString().length
-    return {
-      maximumFractionDigits: 0,
-      ...format,
-      minimumIntegerDigits: integerDigits,
-    }
-  }, [format, value])
-
-  useEffect(() => {
-    if (!hydrated || reducedMotion) return
-    if (!inView) {
-      setDisplay(0)
-      return
-    }
-    let lastPush = 0
-    const controls = animate(0, value, {
-      ...COUNT_SPRING,
-      visualDuration: duration,
-      onUpdate: (v) => {
-        const now = performance.now()
-        if (now - lastPush < REEL_STEP_MS) return
-        lastPush = now
-        setDisplay(v)
-      },
-      // The throttle can swallow the final frame, so land the exact value.
-      onComplete: () => setDisplay(value),
-    })
-    return () => controls.stop()
-  }, [hydrated, inView, reducedMotion, value, duration])
+  const shown = !hydrated || reducedMotion || inView
 
   return (
     <span ref={ref} className="whitespace-nowrap">
-      <AnimateNumber
-        format={numberFormat}
-        trend={1}
-        transition={REEL_SPIN}
-        className="tabular-nums"
-      >
-        {display}
+      <AnimateNumber format={format} className="tabular-nums">
+        {shown ? value : 0}
       </AnimateNumber>
       {suffix ? <span className="text-gold-text">{suffix}</span> : null}
     </span>
@@ -967,7 +877,6 @@ function HomeComponent() {
                   <StatValue
                     value={heroStat.value}
                     suffix={heroStat.suffix}
-                    duration={3}
                   />
                 </p>
                 <p className="mt-7 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
