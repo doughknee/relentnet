@@ -214,11 +214,11 @@ const COUNT_SPRING = { type: 'spring', bounce: 0 } as const
  * second, each with a longer spin than the gap between them, keeps every reel
  * permanently mid-rotation instead.
  */
-const REEL_STEP_MS = 55
+const REEL_STEP_MS = 90
 
 /** One reel rotation. Longer than REEL_STEP_MS so spins overlap into a
  *  continuous churn rather than landing between updates. */
-const REEL_SPIN = { duration: 0.25, ease: 'linear' } as const
+const REEL_SPIN = { duration: 0.3, ease: 'linear' } as const
 
 /**
  * Scroll-in counter for a stat: AnimateNumber's digit reels, driven by an
@@ -259,13 +259,27 @@ function StatValue({
   const [display, setDisplay] = useState(value)
   useEffect(() => setHydrated(true), [])
 
-  // Whole numbers by default. Interpolating produces floats, so without this
-  // a count to 10,000 renders "1,263.973" on the way up; stats that want
-  // decimals (uptime) pass their own format.
-  const numberFormat = useMemo(
-    () => format ?? { maximumFractionDigits: 0 },
-    [format],
-  )
+  /**
+   * Whole numbers by default (interpolating produces floats, so a count to
+   * 10,000 would otherwise render "1,263.973" on the way up), and the integer
+   * column count pinned to the final figure's.
+   *
+   * The pin is what keeps the reels stable. A number climbing from 0 to 10,000
+   * gains a digit column four times over, and each insertion is a LAYOUT
+   * animation rather than a rotation, so the reels spend the count being
+   * structurally rebuilt while mid-spin. Padding to the final width means no
+   * column is ever added and the digits only ever rotate. The padding is
+   * invisible at rest, since the settled figure already fills its own width;
+   * it shows only while counting, which is what an odometer does anyway.
+   */
+  const numberFormat = useMemo(() => {
+    const integerDigits = Math.floor(Math.abs(value)).toString().length
+    return {
+      maximumFractionDigits: 0,
+      ...format,
+      minimumIntegerDigits: integerDigits,
+    }
+  }, [format, value])
 
   useEffect(() => {
     if (!hydrated || reducedMotion) return
