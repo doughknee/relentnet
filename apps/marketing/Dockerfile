@@ -19,7 +19,15 @@ RUN test -n "$MOTION_TOKEN" || { echo "MOTION_TOKEN build arg missing" >&2; exit
     npm config delete "//api.motion.dev/npm/:_authToken"
 
 COPY . .
-RUN npm run build -w @relentnet/marketing
+# vite-node (sitemap step) starts a Vite server that registers file watchers.
+# On a shared-kernel VPS the host's fs.inotify.max_user_instances pool (128,
+# counted per-uid across every container on the box) can be exhausted by
+# other services, and inotify_init then fails with EMFILE — reproducible on
+# the Coolify host, not on an isolated Docker Desktop VM even at soft-1024.
+# CHOKIDAR_USEPOLLING makes the watcher stat-poll instead: zero inotify use,
+# host-state-independent. The fail-soft ulimit raise covers the plain
+# fd-exhaustion variant of the same error.
+RUN ulimit -n 65535 2>/dev/null; CHOKIDAR_USEPOLLING=1 npm run build -w @relentnet/marketing
 
 FROM nginx:1.27-alpine AS runtime
 COPY apps/marketing/nginx.conf /etc/nginx/conf.d/default.conf
