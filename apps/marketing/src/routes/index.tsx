@@ -1,14 +1,14 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AnimatePresence,
+  animate,
   motion,
   useInView,
   useReducedMotion,
   useScroll,
   useTransform,
 } from 'motion/react'
-import { AnimateNumber } from 'motion-plus/react'
 
 import { BrandMark, BrandMarkChromatic } from '@/components/BrandMark'
 import { CtaLink } from '@/components/CtaLink'
@@ -193,37 +193,69 @@ export const stats = [
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
 /**
- * Scroll-in odometer for a stat (Motion+ AnimateNumber). The prerendered
- * HTML carries the FINAL value — crawlers and no-JS readers never see a 0 —
- * then after hydration, tiles still below the fold snap to 0 offscreen and
- * roll up on first view. Reduced motion never leaves the final value.
+ * Counter roll. Deliberately NOT the brand ease: [0.2,0.8,0.2,1] lands ~85%
+ * of the count inside the first half, which reads as a snap rather than a
+ * roll. easeOut spends far more of the duration in the legible middle.
+ */
+const COUNT_EASE = 'easeOut' as const
+
+/**
+ * Scroll-in counter for a stat. It interpolates the VALUE rather than
+ * animating digits, which is the whole point: AnimateNumber transitions each
+ * digit column independently along its shortest path, so counting to a round
+ * number like 10,000 only ever moved the leading 1 while four trailing zeros
+ * sat still. Interpolating means the figure passes through every value in
+ * between and every column churns.
+ *
+ * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
+ * never see a 0. After hydration a stat still below the fold drops to zero
+ * offscreen and counts up on first view. Reduced motion never leaves the
+ * final value.
  */
 function StatValue({
   value,
   suffix,
   format,
+  duration = 2.2,
 }: {
   value: number
   suffix?: string
-  format?: React.ComponentProps<typeof AnimateNumber>['format']
+  format?: Intl.NumberFormatOptions
+  /** Roll time in seconds. The hero figure runs longer than the spec rows. */
+  duration?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
   const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
+  const [display, setDisplay] = useState(value)
   useEffect(() => setHydrated(true), [])
 
-  const shown = !hydrated || reducedMotion || inView
+  // Whole numbers by default. Interpolating produces floats, so without this
+  // a count to 10,000 renders "1,263.973" on the way up; stats that want
+  // decimals (uptime) pass their own format.
+  const formatter = useMemo(
+    () => new Intl.NumberFormat('en-US', format ?? { maximumFractionDigits: 0 }),
+    [format],
+  )
+
+  useEffect(() => {
+    if (!hydrated || reducedMotion) return
+    if (!inView) {
+      setDisplay(0)
+      return
+    }
+    const controls = animate(0, value, {
+      duration,
+      ease: COUNT_EASE,
+      onUpdate: setDisplay,
+    })
+    return () => controls.stop()
+  }, [hydrated, inView, reducedMotion, value, duration])
 
   return (
     <span ref={ref} className="whitespace-nowrap">
-      <AnimateNumber
-        format={format}
-        transition={{ duration: 1.2, ease: EASE }}
-        className="tabular-nums"
-      >
-        {shown ? value : 0}
-      </AnimateNumber>
+      <span className="tabular-nums">{formatter.format(display)}</span>
       {suffix ? <span className="text-gold-text">{suffix}</span> : null}
     </span>
   )
@@ -867,22 +899,31 @@ function HomeComponent() {
               beat for the whole plate while the numbers roll. */}
           <Reveal delay={100}>
             <div className="border border-line bg-page grid grid-cols-1 min-[900px]:grid-cols-[7fr_5fr]">
-              <div className="p-8 min-[768px]:p-12 border-b min-[900px]:border-b-0 min-[900px]:border-r border-line">
+              {/* Centred rather than top-aligned: the spec column is the taller
+                  of the two, so a top-aligned hero left a slab of dead space
+                  under its description. */}
+              <div className="flex flex-col justify-center p-8 min-[768px]:p-10 border-b min-[900px]:border-b-0 min-[900px]:border-r border-line">
                 <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-gold-text font-medium">
                   {heroStat.label}
                 </p>
-                <p className="mt-6 font-serif text-[clamp(58px,8vw,116px)] leading-[0.85] text-ink-em whitespace-nowrap">
-                  <StatValue value={heroStat.value} suffix={heroStat.suffix} />
+                <p className="mt-7 font-serif text-[clamp(58px,8vw,116px)] leading-[0.85] text-ink-em whitespace-nowrap">
+                  <StatValue
+                    value={heroStat.value}
+                    suffix={heroStat.suffix}
+                    duration={3}
+                  />
                 </p>
-                <p className="mt-6 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[420px]">
+                <p className="mt-7 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
                   {heroStat.description}
                 </p>
               </div>
-              <dl className="flex flex-col justify-center">
+              {/* flex-1 per row: the descriptions run one to three lines, so
+                  natural heights spaced the rules unevenly. */}
+              <dl className="flex flex-col">
                 {stats.map((stat, i) => (
                   <div
                     key={stat.label}
-                    className={`grid grid-cols-[1fr_auto] items-baseline gap-x-5 px-8 min-[768px]:px-10 py-6 ${
+                    className={`flex-1 grid grid-cols-[1fr_auto] content-center items-baseline gap-x-5 px-8 min-[768px]:px-10 py-7 ${
                       i > 0 ? 'border-t border-line' : ''
                     }`}
                   >
