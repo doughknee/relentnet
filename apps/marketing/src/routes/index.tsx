@@ -283,10 +283,65 @@ export function nextTabIndex(
   return null
 }
 
+/**
+ * Drafting dimension rule for the portrait: the measurement line you'd find
+ * beside a figure on a technical drawing, drawn top to bottom as the section
+ * arrives. Decorative, so it carries no label — a plausible-looking
+ * measurement would be inventing data. Only shown once the two-column layout
+ * has a gutter wide enough to hold it.
+ */
+function DimensionRule() {
+  const tick = {
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, amount: 0.5 },
+    transition: { duration: 0.4, ease: EASE, delay: 0.75 },
+  } as const
+
+  return (
+    <span
+      aria-hidden="true"
+      className="hidden min-[1024px]:block absolute inset-y-0 -right-9 w-2"
+    >
+      <motion.span
+        className="absolute left-1/2 inset-y-0 w-px bg-gold-deep origin-top"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
+      />
+      <motion.span
+        className="absolute inset-x-0 top-0 h-px bg-gold-deep"
+        {...tick}
+      />
+      <motion.span
+        className="absolute inset-x-0 bottom-0 h-px bg-gold-deep"
+        {...tick}
+      />
+    </span>
+  )
+}
+
 function HomeComponent() {
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
+
+  // Portrait parallax. Scroll-linked styles bypass the root MotionConfig, so
+  // reduced motion is gated by hand; the hydration gate keeps the prerendered
+  // HTML from baking in an offset transform. Deliberately unsprung — smoothing
+  // a scroll-driven transform makes the page feel like it is catching up.
+  const buildersRef = useRef<HTMLElement>(null)
+  const reducedMotion = useReducedMotion()
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+  const { scrollYProgress: buildersProgress } = useScroll({
+    target: buildersRef,
+    offset: ['start end', 'end start'],
+  })
+  // Drifts DOWN as the page scrolls up, so it lags the text beside it.
+  const photoY = useTransform(buildersProgress, [0, 1], [-24, 24])
+  const parallax = hydrated && !reducedMotion
 
   /** Roving tabindex: selection follows focus, so moving also moves focus. */
   function onTabKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -628,19 +683,31 @@ function HomeComponent() {
       </section>
 
       {/* ── Who you'll work with ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[340px_1fr] gap-12 min-[1024px]:gap-18 items-center">
-          <Reveal>
-            <Frame reveal className="w-fit" caption="Fig. 05 · The builders">
-              <img
-                src="/founder-photo.webp"
-                alt="The RelentNet founder"
-                width={320}
-                height={380}
-                className="block w-[320px] h-[380px] max-w-full object-cover transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
-              />
-            </Frame>
-          </Reveal>
+      <section ref={buildersRef}>
+        {/* 5fr/7fr matches the client-work split, and gives the portrait real
+            presence instead of the 340px thumbnail it was. The source is
+            560×536, so a wider, less severe crop actually uses more of the
+            photograph than the old portrait box did. */}
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center">
+          {/* The cap only bites in the single-column layout, where a full-width
+              portrait would otherwise run to most of a tablet screen. */}
+          <motion.div
+            className="relative max-w-[480px]"
+            style={parallax ? { y: photoY } : undefined}
+          >
+            <Reveal>
+              <Frame reveal caption="Fig. 05 · The builders">
+                <img
+                  src="/founder-photo.webp"
+                  alt="The RelentNet builders"
+                  width={440}
+                  height={480}
+                  className="block w-full aspect-[11/12] object-cover transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+                />
+              </Frame>
+            </Reveal>
+            <DimensionRule />
+          </motion.div>
           <div>
             <Reveal delay={80}>
               <Eyebrow className="mb-5">03 · Who you'll work with</Eyebrow>
