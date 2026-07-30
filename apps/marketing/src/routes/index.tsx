@@ -595,16 +595,35 @@ function HomeComponent() {
             </Frame>
           </div>
 
-          {'quote' in activeCase && (
-            <Reveal delay={100} className="mt-12 max-w-[680px]">
-              <blockquote className="font-serif italic text-[24px] leading-[1.45] text-ink">
-                &ldquo;{activeCase.quote}&rdquo;
-              </blockquote>
-              <p className="mt-4 font-mono text-[11px] tracking-[0.25em] uppercase text-ink/65">
-                {activeCase.quoteAttribution}
-              </p>
-            </Reveal>
-          )}
+          {/* Only some cases carry a quote, so the section's height changes by
+              ~150px between tabs. Easing that change folds it into the swap
+              choreography instead of letting everything below it jump. The
+              top margin lives inside the collapsing element, or it would
+              persist as a gap once the height reaches 0. initial={false}
+              keeps the prerendered quote at full height for crawlers. */}
+          <Reveal delay={100} className="max-w-[680px]">
+            <AnimatePresence initial={false} mode="wait">
+              {'quote' in activeCase && (
+                <motion.div
+                  key={activeCase.slug}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-12">
+                    <blockquote className="font-serif italic text-[24px] leading-[1.45] text-ink">
+                      &ldquo;{activeCase.quote}&rdquo;
+                    </blockquote>
+                    <p className="mt-4 font-mono text-[11px] tracking-[0.25em] uppercase text-ink/65">
+                      {activeCase.quoteAttribution}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Reveal>
         </div>
       </section>
 
