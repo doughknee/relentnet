@@ -15,6 +15,7 @@ import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Frame } from '@/components/Frame'
 import { Reveal } from '@/components/Reveal'
+import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
 import { seo } from '@/lib/seo'
 
@@ -140,7 +141,7 @@ export const premise = {
       body: 'The tools you already pay for can cover it. They’ve just never been wired together properly. We do the wiring.',
     },
     {
-      num: 'Answer 03',
+      num: 'Answer 03 · No invoice',
       title: 'Don’t build yet',
       body: 'The honest answer, more often than you’d think. You keep the workflow map. You skip the invoice for a build.',
       emphasized: true,
@@ -364,24 +365,35 @@ function HomeComponent() {
               {premise.intro}
             </p>
           </Reveal>
-          <div className="mt-14 grid grid-cols-1 min-[768px]:grid-cols-3 gap-px p-0.5 bg-line">
+          {/* Separated cards, not the butted hairline grid used elsewhere —
+              a tilting surface needs air around it to lean into. */}
+          <div className="mt-14 grid grid-cols-1 min-[768px]:grid-cols-3 gap-5">
             {premise.answers.map((a, i) => (
-              <Reveal
-                key={a.title}
-                delay={i * 150}
-                className={`${
-                  'emphasized' in a && a.emphasized
-                    ? 'bg-inset border-t-2 border-gold'
-                    : 'bg-page border-t-2 border-transparent'
-                } pt-10 px-7 min-[768px]:px-10 pb-11`}
-              >
-                <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
-                  {a.num}
-                </p>
-                <h3 className="font-serif text-[32px] mt-4 mb-3">{a.title}</h3>
-                <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
-                  {a.body}
-                </p>
+              // The emphasized card is marked by the gold top rule alone.
+              // bg-inset recedes in dark theme (it's a deeper black), which
+              // fought the emphasis once the cards stopped being butted
+              // together — and the "No invoice" tag now says the quiet part out
+              // loud, so the surface doesn't need to shout.
+              <Reveal key={a.title} delay={i * 120} className="h-full">
+                <TiltCard
+                  // chromatic-hover is the reduced-motion/touch fallback: the
+                  // static gold offset only lands when TiltCard leaves `style`
+                  // undefined, since an inline box-shadow outranks it. No CSS
+                  // transition here — it would smear Motion's per-frame writes.
+                  className={`chromatic-hover h-full pt-10 px-7 min-[768px]:px-10 pb-11 bg-page border border-line ${
+                    'emphasized' in a && a.emphasized
+                      ? 'border-t-2 border-t-gold'
+                      : ''
+                  }`}
+                >
+                  <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
+                    {a.num}
+                  </p>
+                  <h3 className="font-serif text-[32px] mt-4 mb-3">{a.title}</h3>
+                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                    {a.body}
+                  </p>
+                </TiltCard>
               </Reveal>
             ))}
           </div>
