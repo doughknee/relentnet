@@ -10,7 +10,7 @@ import {
   stats,
   steps,
 } from './index'
-import { countEase } from '@/lib/countEase'
+import { makeCountEase } from '@/lib/countEase'
 import { caseStudies } from '@/data/caseStudies'
 
 describe('homepage content (v4)', () => {
@@ -67,19 +67,20 @@ describe('homepage content (v4)', () => {
     ).toEqual(['99.99%', '40+', 'Since 2022'])
   })
 
-  it('gives the last ten hours of the headline count about a second', () => {
-    // Curve and duration are tuned together, so neither is safe to change
-    // alone: this is the beat Brandon asked the counter to end on.
+  it('spends over two seconds on the last eight hours of the headline count', () => {
+    // Curve and duration are tuned against each other, so neither is safe to
+    // move alone: this is the beat Brandon asked the counter to end on.
+    const ease = makeCountEase(heroStat.value)
     let lo = 0
     let hi = 1
     for (let i = 0; i < 200; i++) {
       const mid = (lo + hi) / 2
-      if (countEase(mid) < 9990 / heroStat.value) lo = mid
+      if (ease(mid) < (heroStat.value - 8) / heroStat.value) lo = mid
       else hi = mid
     }
     const closingSeconds = (1 - (lo + hi) / 2) * COUNT_DURATION
-    expect(closingSeconds).toBeGreaterThan(0.9)
-    expect(closingSeconds).toBeLessThan(1.15)
+    expect(closingSeconds).toBeGreaterThan(2.2)
+    expect(closingSeconds).toBeLessThan(2.6)
   })
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {

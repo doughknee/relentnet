@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AnimatePresence,
   animate,
@@ -20,7 +20,7 @@ import { Frame } from '@/components/Frame'
 import { Reveal } from '@/components/Reveal'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
-import { countEase } from '@/lib/countEase'
+import { makeCountEase } from '@/lib/countEase'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/')({
@@ -237,9 +237,9 @@ const FINAL_REEL_TRANSITION = {
 /** How often the climbing value is handed to the reels, in ms. */
 const DIGIT_UPDATE_MS = 90
 
-/** Total count time in seconds. Most of the extra over the original four buys
- *  the closing second countEase spends on the last ten units. */
-export const COUNT_DURATION = 5
+/** Total count time in seconds. Two fifths of it belong to the last eight
+ *  increments, so the climb needs the extra room to not feel rushed. */
+export const COUNT_DURATION = 6
 
 /**
  * Scroll-in counter for a stat.
@@ -286,6 +286,15 @@ function StatValue({
   const step = 10 ** -(numberFormat.maximumFractionDigits ?? 0)
   const closing = display >= value - step
 
+  /* The curve is built per figure, because how long the closing increments
+     take is a fact about how many of them there are: 10,000 hours, 9,999
+     hundredths of a percent, 40 clients. Memoised so the identity is stable,
+     since it is a dependency of the effect that starts the climb. */
+  const ease = useMemo(
+    () => makeCountEase(Math.round(value / step)),
+    [value, step],
+  )
+
   useMotionValueEvent(count, 'change', (latest) => {
     const now = performance.now()
     if (now - lastDigitUpdate.current < DIGIT_UPDATE_MS) return
@@ -307,10 +316,10 @@ function StatValue({
     setDisplay(0)
     const controls = animate(count, value, {
       duration: reducedMotion ? 0.01 : COUNT_DURATION,
-      ease: countEase,
+      ease,
     })
     return () => controls.stop()
-  }, [hydrated, inView, reducedMotion, value, count])
+  }, [hydrated, inView, reducedMotion, value, count, ease])
 
   return (
     <span

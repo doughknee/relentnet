@@ -1,59 +1,54 @@
 /**
  * Easing for a counter that has to read as an odometer rather than a tween.
  *
- * Defined by its VELOCITY, not by a bezier, in two phases that meet at
- * `PEAK_TIME` with matching speed:
+ * This is a FACTORY rather than a curve, because the thing being asked for
+ * cannot be expressed as one. "Slow down a lot over the last few numbers" is a
+ * statement about UNITS, and an easing function only sees fractions of
+ * distance. For 10,000 the last eight units are 0.08% of the journey; for 40
+ * they are 20% of it. Any single curve applied to both either crawls through
+ * one or skips the other.
  *
- *   0 to PEAK_TIME   a raised-cosine ramp from a standstill up to PEAK_SPEED
- *   PEAK_TIME to 1   that speed decaying as (1 - s)^DECAY, reaching exactly
- *                    zero at the end
+ * Earlier attempts here all failed on that. A power-law tail steep enough to
+ * spend a second near the target dumps nearly all of it into the final step:
+ * at decay 6 the closing units ran 14, 16, 18, 20, 23, 28, 34, 46, 73 and then
+ * 688ms, and pushing the decay to 10 made that last figure 1,483ms against
+ * 97ms for the one before it. Flattening the curve to spread those steps
+ * shrinks the whole closing window to a rounding error: an even ramp needs
+ * speed decaying as the square root of the distance left, which puts the last
+ * ten units at 2% of the run.
  *
- * Leaving the line at zero velocity is what stops it looking like a tween;
- * arriving at zero velocity is what makes it look like it is coming to rest.
+ * So the tail is allocated in units and in time directly, and the rest of the
+ * curve is fitted around it. Given N rendered increments, in three phases:
  *
- * The tail is the whole point. Because speed decays as a sixth power, each
- * step toward the target takes longer than the one before it, and the last is
- * the slowest of all. Counting to 10,000 over five seconds reaches 9,900 at
- * 3.65s and 9,990 at 4.03s, then spends the closing second on ten units:
+ *   0 to 0.45          raised-cosine ramp from a standstill up to peak
+ *   0.45 to 0.60       braking onto the tail's entry speed, not onto zero
+ *   0.60 to 1          the last 8 increments, over 40% of the runtime, timed
+ *                      so k units remaining sits at (k / 8) ^ 0.55 of it
  *
- *   9,990 to 9,999   14, 16, 18, 20, 23, 28, 34, 46, 73 ms
- *   9,999 to 10,000  688 ms
+ * Counting to 10,000 over six seconds, the closing increments run 165, 181,
+ * 195, 214, 240, 280, 355 and 765ms: nearly two seconds on the last five. 40
+ * gets the same eight figures, so a small stat no longer arrives early and
+ * waits.
  *
- * That last figure is deliberate but it is not free. The reel spring is 70ms,
- * so a 688ms hold does not render as a slow roll: the digits settle and then
- * the row waits before the final carry. Lowering DECAY spreads the closing
- * second more evenly at the cost of shortening it, and the two cannot both be
- * had: ten units is 0.1% of the distance to 10,000, so buying that slice a
- * fifth of the runtime requires a tail steep enough to pool in the last step.
- *
- * Brandon's original tuning (ported from ../motion-testing) braked hard at 0.6
- * and then crawled the last 0.1% of the distance at a near-constant speed. For
- * 10,000 that flat crawl only covered the last ten units, so the approach read
- * as a slow constant rate rather than as a deceleration. Same launch, same
- * peak time, near-identical peak speed; only the braking changed.
- *
- * Caveat: the tail is a fraction of the DISTANCE, so its duration in whole
- * units scales with the size of the figure. 10,000 and 99.99 both close their
- * last rendered step in ~688ms; 40 has only forty values to cross, so its last
- * step is a quarter of the whole distance and it sits on 39 for ~1.5s.
+ * The braking phase decays onto the tail's entry speed rather than onto zero
+ * on purpose. Decaying to a standstill would make the increments just BEFORE
+ * the tail slower than the ones inside it, and a counter that slows, speeds up
+ * and slows again reads as broken.
  */
 
-/** When the climb stops accelerating and starts braking. */
-const PEAK_TIME = 0.6
-/** How sharply speed decays over the tail. Higher means a longer, more
- *  back-loaded settle; see the note above on what that trades away. */
-const DECAY = 6
+/** When the climb stops accelerating. */
+const PEAK_TIME = 0.45
+/** Share of the runtime reserved for the closing increments. */
+const TAIL_TIME = 0.4
+/** How many increments that closing stretch covers. */
+const TAIL_UNITS = 8
+/** Tail timing: k units remaining sits at (k / TAIL_UNITS) ^ this of the tail.
+ *  Lower crowds more of the time into the final increment. */
+const TAIL_SHAPE = 0.55
+/** How sharply the brake sheds speed on its way into the tail. */
+const BRAKE_DECAY = 3
 
-/* Solved rather than chosen, so the curve lands on exactly 1 without a fudge
-   factor: the two phases cover PEAK_SPEED * PEAK_TIME / 2 and
-   PEAK_SPEED * (1 - PEAK_TIME) / (DECAY + 1), and those must sum to 1. */
-const PEAK_SPEED =
-  1 / (PEAK_TIME / 2 + (1 - PEAK_TIME) / (DECAY + 1))
-
-/** Distance already covered when the brake comes on. */
-const PEAK_DISTANCE = (PEAK_SPEED * PEAK_TIME) / 2
-/** Distance the decaying tail has left to cover. */
-const TAIL_DISTANCE = (PEAK_SPEED * (1 - PEAK_TIME)) / (DECAY + 1)
+const BRAKE_SPAN = 1 - TAIL_TIME - PEAK_TIME
 
 /** Distance covered by a raised-cosine ramp from `fromSpeed` to `toSpeed`. */
 const raisedCosineArea = (
@@ -66,11 +61,42 @@ const raisedCosineArea = (
   ((fromSpeed - toSpeed) * duration * Math.sin((Math.PI * elapsed) / duration)) /
     (2 * Math.PI)
 
-export function countEase(t: number): number {
-  if (t <= PEAK_TIME) {
-    return raisedCosineArea(t, PEAK_TIME, 0, PEAK_SPEED)
-  }
+/**
+ * Builds the easing for a figure with `increments` rendered steps: 10,000 for
+ * the hours count, 9,999 for uptime at two decimals, 40 for clients served.
+ */
+export function makeCountEase(increments: number): (t: number) => number {
+  const units = Math.min(TAIL_UNITS, Math.max(1, increments))
+  const tailDistance = units / Math.max(1, increments)
+  /* Speed the tail opens at, which is what the brake has to hand over. */
+  const joinSpeed = tailDistance / (TAIL_SHAPE * TAIL_TIME)
 
-  const s = (t - PEAK_TIME) / (1 - PEAK_TIME)
-  return PEAK_DISTANCE + TAIL_DISTANCE * (1 - (1 - s) ** (DECAY + 1))
+  /* Peak speed is solved, not chosen, so the phases sum to exactly 1. */
+  const peakSpeed =
+    (1 -
+      tailDistance -
+      joinSpeed * BRAKE_SPAN * (1 - 1 / (BRAKE_DECAY + 1))) /
+    (PEAK_TIME / 2 + BRAKE_SPAN / (BRAKE_DECAY + 1))
+
+  const peakDistance = (peakSpeed * PEAK_TIME) / 2
+
+  return (t) => {
+    if (t <= PEAK_TIME) {
+      return raisedCosineArea(t, PEAK_TIME, 0, peakSpeed)
+    }
+
+    if (t <= 1 - TAIL_TIME) {
+      const s = (t - PEAK_TIME) / BRAKE_SPAN
+      return (
+        peakDistance +
+        ((peakSpeed - joinSpeed) *
+          BRAKE_SPAN *
+          (1 - (1 - s) ** (BRAKE_DECAY + 1))) /
+          (BRAKE_DECAY + 1) +
+        joinSpeed * BRAKE_SPAN * s
+      )
+    }
+
+    return 1 - tailDistance * ((1 - t) / TAIL_TIME) ** (1 / TAIL_SHAPE)
+  }
 }
