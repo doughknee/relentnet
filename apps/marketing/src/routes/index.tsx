@@ -193,6 +193,9 @@ export const stats = [
   },
 ] as const
 
+/** The section reads as one ledger, with the hero simply the first row. */
+export const ledger = [heroStat, ...stats] as const
+
 /** The brand ease, matching every other entrance on the site. */
 const EASE = [0.2, 0.8, 0.2, 1] as const
 
@@ -926,62 +929,83 @@ function HomeComponent() {
           <Reveal>
             <Eyebrow className="mb-14">05 · The numbers</Eyebrow>
           </Reveal>
-          {/* A drafting title block, not a dashboard. Four equal tiles asked
+          {/* A ledger, not a dashboard. Tiling four figures side by side asked
               the reader to compare quantities that measure entirely different
-              things, which is what made the smaller ones look weak; giving one
-              figure the weight lets the rest read as specification. One motion
-              beat for the whole plate while the numbers roll. */}
-          <Reveal delay={100}>
-            <div className="border border-line bg-page grid grid-cols-1 min-[900px]:grid-cols-[7fr_5fr]">
-              {/* Centred rather than top-aligned: the spec column is the taller
-                  of the two, so a top-aligned hero left a slab of dead space
-                  under its description. */}
-              <div className="flex flex-col justify-center p-8 min-[768px]:p-10 border-b min-[900px]:border-b-0 min-[900px]:border-r border-line">
-                <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-gold-text font-medium">
-                  {heroStat.label}
-                </p>
-                <p className="mt-7 font-serif text-[clamp(58px,8vw,116px)] leading-[0.85] text-ink-em whitespace-nowrap">
-                  <StatValue
-                    value={heroStat.value}
-                    suffix={heroStat.suffix}
+              things, and it cost three of them their scale. Given a row each,
+              every figure gets to run large and the eye reads down a spec
+              sheet instead of across a grid. Rules do the work of boxes. */}
+          <dl className="border-b border-line">
+            {ledger.map((stat, i) => (
+              <Reveal key={stat.label} delay={i * 90}>
+                {/* Hovering runs the leader: a gold line draws from the label
+                    out to the figure, a wash comes up under it, and the row
+                    leans into the gesture. Bleeding the padding past the text
+                    lets the wash wrap the row rather than stop at the glyphs. */}
+                <div className="group relative -mx-4 min-[768px]:-mx-7 px-4 min-[768px]:px-7 border-t border-line grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] gap-x-6 min-[768px]:gap-x-12 py-8 min-[768px]:py-10">
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(90deg,rgba(203,171,69,0.09),rgba(203,171,69,0.02)_45%,transparent_75%)]"
                   />
-                </p>
-                <p className="mt-7 text-[15px] font-light text-ink-sub leading-[1.6] max-w-[400px]">
-                  {heroStat.description}
-                </p>
-              </div>
-              {/* flex-1 per row: the descriptions run one to three lines, so
-                  natural heights spaced the rules unevenly. */}
-              <dl className="flex flex-col">
-                {stats.map((stat, i) => (
-                  <div
-                    key={stat.label}
-                    className={`flex-1 grid grid-cols-[1fr_auto] content-center items-baseline gap-x-5 px-8 min-[768px]:px-10 py-7 ${
-                      i > 0 ? 'border-t border-line' : ''
+
+                  {/* Label and description stack into one left-hand block with
+                      the figure centred against it. Baseline-aligning the two
+                      columns instead hung the tiny label off the figure's
+                      baseline and left the top of every row empty. */}
+                  <dt className="col-start-1 row-start-1 flex items-baseline gap-4 min-[768px]:gap-6 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                    <span className="font-mono text-[11px] text-gold-deep tabular-nums group-hover:text-gold-text transition-colors duration-500">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className={`font-mono tracking-[0.2em] uppercase transition-colors duration-500 group-hover:text-gold-text ${
+                        i === 0
+                          ? 'text-[12px] text-gold-text font-medium'
+                          : 'text-[11px] text-ink-muted'
+                      }`}
+                    >
+                      {stat.label}
+                    </span>
+                    {/* The leader: a drafting sheet runs one from the label out
+                        to its value, which is exactly the gutter this layout
+                        would otherwise leave empty. Faint at rest, gold on
+                        hover, drawn from the label toward the figure. */}
+                    <span
+                      aria-hidden="true"
+                      className="relative hidden min-[560px]:block flex-1 self-center h-px bg-line-faint"
+                    >
+                      <span className="absolute inset-0 bg-gold origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none" />
+                    </span>
+                  </dt>
+
+                  {/* The hero keeps its extra weight, since one figure carrying
+                      the section is what stopped the others reading as weak. */}
+                  <dd
+                    className={`col-start-2 row-start-1 row-span-2 self-center font-serif leading-[0.85] whitespace-nowrap text-right ${
+                      i === 0
+                        ? 'text-[clamp(46px,7vw,96px)] text-ink-em'
+                        : 'text-[clamp(34px,4.6vw,62px)] text-gold-text'
                     }`}
                   >
-                    <dt className="font-mono text-[11px] tracking-[0.2em] uppercase text-ink-muted">
-                      {stat.label}
-                    </dt>
-                    <dd className="font-serif text-[clamp(26px,2.6vw,36px)] leading-none text-gold-text whitespace-nowrap text-right">
-                      {typeof stat.value === 'number' ? (
-                        <StatValue
-                          value={stat.value}
-                          suffix={'suffix' in stat ? stat.suffix : undefined}
-                          format={'format' in stat ? stat.format : undefined}
-                        />
-                      ) : (
-                        stat.value
-                      )}
-                    </dd>
-                    <dd className="col-span-2 mt-2 text-[13px] font-light text-ink-sub leading-[1.55]">
-                      {stat.description}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </Reveal>
+                    {typeof stat.value === 'number' ? (
+                      <StatValue
+                        value={stat.value}
+                        suffix={'suffix' in stat ? stat.suffix : undefined}
+                        format={'format' in stat ? stat.format : undefined}
+                      />
+                    ) : (
+                      stat.value
+                    )}
+                  </dd>
+
+                  {/* self-start against a 1fr track: the figure spans both rows,
+                      so letting the track stretch pushed the description a
+                      different distance from its label in every row. */}
+                  <dd className="col-start-1 row-start-2 self-start mt-3 max-w-[560px] text-[14px] font-light text-ink-sub leading-[1.6] transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                    {stat.description}
+                  </dd>
+                </div>
+              </Reveal>
+            ))}
+          </dl>
         </div>
       </section>
 
