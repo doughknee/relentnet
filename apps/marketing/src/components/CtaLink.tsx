@@ -11,22 +11,45 @@ const variants = {
   outline: `${base} border border-line text-ink hover:border-gold hover:text-gold-text`,
 } as const
 
-/** The v4 pill-less CTA pair: solid gold (optionally with arrow) or outline. */
-export function CtaLink({
-  to,
-  variant = 'gold',
-  arrow = false,
-  children,
-}: {
-  to: string
+type CtaLinkProps = {
   variant?: keyof typeof variants
   arrow?: boolean
   children: ReactNode
-}) {
-  return (
-    <Link to={to} className={variants[variant]}>
+} & (
+  /** An in-app route, through the router. */
+  | { to: string; href?: never }
+  /** Anything the router cannot own: tel:, mailto:, another origin. */
+  | { href: string; to?: never }
+)
+
+/**
+ * The v4 pill-less CTA pair: solid gold (optionally with arrow) or outline.
+ *
+ * `uppercase` is a CSS transform, so the DOM text is untouched and an address
+ * passed as the label still reaches the clipboard and the accessible name in
+ * the case it was written.
+ */
+export function CtaLink({
+  to,
+  href,
+  variant = 'gold',
+  arrow = false,
+  children,
+}: CtaLinkProps) {
+  const content = (
+    <>
       {children}
       {arrow && <ArrowRight size={15} strokeWidth={2} aria-hidden="true" />}
+    </>
+  )
+
+  return href ? (
+    <a href={href} className={variants[variant]}>
+      {content}
+    </a>
+  ) : (
+    <Link to={to as string} className={variants[variant]}>
+      {content}
     </Link>
   )
 }

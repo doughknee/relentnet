@@ -1,6 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight } from 'lucide-react'
 import {
   AnimatePresence,
   animate,
@@ -1254,20 +1253,26 @@ function HomeComponent() {
                   </p>
                   {/* mt-auto pins the actions to a common baseline: the bodies
                       run one to three lines and the row stretches to the
-                      tallest, which otherwise left them at three heights. */}
+                      tallest, which otherwise left them at three heights.
+
+                      All three are buttons, in the pair CtaLink was built for.
+                      A gold button beside two text links made the outer cards
+                      read as half-finished; matching the mass and keeping the
+                      fill for one card puts the emphasis in the variant rather
+                      than in how much of the card is used. */}
                   <div className="mt-auto pt-7">
                     {door.action.to ? (
                       <CtaLink to={door.action.to} arrow>
                         {door.action.label}
                       </CtaLink>
                     ) : (
-                      <a
-                        href={door.action.href}
-                        className="inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.06em] text-gold-text transition-all duration-300 hover:gap-3.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                      <CtaLink
+                        href={door.action.href as string}
+                        variant="outline"
+                        arrow
                       >
                         {door.action.label}
-                        <ArrowRight size={14} strokeWidth={2} aria-hidden />
-                      </a>
+                      </CtaLink>
                     )}
                   </div>
                 </TiltCard>
