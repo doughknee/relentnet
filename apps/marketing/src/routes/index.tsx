@@ -581,19 +581,22 @@ function DimensionRule() {
       aria-hidden="true"
       className="hidden min-[1024px]:block absolute inset-y-0 -right-9 w-2"
     >
+      {/* Brightens with the portrait it measures. A drawing's dimension rule
+          belongs to its figure, so tying the two makes the hover read as one
+          object responding rather than two. */}
       <motion.span
-        className="absolute left-1/2 inset-y-0 w-px bg-gold-deep origin-top"
+        className="absolute left-1/2 inset-y-0 w-px bg-gold-deep origin-top transition-colors duration-500 group-hover/fig:bg-gold"
         initial={{ scaleY: 0 }}
         whileInView={{ scaleY: 1 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
       />
       <motion.span
-        className="absolute inset-x-0 top-0 h-px bg-gold-deep"
+        className="absolute inset-x-0 top-0 h-px bg-gold-deep transition-colors duration-500 group-hover/fig:bg-gold"
         {...tick}
       />
       <motion.span
-        className="absolute inset-x-0 bottom-0 h-px bg-gold-deep"
+        className="absolute inset-x-0 bottom-0 h-px bg-gold-deep transition-colors duration-500 group-hover/fig:bg-gold"
         {...tick}
       />
     </span>
@@ -613,7 +616,16 @@ function DimensionRule() {
  *
  * Decorative. The numerals and headings carry the order for assistive tech.
  */
-function ProcessAxis({ count }: { count: number }) {
+function ProcessAxis({
+  count,
+  active,
+}: {
+  count: number
+  /** Index of the step the pointer is over, or null. The axis is the only
+   *  place the reader can see WHICH station they are reading about, so it
+   *  answers the hover rather than the step answering it alone. */
+  active: number | null
+}) {
   return (
     <div
       aria-hidden="true"
@@ -630,12 +642,22 @@ function ProcessAxis({ count }: { count: number }) {
         {Array.from({ length: count }, (_, i) => (
           <div key={i} className="flex-1 relative">
             <motion.span
-              className="absolute left-0 top-0 w-px h-2 bg-gold-deep origin-top"
+              className={`absolute left-0 top-0 w-px h-2 origin-top transition-colors duration-300 ${
+                active === i ? 'bg-gold' : 'bg-gold-deep'
+              }`}
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true, amount: 0.6 }}
               // Each tick lands as the drawing line reaches its station.
               transition={{ duration: 0.3, ease: EASE, delay: i * 0.33 }}
+            />
+            {/* The station's own rule, drawn only while its step is read. Sits
+                under the tick and extends it, so the axis gains depth at one
+                point instead of the tick merely changing colour. */}
+            <span
+              className={`absolute left-0 top-0 w-px bg-gold origin-top transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none ${
+                active === i ? 'h-7 scale-y-100' : 'h-7 scale-y-0'
+              }`}
             />
           </div>
         ))}
@@ -647,6 +669,8 @@ function ProcessAxis({ count }: { count: number }) {
 function HomeComponent() {
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
+  /** Which process step the pointer is over, so section 04's axis can answer. */
+  const [activeStep, setActiveStep] = useState<number | null>(null)
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
 
   // Portrait parallax. Scroll-linked styles bypass the root MotionConfig, so
@@ -860,7 +884,11 @@ function HomeComponent() {
                       className={`relative font-mono text-[11px] tracking-[0.14em] uppercase px-[18px] py-[11px] cursor-pointer border whitespace-nowrap transition-colors duration-200 ${
                         selected
                           ? 'border-transparent text-gold-text'
-                          : 'border-line text-ink-muted hover:text-ink-sub'
+                          : // Was ink-muted to ink-sub and nothing else, which
+                            // on the section's primary control is close to no
+                            // feedback at all. The border now moves too, so the
+                            // tab reads as reachable before it is the gold one.
+                            'border-line text-ink-muted hover:border-gold/45 hover:text-ink hover:bg-gold-tint'
                       }`}
                     >
                       {/* Shared-layout indicator: the gold state physically
@@ -917,14 +945,22 @@ function HomeComponent() {
                 >
                   {activeCase.outcome}
                 </motion.p>
+                {/* The rule beside the figure fills in from the top as you
+                    read it, the same gesture the stats ledger uses on its
+                    leaders. Decorative overlay rather than animating the
+                    border, which cannot be given an origin. */}
                 <motion.div
                   variants={panelLine}
-                  className="border-l border-line pl-6 mb-8"
+                  className="group relative border-l border-line pl-6 mb-8"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-[-1px] inset-y-0 w-px bg-gold origin-top scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-y-100 motion-reduce:transition-none"
+                  />
                   <p className="font-serif text-[40px] leading-none text-gold-text">
                     {activeCase.statValue}
                   </p>
-                  <p className="mt-2.5 text-[13px] text-ink-sub max-w-[340px]">
+                  <p className="mt-2.5 text-[13px] text-ink-sub max-w-[340px] transition-colors duration-500 group-hover:text-ink">
                     {activeCase.statDesc}
                   </p>
                 </motion.div>
@@ -1013,8 +1049,11 @@ function HomeComponent() {
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center">
           {/* The cap only bites in the single-column layout, where a full-width
               portrait would otherwise run to most of a tablet screen. */}
+          {/* Named group so the dimension rule can answer the portrait: Frame
+              owns the bare `group` for its own zoom, and an unnamed second one
+              here would be ambiguous. */}
           <motion.div
-            className="relative max-w-[480px]"
+            className="group/fig relative max-w-[480px]"
             style={parallax ? { y: photoY } : undefined}
           >
             <Reveal>
@@ -1050,16 +1089,23 @@ function HomeComponent() {
               </p>
             </Reveal>
             <Reveal delay={320}>
+              {/* These had no hover state at all, not even a transition: two
+                  live links that looked exactly the same whether you were on
+                  them or not. Underline offset rather than a colour change
+                  alone, so the affordance does not depend on seeing gold. */}
               <p className="font-mono text-xs tracking-[0.1em] text-ink-muted">
-                <a href="tel:+17276161060" className="text-gold-text">
-                  727-616-1060
+                <a
+                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
+                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
+                >
+                  {siteConfig.contact.phone}
                 </a>{' '}
                 ·{' '}
                 <a
-                  href="mailto:inquires@relentnet.com"
-                  className="text-gold-text"
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
                 >
-                  inquires@relentnet.com
+                  {siteConfig.contact.email}
                 </a>{' '}
                 · Nashville, TN
               </p>
@@ -1075,8 +1121,11 @@ function HomeComponent() {
           <Reveal>
             <Eyebrow className="mb-10">04 · How it works</Eyebrow>
           </Reveal>
-          <ProcessAxis count={steps.length} />
-          <div className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-6 min-[768px]:gap-10">
+          <ProcessAxis count={steps.length} active={activeStep} />
+          <div
+            className="flex flex-col min-[768px]:flex-row min-[768px]:items-start gap-6 min-[768px]:gap-10"
+            onPointerLeave={() => setActiveStep(null)}
+          >
             {steps.map((step, i) => (
               <Fragment key={step.title}>
                 {/* The stacked layout has no axis above it, so a vertical rule
@@ -1094,29 +1143,48 @@ function HomeComponent() {
                 )}
                 {/* Timed so each step lands just after the axis tick above it. */}
                 <Reveal delay={80 + i * 330} className="flex-1">
-                  <span className="font-serif italic text-xl text-gold-text">
-                    {step.num}
-                  </span>
-                  <h3 className="font-serif text-[38px] mt-3 mb-3.5">
-                    {step.title}
-                  </h3>
-                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
-                    {step.description}
-                  </p>
-                  <p className="mt-5 text-xs tracking-[0.08em] uppercase text-ink-sub">
-                    {step.note}
-                  </p>
+                  {/* Pointer, not mouse: this has to answer a pen as well.
+                      Leaving is handled once on the row, so travelling between
+                      two steps never blanks the axis in between. */}
+                  <div
+                    className="group"
+                    onPointerEnter={() => setActiveStep(i)}
+                  >
+                    <span className="inline-block font-serif italic text-xl text-gold-text transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:text-gold-bright group-hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+                      {step.num}
+                    </span>
+                    <h3 className="font-serif text-[38px] mt-3 mb-3.5">
+                      {step.title}
+                    </h3>
+                    {/* The rule the axis tick would draw if it reached this
+                        far: same gesture, drawn from the left as the step is
+                        read. */}
+                    <span
+                      aria-hidden="true"
+                      className="block h-px w-full max-w-[120px] bg-gold origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-x-100 motion-reduce:transition-none mb-3.5 -mt-1"
+                    />
+                    <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                      {step.description}
+                    </p>
+                    <p className="mt-5 text-xs tracking-[0.08em] uppercase text-ink-sub transition-colors duration-500 group-hover:text-gold-text">
+                      {step.note}
+                    </p>
+                  </div>
                 </Reveal>
               </Fragment>
             ))}
           </div>
           <Reveal delay={450}>
             <p className="mt-7 text-right">
+              {/* Was colour-only, while every other arrow link on the page
+                  also opens its gap. Matching them costs nothing and stops
+                  this one reading as a different kind of link. */}
               <Link
                 to="/process"
-                className="text-xs uppercase tracking-[0.15em] text-ink-muted transition-colors duration-300 hover:text-gold-text"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-ink-muted transition-all duration-300 hover:gap-3.5 hover:text-gold-text"
               >
-                The full five-phase process →
+                The full five-phase process
+                <span aria-hidden="true">→</span>
               </Link>
             </p>
           </Reveal>
