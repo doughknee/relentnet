@@ -23,7 +23,7 @@ export const phases = [
     title: 'Diagnose the workflow',
     quote: 'We begin with how the business actually moves.',
     description:
-      'We map intake, sales, fulfillment, communication, reporting, and the tools your team already relies on — before recommending anything.',
+      'We map intake, sales, fulfillment, communication, reporting, and the tools your team already relies on, all before recommending anything.',
     deliverables: [
       'Workflow interviews',
       'Current-tool inventory',
@@ -37,7 +37,7 @@ export const phases = [
     title: 'Prioritize the friction',
     quote: 'The right system starts with the right problem.',
     description:
-      'Duplicated effort, missed follow-ups, fragile handoffs, unclear reporting — we separate symptoms from root causes and rank what’s worth fixing.',
+      'Duplicated effort, missed follow-ups, fragile handoffs, unclear reporting. We separate symptoms from root causes and rank what’s worth fixing.',
     deliverables: [
       'Bottleneck analysis',
       'Data and handoff review',
@@ -51,7 +51,7 @@ export const phases = [
     title: 'Design the system',
     quote: 'A clear workflow becomes a clear interface.',
     description:
-      'Screens, data model, permissions, automations, and sequence — defined before production development begins.',
+      'Screens, data model, permissions, automations, and sequence, all defined before production development begins.',
     deliverables: [
       'Workflow blueprint',
       'Interface direction',
@@ -65,7 +65,7 @@ export const phases = [
     title: 'Build the operating layer',
     quote: 'The software should fit the business, not the other way around.',
     description:
-      'Portals, dashboards, internal tools, automations, and reporting — clean engineering, focused user experience.',
+      'Portals, dashboards, internal tools, automations, and reporting, built with clean engineering and a focused user experience.',
     deliverables: [
       'Production implementation',
       'Responsive interface build',
@@ -79,7 +79,7 @@ export const phases = [
     title: 'Steward the technology',
     quote: 'The launch is the start of the operating relationship.',
     description:
-      'Hosting, monitoring, maintenance, security, and ongoing improvement as the business changes — with direct access to the people who built it.',
+      'Hosting, monitoring, maintenance, security, and ongoing improvement as the business changes, with direct access to the people who built it.',
     deliverables: [
       'Hosting and monitoring',
       'Security and dependency care',
@@ -113,8 +113,8 @@ function Process() {
             className="animate-fade-in-up mt-9 mx-auto max-w-[540px] text-ink-sub text-[17px] font-light leading-[1.6]"
             style={{ animationDelay: '180ms' }}
           >
-            Five phases. Every engagement follows the shape of the business —
-            and nothing gets built until the friction is understood.
+            Five phases. Every engagement follows the shape of the business, and
+            nothing gets built until the friction is understood.
           </p>
         </div>
       </section>

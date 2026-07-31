@@ -39,7 +39,7 @@ const reviewCards = [
   {
     title: 'Operational risk',
     description:
-      'Fragile processes, access concerns, and reporting gaps — before they become requirements.',
+      'Fragile processes, access concerns, and reporting gaps, caught before they become requirements.',
   },
 ] as const
 
@@ -150,7 +150,7 @@ function Diagnostic() {
               ))}
             </div>
             <p className="mt-6 text-xs text-ink-muted leading-[1.6]">
-              Free, fixed scope — and you keep everything we map.
+              Free, fixed scope, and you keep everything we map.
             </p>
           </aside>
         </div>

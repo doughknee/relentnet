@@ -41,7 +41,7 @@ async function fetchWithTimeout(
 
 export const inquiryContent = {
   headline: 'Tell us where it feels slow.',
-  body: "Manual, disconnected, hard to see — a few sentences is enough. We'll read it before we reply.",
+  body: "Manual, disconnected, hard to see. Even a few sentences is enough, and we'll read it before we reply.",
   successTitle: 'Request received.',
   successBody:
     "We'll review the workflow context and follow up with the best next step.",

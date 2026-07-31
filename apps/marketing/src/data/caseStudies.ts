@@ -211,11 +211,11 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       build:
         'A complete redesign and rebuild: native desktop app, decoupled channel architecture, multi-source real-time pipeline, and a community-extensible plugin model that lets new data sources ship without disturbing the rest of the product.',
       outcome:
-        'Scrollr has reached beta with the original founders. The product now reads as a coherent platform rather than a fragile sports extension — installable on macOS, Windows, and Linux, open-source, and architected to keep growing.',
+        'Scrollr has reached beta with the original founders. The product now reads as a coherent platform rather than a fragile sports extension: installable on macOS, Windows, and Linux, open-source, and architected to keep growing.',
     },
     hero: {
       tagline:
-        'A quiet, always-visible desktop ticker for live scores, prices, headlines, and fantasy — rebuilt from a brittle Chrome extension into a cross-platform native product.',
+        'A quiet, always-visible desktop ticker for live scores, prices, headlines, and fantasy, rebuilt from a brittle Chrome extension into a cross-platform native product.',
       image: {
         src: '/case-studies/scrollr/hero-sports-dark.webp',
         alt: 'Scrollr desktop app showing live MLB scores with team logos, status pills, and tabs for Schedule and Standings',
@@ -226,7 +226,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         {
           sectionRef: 'challenge',
           blurb:
-            'A founder-funded fantasy ticker locked inside a fragile Chrome extension — multiple developers, no source control, no foundation to build on.',
+            'A founder-funded fantasy ticker locked inside a fragile Chrome extension: multiple developers, no source control, no foundation to build on.',
           image: {
             src: '/case-studies/scrollr/legacy-ticker-bar.webp',
             alt: 'Original Scrollr Chrome-extension ticker bar showing live sports scores in a long horizontal strip',
@@ -259,7 +259,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         {
           sectionRef: 'results',
           blurb:
-            'Now in beta on macOS, Windows, and Linux. Open-source, multi-channel, configurable — the version of Scrollr the founders had been trying to ship all along.',
+            'Now in beta on macOS, Windows, and Linux: open-source, multi-channel, and configurable at last.',
           image: {
             src: '/case-studies/scrollr/settings-ticker-dark.webp',
             alt: 'Scrollr ticker settings panel with controls for edge position, scroll speed, row count, and per-row channel assignment',
@@ -270,7 +270,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
     },
     elevatorPitch:
-      'Scrollr arrived as a fragile, fantasy-football Chrome extension built by a rotating cast of contractors. Two years later it ships as an open-source, cross-platform desktop product with a multi-channel real-time pipeline — the version of the product the founders had been trying to build all along.',
+      'Scrollr arrived as a fragile, fantasy-football Chrome extension built by a rotating cast of contractors. Two years later it ships as an open-source, cross-platform desktop product with a multi-channel real-time pipeline: the version of the product the founders had been trying to build all along.',
     atAGlance: {
       engagementYear: '2024–present',
       role: 'Product strategy, design, full-stack engineering, devops, hosting, ongoing stewardship',
@@ -336,7 +336,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     story: {
       problem: [
         p(
-          'Daniel, a RelentNet co-founder, first met the Scrollr team at an incubator pop-up where they were openly looking for a developer partner. Phil and three partners had raised funding around a clear vision — a fantasy sports ticker bar that sat at the edge of the screen while you watched a game in a browser — and had paid several developers across two earlier builds to get there.',
+          'Daniel, a RelentNet co-founder, first met the Scrollr team at an incubator pop-up where they were openly looking for a developer partner. Phil and three partners had raised funding around a clear vision (a fantasy sports ticker bar that sat at the edge of the screen while you watched a game in a browser) and had paid several developers across two earlier builds to get there.',
         ),
         {
           type: 'image',
@@ -344,7 +344,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/legacy-homepage.png',
             alt: 'The pre-rebuild myscrollr.com marketing page, built on Wix, framed entirely around fantasy football',
             caption:
-              'The pre-rebuild marketing site \u2014 a Wix page positioned entirely around fantasy football, matching the narrow scope of the product underneath.',
+              'The pre-rebuild marketing site: a Wix page positioned entirely around fantasy football, matching the narrow scope of the product underneath.',
             width: 1362,
             height: 959,
           },
@@ -358,7 +358,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/legacy-ticker-bar.webp',
             alt: 'Screenshot of the original Scrollr ticker bar from the Chrome-extension era, showing live sports scores in a long horizontal strip',
             caption:
-              'The original Scrollr ticker, captured from the pre-rebuild site. The right shape \u2014 a thin live-data strip at the edge of the screen \u2014 trapped inside a brittle browser-only extension.',
+              'The original Scrollr ticker, captured from the pre-rebuild site. The right shape, a thin live-data strip at the edge of the screen, trapped inside a brittle browser-only extension.',
             width: 1920,
             height: 112,
           },
@@ -369,7 +369,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       diagnosis: [
         p(
-          'Daniel was the first one to look at the codebase and call the shot: this would have to be a full rebuild. Brandon, the other RelentNet co-founder, came in for a second look specifically to see what could be salvaged — and arrived at the same conclusion. The Firebase-bound architecture was too rigid and too tangled to extend; every additional fix would be paying interest on the wrong foundation.',
+          'Daniel was the first one to look at the codebase and call the shot: this would have to be a full rebuild. Brandon, the other RelentNet co-founder, came in for a second look specifically to see what could be salvaged, and arrived at the same conclusion. The Firebase-bound architecture was too rigid and too tangled to extend; every additional fix would be paying interest on the wrong foundation.',
         ),
         {
           type: 'image',
@@ -388,10 +388,10 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       build: [
         p(
-          'Over the months that followed, we sat down with the original idea and reshaped it. RSS feeds for live headlines, market data for finance, fantasy league integration, and a desktop-native shell that could run alongside any application — not just a browser tab. The product\u2019s identity moved from "Chrome extension for sports" to "always-visible desktop ticker for whatever data matters to you."',
+          'Over the months that followed, we sat down with the original idea and reshaped it. RSS feeds for live headlines, market data for finance, fantasy league integration, and a desktop-native shell that could run alongside any application, not just a browser tab. The product\u2019s identity moved from "Chrome extension for sports" to "always-visible desktop ticker for whatever data matters to you."',
         ),
         p(
-          'The architecture we landed on is intentionally decoupled. A Go core API handles routing, authentication via self-hosted Logto, and real-time delivery over per-user Redis pub/sub channels streamed to clients via Server-Sent Events. Rust services ingest from each source on their own schedules — TwelveData WebSockets for market data, ESPN for sports, RSS feeds for news, Yahoo for fantasy — normalize the data, and write to PostgreSQL. Sequin watches the database for changes and fires CDC webhooks back into the core, which fans them out to the right users.',
+          'The architecture we landed on is intentionally decoupled. A Go core API handles routing, authentication via self-hosted Logto, and real-time delivery over per-user Redis pub/sub channels streamed to clients via Server-Sent Events. Rust services ingest from each source on their own schedules (TwelveData WebSockets for market data, ESPN for sports, RSS feeds for news, Yahoo for fantasy), normalize the data, and write to PostgreSQL. Sequin watches the database for changes and fires CDC webhooks back into the core, which fans them out to the right users.',
         ),
         {
           type: 'image',
@@ -399,7 +399,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/catalog-dark.webp',
             alt: 'Scrollr source catalog showing Finance, Sports, Fantasy, News, Clock, and Weather as added channels alongside available widgets for System Monitor, Uptime, and GitHub',
             caption:
-              'Each channel is a self-contained unit. Adding a new one — community-built or otherwise — does not touch the existing product.',
+              'Each channel is a self-contained unit. Adding a new one, community-built or otherwise, does not touch the existing product.',
             width: 1600,
             height: 954,
           },
@@ -408,12 +408,12 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'The client is a Tauri v2 native app wrapping a React 19 + Vite 7 + TanStack Router frontend, with a daisyUI-based theme system and Motion-driven animations. It installs on macOS, Windows, and Linux. The ticker can be docked to any edge of the screen, with adjustable density, scroll speed, row count, and nine theme palettes.',
         ),
         p(
-          'The hardest decision was committing to a channel architecture where each data source — sports, finance, news, fantasy — is a fully self-contained unit with its own Go API, Rust service, dashboard tab, and feed component. No shared code between channels. That decision cost more upfront, but it is the reason new channels can ship today without touching the rest of the product, and the reason community contributors can add their own.',
+          'The hardest decision was committing to a channel architecture where each data source (sports, finance, news, fantasy) is a fully self-contained unit with its own Go API, Rust service, dashboard tab, and feed component. No shared code between channels. That decision cost more upfront, but it is the reason new channels can ship today without touching the rest of the product, and the reason community contributors can add their own.',
         ),
       ],
       outcome: [
         p(
-          'Scrollr is in beta and preparing for launch. The original founders, Phil included, have stayed close throughout and have been openly happy with both the product and the partnership. The version of Scrollr that exists today is the version they were trying to fund into existence on the first two attempts — a real product, not a brittle extension.',
+          'Scrollr is in beta and preparing for launch. The original founders, Phil included, have stayed close throughout and have been openly happy with both the product and the partnership. The version of Scrollr that exists today is the version they were trying to fund into existence on the first two attempts: a real product, not a brittle extension.',
         ),
         {
           type: 'image',
@@ -421,7 +421,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/settings-ticker-dark.webp',
             alt: 'Scrollr ticker settings panel with controls for edge position, scroll speed, row count, and per-row channel assignment',
             caption:
-              'Configuration is opinionated where it matters and quiet everywhere else — edge, speed, row count, per-row channel assignment.',
+              'Configuration is opinionated where it matters and quiet everywhere else: edge, speed, row count, per-row channel assignment.',
             width: 1600,
             height: 954,
           },
@@ -503,7 +503,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     featuredStat: {
       value: 'Email → QBO',
       description:
-        'Vendor invoices route from inbox to QuickBooks Bills automatically — Claude-vision extraction, PM approval, PDF and project attached.',
+        'Vendor invoices route from inbox to QuickBooks Bills automatically: Claude-vision extraction, PM approval, PDF and project attached.',
     },
     detailHeadline:
       'A credibility-first front door, and an AP pipeline that runs itself.',
@@ -513,16 +513,16 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       diagnosis:
         'Two jobs, not one: the site had to make credibility legible in seconds for serious prospects, and the back office needed vendor invoices to stop being keyed in by hand.',
       build:
-        'A credibility-first marketing site plus an internal software hub — including an AP portal that reads vendor invoices with Claude vision, routes them through PM review, and posts them to QuickBooks Online as Bills.',
+        'A credibility-first marketing site plus an internal software hub, including an AP portal that reads vendor invoices with Claude vision, routes them through PM review, and posts them to QuickBooks Online as Bills.',
       outcome:
         'Cambridge now opens with its real track record and runs an invoice pipeline that moves from inbox to QuickBooks with the PDF attached and the project tagged.',
     },
     hero: {
       tagline:
-        'A commanding front door for high-value commercial construction opportunities — backed by a back office that no longer keys in invoices by hand.',
+        'A commanding front door for high-value commercial construction opportunities, backed by a back office that no longer keys in invoices by hand.',
       image: {
         src: '/case-studies/cambridge-building-group/hero.webp',
-        alt: 'Cambridge Building Group homepage — "Building Nashville’s Future" over a navy-and-gold hero noting Est. 2015, 120+ years combined experience, and 350+ projects completed',
+        alt: 'Cambridge Building Group homepage: "Building Nashville’s Future" over a navy-and-gold hero noting Est. 2015, 120+ years combined experience, and 350+ projects completed',
         width: 1600,
         height: 1000,
       },
@@ -586,7 +586,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           from: 'Underbuilt web presence',
           to: 'Credibility-first site',
           context:
-            'The site opens on the firm’s real record — established 2015, 350+ projects completed, and an unlimited Tennessee contractor license.',
+            'The site opens on the firm’s real record: established 2015, 350+ projects completed, and an unlimited Tennessee contractor license.',
         },
         {
           label: 'Build stack',
@@ -602,7 +602,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'Cambridge Building Group does high-trust commercial work, but the previous web presence did not communicate that. Prospects landed on a site that under-represented the company and gave sales conversations nothing to lean on.',
         ),
         p(
-          'In commercial construction, the website is not a brochure — it is a stage in the buying process. A weak stage costs the firm conversations it should be having.',
+          'In commercial construction, the website is not a brochure. It is a stage in the buying process. A weak stage costs the firm conversations it should be having.',
         ),
       ],
       diagnosis: [
@@ -610,15 +610,15 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'The diagnostic showed the real problem was sales friction, not visual design. Serious prospects needed to understand capability, credibility, and positioning within a few seconds of arriving on the site.',
         ),
         p(
-          'Everything else — typography, project imagery, contact paths — needed to serve that one job.',
+          'Typography, project imagery, and contact paths all needed to serve that one job.',
         ),
         {
           type: 'image',
           image: {
             src: '/case-studies/cambridge-building-group/track-record.webp',
-            alt: 'Cambridge Building Group track-record timeline — founded 2015, the Nashville Shores project, tornado-recovery rebuilds, and an unlimited Tennessee license',
+            alt: 'Cambridge Building Group track-record timeline: founded 2015, the Nashville Shores project, tornado-recovery rebuilds, and an unlimited Tennessee license',
             caption:
-              'The credibility was always there — founded 2015, an unlimited Tennessee license, 350+ projects. The work was surfacing it.',
+              'The credibility was always there: founded 2015, an unlimited Tennessee license, 350+ projects. The work was surfacing it.',
             width: 1600,
             height: 956,
           },
@@ -626,15 +626,15 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       build: [
         p(
-          'The engagement grew into two pieces of software. The first is the public marketing site — built on React 19, TanStack Router, Tailwind 4, and Motion — with deliberate visual hierarchy and conversion-focused inquiry paths, so a prospect at the top of the funnel and one ready to talk both find the right next step.',
+          'The engagement grew into two pieces of software. The first is the public marketing site, built on React 19, TanStack Router, Tailwind 4, and Motion, with deliberate visual hierarchy and conversion-focused inquiry paths, so a prospect at the top of the funnel and one ready to talk both find the right next step.',
         ),
         {
           type: 'image',
           image: {
             src: '/case-studies/cambridge-building-group/values.webp',
-            alt: 'The Cambridge Building Group core-values section — Communication, Urgency, Integrity, Technology, Innovation, and Safety in a tabbed navy-and-gold layout',
+            alt: 'The Cambridge Building Group core-values section: Communication, Urgency, Integrity, Technology, Innovation, and Safety in a tabbed navy-and-gold layout',
             caption:
-              'The rebuilt site leads with how the firm works — its core values laid out plainly, in the firm’s own navy-and-gold identity.',
+              'The rebuilt site leads with how the firm works, its core values laid out plainly in the firm’s own navy-and-gold identity.',
             width: 1600,
             height: 956,
           },
@@ -643,7 +643,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           type: 'image',
           image: {
             src: '/case-studies/cambridge-building-group/services.webp',
-            alt: 'Cambridge Building Group services section — commercial, hospitality, industrial, multifamily, select residential, and pre-engineered metal buildings',
+            alt: 'Cambridge Building Group services section: commercial, hospitality, industrial, multifamily, select residential, and pre-engineered metal buildings',
             caption:
               'Six service areas laid out so a prospect can self-qualify before they ever pick up the phone.',
             width: 1600,
@@ -651,7 +651,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           },
         },
         p(
-          'The second is an internal AP portal. Vendor invoices arrive through a Postmark inbound email address or a manual upload, and Claude vision extracts the fields. A project manager reviews each one, and approved invoices post straight to QuickBooks Online as Bills — PDF attached, project tagged. It runs on FastAPI and PostgreSQL behind self-hosted Logto auth, with Cloudflare R2 for document storage, deployed on Coolify.',
+          'The second is an internal AP portal. Vendor invoices arrive through a Postmark inbound email address or a manual upload, and Claude vision extracts the fields. A project manager reviews each one, and approved invoices post straight to QuickBooks Online as Bills, PDF attached and project tagged. It runs on FastAPI and PostgreSQL behind self-hosted Logto auth, with Cloudflare R2 for document storage, deployed on Coolify.',
         ),
       ],
       outcome: [
@@ -694,7 +694,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       },
       {
         headline: 'A front door that matches the work',
-        body: 'The marketing site leads with the firm’s record — a decade in business, 350+ projects, and an unlimited Tennessee contractor license.',
+        body: 'The marketing site leads with the firm’s record: a decade in business, 350+ projects, and an unlimited Tennessee contractor license.',
       },
     ],
     meta: {
@@ -719,20 +719,20 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     detailHeadline: 'A low-latency operating layer for live pickleball.',
     summary: {
       problem:
-        'Running a pickleball tournament or league means juggling brackets, schedules, live scores, and broadcast graphics — usually across spreadsheets and fragile, generic tools that desync under game-day pressure.',
+        'Running a pickleball tournament or league means juggling brackets, schedules, live scores, and broadcast graphics, usually across spreadsheets and fragile, generic tools that desync under game-day pressure.',
       diagnosis:
-        'This was an infrastructure problem before a UI one: the platform had to be fast, multi-tenant, and synchronized across every surface — scorer, schedule, and broadcast overlay alike.',
+        'This was an infrastructure problem before a UI one: the platform had to be fast, multi-tenant, and synchronized across every surface, scorer and schedule and broadcast overlay alike.',
       build:
-        'A pickleball tournament and league platform on a Go + Redis real-time core, paired with a standalone, themeable broadcast-overlay suite — two products sharing one backend.',
+        'A pickleball tournament and league platform on a Go + Redis real-time core, paired with a standalone, themeable broadcast-overlay suite: two products sharing one backend.',
       outcome:
         'CourtCommand reads as purpose-built operating infrastructure for live pickleball: tournaments, leagues, live scoring, and broadcast graphics, not another generic scoreboard skin.',
     },
     hero: {
       tagline:
-        'Tournaments, leagues, live scoring, and broadcast overlays for pickleball — on one low-latency platform built for the people running the room.',
+        'Tournaments, leagues, live scoring, and broadcast overlays for pickleball, on one low-latency platform built for the people running the room.',
       image: {
         src: '/case-studies/courtcommand/hero.webp',
-        alt: 'CourtCommand homepage — "Pickleball Tournament & League Management" with tournaments, leagues, and venues',
+        alt: 'CourtCommand homepage: "Pickleball Tournament & League Management" with tournaments, leagues, and venues',
         width: 1600,
         height: 1000,
       },
@@ -804,7 +804,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     story: {
       problem: [
         p(
-          'Running a pickleball tournament or league does not forgive sluggish software. Organizers juggle brackets, seeding, schedules, live scores, and broadcast graphics in real time, and the tools they reach for — usually spreadsheets and generic scoreboard apps — leave too much room for desynchronization and ambiguous state.',
+          'Running a pickleball tournament or league does not forgive sluggish software. Organizers juggle brackets, seeding, schedules, live scores, and broadcast graphics in real time, and the tools they reach for, usually spreadsheets and generic scoreboard apps, leave too much room for desynchronization and ambiguous state.',
         ),
         p(
           'A scorer, a schedule, and a broadcast overlay all reading from different sources is how game day falls apart. The job was to make one source of truth that every surface trusts.',
@@ -835,7 +835,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     meta: {
       title: 'CourtCommand Case Study | RelentNet',
       description:
-        'How RelentNet built CourtCommand — a real-time pickleball tournament, league, and broadcast-overlay platform on a Go and Redis core with 170+ API endpoints.',
+        'How RelentNet built CourtCommand, a real-time pickleball tournament, league, and broadcast-overlay platform on a Go and Redis core with 170+ API endpoints.',
     },
   },
   {
@@ -858,18 +858,18 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       problem:
         'A St. Pete Beach real-estate team needed more than a polished website; they needed a premium buyer experience with live local inventory that earned trust before a buyer ever reached out.',
       diagnosis:
-        'Buyers in this segment evaluate quietly. They want clarity, confidence, and fast access to relevant listings — and bouncing them to a generic portal to see inventory was costing the team conversations.',
+        'Buyers in this segment evaluate quietly. They want clarity, confidence, and fast access to relevant listings, and bouncing them to a generic portal to see inventory was costing the team conversations.',
       build:
         'A premium digital storefront with MLS-integrated (IDX) property search synced to the MFRMLS feed, neighborhood guides for six Tampa Bay submarkets, and client-first conversion paths.',
       outcome:
-        'The site works as both a brand asset and a practical client-acquisition tool — live listings inside the VM Homes brand, organized around the markets the team actually works.',
+        'The site works as both a brand asset and a practical client-acquisition tool: live listings inside the VM Homes brand, organized around the markets the team actually works.',
     },
     hero: {
       tagline:
-        'A premium client experience for buyers evaluating the St. Pete Beach market — with live Tampa Bay inventory built right in.',
+        'A premium client experience for buyers evaluating the St. Pete Beach market, with live Tampa Bay inventory built right in.',
       image: {
         src: '/case-studies/vm-homes/hero.webp',
-        alt: 'VM Homes homepage — "Real Estate Experts" over a Gulf-front aerial with a property search bar',
+        alt: 'VM Homes homepage: "Real Estate Experts" over a Gulf-front aerial with a property search bar',
         width: 1600,
         height: 1000,
       },
@@ -901,10 +901,10 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     story: {
       problem: [
         p(
-          'VM Homes did not need a brochure site. The team needed an experience their buyers could trust before reaching out — one that respected the price point of the homes and the trust the team had already built around St. Pete Beach.',
+          'VM Homes did not need a brochure site. The team needed an experience their buyers could trust before reaching out, one that respected the price point of the homes and the trust the team had already built around St. Pete Beach.',
         ),
         p(
-          'A polished website on its own would not have moved the needle. The buyer experience needed to do work — and that meant putting live, relevant inventory in front of people, not sending them off to a generic portal.',
+          'A polished website on its own would not have moved the needle. The buyer experience needed to do work, and that meant putting live, relevant inventory in front of people rather than sending them off to a generic portal.',
         ),
       ],
       diagnosis: [
@@ -917,15 +917,15 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       build: [
         p(
-          'We built a premium digital storefront with IDX property search synced to the MFRMLS feed, so current listings appear inside the VM Homes brand with live prices, beds, baths, and square footage. Search is organized by the six Tampa Bay submarkets the team works — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach — alongside neighborhood guidance and client-first conversion paths.',
+          'We built a premium digital storefront with IDX property search synced to the MFRMLS feed, so current listings appear inside the VM Homes brand with live prices, beds, baths, and square footage. Search is organized by the six Tampa Bay submarkets the team works (North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach) alongside neighborhood guidance and client-first conversion paths.',
         ),
         {
           type: 'image',
           image: {
             src: '/case-studies/vm-homes/listings.webp',
-            alt: 'VM Homes "VM Exclusives" listings — Tampa Bay properties with photos, prices, and bed/bath/square-footage details',
+            alt: 'VM Homes "VM Exclusives" listings: Tampa Bay properties with photos, prices, and bed/bath/square-footage details',
             caption:
-              'Live MFRMLS listings render inside the VM Homes brand — prices, beds, baths, and square footage, with no hand-off to a generic portal.',
+              'Live MFRMLS listings render inside the VM Homes brand: prices, beds, baths, and square footage, with no hand-off to a generic portal.',
             width: 1600,
             height: 956,
           },
@@ -937,9 +937,9 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           type: 'image',
           image: {
             src: '/case-studies/vm-homes/areas.webp',
-            alt: 'VM Homes "Search By Area" — North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach',
+            alt: 'VM Homes "Search By Area": North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach',
             caption:
-              'Search is organized by the six submarkets the team actually works — from downtown St. Pete to the Gulf beaches.',
+              'Search is organized by the six submarkets the team actually works, from downtown St. Pete to the Gulf beaches.',
             width: 1600,
             height: 956,
           },
@@ -955,7 +955,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/vm-homes/expertise.webp',
             alt: 'VM Homes "Expertise You Can Trust" section, with a chat-with-an-expert call to action',
             caption:
-              'The brand stays front and center — a premium experience that earns trust before a buyer ever reaches out.',
+              'The brand stays front and center, a premium experience that earns trust before a buyer ever reaches out.',
             width: 1600,
             height: 956,
           },

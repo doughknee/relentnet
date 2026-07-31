@@ -25,7 +25,7 @@ export const studies = [
     systemType: 'Marketing site + AP automation',
     headline: 'Invoices that file themselves.',
     outcome:
-      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks — PDF and project attached.',
+      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks with the PDF and project attached.',
     statValue: 'Email → QBO',
     statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
     image: '/case-studies/cambridge-building-group/hero.webp',
@@ -65,7 +65,7 @@ export const studies = [
     systemType: 'MLS-integrated search platform',
     headline: 'A storefront that earns trust quietly.',
     outcome:
-      'Premium buyer experience with live MLS inventory inside the brand — no bouncing buyers to a generic portal.',
+      'Premium buyer experience with live MLS inventory inside the brand, so buyers never get bounced to a generic portal.',
     statValue: '6 markets',
     statDesc:
       'MLS-synced search across Tampa Bay, from downtown St. Pete to the Gulf beaches.',
@@ -190,7 +190,9 @@ function ClientsIndex() {
                   params={{ slug: s.slug }}
                   aria-label={`Read the ${s.name} case study`}
                 >
-                  <Frame caption={`Fig. 0${i + 1} — ${s.name}`}>
+                  {/* Middot, matching every other Fig. caption on the site.
+                      This one was the odd caption out. */}
+                  <Frame caption={`Fig. 0${i + 1} · ${s.name}`}>
                     <div
                       role="img"
                       aria-label={s.imageAlt}
