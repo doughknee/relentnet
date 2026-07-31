@@ -225,13 +225,15 @@ const REEL_TRANSITION = {
 } as const
 
 /**
- * Reel timing for the closing carry alone.
+ * Reel timing for the closing carry alone, at the headline figure's pace.
+ * Scaled per figure by `duration` in StatValue, since a supporting stat on a
+ * shorter clock has a proportionally shorter final increment to fill.
  *
- * makeCountEase gives the final increment 765ms of the six seconds, and at the
- * fast reel above the digits just snapped into place and the row sat waiting.
- * The spring here runs slightly LONGER than that 765ms on purpose, so the four
- * nines are still rolling over as the count expires rather than landing early
- * and leaving a beat of stillness at the end.
+ * makeCountEase gives that increment 765ms of the 4.8s, and at the fast reel
+ * above the digits just snapped into place and the row sat waiting. The spring
+ * here runs slightly LONGER than the increment on purpose, so the four nines
+ * are still rolling over as the count expires rather than landing early and
+ * leaving a beat of stillness at the end.
  *
  * Only the final carry gets this. `closing` flips when the raw climb passes
  * 9,999, but Intl rounds, so the figure does not re-render as 10,000 until the
@@ -242,18 +244,25 @@ const REEL_TRANSITION = {
  * this one is four nines rolling to zero with a 1 arriving in front, and the
  * brand's no-overshoot rule is least negotiable on the figure people remember.
  */
-const FINAL_REEL_TRANSITION = {
-  layout: { duration: 0.6 },
-  opacity: { duration: 0.4, ease: 'linear' },
-  y: { type: 'spring', visualDuration: 0.85, bounce: 0 },
+const FINAL_REEL = {
+  layout: 0.6,
+  opacity: 0.4,
+  y: 0.85,
 } as const
 
 /** How often the climbing value is handed to the reels, in ms. */
 const DIGIT_UPDATE_MS = 90
 
-/** Total count time in seconds, split evenly by makeCountEase: 2.4s to climb
- *  as far as 9,992, then 2.4s on the last eight increments. */
+/** Total count time in seconds for the headline figure, split evenly by
+ *  makeCountEase: 2.4s to climb as far as 9,992, then 2.4s on the last eight
+ *  increments. */
 export const COUNT_DURATION = 4.8
+
+/** The supporting figures run the identical curve on a shorter clock. They are
+ *  read after the headline and carry less, so holding them at its pace made
+ *  the section feel slow rather than deliberate. Same shape, same eight-step
+ *  ending, five eighths of the time. */
+export const SUPPORTING_COUNT_DURATION = 3
 
 /**
  * Scroll-in counter for a stat.
@@ -264,9 +273,11 @@ export const COUNT_DURATION = 4.8
  * climb supplies distance for every column to travel, and the quick reels keep
  * the motion legible instead of smearing.
  *
- * The closing carry is the exception and swaps to FINAL_REEL_TRANSITION: by
- * then the feed has slowed to a crawl, so there is nothing left to outrun and
- * the last change gets to roll rather than snap.
+ * The closing carry is the exception and swaps to a slow reel: by then the feed
+ * has slowed to a crawl, so there is nothing left to outrun and the last change
+ * gets to roll rather than snap. That reel is scaled by `duration`, because the
+ * increment it has to fill scales with it too; a fixed 0.85s roll on a three
+ * second count would still be turning well after the figure had landed.
  *
  * Each figure owns its own trigger and starts as its row reaches the fold, so
  * the four are deliberately NOT synchronised. Sharing one trigger for the
@@ -284,11 +295,14 @@ function StatValue({
   prefix,
   suffix,
   format,
+  duration = COUNT_DURATION,
 }: {
   value: number
   prefix?: string
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
+  /** Seconds for the whole climb. Scales the closing reel with it. */
+  duration?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
@@ -318,6 +332,21 @@ function StatValue({
     [value, step],
   )
 
+  /* Sized to the closing increment, which is a fixed share of the run, so the
+     roll stays in proportion at any duration instead of outlasting the count. */
+  const finalReel = useMemo(() => {
+    const scale = duration / COUNT_DURATION
+    return {
+      layout: { duration: FINAL_REEL.layout * scale },
+      opacity: { duration: FINAL_REEL.opacity * scale, ease: 'linear' as const },
+      y: {
+        type: 'spring' as const,
+        visualDuration: FINAL_REEL.y * scale,
+        bounce: 0,
+      },
+    }
+  }, [duration])
+
   useMotionValueEvent(count, 'change', (latest) => {
     const now = performance.now()
     if (now - lastDigitUpdate.current < DIGIT_UPDATE_MS) return
@@ -338,11 +367,11 @@ function StatValue({
     lastDigitUpdate.current = 0
     setDisplay(0)
     const controls = animate(count, value, {
-      duration: reducedMotion ? 0.01 : COUNT_DURATION,
+      duration: reducedMotion ? 0.01 : duration,
       ease,
     })
     return () => controls.stop()
-  }, [hydrated, inView, reducedMotion, value, count, ease])
+  }, [hydrated, inView, reducedMotion, value, count, ease, duration])
 
   return (
     <span
@@ -356,7 +385,7 @@ function StatValue({
       <AnimateNumber
         locales="en-US"
         format={numberFormat}
-        transition={closing ? FINAL_REEL_TRANSITION : REEL_TRANSITION}
+        transition={closing ? finalReel : REEL_TRANSITION}
         className="tabular-nums"
       >
         {display}
@@ -1058,6 +1087,9 @@ function HomeComponent() {
                       prefix={'prefix' in stat ? stat.prefix : undefined}
                       suffix={'suffix' in stat ? stat.suffix : undefined}
                       format={'format' in stat ? stat.format : undefined}
+                      duration={
+                        i === 0 ? COUNT_DURATION : SUPPORTING_COUNT_DURATION
+                      }
                     />
                   </dd>
 

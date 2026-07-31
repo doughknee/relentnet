@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   COUNT_DURATION,
+  SUPPORTING_COUNT_DURATION,
   cases,
   heroStat,
   marqueeItems,
@@ -12,6 +13,20 @@ import {
 } from './index'
 import { makeCountEase } from '@/lib/countEase'
 import { caseStudies } from '@/data/caseStudies'
+
+/** Seconds a figure spends on its closing eight increments. Bisects the curve,
+ *  which is monotonic, then scales the result by the clock it runs on. */
+const closingSeconds = (value: number, duration: number) => {
+  const ease = makeCountEase(value)
+  let lo = 0
+  let hi = 1
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2
+    if (ease(mid) < (value - 8) / value) lo = mid
+    else hi = mid
+  }
+  return (1 - (lo + hi) / 2) * duration
+}
 
 describe('homepage content (v4)', () => {
   it('walks diagnose → build → steward', () => {
@@ -77,17 +92,22 @@ describe('homepage content (v4)', () => {
   it('spends over two seconds on the last eight hours of the headline count', () => {
     // Curve and duration are tuned against each other, so neither is safe to
     // move alone: this is the beat Brandon asked the counter to end on.
-    const ease = makeCountEase(heroStat.value)
-    let lo = 0
-    let hi = 1
-    for (let i = 0; i < 200; i++) {
-      const mid = (lo + hi) / 2
-      if (ease(mid) < (heroStat.value - 8) / heroStat.value) lo = mid
-      else hi = mid
+    const seconds = closingSeconds(heroStat.value, COUNT_DURATION)
+    expect(seconds).toBeGreaterThan(2.2)
+    expect(seconds).toBeLessThan(2.6)
+  })
+
+  it('runs the supporting figures quicker without flattening their ending', () => {
+    // They carry less than the headline, so they get a shorter clock. The
+    // second half guards the thing that shortening it could quietly ruin: the
+    // closing eight increments are a fixed SHARE of the run, so they shrink
+    // with it, and there is a point past which they stop reading as a settle.
+    expect(SUPPORTING_COUNT_DURATION).toBeLessThan(COUNT_DURATION)
+    for (const stat of stats) {
+      expect(
+        closingSeconds(stat.value, SUPPORTING_COUNT_DURATION),
+      ).toBeGreaterThan(1.2)
     }
-    const closingSeconds = (1 - (lo + hi) / 2) * COUNT_DURATION
-    expect(closingSeconds).toBeGreaterThan(2.2)
-    expect(closingSeconds).toBeLessThan(2.6)
   })
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {
