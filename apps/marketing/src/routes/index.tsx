@@ -215,6 +215,25 @@ const REEL_TRANSITION = {
   y: { type: 'spring', visualDuration: 0.07, bounce: 0.05 },
 } as const
 
+/**
+ * Reel timing for the closing carry alone.
+ *
+ * countEase spends its last second on the final ten units, and most of that
+ * second on the very last one. At the 70ms reel above, that did not read as a
+ * slow roll: the digits snapped onto 9,999 and the row sat there waiting. This
+ * hands the final change a spring long enough to still be turning while the
+ * count runs out, so the carry rolls through the pause instead of preceding it.
+ *
+ * No bounce at all. Every other reel change is one column moving a notch, but
+ * this one is four nines rolling to zero with a 1 arriving in front, and the
+ * brand's no-overshoot rule is least negotiable on the figure people remember.
+ */
+const FINAL_REEL_TRANSITION = {
+  layout: { duration: 0.45 },
+  opacity: { duration: 0.3, ease: 'linear' },
+  y: { type: 'spring', visualDuration: 0.6, bounce: 0 },
+} as const
+
 /** How often the climbing value is handed to the reels, in ms. */
 const DIGIT_UPDATE_MS = 90
 
@@ -230,6 +249,10 @@ export const COUNT_DURATION = 5
  * resolves before the next value lands. That pairing is the whole trick: the
  * climb supplies distance for every column to travel, and the quick reels keep
  * the motion legible instead of smearing.
+ *
+ * The closing carry is the exception and swaps to FINAL_REEL_TRANSITION: by
+ * then the feed has slowed to a crawl, so there is nothing left to outrun and
+ * the last change gets to roll rather than snap.
  *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
  * never see a 0. Reduced motion collapses the climb to a hair over zero rather
@@ -254,6 +277,14 @@ function StatValue({
   useEffect(() => setHydrated(true), [])
 
   const numberFormat = format ?? DEFAULT_NUMBER_FORMAT
+
+  /* One unit in the last place the format renders, so this reads the same for
+     10,000 as for 99.99. Intl ROUNDS rather than truncates, so the figure still
+     shows `value - step` for a while after the raw climb passes it: flipping
+     here is invisible on screen and leaves the slow spring already in place
+     when the closing carry finally lands. */
+  const step = 10 ** -(numberFormat.maximumFractionDigits ?? 0)
+  const closing = display >= value - step
 
   useMotionValueEvent(count, 'change', (latest) => {
     const now = performance.now()
@@ -289,7 +320,7 @@ function StatValue({
       <AnimateNumber
         locales="en-US"
         format={numberFormat}
-        transition={REEL_TRANSITION}
+        transition={closing ? FINAL_REEL_TRANSITION : REEL_TRANSITION}
         className="tabular-nums"
       >
         {display}
