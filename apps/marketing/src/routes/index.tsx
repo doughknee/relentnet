@@ -208,30 +208,39 @@ const DEFAULT_NUMBER_FORMAT = { maximumFractionDigits: 0 } as const
  * change has to LAND before the next value arrives. Every earlier attempt here
  * used spins of 0.25s or more against a ~90ms feed, so the reels were
  * permanently mid-flight and never resolved, which is what read as mush.
+ *
+ * Trimmed from Brandon's 0.07 once the closing increments grew long enough to
+ * hold their own. The middle of the climb is the busiest part of the feed, and
+ * the crisper each tick lands there the more the slow ending stands out.
  */
 const REEL_TRANSITION = {
-  layout: { duration: 0.07 },
-  opacity: { duration: 0.05, ease: 'linear' },
-  y: { type: 'spring', visualDuration: 0.07, bounce: 0.05 },
+  layout: { duration: 0.055 },
+  opacity: { duration: 0.04, ease: 'linear' },
+  y: { type: 'spring', visualDuration: 0.05, bounce: 0.05 },
 } as const
 
 /**
  * Reel timing for the closing carry alone.
  *
- * countEase spends its last second on the final ten units, and most of that
- * second on the very last one. At the 70ms reel above, that did not read as a
- * slow roll: the digits snapped onto 9,999 and the row sat there waiting. This
- * hands the final change a spring long enough to still be turning while the
- * count runs out, so the carry rolls through the pause instead of preceding it.
+ * makeCountEase gives the final increment 765ms of the six seconds, and at the
+ * fast reel above the digits just snapped into place and the row sat waiting.
+ * The spring here runs slightly LONGER than that 765ms on purpose, so the four
+ * nines are still rolling over as the count expires rather than landing early
+ * and leaving a beat of stillness at the end.
+ *
+ * Only the final carry gets this. `closing` flips when the raw climb passes
+ * 9,999, but Intl rounds, so the figure does not re-render as 10,000 until the
+ * climb passes 9,999.5: the 9,998 to 9,999 change ahead of it still takes the
+ * fast reel and cannot smear into this one.
  *
  * No bounce at all. Every other reel change is one column moving a notch, but
  * this one is four nines rolling to zero with a 1 arriving in front, and the
  * brand's no-overshoot rule is least negotiable on the figure people remember.
  */
 const FINAL_REEL_TRANSITION = {
-  layout: { duration: 0.45 },
-  opacity: { duration: 0.3, ease: 'linear' },
-  y: { type: 'spring', visualDuration: 0.6, bounce: 0 },
+  layout: { duration: 0.6 },
+  opacity: { duration: 0.4, ease: 'linear' },
+  y: { type: 'spring', visualDuration: 0.85, bounce: 0 },
 } as const
 
 /** How often the climbing value is handed to the reels, in ms. */
