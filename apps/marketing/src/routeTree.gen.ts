@@ -14,6 +14,7 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as InquireRouteImport } from './routes/inquire'
 import { Route as DiagnosticRouteImport } from './routes/diagnostic'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalIndexRouteImport } from './routes/legal/index'
 import { Route as ClientsIndexRouteImport } from './routes/clients/index'
@@ -45,6 +46,11 @@ const DiagnosticRoute = DiagnosticRouteImport.update({
   path: '/diagnostic',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +79,7 @@ const ClientsSlugRoute = ClientsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   DiagnosticRoute: typeof DiagnosticRoute
   InquireRoute: typeof InquireRoute
   PortalRoute: typeof PortalRoute
@@ -197,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnosticRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -237,6 +257,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   DiagnosticRoute: DiagnosticRoute,
   InquireRoute: InquireRoute,
   PortalRoute: PortalRoute,

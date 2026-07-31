@@ -24,6 +24,7 @@ const staticEntries: Array<SitemapEntry> = [
   { path: '/diagnostic', changefreq: 'monthly', priority: '0.8' },
   { path: '/process', changefreq: 'monthly', priority: '0.8' },
   { path: '/clients', changefreq: 'weekly', priority: '0.9' },
+  { path: '/about', changefreq: 'monthly', priority: '0.7' },
   { path: '/inquire', changefreq: 'monthly', priority: '0.8' },
   { path: '/legal', changefreq: 'yearly', priority: '0.3' },
 ]

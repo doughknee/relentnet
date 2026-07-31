@@ -11,6 +11,7 @@ export const primaryNavItems = [
   { label: 'Diagnostic', to: '/diagnostic' },
   { label: 'Process', to: '/process' },
   { label: 'Client Work', to: '/clients' },
+  { label: 'About', to: '/about' },
   { label: 'Portal', to: '/portal' },
 ] as const
 

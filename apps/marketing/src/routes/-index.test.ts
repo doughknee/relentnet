@@ -7,11 +7,11 @@ import {
   heroStat,
   marqueeItems,
   nextTabIndex,
-  closingDoors,
   premise,
   stats,
   steps,
 } from './index'
+import { closingDoors } from '@/components/ClosingDoors'
 import { makeCountEase } from '@/lib/countEase'
 import { siteConfig } from '@/site.config'
 import { caseStudies } from '@/data/caseStudies'

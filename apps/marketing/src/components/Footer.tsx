@@ -7,6 +7,7 @@ const exploreLinks = [
   { label: 'Workflow Diagnostic', to: '/diagnostic' },
   { label: 'Process', to: '/process' },
   { label: 'Client Work', to: '/clients' },
+  { label: 'About', to: '/about' },
   { label: 'Client Portal', to: '/portal' },
 ] as const
 
