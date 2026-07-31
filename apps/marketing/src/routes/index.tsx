@@ -235,15 +235,24 @@ export const closingDoors: ReadonlyArray<{
     num: '02',
     title: 'Call',
     body: 'You reach the people who would design and build the thing, not an account manager.',
-    action: { label: '727-616-1060', href: 'tel:+17276161060' },
+    // The number stays on the button: it is worth reading, and someone may
+    // well dial it by hand off a laptop screen.
+    action: {
+      label: siteConfig.contact.phone,
+      href: `tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`,
+    },
   },
   {
     num: '03',
     title: 'Email',
     body: 'Tell us which workflow is costing you the most time right now.',
+    // The address does NOT go on the button. It has no spaces, so it cannot
+    // wrap, and at 12px with the button's tracking it is wider than the card
+    // at every breakpoint. It is already visible twice on this page, in
+    // section 03 and in the footer, and the mail client supplies it anyway.
     action: {
-      label: 'inquires@relentnet.com',
-      href: 'mailto:inquires@relentnet.com',
+      label: 'Email us',
+      href: `mailto:${siteConfig.contact.email}`,
     },
   },
 ]
@@ -1234,7 +1243,10 @@ function HomeComponent() {
               a link. One of the three is a button and two are addresses, so a
               whole-card link would have meant one card behaving differently
               from its neighbours for no reason the reader can see. */}
-          <div className="mt-16 grid grid-cols-1 min-[768px]:grid-cols-3 gap-5 text-left">
+          {/* Three across only from 900px, not 768. These cards carry buttons
+              the premise section's do not, and at 768 a third of the column is
+              138px of content, which is narrower than any of these labels. */}
+          <div className="mt-16 grid grid-cols-1 min-[900px]:grid-cols-3 gap-5 text-left">
             {closingDoors.map((door, i) => (
               <Reveal key={door.title} delay={150 + i * 120} className="h-full">
                 <TiltCard
@@ -1262,13 +1274,14 @@ function HomeComponent() {
                       than in how much of the card is used. */}
                   <div className="mt-auto pt-7">
                     {door.action.to ? (
-                      <CtaLink to={door.action.to} arrow>
+                      <CtaLink to={door.action.to} block arrow>
                         {door.action.label}
                       </CtaLink>
                     ) : (
                       <CtaLink
                         href={door.action.href as string}
                         variant="outline"
+                        block
                         arrow
                       >
                         {door.action.label}

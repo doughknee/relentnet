@@ -13,6 +13,7 @@ import {
   steps,
 } from './index'
 import { makeCountEase } from '@/lib/countEase'
+import { siteConfig } from '@/site.config'
 import { caseStudies } from '@/data/caseStudies'
 
 /** Seconds a figure spends on its closing eight increments. Bisects the curve,
@@ -111,20 +112,20 @@ describe('homepage content (v4)', () => {
     }
   })
 
-  it('dials and mails what the closing cards display', () => {
-    // The bug worth guarding is a card whose link goes somewhere other than the
-    // number or address printed on it, which nothing on the page would reveal.
-    for (const { action } of closingDoors) {
-      if (!action.href) continue
-      if (action.href.startsWith('mailto:')) {
-        expect(action.href).toBe(`mailto:${action.label}`)
-      } else {
-        // Digits only: the href carries a country code the label omits.
-        expect(action.href.replace(/\D/g, '')).toContain(
-          action.label.replace(/\D/g, ''),
-        )
-      }
-    }
+  it('dials and mails the contact details the site config holds', () => {
+    // Two failures worth guarding, neither of which the page would reveal: a
+    // link that goes somewhere other than the label printed on it, and a
+    // homepage that drifts away from the footer because someone updated the
+    // config and not this.
+    const tel = closingDoors.find((d) => d.action.href?.startsWith('tel:'))
+    const mail = closingDoors.find((d) => d.action.href?.startsWith('mailto:'))
+
+    expect(mail?.action.href).toBe(`mailto:${siteConfig.contact.email}`)
+    expect(tel?.action.label).toBe(siteConfig.contact.phone)
+    // Digits only: the href carries a country code the label omits.
+    expect(tel?.action.href?.replace(/\D/g, '')).toContain(
+      siteConfig.contact.phone.replace(/\D/g, ''),
+    )
   })
 
   it('closes on three doors with exactly one emphasized', () => {

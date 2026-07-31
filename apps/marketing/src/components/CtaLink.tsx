@@ -4,16 +4,30 @@ import { ArrowRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 const base =
-  'chromatic-hover inline-flex items-center gap-3 px-[30px] py-[17px] whitespace-nowrap text-xs uppercase tracking-[0.15em] transition-all duration-300'
+  'chromatic-hover items-center gap-3 py-[17px] text-xs uppercase tracking-[0.15em] transition-all duration-300'
+
+/**
+ * Inline sizes to its own label and never wraps, which is right when the
+ * button sits in open space. Block fills its container and is allowed to wrap,
+ * for a button in a card or column whose width it does not control: at that
+ * point nowrap does not keep the label on one line, it just pushes it through
+ * the padding and out the side.
+ */
+const layouts = {
+  inline: 'inline-flex px-[30px] whitespace-nowrap',
+  block: 'flex w-full justify-center text-center px-5',
+} as const
 
 const variants = {
-  gold: `${base} bg-gold border border-gold text-gold-ink font-medium hover:bg-transparent hover:text-gold-text`,
-  outline: `${base} border border-line text-ink hover:border-gold hover:text-gold-text`,
+  gold: 'bg-gold border border-gold text-gold-ink font-medium hover:bg-transparent hover:text-gold-text',
+  outline: 'border border-line text-ink hover:border-gold hover:text-gold-text',
 } as const
 
 type CtaLinkProps = {
   variant?: keyof typeof variants
   arrow?: boolean
+  /** Fill the container and wrap, rather than sizing to the label. */
+  block?: boolean
   children: ReactNode
 } & (
   /** An in-app route, through the router. */
@@ -34,21 +48,32 @@ export function CtaLink({
   href,
   variant = 'gold',
   arrow = false,
+  block = false,
   children,
 }: CtaLinkProps) {
+  const className = `${base} ${layouts[block ? 'block' : 'inline']} ${
+    variants[variant]
+  }`
   const content = (
     <>
       {children}
-      {arrow && <ArrowRight size={15} strokeWidth={2} aria-hidden="true" />}
+      {arrow && (
+        <ArrowRight
+          size={15}
+          strokeWidth={2}
+          aria-hidden="true"
+          className="shrink-0"
+        />
+      )}
     </>
   )
 
   return href ? (
-    <a href={href} className={variants[variant]}>
+    <a href={href} className={className}>
       {content}
     </a>
   ) : (
-    <Link to={to as string} className={variants[variant]}>
+    <Link to={to as string} className={className}>
       {content}
     </Link>
   )
