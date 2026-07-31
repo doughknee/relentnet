@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { Eyebrow } from '@/components/Eyebrow'
+import { siteConfig } from '@/site.config'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/inquire')({
@@ -198,20 +199,23 @@ function Contact() {
               <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
                 Prefer to talk
               </p>
+              {/* From siteConfig, like the footer and the homepage. This page
+                  was the last copy still typed out by hand, which is how a
+                  number gets changed everywhere except one place. */}
               <p className="font-serif text-[26px] text-ink-em">
                 <a
-                  href="tel:+17276161060"
+                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
                   className="hover:text-gold-text transition-colors"
                 >
-                  727-616-1060
+                  {siteConfig.contact.phone}
                 </a>
               </p>
               <p className="mt-1.5 text-sm text-ink-sub">
                 <a
-                  href="mailto:inquires@relentnet.com"
+                  href={`mailto:${siteConfig.contact.email}`}
                   className="hover:text-gold-text transition-colors"
                 >
-                  inquires@relentnet.com
+                  {siteConfig.contact.email}
                 </a>{' '}
                 · 9am–5pm CST, Mon–Fri
               </p>
