@@ -13,7 +13,13 @@ import {
 } from 'motion/react'
 import { AnimateNumber } from 'motion-plus/react'
 
-import { BrandMark, BrandMarkChromatic } from '@/components/BrandMark'
+import {
+  BrandMark,
+  BrandMarkChromatic,
+  MARK_PATH,
+  PLATE_ECHO,
+  PLATE_GHOST,
+} from '@/components/BrandMark'
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Frame } from '@/components/Frame'
@@ -200,6 +206,28 @@ export const stats = [
 
 /** The section reads as one ledger, with the hero simply the first row. */
 export const ledger = [heroStat, ...stats] as const
+
+/**
+ * The title block at the foot of the sheet. Label over value, the way a
+ * drawing carries its own contact details.
+ *
+ * Fee is a cell rather than a sentence because it answers the question a
+ * reader actually has at this point, and a ruled plate is a more credible
+ * place to answer it than a line of fine print.
+ */
+export const signOff: ReadonlyArray<{
+  label: string
+  value: string
+  href?: string
+}> = [
+  { label: 'Telephone', value: '727-616-1060', href: 'tel:+17276161060' },
+  {
+    label: 'Email',
+    value: 'inquires@relentnet.com',
+    href: 'mailto:inquires@relentnet.com',
+  },
+  { label: 'Fee', value: 'None' },
+]
 
 /** The brand ease, matching every other entrance on the site. */
 const EASE = [0.2, 0.8, 0.2, 1] as const
@@ -392,6 +420,53 @@ function StatValue({
       </AnimateNumber>
       {suffix ? <span className="text-gold-text">{suffix}</span> : null}
     </span>
+  )
+}
+
+/**
+ * The mark coming into register, for the sign-off at the foot of the page.
+ *
+ * The plates start wide and pull in, which reads as the press finding its
+ * registration. They settle onto the brand kit's own offsets rather than onto
+ * zero: the lockup is misregistered BY DESIGN, and closing it flat would be a
+ * different logo. The echo lands after the ghost, so the two arrive as two
+ * events instead of one symmetrical squeeze.
+ *
+ * Answers the hero's mark bloom at the other end of the page. Decorative, so
+ * the whole thing is aria-hidden and the prerendered spread costs nothing.
+ */
+function SignOffMark({ className = '' }: { className?: string }) {
+  const plate = {
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, amount: 0.6 },
+  } as const
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-15.9 -27.9 1047.8 1070.8"
+      aria-hidden="true"
+      className={className}
+    >
+      <motion.g
+        {...plate}
+        initial={{ x: PLATE_GHOST * 2.6, y: PLATE_GHOST * 2.6, opacity: 0 }}
+        whileInView={{ x: PLATE_GHOST, y: PLATE_GHOST, opacity: 0.43 }}
+        transition={{ duration: 0.9, ease: EASE }}
+      >
+        <path d={MARK_PATH} fill="#cbab45" fillRule="evenodd" />
+      </motion.g>
+      <motion.g
+        {...plate}
+        initial={{ x: PLATE_ECHO * 2.6, y: PLATE_ECHO * 2.6, opacity: 0 }}
+        whileInView={{ x: PLATE_ECHO, y: PLATE_ECHO, opacity: 1 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.12 }}
+      >
+        <path d={MARK_PATH} fill="#cbab45" fillRule="evenodd" />
+      </motion.g>
+      <path d={MARK_PATH} fill="#e5e5e5" fillRule="evenodd" />
+    </svg>
   )
 }
 
@@ -1113,18 +1188,15 @@ function HomeComponent() {
           className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_700px_500px_at_50%_100%,rgba(203,171,69,0.08),transparent_70%)]"
         />
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-32 text-center relative">
-          <Reveal>
-            <div className="mx-auto mb-9 w-[76px]">
-              <BrandMarkChromatic
-                className="hidden dark:block w-full h-auto"
-                aria-hidden="true"
-              />
-              <BrandMark
-                className="dark:hidden w-full h-auto text-gold-text"
-                aria-hidden="true"
-              />
-            </div>
-          </Reveal>
+          <div className="mx-auto mb-9 w-[76px]">
+            {/* Not wrapped in Reveal: the plates own their own entrance, and a
+                Reveal transform on the parent would ride on top of it. */}
+            <SignOffMark className="hidden dark:block w-full h-auto" />
+            <BrandMark
+              className="dark:hidden w-full h-auto text-gold-text"
+              aria-hidden="true"
+            />
+          </div>
           <Reveal delay={60}>
             <h2 className="font-serif text-[clamp(34px,6.2vw,76px)] leading-[1.05] text-balance">
               Start with the workflow.
@@ -1142,22 +1214,47 @@ function HomeComponent() {
             </div>
           </Reveal>
           <Reveal delay={250}>
-            <p className="mt-9 text-[13px] text-ink-sub">
-              No fee. No obligation. A clear build / connect / don't-build
-              answer.
-              <br />
-              Prefer to talk?{' '}
-              <a href="tel:+17276161060" className="text-gold-text">
-                727-616-1060
-              </a>{' '}
-              ·{' '}
-              <a
-                href="mailto:inquires@relentnet.com"
-                className="text-gold-text"
-              >
-                inquires@relentnet.com
-              </a>
+            <p className="mt-9 text-[14px] font-light text-ink-sub leading-[1.6] max-w-[520px] mx-auto">
+              Booking commits you to nothing. The diagnostic ends with one of
+              three answers: build, connect, or don’t build yet.
             </p>
+          </Reveal>
+
+          {/* The title block. A drawing carries its contact details in a ruled
+              plate at the foot of the sheet, which is the one place on this page
+              where that convention is literally true. It also gets the phone
+              number and the address out of 13px fine print, where the two most
+              direct ways to reach the company were the least designed things on
+              the site. */}
+          <Reveal delay={340}>
+            <dl className="mt-14 mx-auto max-w-[720px] border border-line grid grid-cols-1 min-[560px]:grid-cols-3 text-left">
+              {signOff.map((cell, i) => (
+                <div
+                  key={cell.label}
+                  className={`chromatic-hover px-6 py-5 transition-all duration-300 ${
+                    i > 0
+                      ? 'border-t border-line min-[560px]:border-t-0 min-[560px]:border-l'
+                      : ''
+                  }`}
+                >
+                  <dt className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-muted">
+                    {cell.label}
+                  </dt>
+                  <dd className="mt-2 text-[15px] text-ink-em">
+                    {cell.href ? (
+                      <a
+                        href={cell.href}
+                        className="text-gold-text transition-colors duration-300 hover:text-gold-bright"
+                      >
+                        {cell.value}
+                      </a>
+                    ) : (
+                      cell.value
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </div>
       </section>

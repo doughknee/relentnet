@@ -8,6 +8,7 @@ import {
   marqueeItems,
   nextTabIndex,
   premise,
+  signOff,
   stats,
   steps,
 } from './index'
@@ -107,6 +108,27 @@ describe('homepage content (v4)', () => {
       expect(
         closingSeconds(stat.value, SUPPORTING_COUNT_DURATION),
       ).toBeGreaterThan(1.2)
+    }
+  })
+
+  it('dials and mails what the sign-off block displays', () => {
+    // The bug worth guarding is a cell whose link goes somewhere other than the
+    // number or address printed on it, which nothing about the page would show.
+    expect(signOff.map((cell) => cell.label)).toEqual([
+      'Telephone',
+      'Email',
+      'Fee',
+    ])
+    for (const cell of signOff) {
+      if (!cell.href) continue
+      if (cell.href.startsWith('mailto:')) {
+        expect(cell.href).toBe(`mailto:${cell.value}`)
+      } else {
+        // Digits only: the href carries a country code the label omits.
+        expect(cell.href.replace(/\D/g, '')).toContain(
+          cell.value.replace(/\D/g, ''),
+        )
+      }
     }
   })
 
