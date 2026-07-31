@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 import {
   AnimatePresence,
   animate,
@@ -208,25 +209,44 @@ export const stats = [
 export const ledger = [heroStat, ...stats] as const
 
 /**
- * The title block at the foot of the sheet. Label over value, the way a
- * drawing carries its own contact details.
+ * The three ways in, closing the page on the same card the premise section
+ * opens it with. Section 01 offers three answers, this offers three doors, and
+ * the rhyme is the point: the reader ends where they started, holding options
+ * rather than a single funnel.
  *
- * Fee is a cell rather than a sentence because it answers the question a
- * reader actually has at this point, and a ruled plate is a more credible
- * place to answer it than a line of fine print.
+ * Every claim here is already made elsewhere on the page. The fee and the
+ * three answers come from the premise; "not an account manager" is section
+ * 03's whole argument.
  */
-export const signOff: ReadonlyArray<{
-  label: string
-  value: string
-  href?: string
+export const closingDoors: ReadonlyArray<{
+  num: string
+  title: string
+  body: string
+  action: { label: string; to?: string; href?: string }
+  emphasized?: boolean
 }> = [
-  { label: 'Telephone', value: '727-616-1060', href: 'tel:+17276161060' },
   {
-    label: 'Email',
-    value: 'inquires@relentnet.com',
-    href: 'mailto:inquires@relentnet.com',
+    num: '01',
+    title: 'Book a diagnostic',
+    body: 'Free, and it commits you to nothing. It ends with one of three answers: build, connect, or don’t build yet.',
+    action: { label: 'Book a Free Diagnostic', to: '/inquire' },
+    emphasized: true,
   },
-  { label: 'Fee', value: 'None' },
+  {
+    num: '02',
+    title: 'Call',
+    body: 'You reach the people who would design and build the thing, not an account manager.',
+    action: { label: '727-616-1060', href: 'tel:+17276161060' },
+  },
+  {
+    num: '03',
+    title: 'Email',
+    body: 'Tell us which workflow is costing you the most time right now.',
+    action: {
+      label: 'inquires@relentnet.com',
+      href: 'mailto:inquires@relentnet.com',
+    },
+  },
 ]
 
 /** The brand ease, matching every other entrance on the site. */
@@ -1206,56 +1226,54 @@ function HomeComponent() {
               </span>
             </h2>
           </Reveal>
-          <Reveal delay={150}>
-            <div className="mt-12 flex flex-wrap justify-center gap-3.5">
-              <CtaLink to="/inquire" arrow>
-                Book a Free Diagnostic
-              </CtaLink>
-            </div>
-          </Reveal>
-          <Reveal delay={250}>
-            <p className="mt-9 text-[14px] font-light text-ink-sub leading-[1.6] max-w-[520px] mx-auto">
-              Booking commits you to nothing. The diagnostic ends with one of
-              three answers: build, connect, or don’t build yet.
-            </p>
-          </Reveal>
+          {/* The same card the premise section opens on, so the page closes in
+              the language it started in: three answers there, three doors here.
+              Separated rather than butted, because a tilting surface needs air
+              around it to lean into.
 
-          {/* The title block. A drawing carries its contact details in a ruled
-              plate at the foot of the sheet, which is the one place on this page
-              where that convention is literally true. It also gets the phone
-              number and the address out of 13px fine print, where the two most
-              direct ways to reach the company were the least designed things on
-              the site. */}
-          <Reveal delay={340}>
-            <dl className="mt-14 mx-auto max-w-[720px] border border-line grid grid-cols-1 min-[560px]:grid-cols-3 text-left">
-              {signOff.map((cell, i) => (
-                <div
-                  key={cell.label}
-                  className={`chromatic-hover px-6 py-5 transition-all duration-300 ${
-                    i > 0
-                      ? 'border-t border-line min-[560px]:border-t-0 min-[560px]:border-l'
-                      : ''
+              Each card carries its own action instead of the card itself being
+              a link. One of the three is a button and two are addresses, so a
+              whole-card link would have meant one card behaving differently
+              from its neighbours for no reason the reader can see. */}
+          <div className="mt-16 grid grid-cols-1 min-[768px]:grid-cols-3 gap-5 text-left">
+            {closingDoors.map((door, i) => (
+              <Reveal key={door.title} delay={150 + i * 120} className="h-full">
+                <TiltCard
+                  className={`chromatic-hover h-full flex flex-col pt-10 px-7 min-[768px]:px-9 pb-10 bg-page border border-line ${
+                    door.emphasized ? 'border-t-2 border-t-gold' : ''
                   }`}
                 >
-                  <dt className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-muted">
-                    {cell.label}
-                  </dt>
-                  <dd className="mt-2 text-[15px] text-ink-em">
-                    {cell.href ? (
-                      <a
-                        href={cell.href}
-                        className="text-gold-text transition-colors duration-300 hover:text-gold-bright"
-                      >
-                        {cell.value}
-                      </a>
+                  <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
+                    {door.num}
+                  </p>
+                  <h3 className="font-serif text-[32px] mt-4 mb-3">
+                    {door.title}
+                  </h3>
+                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                    {door.body}
+                  </p>
+                  {/* mt-auto pins the actions to a common baseline: the bodies
+                      run one to three lines and the row stretches to the
+                      tallest, which otherwise left them at three heights. */}
+                  <div className="mt-auto pt-7">
+                    {door.action.to ? (
+                      <CtaLink to={door.action.to} arrow>
+                        {door.action.label}
+                      </CtaLink>
                     ) : (
-                      cell.value
+                      <a
+                        href={door.action.href}
+                        className="inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.06em] text-gold-text transition-all duration-300 hover:gap-3.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                      >
+                        {door.action.label}
+                        <ArrowRight size={14} strokeWidth={2} aria-hidden />
+                      </a>
                     )}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
+                  </div>
+                </TiltCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </div>

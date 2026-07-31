@@ -7,8 +7,8 @@ import {
   heroStat,
   marqueeItems,
   nextTabIndex,
+  closingDoors,
   premise,
-  signOff,
   stats,
   steps,
 } from './index'
@@ -111,25 +111,30 @@ describe('homepage content (v4)', () => {
     }
   })
 
-  it('dials and mails what the sign-off block displays', () => {
-    // The bug worth guarding is a cell whose link goes somewhere other than the
-    // number or address printed on it, which nothing about the page would show.
-    expect(signOff.map((cell) => cell.label)).toEqual([
-      'Telephone',
-      'Email',
-      'Fee',
-    ])
-    for (const cell of signOff) {
-      if (!cell.href) continue
-      if (cell.href.startsWith('mailto:')) {
-        expect(cell.href).toBe(`mailto:${cell.value}`)
+  it('dials and mails what the closing cards display', () => {
+    // The bug worth guarding is a card whose link goes somewhere other than the
+    // number or address printed on it, which nothing on the page would reveal.
+    for (const { action } of closingDoors) {
+      if (!action.href) continue
+      if (action.href.startsWith('mailto:')) {
+        expect(action.href).toBe(`mailto:${action.label}`)
       } else {
         // Digits only: the href carries a country code the label omits.
-        expect(cell.href.replace(/\D/g, '')).toContain(
-          cell.value.replace(/\D/g, ''),
+        expect(action.href.replace(/\D/g, '')).toContain(
+          action.label.replace(/\D/g, ''),
         )
       }
     }
+  })
+
+  it('closes on three doors with exactly one emphasized', () => {
+    expect(closingDoors).toHaveLength(premise.answers.length)
+    // Every card needs somewhere to go, and the gold top rule only means
+    // "start here" while it is on one card.
+    expect(
+      closingDoors.every((d) => d.action.to || d.action.href),
+    ).toBe(true)
+    expect(closingDoors.filter((d) => d.emphasized)).toHaveLength(1)
   })
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {
