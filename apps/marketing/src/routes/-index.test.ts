@@ -62,8 +62,15 @@ describe('homepage content (v4)', () => {
 
   it('pins the company-level stat claims', () => {
     expect(`${heroStat.value}${heroStat.suffix}`).toBe('10000+')
+    // Assembled from all three parts: tenure carries its "Since " as a prefix
+    // so the year can run through the counter like the others.
     expect(
-      stats.map((s) => `${s.value}${'suffix' in s ? s.suffix : ''}`),
+      stats.map(
+        (s) =>
+          `${'prefix' in s ? s.prefix : ''}${s.value}${
+            'suffix' in s ? s.suffix : ''
+          }`,
+      ),
     ).toEqual(['99.99%', '40+', 'Since 2022'])
   })
 

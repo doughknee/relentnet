@@ -164,9 +164,10 @@ export const heroStat = {
 
 /**
  * Supporting figures, read as a spec panel rather than as rivals to the hero
- * number. Tenure is deliberately not a numeral: "4" next to "10,000+" invites
- * a comparison it can only lose, while the same fact stated as a date reads as
- * provenance.
+ * number. Tenure is stated as a date rather than as a duration: "4" next to
+ * "10,000+" invites a comparison it can only lose, while a year reads as
+ * provenance. It still counts, because a row that arrives finished while the
+ * other three are climbing looks like it failed to start.
  */
 export const stats = [
   {
@@ -187,7 +188,11 @@ export const stats = [
   },
   {
     label: 'In business',
-    value: 'Since 2022',
+    prefix: 'Since ',
+    value: 2022,
+    // A year, so no thousands separator. Decimals pinned off for the same
+    // reason as everywhere else: the climb feeds raw floats.
+    format: { useGrouping: false, maximumFractionDigits: 0 },
     description:
       'Building, hosting, and stewarding for owner-led businesses.',
   },
@@ -263,22 +268,30 @@ export const COUNT_DURATION = 4.8
  * then the feed has slowed to a crawl, so there is nothing left to outrun and
  * the last change gets to roll rather than snap.
  *
+ * `start` is owned by the ledger rather than by each figure, so the four climb
+ * as one. Given a trigger apiece they fired as each row crossed the fold, which
+ * put four identical-length counts several hundred milliseconds out of step and
+ * lost the moment where the section lands together.
+ *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
  * never see a 0. Reduced motion collapses the climb to a hair over zero rather
  * than branching, so the figure simply arrives.
  */
 function StatValue({
   value,
+  prefix,
   suffix,
   format,
+  start,
 }: {
   value: number
+  prefix?: string
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
+  /** Raised once for the whole ledger. */
+  start: boolean
 }) {
-  const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
-  const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
   const [display, setDisplay] = useState(value)
   const count = useMotionValue(0)
@@ -316,7 +329,7 @@ function StatValue({
 
   useEffect(() => {
     if (!hydrated) return
-    if (!inView) {
+    if (!start) {
       setDisplay(0)
       return
     }
@@ -328,13 +341,11 @@ function StatValue({
       ease,
     })
     return () => controls.stop()
-  }, [hydrated, inView, reducedMotion, value, count, ease])
+  }, [hydrated, start, reducedMotion, value, count, ease])
 
   return (
-    <span
-      ref={ref}
-      className="inline-flex items-baseline whitespace-nowrap"
-    >
+    <span className="inline-flex items-baseline whitespace-nowrap">
+      {prefix ? <span>{prefix}</span> : null}
       <AnimateNumber
         locales="en-US"
         format={numberFormat}
@@ -514,6 +525,10 @@ function HomeComponent() {
   // Drifts DOWN as the page scrolls up, so it lags the text beside it.
   const photoY = useTransform(buildersProgress, [0, 1], [-24, 24])
   const parallax = hydrated && !reducedMotion
+
+  // Section 05's four counters share one trigger so they land together.
+  const ledgerRef = useRef<HTMLDListElement>(null)
+  const countersRunning = useInView(ledgerRef, { once: true, amount: 0.2 })
 
   /** Roving tabindex: selection follows focus, so moving also moves focus. */
   function onTabKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -984,7 +999,11 @@ function HomeComponent() {
               things, and it cost three of them their scale. Given a row each,
               every figure gets to run large and the eye reads down a spec
               sheet instead of across a grid. Rules do the work of boxes. */}
-          <dl className="border-b border-line">
+          {/* One trigger for all four counters, so they climb and land as a
+              set. `amount` is low because the ledger is taller than most
+              viewports: waiting for half of it would hold the top two rows
+              still while the reader is already looking at them. */}
+          <dl ref={ledgerRef} className="border-b border-line">
             {ledger.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 90}>
                 {/* Hovering runs the leader: a gold line draws from the label
@@ -1035,15 +1054,13 @@ function HomeComponent() {
                         : 'text-[clamp(34px,4.6vw,62px)] text-gold-text'
                     }`}
                   >
-                    {typeof stat.value === 'number' ? (
-                      <StatValue
-                        value={stat.value}
-                        suffix={'suffix' in stat ? stat.suffix : undefined}
-                        format={'format' in stat ? stat.format : undefined}
-                      />
-                    ) : (
-                      stat.value
-                    )}
+                    <StatValue
+                      value={stat.value}
+                      prefix={'prefix' in stat ? stat.prefix : undefined}
+                      suffix={'suffix' in stat ? stat.suffix : undefined}
+                      format={'format' in stat ? stat.format : undefined}
+                      start={countersRunning}
+                    />
                   </dd>
 
                   {/* self-start against a 1fr track: the figure spans both rows,
