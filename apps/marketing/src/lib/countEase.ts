@@ -11,11 +11,20 @@
  * Leaving the line at zero velocity is what stops it looking like a tween;
  * arriving at zero velocity is what makes it look like it is coming to rest.
  *
- * The tail is the whole point. Because speed decays as a fourth power, each
- * step toward the target takes longer than the one before it, and the last
- * step is the slowest of all: counting to 10,000 over four seconds reaches
- * 9,900 at 3.1s and 9,999 at 3.65s, then spends a full third of a second
- * closing the final unit.
+ * The tail is the whole point. Because speed decays as a sixth power, each
+ * step toward the target takes longer than the one before it, and the last is
+ * the slowest of all. Counting to 10,000 over five seconds reaches 9,900 at
+ * 3.65s and 9,990 at 4.03s, then spends the closing second on ten units:
+ *
+ *   9,990 to 9,999   14, 16, 18, 20, 23, 28, 34, 46, 73 ms
+ *   9,999 to 10,000  688 ms
+ *
+ * That last figure is deliberate but it is not free. The reel spring is 70ms,
+ * so a 688ms hold does not render as a slow roll: the digits settle and then
+ * the row waits before the final carry. Lowering DECAY spreads the closing
+ * second more evenly at the cost of shortening it, and the two cannot both be
+ * had: ten units is 0.1% of the distance to 10,000, so buying that slice a
+ * fifth of the runtime requires a tail steep enough to pool in the last step.
  *
  * Brandon's original tuning (ported from ../motion-testing) braked hard at 0.6
  * and then crawled the last 0.1% of the distance at a near-constant speed. For
@@ -25,14 +34,15 @@
  *
  * Caveat: the tail is a fraction of the DISTANCE, so its duration in whole
  * units scales with the size of the figure. 10,000 and 99.99 both close their
- * last rendered step in about a third of a second; a figure as small as 40
- * holds on 39 for roughly a second, having fewer values to cross.
+ * last rendered step in ~688ms; 40 has only forty values to cross, so its last
+ * step is a quarter of the whole distance and it sits on 39 for ~1.5s.
  */
 
 /** When the climb stops accelerating and starts braking. */
 const PEAK_TIME = 0.6
-/** How sharply speed decays over the tail. Higher means a longer settle. */
-const DECAY = 4
+/** How sharply speed decays over the tail. Higher means a longer, more
+ *  back-loaded settle; see the note above on what that trades away. */
+const DECAY = 6
 
 /* Solved rather than chosen, so the curve lands on exactly 1 without a fudge
    factor: the two phases cover PEAK_SPEED * PEAK_TIME / 2 and

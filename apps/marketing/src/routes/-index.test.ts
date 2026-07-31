@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  COUNT_DURATION,
   cases,
   heroStat,
   marqueeItems,
@@ -9,6 +10,7 @@ import {
   stats,
   steps,
 } from './index'
+import { countEase } from '@/lib/countEase'
 import { caseStudies } from '@/data/caseStudies'
 
 describe('homepage content (v4)', () => {
@@ -63,6 +65,21 @@ describe('homepage content (v4)', () => {
     expect(
       stats.map((s) => `${s.value}${'suffix' in s ? s.suffix : ''}`),
     ).toEqual(['99.99%', '40+', 'Since 2022'])
+  })
+
+  it('gives the last ten hours of the headline count about a second', () => {
+    // Curve and duration are tuned together, so neither is safe to change
+    // alone: this is the beat Brandon asked the counter to end on.
+    let lo = 0
+    let hi = 1
+    for (let i = 0; i < 200; i++) {
+      const mid = (lo + hi) / 2
+      if (countEase(mid) < 9990 / heroStat.value) lo = mid
+      else hi = mid
+    }
+    const closingSeconds = (1 - (lo + hi) / 2) * COUNT_DURATION
+    expect(closingSeconds).toBeGreaterThan(0.9)
+    expect(closingSeconds).toBeLessThan(1.15)
   })
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {

@@ -218,8 +218,9 @@ const REEL_TRANSITION = {
 /** How often the climbing value is handed to the reels, in ms. */
 const DIGIT_UPDATE_MS = 90
 
-/** Total count time in seconds. */
-const COUNT_DURATION = 4
+/** Total count time in seconds. Most of the extra over the original four buys
+ *  the closing second countEase spends on the last ten units. */
+export const COUNT_DURATION = 5
 
 /**
  * Scroll-in counter for a stat.

@@ -53,16 +53,22 @@ describe('countEase', () => {
   })
 
   it('takes longer over every step as it closes on the target', () => {
-    // The property the tail exists for: counting to 10,000, each of the last
-    // few units must take longer than the one before, with 9,999 to 10,000 the
-    // slowest of all.
-    const t = [9997, 9998, 9999, 10000].map((v) => timeAt(v / 10000))
-    const steps = [t[1] - t[0], t[2] - t[1], t[3] - t[2]]
-    expect(steps[1]).toBeGreaterThan(steps[0])
-    expect(steps[2]).toBeGreaterThan(steps[1])
+    // The property the tail exists for: counting to 10,000, every one of the
+    // last ten units must take longer than the one before it, with 9,999 to
+    // 10,000 the slowest of all.
+    const marks = Array.from({ length: 11 }, (_, i) =>
+      timeAt((9990 + i) / 10000),
+    )
+    const steps = marks.slice(1).map((t, i) => t - marks[i])
+    for (let i = 1; i < steps.length; i++) {
+      expect(steps[i]).toBeGreaterThan(steps[i - 1])
+    }
+  })
 
-    // And the last one has to be long enough to actually see. Over a 4s count
-    // that is a third of a second spent closing a single unit.
-    expect(steps[2] * 4).toBeGreaterThan(0.25)
+  it('spends a fifth of the run on the last ten units of a 10,000 count', () => {
+    // Brandon's ask: that closing stretch should be about a second, which at
+    // COUNT_DURATION = 5s means a fifth of the curve. Pinned here in normalised
+    // time; -index.test.ts pins it against the duration actually used.
+    expect(1 - timeAt(0.999)).toBeGreaterThan(0.19)
   })
 })
