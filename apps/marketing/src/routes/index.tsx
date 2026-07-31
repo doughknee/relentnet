@@ -268,10 +268,12 @@ export const COUNT_DURATION = 4.8
  * then the feed has slowed to a crawl, so there is nothing left to outrun and
  * the last change gets to roll rather than snap.
  *
- * `start` is owned by the ledger rather than by each figure, so the four climb
- * as one. Given a trigger apiece they fired as each row crossed the fold, which
- * put four identical-length counts several hundred milliseconds out of step and
- * lost the moment where the section lands together.
+ * Each figure owns its own trigger and starts as its row reaches the fold, so
+ * the four are deliberately NOT synchronised. Sharing one trigger for the
+ * ledger did land them on the same frame, but it also meant the lower rows ran
+ * out of sight; counting as the reader arrives is worth more than the set
+ * finishing together. They still all run the same animation, which was the
+ * half of that worth keeping.
  *
  * The prerendered HTML carries the FINAL value, so crawlers and no-JS readers
  * never see a 0. Reduced motion collapses the climb to a hair over zero rather
@@ -282,16 +284,15 @@ function StatValue({
   prefix,
   suffix,
   format,
-  start,
 }: {
   value: number
   prefix?: string
   suffix?: string
   format?: React.ComponentProps<typeof AnimateNumber>['format']
-  /** Raised once for the whole ledger. */
-  start: boolean
 }) {
+  const ref = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
+  const inView = useInView(ref, { once: true, amount: 0.5 })
   const [hydrated, setHydrated] = useState(false)
   const [display, setDisplay] = useState(value)
   const count = useMotionValue(0)
@@ -329,7 +330,7 @@ function StatValue({
 
   useEffect(() => {
     if (!hydrated) return
-    if (!start) {
+    if (!inView) {
       setDisplay(0)
       return
     }
@@ -341,11 +342,17 @@ function StatValue({
       ease,
     })
     return () => controls.stop()
-  }, [hydrated, start, reducedMotion, value, count, ease])
+  }, [hydrated, inView, reducedMotion, value, count, ease])
 
   return (
-    <span className="inline-flex items-baseline whitespace-nowrap">
-      {prefix ? <span>{prefix}</span> : null}
+    <span
+      ref={ref}
+      className="inline-flex items-baseline whitespace-nowrap"
+    >
+      {/* whitespace-pre keeps the prefix's trailing space. The parent is an
+          inline-flex, so the prefix is a flex item and its trailing whitespace
+          is trimmed like any other, which ran "Since" into "2022". */}
+      {prefix ? <span className="whitespace-pre">{prefix}</span> : null}
       <AnimateNumber
         locales="en-US"
         format={numberFormat}
@@ -525,10 +532,6 @@ function HomeComponent() {
   // Drifts DOWN as the page scrolls up, so it lags the text beside it.
   const photoY = useTransform(buildersProgress, [0, 1], [-24, 24])
   const parallax = hydrated && !reducedMotion
-
-  // Section 05's four counters share one trigger so they land together.
-  const ledgerRef = useRef<HTMLDListElement>(null)
-  const countersRunning = useInView(ledgerRef, { once: true, amount: 0.2 })
 
   /** Roving tabindex: selection follows focus, so moving also moves focus. */
   function onTabKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -999,11 +1002,7 @@ function HomeComponent() {
               things, and it cost three of them their scale. Given a row each,
               every figure gets to run large and the eye reads down a spec
               sheet instead of across a grid. Rules do the work of boxes. */}
-          {/* One trigger for all four counters, so they climb and land as a
-              set. `amount` is low because the ledger is taller than most
-              viewports: waiting for half of it would hold the top two rows
-              still while the reader is already looking at them. */}
-          <dl ref={ledgerRef} className="border-b border-line">
+          <dl className="border-b border-line">
             {ledger.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 90}>
                 {/* Hovering runs the leader: a gold line draws from the label
@@ -1059,7 +1058,6 @@ function HomeComponent() {
                       prefix={'prefix' in stat ? stat.prefix : undefined}
                       suffix={'suffix' in stat ? stat.suffix : undefined}
                       format={'format' in stat ? stat.format : undefined}
-                      start={countersRunning}
                     />
                   </dd>
 
