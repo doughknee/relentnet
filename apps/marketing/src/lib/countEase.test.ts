@@ -74,10 +74,12 @@ describe('makeCountEase', () => {
     const small = closingSteps(40, 8)
     big.forEach((step, i) => expect(small[i]).toBeCloseTo(step, 6))
 
-    // And that stretch has to be worth watching: over a 6s count the last
-    // five increments alone run past a second and a half.
+    // And that stretch has to be worth watching. Kept in normalised time so
+    // the duration can move without this needing a rewrite; -index.test.ts
+    // pins the seconds against COUNT_DURATION. At 4.8s these are 1.85s on the
+    // last five and 765ms on the final one.
     const lastFive = big.slice(-5).reduce((a, b) => a + b, 0)
-    expect(lastFive * 6).toBeGreaterThan(1.5)
-    expect(big[big.length - 1] * 6).toBeGreaterThan(0.6)
+    expect(lastFive).toBeGreaterThan(0.35)
+    expect(big[big.length - 1]).toBeGreaterThan(0.14)
   })
 })

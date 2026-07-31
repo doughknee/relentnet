@@ -246,9 +246,9 @@ const FINAL_REEL_TRANSITION = {
 /** How often the climbing value is handed to the reels, in ms. */
 const DIGIT_UPDATE_MS = 90
 
-/** Total count time in seconds. Two fifths of it belong to the last eight
- *  increments, so the climb needs the extra room to not feel rushed. */
-export const COUNT_DURATION = 6
+/** Total count time in seconds, split evenly by makeCountEase: 2.4s to climb
+ *  as far as 9,992, then 2.4s on the last eight increments. */
+export const COUNT_DURATION = 4.8
 
 /**
  * Scroll-in counter for a stat.
