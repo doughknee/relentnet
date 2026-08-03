@@ -81,7 +81,10 @@ export function Footer() {
       <div className="border-t border-line-faint py-5 px-5 md:px-12 text-[10px] uppercase tracking-[0.2em] text-ink-faint">
         <div className="max-w-[1200px] mx-auto flex justify-between items-center">
           <p>
-            © {siteConfig.name} {new Date().getFullYear()} · Nashville, TN
+            © {siteConfig.name} {new Date().getFullYear()} ·{' '}
+            {siteConfig.locations
+              .map((l) => `${l.city}, ${l.state}`)
+              .join(' · ')}
           </p>
           <Link to="/legal" className="hover:text-gold-text transition-colors">
             Legal
