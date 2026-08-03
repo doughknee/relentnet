@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
-import { Input } from '@/components/ui/Input'
+
 import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
+import { Eyebrow } from '@/components/Eyebrow'
 import { siteConfig } from '@/site.config'
 import { seo } from '@/lib/seo'
 
@@ -38,18 +40,37 @@ async function fetchWithTimeout(
 }
 
 export const inquiryContent = {
-  headline: 'Request a Workflow Diagnostic.',
-  body: 'Tell us where the business feels slow, manual, disconnected, or hard to see. We will use the diagnostic request to understand the operational friction before recommending the next step.',
-  successTitle: 'Diagnostic Request Received.',
+  headline: 'Tell us where it feels slow.',
+  body: "Manual, disconnected, hard to see. Even a few sentences is enough, and we'll read it before we reply.",
+  successTitle: 'Request received.',
   successBody:
-    'We will review the workflow context, look for the clearest operational opportunity, and follow up with the best next step.',
+    "We'll review the workflow context and follow up with the best next step.",
 } as const
+
+export const inquiryNextSteps = [
+  'We read your note and reply within one business day.',
+  'A short call to confirm the diagnostic is the right first step.',
+  'A free diagnostic, then a clear build / connect / don’t-build answer.',
+] as const
+
+const commOptions = [
+  { label: 'Phone call', value: 'phone' },
+  { label: 'Text', value: 'sms' },
+  { label: 'Email', value: 'email' },
+  { label: 'Video call', value: 'video' },
+  { label: 'In person', value: 'person' },
+] as const
+
+const labelClasses = 'text-[11px] uppercase tracking-[0.15em] text-ink-muted'
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const form = useForm({
+    // Field set matches the long-standing webhook payload — fields the v4
+    // form no longer collects are sent with their defaults so n8n keeps
+    // receiving the same shape.
     defaultValues: {
       fullName: '',
       companyName: '',
@@ -125,83 +146,100 @@ function Contact() {
   })
 
   return (
-    <div className="min-h-screen overflow-hidden flex flex-col">
-      <div className="grow pt-32 pb-12 px-6 md:px-20 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
-          {/* LEFT COLUMN: Context & Info */}
-          <div className="lg:col-span-5 space-y-12">
-            <div className="animate-fade-in-up opacity-0">
-              <h1 className="font-serif text-5xl md:text-6xl leading-[1.1] mb-6">
-                Request a <br />
-                <span className="italic text-gold">Diagnostic.</span>
+    <div className="relative overflow-x-clip">
+      {/* Radial gold glow over the top of the page */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 inset-x-0 h-screen pointer-events-none bg-[radial-gradient(ellipse_760px_420px_at_calc(50%-350px)_60px,rgba(203,171,69,0.06),transparent_65%)]"
+      />
+
+      <div className="relative z-10 pt-[110px] pb-20 px-5 md:px-12">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-20 items-start">
+          {/* ── Left: context ── */}
+          <div className="flex flex-col gap-11">
+            <div className="animate-fade-in-up">
+              <Eyebrow className="mb-7">Book a diagnostic</Eyebrow>
+              <h1 className="font-serif text-[clamp(36px,6vw,72px)] leading-none mb-6 text-balance">
+                Tell us where it{' '}
+                <span className="italic text-gold-text">feels slow.</span>
               </h1>
-              <p className="text-ink-sub font-light text-lg leading-relaxed">
+              <p className="text-ink-sub font-light leading-[1.65] max-w-[400px]">
                 {inquiryContent.body}
               </p>
             </div>
 
             <div
-              className="space-y-8 border-t border-line pt-8 animate-fade-in-up opacity-0"
-              style={{ animationDelay: '200ms' }}
+              className="animate-fade-in-up border-t border-line-faint pt-8"
+              style={{ animationDelay: '150ms' }}
             >
-              <div>
-                <h4 className="text-xs font-bold tracking-[0.3em] text-gold uppercase mb-4">
-                  Office Locations
-                </h4>
-                <p className="text-sm text-ink-sub leading-relaxed">
-                  <strong className="text-ink-em">
-                    {siteConfig.regions.join(', ')}
-                  </strong>
-                  <br />
-                  <span className="text-xs text-ink-muted">
-                    Available for in-person consultation
-                  </span>
-                </p>
+              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-5">
+                What happens next
+              </p>
+              <div className="flex flex-col">
+                {inquiryNextSteps.map((text, i) => (
+                  <div
+                    key={i}
+                    className="flex items-baseline gap-[18px] border-b border-line-faint py-3.5"
+                  >
+                    <span className="font-serif italic text-[15px] text-gold-text shrink-0">
+                      {['i.', 'ii.', 'iii.'][i]}
+                    </span>
+                    <span className="text-sm font-light text-ink-sub leading-normal">
+                      {text}
+                    </span>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div>
-                <h4 className="text-xs font-bold tracking-[0.3em] text-gold uppercase mb-4">
-                  Direct Contact
-                </h4>
-                <div className="space-y-2 text-sm text-ink-sub">
-                  <p>
-                    <span className="block text-[10px] uppercase tracking-widest text-ink-faint">
-                      Email
-                    </span>
-                    {siteConfig.contact.email}
-                  </p>
-                  <p>
-                    <span className="block text-[10px] uppercase tracking-widest text-ink-faint">
-                      Phone
-                    </span>
-                    {siteConfig.contact.phone}
-                  </p>
-                  <p>
-                    <span className="block text-[10px] uppercase tracking-widest text-ink-faint">
-                      Hours
-                    </span>
-                    {siteConfig.contact.hours}
-                  </p>
-                </div>
-              </div>
+            <div
+              className="animate-fade-in-up"
+              style={{ animationDelay: '250ms' }}
+            >
+              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
+                Prefer to talk
+              </p>
+              {/* From siteConfig, like the footer and the homepage. This page
+                  was the last copy still typed out by hand, which is how a
+                  number gets changed everywhere except one place. */}
+              <p className="font-serif text-[26px] text-ink-em">
+                <a
+                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
+                  className="hover:text-gold-text transition-colors"
+                >
+                  {siteConfig.contact.phone}
+                </a>
+              </p>
+              <p className="mt-1.5 text-sm text-ink-sub">
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="hover:text-gold-text transition-colors"
+                >
+                  {siteConfig.contact.email}
+                </a>{' '}
+                · 9am–5pm CST, Mon–Fri
+              </p>
+              <p className="mt-3.5 text-xs text-ink-muted">
+                In-person available across TN, LA, GA, FL.
+              </p>
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Form */}
+          {/* ── Right: form card ── */}
           <div
-            className="lg:col-span-7 bg-card border border-line-faint p-8 md:p-12 backdrop-blur-sm animate-fade-in-up opacity-0"
-            style={{ animationDelay: '400ms' }}
+            className="animate-fade-in-up border border-line bg-card p-7 md:p-12"
+            style={{ animationDelay: '300ms' }}
           >
             {isSuccess ? (
-              <div className="h-full flex flex-col justify-center items-center text-center space-y-6 animate-fade-in-up">
-                <div className="w-16 h-16 rounded-full border border-gold flex items-center justify-center text-gold">
+              <div className="min-h-[400px] flex flex-col justify-center items-center text-center gap-5">
+                <div className="w-16 h-16 rounded-full border border-gold flex items-center justify-center text-gold-text">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-8 h-8"
+                    className="w-[30px] h-[30px]"
                   >
                     <path
                       strokeLinecap="round"
@@ -210,15 +248,15 @@ function Contact() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-serif">
+                <h3 className="font-serif text-[32px]">
                   {inquiryContent.successTitle}
                 </h3>
-                <p className="text-ink-sub max-w-md">
+                <p className="text-ink-sub font-light leading-[1.6] max-w-[400px]">
                   {inquiryContent.successBody}
                 </p>
                 <button
                   onClick={() => setIsSuccess(false)}
-                  className="text-xs tracking-widest uppercase text-gold hover:underline mt-8"
+                  className="mt-6 text-[11px] tracking-[0.15em] uppercase text-gold-text cursor-pointer hover:underline"
                 >
                   Send another message
                 </button>
@@ -230,92 +268,80 @@ function Contact() {
                   e.stopPropagation()
                   form.handleSubmit()
                 }}
-                className="space-y-12"
+                className="flex flex-col gap-7"
               >
-                {/* STEP 1: BASICS */}
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif italic text-black/25 dark:text-white/50 border-b border-line-faint pb-2">
-                    01. Business Context
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <form.Field
-                      name="fullName"
-                      validators={{
-                        onChange: ({ value }) =>
-                          !value ? 'Full Name is required' : undefined,
-                      }}
-                      children={(field) => (
-                        <div className="space-y-2">
-                          <label
-                            htmlFor={field.name}
-                            className="text-xs uppercase tracking-widest text-ink-muted"
-                          >
-                            Full Name *
-                          </label>
-                          <Input
-                            id={field.name}
-                            name={field.name}
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="Full name"
-                          />
-                          {field.state.meta.errors.length ? (
-                            <em className="text-xs text-red-500">
-                              {field.state.meta.errors.join(', ')}
-                            </em>
-                          ) : null}
-                        </div>
-                      )}
-                    />
-                    <form.Field
-                      name="companyName"
-                      validators={{
-                        onChange: ({ value }) =>
-                          !value ? 'Company Name is required' : undefined,
-                      }}
-                      children={(field) => (
-                        <div className="space-y-2">
-                          <label
-                            htmlFor={field.name}
-                            className="text-xs uppercase tracking-widest text-ink-muted"
-                          >
-                            Company *
-                          </label>
-                          <Input
-                            id={field.name}
-                            name={field.name}
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            placeholder="Company or organization"
-                          />
-                          {field.state.meta.errors.length ? (
-                            <em className="text-xs text-red-500">
-                              {field.state.meta.errors.join(', ')}
-                            </em>
-                          ) : null}
-                        </div>
-                      )}
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <form.Field
+                    name="fullName"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'Full name is required' : undefined,
+                    }}
+                    children={(field) => (
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor={field.name} className={labelClasses}>
+                          Full name *
+                        </label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          placeholder="Full name"
+                        />
+                        {field.state.meta.errors.length ? (
+                          <em className="text-xs text-red-500">
+                            {field.state.meta.errors.join(', ')}
+                          </em>
+                        ) : null}
+                      </div>
+                    )}
+                  />
+                  <form.Field
+                    name="companyName"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'Company is required' : undefined,
+                    }}
+                    children={(field) => (
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor={field.name} className={labelClasses}>
+                          Company *
+                        </label>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          placeholder="Company or organization"
+                        />
+                        {field.state.meta.errors.length ? (
+                          <em className="text-xs text-red-500">
+                            {field.state.meta.errors.join(', ')}
+                          </em>
+                        ) : null}
+                      </div>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <form.Field
                     name="email"
                     validators={{
                       onChange: ({ value }) => {
-                        if (!value) return 'Business Email is required'
+                        if (!value) return 'Business email is required'
                         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
                           return 'Invalid email address'
                         return undefined
                       },
                     }}
                     children={(field) => (
-                      <div className="space-y-2">
-                        <label
-                          htmlFor={field.name}
-                          className="text-xs uppercase tracking-widest text-ink-muted"
-                        >
-                          Business Email *
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor={field.name} className={labelClasses}>
+                          Business email *
                         </label>
                         <Input
                           id={field.name}
@@ -324,7 +350,7 @@ function Contact() {
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="john@company.com"
+                          placeholder="you@company.com"
                         />
                         {field.state.meta.errors.length ? (
                           <em className="text-xs text-red-500">
@@ -335,396 +361,130 @@ function Contact() {
                     )}
                   />
                   <form.Field
-                    name="currentUrl"
+                    name="phoneNumber"
                     children={(field) => (
-                      <div className="space-y-2">
-                        <label
-                          htmlFor={field.name}
-                          className="text-xs uppercase tracking-widest text-ink-muted"
-                        >
-                          Current Website or Tool URL
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor={field.name} className={labelClasses}>
+                          Phone
                         </label>
                         <Input
                           id={field.name}
                           name={field.name}
+                          type="tel"
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="Existing site, portal, CRM, spreadsheet, or tool link"
+                          placeholder="+1 (555) 000-0000"
                         />
-                        {field.state.meta.errors.length ? (
-                          <em className="text-xs text-red-500">
-                            {field.state.meta.errors.join(', ')}
-                          </em>
-                        ) : null}
                       </div>
                     )}
                   />
                 </div>
 
-                {/* STEP 2: THE PROJECT */}
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif italic text-black/25 dark:text-white/50 border-b border-line-faint pb-2">
-                    02. Workflow Friction
-                  </h3>
+                <form.Field
+                  name="currentUrl"
+                  children={(field) => (
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor={field.name} className={labelClasses}>
+                        Current site, portal, or tool{' '}
+                        <span className="text-ink-faint normal-case tracking-normal">
+                          (optional)
+                        </span>
+                      </label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="A link to whatever you work in today"
+                      />
+                    </div>
+                  )}
+                />
 
-                  <form.Field
-                    name="projectNature"
-                    children={(field) => (
-                      <div className="space-y-2">
-                        <label
-                          htmlFor={field.name}
-                          className="text-xs uppercase tracking-widest text-ink-muted"
-                        >
-                          Best Starting Point *
-                        </label>
-                        <div className="space-y-2">
-                          {[
-                            {
-                              label: 'Workflow discovery',
-                              value: 'workflow_discovery',
-                            },
-                            {
-                              label: 'Custom software system',
-                              value: 'custom_system',
-                            },
-                            {
-                              label: 'Technology stewardship',
-                              value: 'stewardship',
-                            },
-                            {
-                              label: 'Not sure yet',
-                              value: 'not_sure',
-                            },
-                          ].map((option) => (
-                            <label
+                <form.Field
+                  name="vision"
+                  validators={{
+                    onChange: ({ value }) =>
+                      !value || value.length < 10
+                        ? 'Please share a bit more detail'
+                        : undefined,
+                  }}
+                  children={(field) => (
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor={field.name} className={labelClasses}>
+                        Where does the business feel slow? *
+                      </label>
+                      <Textarea
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="The workflow pain, disconnected tools, reporting gaps, or manual process slowing you down."
+                        rows={5}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em className="text-xs text-red-500">
+                          {field.state.meta.errors.join(', ')}
+                        </em>
+                      ) : null}
+                    </div>
+                  )}
+                />
+
+                <form.Field
+                  name="communicationMethods"
+                  validators={{
+                    onChange: ({ value }) =>
+                      value.length === 0
+                        ? 'Select at least one method'
+                        : undefined,
+                  }}
+                  children={(field) => (
+                    <div className="flex flex-col gap-2.5">
+                      <span className={labelClasses}>
+                        How should we reach you? *
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {commOptions.map((option) => {
+                          const on = field.state.value.includes(option.value)
+                          return (
+                            <button
                               key={option.value}
-                              className={`flex items-center gap-3 p-3 border ${field.state.value === option.value ? 'border-gold bg-gold/5' : 'border-line bg-inset'} cursor-pointer transition-all`}
-                            >
-                              <input
-                                type="radio"
-                                name={field.name}
-                                value={option.value}
-                                checked={field.state.value === option.value}
-                                onChange={() =>
-                                  field.handleChange(
-                                    option.value as typeof field.state.value,
-                                  )
-                                }
-                                className="accent-gold"
-                              />
-                              <span className="text-sm">{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  />
-
-                  <form.Field
-                    name="hasDeadline"
-                    children={(field) => (
-                      <div className="space-y-4">
-                        <label className="flex items-center gap-3 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name={field.name}
-                            checked={field.state.value}
-                            onChange={(e) =>
-                              field.handleChange(e.target.checked)
-                            }
-                            className="w-4 h-4 accent-gold bg-inset border-line"
-                          />
-                          <span className="text-sm text-ink-sub">
-                            Is there a firm urgency for this workflow?
-                          </span>
-                        </label>
-                      </div>
-                    )}
-                  />
-
-                  <form.Subscribe
-                    selector={(state) => [state.values.hasDeadline]}
-                    children={([hasDeadline]) =>
-                      hasDeadline ? (
-                        <form.Field
-                          name="deadlineDate"
-                          validators={{
-                            onChange: ({ value }) =>
-                              !value ? 'Deadline date is required' : undefined,
-                          }}
-                          children={(field) => (
-                            <div className="space-y-2 animate-fade-in-up">
-                              <label
-                                htmlFor={field.name}
-                                className="text-xs uppercase tracking-widest text-ink-muted"
-                              >
-                                Urgency Date *
-                              </label>
-                              <Input
-                                id={field.name}
-                                name={field.name}
-                                type="date"
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) =>
-                                  field.handleChange(e.target.value)
-                                }
-                              />
-                              {field.state.meta.errors.length ? (
-                                <em className="text-xs text-red-500">
-                                  {field.state.meta.errors.join(', ')}
-                                </em>
-                              ) : null}
-                            </div>
-                          )}
-                        />
-                      ) : null
-                    }
-                  />
-
-                  <form.Field
-                    name="vision"
-                    validators={{
-                      onChange: ({ value }) =>
-                        !value || value.length < 10
-                          ? 'Please share a bit more about your vision'
-                          : undefined,
-                    }}
-                    children={(field) => (
-                      <div className="space-y-2">
-                        <label
-                          htmlFor={field.name}
-                          className="text-xs uppercase tracking-widest text-ink-muted"
-                        >
-                          What workflow, tool, or operational problem should we
-                          understand? *
-                        </label>
-                        <Textarea
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="Describe the workflow pain, disconnected tools, reporting gaps, or manual process slowing the business down."
-                          rows={4}
-                        />
-                        {field.state.meta.errors.length ? (
-                          <em className="text-xs text-red-500">
-                            {field.state.meta.errors.join(', ')}
-                          </em>
-                        ) : null}
-                      </div>
-                    )}
-                  />
-                </div>
-
-                {/* STEP 3: CONCIERGE PREFERENCES */}
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif italic text-black/25 dark:text-white/50 border-b border-line-faint pb-2">
-                    03. Concierge Preferences
-                  </h3>
-
-                  <form.Field
-                    name="communicationMethods"
-                    validators={{
-                      onChange: ({ value }) =>
-                        value.length === 0
-                          ? 'Select at least one method'
-                          : undefined,
-                    }}
-                    children={(field) => (
-                      <div className="space-y-2">
-                        <label className="text-xs uppercase tracking-widest text-ink-muted">
-                          Communication Methods (Select all that apply) *
-                        </label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {[
-                            { label: 'Phone Calls', value: 'phone' },
-                            { label: 'Texts', value: 'sms' },
-                            { label: 'Emails', value: 'email' },
-                            { label: 'Video Calls', value: 'video' },
-                            { label: 'In-Person', value: 'person' },
-                          ].map((option) => (
-                            <label
-                              key={option.value}
-                              className={`flex items-center gap-3 p-3 border ${
-                                field.state.value.includes(option.value)
-                                  ? 'border-gold bg-gold/5'
-                                  : 'border-line bg-inset'
-                              } cursor-pointer transition-all`}
-                            >
-                              <input
-                                type="checkbox"
-                                value={option.value}
-                                checked={field.state.value.includes(
-                                  option.value,
-                                )}
-                                onChange={(e) => {
-                                  if (e.target.checked) {
-                                    field.handleChange([
-                                      ...field.state.value,
-                                      option.value,
-                                    ])
-                                  } else {
-                                    field.handleChange(
-                                      field.state.value.filter(
+                              type="button"
+                              onClick={() =>
+                                field.handleChange(
+                                  on
+                                    ? field.state.value.filter(
                                         (v) => v !== option.value,
-                                      ),
-                                    )
-                                  }
-                                }}
-                                className="accent-gold"
-                              />
-                              <span className="text-sm">{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                        {field.state.meta.errors.length ? (
-                          <em className="text-xs text-red-500">
-                            {field.state.meta.errors.join(', ')}
-                          </em>
-                        ) : null}
+                                      )
+                                    : [...field.state.value, option.value],
+                                )
+                              }
+                              aria-pressed={on}
+                              className={`px-[18px] py-2.5 text-[13px] cursor-pointer transition-all duration-200 border ${
+                                on
+                                  ? 'border-gold bg-gold-tint text-gold-text'
+                                  : 'border-line bg-transparent text-ink-sub'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          )
+                        })}
                       </div>
-                    )}
-                  />
+                      {field.state.meta.errors.length ? (
+                        <em className="text-xs text-red-500">
+                          {field.state.meta.errors.join(', ')}
+                        </em>
+                      ) : null}
+                    </div>
+                  )}
+                />
 
-                  <form.Subscribe
-                    selector={(state) => [state.values.communicationMethods]}
-                    children={([methods]) => (
-                      <>
-                        {(methods.includes('phone') ||
-                          methods.includes('sms')) && (
-                          <form.Field
-                            name="phoneNumber"
-                            validators={{
-                              onChange: ({ value }) =>
-                                !value ? 'Phone number is required' : undefined,
-                            }}
-                            children={(field) => (
-                              <div className="space-y-2 animate-fade-in-up">
-                                <label
-                                  htmlFor={field.name}
-                                  className="text-xs uppercase tracking-widest text-ink-muted"
-                                >
-                                  Mobile Number *
-                                </label>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  type="tel"
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) =>
-                                    field.handleChange(e.target.value)
-                                  }
-                                  placeholder="+1 (555) 000-0000"
-                                />
-                                {field.state.meta.errors.length ? (
-                                  <em className="text-xs text-red-500">
-                                    {field.state.meta.errors.join(', ')}
-                                  </em>
-                                ) : null}
-                              </div>
-                            )}
-                          />
-                        )}
-
-                        {methods.includes('person') && (
-                          <div className="space-y-4 animate-fade-in-up">
-                            <form.Field
-                              name="inPersonState"
-                              validators={{
-                                onChange: ({ value }) =>
-                                  !value ? 'Please select a state' : undefined,
-                              }}
-                              children={(field) => (
-                                <div className="space-y-2">
-                                  <label className="text-xs uppercase tracking-widest text-ink-muted">
-                                    Preferred State *
-                                  </label>
-                                  <div className="grid grid-cols-2 gap-2">
-                                    {[...siteConfig.regions, 'Other'].map(
-                                      (option) => (
-                                        <label
-                                          key={option}
-                                          className={`flex items-center gap-2 p-3 border ${
-                                            field.state.value === option
-                                              ? 'border-gold bg-gold/5'
-                                              : 'border-line bg-inset'
-                                          } cursor-pointer transition-all`}
-                                        >
-                                          <input
-                                            type="radio"
-                                            name={field.name}
-                                            value={option}
-                                            checked={
-                                              field.state.value === option
-                                            }
-                                            onChange={() =>
-                                              field.handleChange(option)
-                                            }
-                                            className="accent-gold"
-                                          />
-                                          <span className="text-sm">
-                                            {option}
-                                          </span>
-                                        </label>
-                                      ),
-                                    )}
-                                  </div>
-                                  {field.state.meta.errors.length ? (
-                                    <em className="text-xs text-red-500">
-                                      {field.state.meta.errors.join(', ')}
-                                    </em>
-                                  ) : null}
-                                </div>
-                              )}
-                            />
-
-                            <form.Field
-                              name="cityState"
-                              validators={{
-                                onChange: ({ value }) =>
-                                  !value
-                                    ? 'City & State is required'
-                                    : undefined,
-                              }}
-                              children={(field) => (
-                                <div className="space-y-2">
-                                  <label
-                                    htmlFor={field.name}
-                                    className="text-xs uppercase tracking-widest text-ink-muted"
-                                  >
-                                    City & State *
-                                  </label>
-                                  <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) =>
-                                      field.handleChange(e.target.value)
-                                    }
-                                    placeholder="e.g. Nashville, TN"
-                                  />
-                                  {field.state.meta.errors.length ? (
-                                    <em className="text-xs text-red-500">
-                                      {field.state.meta.errors.join(', ')}
-                                    </em>
-                                  ) : null}
-                                </div>
-                              )}
-                            />
-                          </div>
-                        )}
-                      </>
-                    )}
-                  />
-                </div>
-
-                {/* SUBMIT */}
-                <div className="pt-4">
+                <div className="pt-2">
                   <form.Subscribe
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                     children={([canSubmit, isSubmitting]) => (
@@ -737,6 +497,9 @@ function Contact() {
                       </Button>
                     )}
                   />
+                  <p className="mt-3.5 text-center text-xs text-ink-faint">
+                    Free diagnostic · transparent pricing · no mystery retainers
+                  </p>
                   {error && (
                     <p className="text-red-500 text-xs mt-4 text-center">
                       {error}

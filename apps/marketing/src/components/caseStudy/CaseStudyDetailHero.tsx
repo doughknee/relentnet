@@ -26,7 +26,10 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
       <div className="max-w-7xl mx-auto">
         <Reveal className="mb-10 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.2em]">
           <nav className="text-ink-muted" aria-label="Breadcrumb">
-            <Link to="/clients" className="hover:text-gold transition-colors">
+            <Link
+              to="/clients"
+              className="hover:text-gold-text transition-colors"
+            >
               Clients
             </Link>
             <span className="mx-2">/</span>
@@ -34,7 +37,7 @@ export function CaseStudyDetailHero({ study }: CaseStudyDetailHeroProps) {
           </nav>
           <Link
             to="/clients"
-            className="hidden sm:inline text-ink-muted hover:text-gold transition-colors"
+            className="hidden sm:inline text-ink-muted hover:text-gold-text transition-colors"
           >
             All client stories
           </Link>

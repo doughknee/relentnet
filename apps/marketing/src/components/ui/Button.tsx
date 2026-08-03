@@ -12,13 +12,14 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'uppercase tracking-widest transition-all duration-300'
+  const baseStyles =
+    'chromatic-hover uppercase tracking-[0.15em] transition-all duration-300'
 
   const variants = {
     primary:
-      'bg-gold text-black font-bold py-4 px-8 hover:bg-ink-em disabled:opacity-50 disabled:cursor-not-allowed',
+      'bg-gold border border-gold text-gold-ink font-medium text-xs py-[17px] px-8 cursor-pointer hover:bg-transparent hover:text-gold-text disabled:opacity-50 disabled:cursor-not-allowed',
     outline:
-      'border border-line px-6 py-3 text-xs text-ink hover:bg-gold hover:border-gold hover:text-black',
+      'border border-line px-6 py-3 text-xs text-ink cursor-pointer hover:border-gold hover:text-gold-text',
   }
 
   const widthStyles = fullWidth ? 'w-full' : ''

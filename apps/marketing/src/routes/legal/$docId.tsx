@@ -48,7 +48,7 @@ function LegalDoc() {
         <div className="max-w-4xl mx-auto">
           <Link
             to="/legal"
-            className="text-xs uppercase tracking-widest text-ink-muted hover:text-gold transition-colors mb-8 block"
+            className="text-xs uppercase tracking-widest text-ink-muted hover:text-gold-text transition-colors mb-8 block"
           >
             &larr; Back to Legal
           </Link>

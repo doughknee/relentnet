@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { seo } from '@/lib/seo'
@@ -18,84 +19,78 @@ export const Route = createFileRoute('/portal')({
 })
 
 export const portalContent = {
-  headline: 'Client Access',
-  body: 'Secure access for active RelentNet clients with systems, support, and stewardship already in motion.',
+  headline: 'Client access',
+  body: 'For active clients with systems, support, and stewardship in motion.',
   prospectBody:
-    'If you are not a client yet, start with a workflow diagnostic so we can understand the operational friction before recommending a build.',
+    'Not a client yet? Start with a workflow diagnostic so we understand the friction before recommending a build.',
   prospectCta: 'Start with a workflow diagnostic',
 } as const
 
+const labelClasses = 'text-[11px] uppercase tracking-[0.15em] text-ink-muted'
+
 function Portal() {
   return (
-    <div className="min-h-screen overflow-hidden flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-md bg-card border border-line-faint p-8 md:p-12 backdrop-blur-sm animate-fade-in-up">
-        <div className="text-center mb-8">
-          <h1 className="font-serif text-3xl md:text-4xl mb-4">
-            Client <span className="italic text-gold">Access</span>
+    <div className="min-h-[calc(100vh-160px)] flex flex-col justify-center items-center pt-25 pb-15 px-4 relative z-10">
+      <div className="animate-fade-in-up w-full max-w-[440px]">
+        <div className="text-center mb-9">
+          <h1 className="font-serif text-[52px] mb-3.5">
+            Client <span className="italic text-gold-text">access</span>
           </h1>
-          <p className="text-ink-sub text-sm font-light">
+          <p className="text-ink-sub text-sm font-light leading-[1.6]">
             {portalContent.body}
           </p>
         </div>
 
-        <form
-          method="post"
-          action="https://clients.relentnet.com/dologin.php"
-          className="space-y-6"
-        >
-          <div className="space-y-2">
-            <label
-              htmlFor="username"
-              className="text-xs uppercase tracking-widest text-ink-muted"
-            >
-              Email Address
-            </label>
-            <Input type="text" name="username" id="username" size={50} />
-          </div>
-
-          <div className="space-y-2">
-            <label
-              htmlFor="password"
-              className="text-xs uppercase tracking-widest text-ink-muted"
-            >
-              Password
-            </label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              size={20}
-              autoComplete="off"
-            />
-          </div>
-
-          <div className="pt-4">
-            <Button type="submit" fullWidth>
-              Login
-            </Button>
-          </div>
-        </form>
-
-        <div className="mt-8 text-center">
-          <a
-            href="https://clients.relentnet.com/pwreset.php"
-            className="text-xs text-ink-muted hover:text-gold transition-colors uppercase tracking-widest"
+        <div className="border border-line bg-card p-7 md:p-10">
+          <form
+            method="post"
+            action="https://clients.relentnet.com/dologin.php"
+            className="flex flex-col gap-[22px]"
           >
-            Forgot Password?
-          </a>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="username" className={labelClasses}>
+                Email address
+              </label>
+              <Input type="text" name="username" id="username" size={50} />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="password" className={labelClasses}>
+                Password
+              </label>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                size={20}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="mt-2">
+              <Button type="submit" fullWidth>
+                Sign in
+              </Button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <a
+              href="https://clients.relentnet.com/pwreset.php"
+              className="text-[11px] text-ink-muted hover:text-gold-text transition-colors uppercase tracking-[0.15em]"
+            >
+              Forgot password?
+            </a>
+          </div>
         </div>
 
-        <div className="mt-8 border-t border-line-faint pt-6 text-center">
-          <p className="text-xs leading-relaxed text-ink-muted">
-            {portalContent.prospectBody}
-          </p>
-          <Link
-            to="/diagnostic"
-            className="mt-4 inline-flex text-xs uppercase tracking-widest text-gold hover:underline"
-          >
-            {portalContent.prospectCta}
-          </Link>
-        </div>
+        <p className="mt-7 text-center text-[13px] text-ink-muted leading-[1.6]">
+          Not a client yet?{' '}
+          <Link to="/diagnostic" className="text-gold-text hover:underline">
+            Start with a workflow diagnostic
+          </Link>{' '}
+          so we understand the friction before recommending a build.
+        </p>
       </div>
     </div>
   )

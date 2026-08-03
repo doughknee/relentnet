@@ -29,7 +29,7 @@ export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
     <section className="relative z-10 px-6 md:px-12 py-20 md:py-24 border-t border-line-faint">
       <div className="max-w-7xl mx-auto">
         <Reveal>
-          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold mb-8">
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-gold-text mb-8">
             Read more customer stories
           </p>
         </Reveal>
@@ -57,7 +57,7 @@ export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
                   {tile.industry}
                 </p>
                 <h3 className="font-serif text-xl md:text-2xl">{tile.name}</h3>
-                <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold group-hover:gap-3 transition-all duration-300">
+                <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold-text group-hover:gap-3 transition-all duration-300">
                   Read story →
                 </span>
               </div>

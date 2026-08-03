@@ -7,6 +7,7 @@ import {
 
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { MotionConfig } from 'motion/react'
 
 import type { ReactNode } from 'react'
 
@@ -64,10 +65,21 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
-      { name: 'theme-color', content: '#000000' },
+      { name: 'theme-color', content: '#0a0908' },
       ...seo({}).meta,
     ],
     links: [
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600&display=swap',
+      },
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
       { rel: 'icon', href: '/favicon.ico' },
       { rel: 'apple-touch-icon', href: '/logo192.png' },
       { rel: 'manifest', href: '/manifest.json' },
@@ -80,10 +92,12 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <div className="min-h-screen bg-page text-ink font-sans selection:bg-gold selection:text-black">
+      <div className="min-h-screen bg-page page-grid text-ink font-sans selection:bg-gold selection:text-black">
         <StarParticles />
         <Header />
-        <main>
+        {/* min-h keeps the footer below the fold while the route chunk
+            mounts — otherwise it flashes at the top of the page on load. */}
+        <main className="min-h-screen">
           <Outlet />
         </main>
         <Footer />
@@ -117,7 +131,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        {/* reducedMotion="user" disables Motion transforms for users with a
+            reduced-motion preference, matching the global CSS rule. */}
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider>{children}</ThemeProvider>
+        </MotionConfig>
         <Scripts />
       </body>
     </html>

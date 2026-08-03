@@ -3,6 +3,10 @@ services:
     build:
       context: .
       dockerfile: apps/marketing/Dockerfile
+      # Motion+ registry token from the MOTION_TOKEN env var (Coolify build
+      # variable / local shell). Coolify also passes it via --build-arg.
+      args:
+        MOTION_TOKEN: ${MOTION_TOKEN:-}
     image: relentnet-marketing:latest
     expose:
       - '80'

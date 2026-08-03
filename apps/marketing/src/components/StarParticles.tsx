@@ -32,7 +32,7 @@ const StarParticles = () => {
       fpsLimit: 120,
       particles: {
         number: {
-          value: 120,
+          value: 90,
           density: {
             enable: true,
             width: 1920,
@@ -46,7 +46,7 @@ const StarParticles = () => {
           type: 'circle',
         },
         opacity: {
-          value: { min: 0.1, max: 0.8 },
+          value: { min: 0.12, max: 0.5 },
           animation: {
             enable: true,
             speed: 1,
@@ -55,7 +55,7 @@ const StarParticles = () => {
           },
         },
         size: {
-          value: { min: 1, max: 3 },
+          value: { min: 1, max: 2.5 },
           animation: {
             enable: true,
             speed: 2,

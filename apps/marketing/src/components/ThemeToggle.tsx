@@ -14,12 +14,12 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={`Switch to ${effective === 'dark' ? 'light' : 'dark'} mode`}
-      className="cursor-pointer rounded-md p-2 text-ink-sub transition-colors hover:text-gold"
+      className="cursor-pointer p-2 text-ink transition-colors hover:text-gold-text"
     >
       {effective === 'dark' ? (
-        <Sun className="size-5" />
+        <Sun className="size-[17px]" strokeWidth={1.5} />
       ) : (
-        <Moon className="size-5" />
+        <Moon className="size-[17px]" strokeWidth={1.5} />
       )}
     </button>
   )

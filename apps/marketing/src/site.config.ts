@@ -3,8 +3,8 @@ export const siteConfig = {
   domain: 'https://relentnet.com',
   contact: {
     email: 'inquires@relentnet.com',
-    phone: '727-616-1060',
-    phoneFormatted: '+1 (727) 616-1060',
+    phone: '858-859-1851',
+    phoneFormatted: '+1 (858) 859-1851',
     hours: '9am - 5pm CST (Mon-Fri)',
   },
   regions: ['Tennessee', 'Louisiana', 'Georgia', 'Florida'],

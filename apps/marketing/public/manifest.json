@@ -1,6 +1,6 @@
 {
   "short_name": "RelentNet",
-  "name": "RelentNet | Bespoke Digital Stewardship",
+  "name": "RelentNet | Workflow Diagnostic & Technology Stewardship",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#0a0908",
+  "background_color": "#0a0908"
 }

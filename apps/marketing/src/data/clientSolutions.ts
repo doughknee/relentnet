@@ -24,7 +24,7 @@ export const clientSolutions: ReadonlyArray<ClientSolution> = [
   {
     label: 'Ship cross-platform products',
     href: '/process',
-    blurb: 'One codebase, native everywhere — desktop, web, and mobile.',
+    blurb: 'One codebase, native everywhere: desktop, web, and mobile.',
   },
   {
     label: 'Stage credibility for sales',

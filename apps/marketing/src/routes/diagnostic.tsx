@@ -1,15 +1,8 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  ClipboardList,
-  GitBranch,
-  Search,
-  ShieldCheck,
-  Wrench,
-} from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import type { LucideIcon } from 'lucide-react'
-
+import { CtaLink } from '@/components/CtaLink'
+import { Eyebrow } from '@/components/Eyebrow'
+import { Reveal } from '@/components/Reveal'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/diagnostic')({
@@ -23,24 +16,32 @@ export const Route = createFileRoute('/diagnostic')({
   component: Diagnostic,
 })
 
-interface ReviewCard {
-  title: string
-  description: string
-  icon: LucideIcon
-}
+const romans = ['i.', 'ii.', 'iii.', 'iv.'] as const
 
-interface OutcomeCard {
-  title: string
-  description: string
-  icon: LucideIcon
-}
+export const diagnosticDeliverables = [
+  'Workflow map',
+  'Friction summary',
+  'Priority list',
+  'Build recommendation',
+] as const
 
-export const diagnosticHero = {
-  headline: 'Map the workflow before building the system.',
-  body: 'A Workflow Diagnostic is the first buying step for owner-led teams that feel operational friction but need the workflow understood before prescribing software.',
-  primaryCta: 'Request a Workflow Diagnostic',
-  secondaryCta: 'See the process',
-} as const
+const reviewCards = [
+  {
+    title: 'Tools & data flow',
+    description:
+      'The systems already in use, and where information gets re-keyed, delayed, or lost.',
+  },
+  {
+    title: 'Handoffs & decisions',
+    description:
+      'The moments work changes hands, approvals stall, or the next action goes unclear.',
+  },
+  {
+    title: 'Operational risk',
+    description:
+      'Fragile processes, access concerns, and reporting gaps, caught before they become requirements.',
+  },
+] as const
 
 export const diagnosticReviewAreas = [
   'Current tools',
@@ -51,11 +52,22 @@ export const diagnosticReviewAreas = [
   'Team permissions',
 ] as const
 
-export const diagnosticDeliverables = [
-  'Workflow map',
-  'Friction summary',
-  'Opportunity priority list',
-  'Build recommendation',
+const outcomes = [
+  {
+    title: 'Build',
+    description:
+      'The workflow is repeated, valuable, and underserved by generic tools. A custom system is justified.',
+  },
+  {
+    title: 'Connect',
+    description:
+      'A smaller automation or integration layer removes the friction without replacing what works.',
+  },
+  {
+    title: 'Don’t build yet',
+    description:
+      'Clarify the process, change a tool, or wait until the workflow is sharper. We’ll say so.',
+  },
 ] as const
 
 export const diagnosticFit = {
@@ -67,319 +79,243 @@ export const diagnosticFit = {
   notFit: [
     'Commodity brochure sites',
     'One-off landing pages',
-    'Teams looking for software before defining the workflow',
+    'Teams that want software before defining the workflow',
   ],
 } as const
 
-export const diagnosticNextSteps = [
-  'Custom operating system',
-  'Automation or integration layer',
-  'Technology stewardship plan',
-  'No-build recommendation',
-] as const
-
-const reviewCards: Array<ReviewCard> = [
-  {
-    title: 'Tools and data flow',
-    description:
-      'We inventory the systems already in use and where information gets re-keyed, delayed, or lost.',
-    icon: Search,
-  },
-  {
-    title: 'Handoffs and decisions',
-    description:
-      'We trace the moments work changes hands, approvals stall, or the next action becomes unclear.',
-    icon: GitBranch,
-  },
-  {
-    title: 'Operational risk',
-    description:
-      'We identify fragile processes, access concerns, and reporting gaps before they become system requirements.',
-    icon: ShieldCheck,
-  },
-]
-
-const outcomeCards: Array<OutcomeCard> = [
-  {
-    title: 'Build',
-    description:
-      'A focused custom system is justified because the workflow is repeated, valuable, and underserved by generic tools.',
-    icon: Wrench,
-  },
-  {
-    title: 'Connect',
-    description:
-      'A smaller automation or integration layer can remove friction without replacing tools that already work.',
-    icon: GitBranch,
-  },
-  {
-    title: 'Do not build yet',
-    description:
-      'The right move may be clarifying process, changing a tool, or deferring software until the workflow is sharper.',
-    icon: ClipboardList,
-  },
-]
-
 function Diagnostic() {
   return (
-    <div className="min-h-screen overflow-hidden">
-      <section className="relative min-h-screen px-6 md:px-12 flex items-start md:items-center pt-32 md:pt-0">
-        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
-          <div className="lg:col-span-8">
-            <p className="text-gold text-[10px] tracking-[0.35em] uppercase font-bold mb-8 animate-fade-in-up">
-              Workflow Diagnostic
-            </p>
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.02] animate-fade-in-up">
-              Map the workflow before building{' '}
-              <span className="italic text-gold/90">the system.</span>
+    <div className="relative overflow-x-clip">
+      {/* Radial gold glow over the top of the page */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 inset-x-0 h-screen pointer-events-none bg-[radial-gradient(ellipse_760px_420px_at_calc(50%+300px)_80px,rgba(203,171,69,0.07),transparent_65%)]"
+      />
+
+      {/* ── Hero + "You leave with" aside ── */}
+      <section className="relative pt-[120px] pb-[90px] px-5 md:px-12">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 min-[1024px]:grid-cols-[7fr_5fr] gap-12 min-[1024px]:gap-20 items-center">
+          <div>
+            <Eyebrow className="animate-fade-in-up mb-8">
+              The Workflow Diagnostic
+            </Eyebrow>
+            <h1
+              className="animate-fade-in-up font-serif text-[clamp(38px,7.2vw,88px)] leading-none tracking-[-0.01em] text-balance"
+              style={{ animationDelay: '80ms' }}
+            >
+              Map the workflow.{' '}
+              <span className="italic text-gold-text">Then decide.</span>
             </h1>
             <p
-              className="mt-8 max-w-2xl text-ink-sub text-base md:text-lg font-light leading-relaxed opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '150ms' }}
+              className="animate-fade-in-up mt-9 max-w-[480px] text-ink-sub text-[17px] font-light leading-[1.6]"
+              style={{ animationDelay: '180ms' }}
             >
-              {diagnosticHero.body}
+              A free first engagement for owner-led teams. We map how work
+              actually moves, find the root friction, and hand you a clear
+              answer: build, connect, or don't.
             </p>
             <div
-              className="mt-10 flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '300ms' }}
+              className="animate-fade-in-up mt-11 flex flex-wrap gap-3.5"
+              style={{ animationDelay: '280ms' }}
             >
-              <Link
-                to="/inquire"
-                className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-7 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold"
-              >
-                {diagnosticHero.primaryCta}
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
-                to="/process"
-                className="inline-flex items-center justify-center gap-3 border border-line px-7 py-4 text-sm uppercase tracking-widest text-ink transition-all duration-300 hover:border-gold hover:text-gold"
-              >
-                {diagnosticHero.secondaryCta}
-              </Link>
+              <CtaLink to="/inquire" arrow>
+                Request a Diagnostic
+              </CtaLink>
+              <CtaLink to="/process" variant="outline">
+                See the process
+              </CtaLink>
             </div>
           </div>
 
           <aside
-            className="lg:col-span-4 border border-line bg-card/70 p-6 md:p-8 backdrop-blur-sm opacity-0 animate-fade-in-up"
-            style={{ animationDelay: '450ms' }}
+            className="animate-fade-in-up border border-line bg-card p-7 min-[768px]:p-10"
+            style={{ animationDelay: '380ms' }}
           >
-            <p className="text-[10px] uppercase tracking-[0.3em] text-ink-muted mb-6">
-              Diagnostic focus
+            <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint mb-7">
+              You leave with
             </p>
-            <div className="space-y-4">
-              {diagnosticReviewAreas.slice(0, 4).map((area) => (
+            <div className="flex flex-col">
+              {diagnosticDeliverables.map((label, i) => (
                 <div
-                  key={area}
-                  className="flex items-center justify-between gap-4 border-b border-line-faint pb-4 last:border-0 last:pb-0"
+                  key={label}
+                  className="flex items-baseline gap-[18px] border-b border-line-faint py-4"
                 >
-                  <span className="text-sm text-ink-sub">{area}</span>
-                  <ArrowRight className="size-3.5 text-gold shrink-0" />
+                  <span className="font-serif italic text-[15px] text-gold-text">
+                    {romans[i]}
+                  </span>
+                  <span className="font-serif text-[22px] text-ink-em">
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
+            <p className="mt-6 text-xs text-ink-muted leading-[1.6]">
+              Free, fixed scope, and you keep everything we map.
+            </p>
           </aside>
         </div>
       </section>
 
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32 border-y border-line-faint bg-inset/40">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          <div className="lg:col-span-4">
-            <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold mb-4">
-              Why start here
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-              The diagnostic protects the build from the wrong assumptions.
-            </h2>
+      {/* ── Why start here ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25 grid grid-cols-1 min-[1024px]:grid-cols-[4fr_8fr] gap-12 min-[1024px]:gap-18 items-start">
+          <div>
+            <Reveal>
+              <Eyebrow className="mb-5">Why start here</Eyebrow>
+            </Reveal>
+            <Reveal delay={100}>
+              <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05]">
+                Features lie.{' '}
+                <span className="text-ghost">Workflows don't.</span>
+              </h2>
+            </Reveal>
           </div>
-          <div className="lg:col-span-8 space-y-6 text-ink-sub text-base md:text-lg leading-relaxed">
-            <p>
-              Most software conversations start with a requested feature list.
-              We start with the business motion: what triggers work, who owns
-              each step, where information moves, and where the team loses
-              visibility.
+          <Reveal delay={200}>
+            <p className="text-ink-sub text-lg font-light leading-[1.7]">
+              Most software conversations start with a feature list. We start
+              with the business motion: what triggers work, who owns each step,
+              where information moves, and where the team loses visibility.
+              That's how the build gets protected from the wrong assumptions.
             </p>
-            <p>
-              The result is a practical recommendation: build the operating
-              layer, connect existing tools, improve the process first, or avoid
-              unnecessary software entirely.
-            </p>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32">
-        <div className="max-w-7xl mx-auto">
-          <div className="max-w-3xl mb-14">
-            <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold mb-4">
-              What we review
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-              We study the workflow the way your team actually lives it.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {reviewCards.map((card) => {
-              const Icon = card.icon
-              return (
-                <article
-                  key={card.title}
-                  className="border border-line bg-card/70 p-7 md:p-8 min-h-72 transition-all duration-300 hover:border-gold/50 hover:-translate-y-1"
-                >
-                  <div className="w-12 h-12 rounded-lg border border-line flex items-center justify-center text-gold mb-8">
-                    <Icon className="size-5" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="font-serif text-2xl mb-4">{card.title}</h3>
-                  <p className="text-sm leading-relaxed text-ink-sub">
-                    {card.description}
-                  </p>
-                </article>
-              )
-            })}
-          </div>
-          <ul className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {diagnosticReviewAreas.map((area) => (
-              <li
-                key={area}
-                className="border border-line-faint bg-inset px-4 py-3 text-sm text-ink-sub"
+      {/* ── What we review ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25">
+          <Reveal>
+            <Eyebrow className="mb-16">What we review</Eyebrow>
+          </Reveal>
+          <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-px p-0.5 bg-line">
+            {reviewCards.map((card, i) => (
+              <Reveal
+                key={card.title}
+                delay={i * 150}
+                className="bg-page pt-11 px-7 min-[768px]:px-10 pb-12"
               >
-                {area}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32 bg-card/40 border-y border-line-faint">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-5">
-            <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold mb-4">
-              What you receive
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-              A decision-ready picture of what technology should do next.
-            </h2>
-          </div>
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {diagnosticDeliverables.map((deliverable, index) => (
-              <article
-                key={deliverable}
-                className="border border-line bg-inset p-6 min-h-36"
-              >
-                <span className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
-                  0{index + 1}
+                <span className="font-serif italic text-xl text-gold-text">
+                  {romans[i]}
                 </span>
-                <h3 className="mt-5 font-serif text-2xl">{deliverable}</h3>
-              </article>
+                <h3 className="font-serif text-[34px] mt-[18px] mb-3.5">
+                  {card.title}
+                </h3>
+                <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                  {card.description}
+                </p>
+              </Reveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32">
-        <div className="max-w-7xl mx-auto">
-          <div className="max-w-3xl mb-14">
-            <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold mb-4">
-              Possible next steps
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-              The recommendation may be to build, connect, steward, or pause.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {outcomeCards.map((card) => {
-              const Icon = card.icon
-              return (
-                <article
-                  key={card.title}
-                  className="border border-line bg-card/70 p-7 md:p-8"
+          <Reveal delay={400}>
+            <div className="mt-7 flex flex-wrap gap-2.5">
+              {diagnosticReviewAreas.map((area) => (
+                <span
+                  key={area}
+                  className="border border-line-faint px-4 py-[9px] text-xs tracking-[0.06em] text-ink-muted"
                 >
-                  <Icon className="size-6 text-gold mb-8" strokeWidth={1.5} />
-                  <h3 className="font-serif text-2xl mb-4">{card.title}</h3>
-                  <p className="text-sm leading-relaxed text-ink-sub">
-                    {card.description}
-                  </p>
-                </article>
-              )
-            })}
+                  {area}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Three outcomes ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25">
+          <div className="max-w-[700px] mb-16">
+            <Reveal>
+              <Eyebrow className="mb-5">The answer</Eyebrow>
+            </Reveal>
+            <Reveal delay={100}>
+              <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05] text-balance">
+                Three honest outcomes.{' '}
+                <span className="italic text-gold-text">
+                  One of them is "don't build."
+                </span>
+              </h2>
+            </Reveal>
           </div>
-          <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {diagnosticNextSteps.map((step) => (
-              <li
-                key={step}
-                className="flex items-center gap-3 border border-line-faint bg-inset px-4 py-4 text-sm text-ink-sub"
+          <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-10 min-[768px]:gap-14">
+            {outcomes.map((o, i) => (
+              <Reveal
+                key={o.title}
+                delay={100 + i * 150}
+                className="border-t-2 border-gold pt-6"
               >
-                <ArrowRight className="size-3.5 text-gold shrink-0" />
-                {step}
-              </li>
+                <h3 className="font-serif text-[32px] mb-3">{o.title}</h3>
+                <p className="text-sm font-light leading-[1.65] text-ink-sub">
+                  {o.description}
+                </p>
+              </Reveal>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32 bg-inset/40 border-y border-line-faint">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FitPanel title="Good fit" items={diagnosticFit.goodFit} />
-          <FitPanel
-            title="Not the right fit"
-            items={diagnosticFit.notFit}
-            muted
-          />
+      {/* ── Fit panels ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-[90px] grid grid-cols-1 min-[768px]:grid-cols-2 gap-12 min-[768px]:gap-20">
+          <div>
+            <Reveal>
+              <h3 className="font-serif text-[34px] text-gold-text mb-7">
+                A good fit if
+              </h3>
+            </Reveal>
+            <div className="flex flex-col">
+              {diagnosticFit.goodFit.map((item) => (
+                <Reveal key={item} delay={100}>
+                  <p className="border-b border-line-faint py-4 text-[15px] font-light text-ink-sub">
+                    {item}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Reveal>
+              <h3 className="font-serif text-[34px] text-ink-faint mb-7">
+                Not the right fit for
+              </h3>
+            </Reveal>
+            <div className="flex flex-col">
+              {diagnosticFit.notFit.map((item) => (
+                <Reveal key={item} delay={100}>
+                  <p className="border-b border-line-faint py-4 text-[15px] font-light text-ink-muted">
+                    {item}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="relative z-10 px-6 md:px-12 py-24 md:py-32 text-center">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold mb-6">
-            Start with clarity
-          </p>
-          <h2 className="font-serif text-4xl md:text-6xl leading-tight mb-8">
-            If the workflow is unclear, the system will be too.
-          </h2>
-          <p className="text-ink-sub text-lg leading-relaxed max-w-2xl mx-auto mb-10">
-            Request a Workflow Diagnostic and leave with a sober map of what is
-            worth building, what should be connected, and what should be left
-            alone.
-          </p>
-          <Link
-            to="/inquire"
-            className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-8 py-4 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold"
-          >
-            {diagnosticHero.primaryCta}
-            <ArrowRight className="size-4" />
-          </Link>
+      {/* ── Closing CTA ── */}
+      <section className="relative">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_700px_500px_at_50%_100%,rgba(203,171,69,0.08),transparent_70%)]"
+        />
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-30 text-center relative">
+          <Reveal>
+            <h2 className="font-serif text-[clamp(32px,5.6vw,68px)] leading-[1.05] text-balance">
+              If the workflow is unclear,{' '}
+              <span className="italic text-gold-text">
+                the system will be too.
+              </span>
+            </h2>
+          </Reveal>
+          <Reveal delay={150}>
+            <div className="mt-11 flex justify-center">
+              <CtaLink to="/inquire" arrow>
+                Request a Workflow Diagnostic
+              </CtaLink>
+            </div>
+          </Reveal>
         </div>
       </section>
     </div>
-  )
-}
-
-function FitPanel({
-  title,
-  items,
-  muted = false,
-}: {
-  title: string
-  items: ReadonlyArray<string>
-  muted?: boolean
-}) {
-  return (
-    <article className="border border-line bg-card/70 p-7 md:p-8">
-      <h3
-        className={`font-serif text-3xl mb-8 ${muted ? 'text-ink-sub' : 'text-gold'}`}
-      >
-        {title}
-      </h3>
-      <ul className="space-y-4">
-        {items.map((item) => (
-          <li
-            key={item}
-            className="flex items-start gap-3 text-sm text-ink-sub"
-          >
-            <ArrowRight className="size-3.5 text-gold mt-1 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </article>
   )
 }

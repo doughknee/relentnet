@@ -104,7 +104,7 @@ export function BrowserFrame({ url, siteName }: BrowserFrameProps) {
           }`}
           aria-label={`Visit ${siteName} live site`}
         >
-          <span className="flex items-center gap-2 border border-gold/50 px-8 py-4 text-sm tracking-widest uppercase text-gold transition-all duration-300 hover:bg-gold hover:text-black">
+          <span className="flex items-center gap-2 border border-gold/50 px-8 py-4 text-sm tracking-widest uppercase text-gold-text transition-all duration-300 hover:bg-gold hover:text-black">
             Visit Live Site
             <ArrowUpRight size={16} />
           </span>
