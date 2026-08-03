@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { FOUNDED_YEAR, aboutSections, founders } from './about'
 import { primaryNavItems } from '@/components/Header'
+import { siteConfig } from '@/site.config'
 import { stats } from './index'
 
 describe('about page content', () => {
@@ -21,6 +22,15 @@ describe('about page content', () => {
     const tenure = stats.find((s) => s.label === 'In business')
     if (!tenure) throw new Error('tenure stat missing from the homepage')
     expect(tenure.value).toBe(FOUNDED_YEAR)
+  })
+
+  it('puts the founders in the same cities the footer does', () => {
+    // The site claimed Nashville alone in four places while Dan works from New
+    // Orleans. Both now read from siteConfig, and this is what stops them
+    // drifting apart again.
+    expect(founders.map((f) => f.city)).toEqual(
+      siteConfig.locations.map((l) => l.city),
+    )
   })
 
   it('keeps the honest answer on the page', () => {
