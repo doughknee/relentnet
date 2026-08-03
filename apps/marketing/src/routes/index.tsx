@@ -1060,7 +1060,7 @@ function HomeComponent() {
                 >
                   {siteConfig.contact.email}
                 </a>{' '}
-                · Nashville, TN
+                · {siteConfig.locations.map((l) => l.city).join(' · ')}
               </p>
             </Reveal>
           </div>

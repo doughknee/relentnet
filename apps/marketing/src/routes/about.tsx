@@ -12,58 +12,76 @@ export const Route = createFileRoute('/about')({
     seo({
       title: 'About | RelentNet',
       description:
-        'RelentNet is Brandon Harris and Daniel Velez. Since 2022 we have diagnosed workflows, built the systems worth building, and hosted them afterwards for owner-led businesses.',
+        'RelentNet is Brandon Harris and Daniel Velez. We met playing video games, worked at the same IT company, and started this in May 2022 to do the same kind of work with a fraction of the overhead.',
       path: '/about',
     }),
   component: About,
 })
 
-/** The year on the homepage's tenure stat. Kept here as the single fact the
- *  page opens on, so the two cannot drift apart silently. */
+/** The month and year on the homepage's tenure stat. Kept here as the one fact
+ *  the page opens on, so the two cannot drift apart silently. */
 export const FOUNDED_YEAR = 2022
+export const FOUNDED_MONTH = 'May'
 
 export const founders = [
-  { name: 'Brandon Harris', role: 'Co-founder' },
-  { name: 'Daniel Velez', role: 'Co-founder' },
+  { name: 'Brandon Harris', role: 'Co-founder & CEO', city: 'Nashville' },
+  { name: 'Daniel Velez', role: 'Co-founder & COO', city: 'New Orleans' },
 ] as const
 
 /**
- * Sections of the page, exported so a test can pin that the page still makes
- * the argument it was built to make.
+ * The page's argument, exported so a test can pin that it still makes it.
  *
- * Every claim here is already made elsewhere on the site. The three answers
- * and the free diagnostic come from the homepage premise, "no account
- * managers" from section 03, the regions from siteConfig, and the Scrollr
- * account from that case study's own narrative. Nothing about either founder
- * beyond name, role, and what they did on Scrollr, because nothing more is
- * written down anywhere yet.
+ * Written from what Brandon and Daniel each said in interview. Everything here
+ * is theirs: the Discord pitch, Daniel covering Brandon's living costs, the
+ * truck plazas at $300, the 2025 framework vulnerability, the eight-person
+ * ceiling, and the shared credentials. Nothing is invented, and the two places
+ * their answers differed are written the way they settled them.
  */
 export const aboutSections = [
   {
     num: '01',
-    eyebrow: 'Who you are hiring',
-    title: 'No layer in between.',
+    eyebrow: 'How it started',
+    title: 'Brandon pitched it over Discord.',
     body: [
-      `Brandon Harris and Daniel Velez founded RelentNet in ${FOUNDED_YEAR}. There is nobody between you and the work.`,
-      'The people who scope your system are the people who write it, host it, monitor it, and pick up the phone when something breaks at an inconvenient hour. That is not a service tier. It is just who is here.',
+      'We met years earlier playing video games, through a mutual friend, on the same platform. Brandon wanted to be more creative and, in his words, not stuck in someone else’s cog. The pitch was a business doing the work we already knew how to do, with a fraction of the overhead of the company we were doing it at.',
+      'Daniel agreed, and for the first two years he covered Brandon’s living costs so Brandon could commit to it properly. The company earned from the start. That was Daniel investing in Brandon, not Daniel funding a company.',
+      'The first job was five websites for a group of truck plazas, at three hundred dollars each. Brandon’s assessment now: a gross undervalue. We have been correcting for it ever since, and what to charge is still the thing we argue about most.',
     ],
   },
   {
     num: '02',
-    eyebrow: 'How a call gets made',
-    title: 'Two people look before anyone quotes.',
+    eyebrow: 'How the work splits',
+    title: 'One of us builds it. One of us runs it.',
     body: [
-      'Daniel met the Scrollr team at an incubator pop-up where they were openly looking for a developer partner. He was first to open the codebase, and his read was that it needed a full rebuild rather than a rescue.',
-      'Brandon came in for a second look with one job: find what could be salvaged. He reached the same conclusion, and only then did anyone propose a rebuild. Getting that second opinion did not require a change request.',
+      'Brandon owns what gets built: the vision, the code, the design. Daniel owns bringing the work in and keeping it running. We both sit in client meetings, so neither of us is ever repeating something secondhand.',
+      `Brandon is in Nashville and Daniel is in New Orleans, which is why the map looks the way it does: ${siteConfig.regions.slice(0, -1).join(', ')} and ${siteConfig.regions[siteConfig.regions.length - 1]}, reachable without booking a flight. Most clients never need us in the room. We offer it anyway.`,
     ],
   },
   {
     num: '03',
     eyebrow: 'What we will tell you',
-    title: 'The answer can be no.',
+    title: 'Sometimes the answer is don’t build yet.',
     body: [
-      'A diagnostic ends in one of three answers, and one of them is don’t build yet. It is the honest answer more often than you would think, and it costs you nothing: you keep the workflow map and skip the invoice.',
-      'Sometimes the tools you already pay for cover it and have simply never been wired together. We would rather do the wiring than sell you a system somebody has to maintain forever.',
+      'Clients know what they want. They usually do not know how they want it, and that gap is where the money goes. So a diagnostic can end with don’t build yet, and it does. We have turned work down because a business was not ready for it and said so rather than take the money. It cost us the job.',
+      'The harder conversation is the other one: that the site has to come down and be rebuilt, and that it will cost more than expected. Nobody enjoys hearing it. Everybody is glad about it afterwards.',
+    ],
+  },
+  {
+    num: '04',
+    eyebrow: 'Why we keep the keys',
+    title: 'Late 2025, and nobody noticed.',
+    body: [
+      'A remote code execution flaw surfaced in React and Next.js server components at the end of 2025. Brandon updated almost every client site and service to get ahead of it while Daniel swept the servers. Not one client was affected, and most of them never learned there had been anything to be affected by.',
+      'That is the whole argument for staying on after launch. Software does not hold still, and somebody has to be watching it who is not you.',
+    ],
+  },
+  {
+    num: '05',
+    eyebrow: 'Where this goes',
+    title: 'About eight people, eventually.',
+    body: [
+      'Big enough to run without either of us at the helm. Small enough that we still know every customer by name. We are not trying to be large, and we bring in specialists per project rather than hiring for work we do not have yet.',
+      'In the meantime we share every credential and everything we know, deliberately. Either of us could run this alone if it came to that. Neither of us wants to.',
     ],
   },
 ] as const
@@ -86,20 +104,23 @@ function About() {
             style={{ animationDelay: '80ms' }}
           >
             The people who answer{' '}
-            <span className="italic text-gold-text">are the people who build.</span>
+            <span className="italic text-gold-text">
+              are the people who build.
+            </span>
           </h1>
           <p
-            className="animate-fade-in-up mt-9 mx-auto max-w-[560px] text-ink-sub text-[17px] font-light leading-[1.6]"
+            className="animate-fade-in-up mt-9 mx-auto max-w-[580px] text-ink-sub text-[17px] font-light leading-[1.6]"
             style={{ animationDelay: '180ms' }}
           >
-            RelentNet is Brandon Harris and Daniel Velez. Since {FOUNDED_YEAR}{' '}
-            we have diagnosed workflows, built the systems worth building, and
-            stayed on to host them.
+            RelentNet is Brandon Harris and Daniel Velez. We met playing video
+            games, worked at the same IT company, and started this in{' '}
+            {FOUNDED_MONTH} {FOUNDED_YEAR} to do that kind of work with a
+            fraction of the overhead.
           </p>
         </div>
       </section>
 
-      {/* ── The builders ── */}
+      {/* ── The two of them ── */}
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 pb-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center">
           <Reveal className="max-w-[480px]">
@@ -115,19 +136,21 @@ function About() {
           </Reveal>
           <div>
             <Reveal delay={80}>
-              {/* Names as a ruled list rather than prose: the page's whole
-                  claim is that the company is these two, so they get to be a
-                  specification rather than a sentence. */}
+              {/* A ruled list rather than prose: the page's whole claim is that
+                  the company is these two, so they get to be a specification. */}
               <dl className="border-t border-line">
                 {founders.map((person) => (
                   <div
                     key={person.name}
-                    className="group flex items-baseline justify-between gap-6 border-b border-line py-5 transition-colors duration-500"
+                    className="group grid grid-cols-[1fr_auto] items-baseline gap-x-6 border-b border-line py-5"
                   >
-                    <dt className="font-serif text-[clamp(26px,3vw,38px)] leading-none text-ink-em transition-colors duration-500 group-hover:text-gold-text">
+                    <dt className="font-serif text-[clamp(24px,2.8vw,34px)] leading-none text-ink-em transition-colors duration-500 group-hover:text-gold-text">
                       {person.name}
                     </dt>
-                    <dd className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-muted whitespace-nowrap">
+                    <dd className="font-mono text-[10px] tracking-[0.2em] uppercase text-gold-text whitespace-nowrap">
+                      {person.city}
+                    </dd>
+                    <dd className="col-span-2 mt-1.5 font-mono text-[11px] tracking-[0.18em] uppercase text-ink-muted">
                       {person.role}
                     </dd>
                   </div>
@@ -135,13 +158,16 @@ function About() {
               </dl>
             </Reveal>
             <Reveal delay={200}>
-              <p className="mt-8 font-mono text-[11px] tracking-[0.2em] uppercase text-gold-text">
-                Nashville, Tennessee
+              <p className="mt-8 text-ink-sub font-light leading-[1.7] max-w-[540px]">
+                Daniel was Brandon’s boss. He owns Function IT Services, a
+                hardware IT company he still runs, and Brandon was a designer
+                there. In {FOUNDED_MONTH} {FOUNDED_YEAR} Brandon pitched him
+                something different and the hierarchy quietly inverted.
               </p>
-              <p className="mt-3 text-ink-sub font-light leading-[1.65] max-w-[520px]">
-                We work across {siteConfig.regions.slice(0, -1).join(', ')}, and{' '}
-                {siteConfig.regions[siteConfig.regions.length - 1]}. We come out
-                in person in all four.
+              <p className="mt-4 text-ink-sub font-light leading-[1.7] max-w-[540px]">
+                There is nobody between you and the work. We scope it, write it,
+                host it, and answer the phone. When a project needs a specialist
+                we bring one in, and you will know that we have.
               </p>
             </Reveal>
           </div>
@@ -161,7 +187,7 @@ function About() {
               </p>
             </Reveal>
             <Reveal delay={120}>
-              <h2 className="font-serif text-[clamp(28px,3.6vw,44px)] leading-[1.1] mb-6">
+              <h2 className="font-serif text-[clamp(28px,3.6vw,44px)] leading-[1.1] mb-6 text-balance">
                 {section.title}
               </h2>
               {section.body.map((paragraph, p) => (

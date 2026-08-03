@@ -8,6 +8,13 @@ export const siteConfig = {
     hours: '9am - 5pm CST (Mon-Fri)',
   },
   regions: ['Tennessee', 'Louisiana', 'Georgia', 'Florida'],
+  /** Both founders' cities. Brandon reaches Georgia and Tennessee from
+   *  Nashville, Dan covers Louisiana and Florida from New Orleans, which is
+   *  why `regions` is those four and not some other four. */
+  locations: [
+    { city: 'Nashville', state: 'TN' },
+    { city: 'New Orleans', state: 'LA' },
+  ],
   meta: {
     title: 'RelentNet | Workflow Diagnostic & Technology Stewardship',
     description:
