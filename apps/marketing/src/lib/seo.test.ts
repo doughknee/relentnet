@@ -16,11 +16,22 @@ describe('seo', () => {
     expect(prop(meta, 'og:image:height')).toMatchObject({ content: '630' })
   })
 
+  it('emits supplied dimensions for a custom image', () => {
+    const { meta } = seo({
+      image: '/case-studies/x/hero.webp',
+      imageWidth: 1600,
+      imageHeight: 900,
+    })
+    expect(prop(meta, 'og:image:width')).toMatchObject({ content: '1600' })
+    expect(prop(meta, 'og:image:height')).toMatchObject({ content: '900' })
+  })
+
   it('omits dimensions and keeps the hero for a custom image', () => {
     const { meta } = seo({ image: '/case-studies/x/hero.webp' })
     expect(prop(meta, 'og:image')).toMatchObject({
       content: `${siteConfig.domain}/case-studies/x/hero.webp`,
     })
     expect(prop(meta, 'og:image:width')).toBeUndefined()
+    expect(prop(meta, 'og:image:height')).toBeUndefined()
   })
 })
