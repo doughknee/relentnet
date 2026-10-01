@@ -30,16 +30,19 @@ export default defineConfig({
       // SPA mode renders its fallback shell (dist/client/_shell.html) from the
       // route at `maskPath`, and does NOT emit a content page for that route.
       // It defaults to '/', which would rob the home page of a prerendered
-      // index.html. Point it at /portal instead: the shell is generic chrome
-      // (no route content leaks in), and since /portal is noindex, the 404
-      // fallback shell is correctly noindex too.
-      spa: { enabled: true, maskPath: '/portal' },
+      // index.html. Point it at /404: the shell is generic chrome (no route
+      // content leaks in) with a noindex "Page not found" head, and every real
+      // route, /portal included, keeps its own prerendered page. nginx no
+      // longer falls back to the shell, so nothing serves it.
+      spa: { enabled: true, maskPath: '/404' },
+      // The mask claims '/404', so the content page is requested as '/404/'
+      // (a distinct key) and written to dist/client/404.html, which nginx
+      // serves with status 404 for every unknown URL.
+      pages: [{ path: '/404/', prerender: { outputPath: '/404.html' } }],
       prerender: {
         enabled: true,
         crawlLinks: true,
         autoSubfolderIndex: true,
-        // /sow is a client-side redirect; nothing to prerender.
-        filter: ({ path }) => path !== '/sow',
       },
     }),
     viteReact(),
