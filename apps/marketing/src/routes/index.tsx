@@ -24,6 +24,7 @@ import { ClosingDoors } from '@/components/ClosingDoors'
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Frame } from '@/components/Frame'
+import { HomeTestimonial } from '@/components/HomeTestimonial'
 import { Reveal } from '@/components/Reveal'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
@@ -31,6 +32,11 @@ import { makeCountEase } from '@/lib/countEase'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/')({
+  // Review only (REL-438): picks the testimonial variant. Removed before merge.
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { testimonial?: 'full' } =>
+    search.testimonial === 'full' ? { testimonial: 'full' } : {},
   head: () =>
     seo({
       title: siteConfig.meta.title,
@@ -616,6 +622,7 @@ function ProcessAxis({
 }
 
 function HomeComponent() {
+  const { testimonial } = Route.useSearch()
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
   /** Which process step the pointer is over, so section 04's axis can answer. */
@@ -1228,6 +1235,9 @@ function HomeComponent() {
           </dl>
         </div>
       </section>
+
+      {/* ── Testimonial (REL-438 review: variant from ?testimonial=) ── */}
+      <HomeTestimonial variant={testimonial ?? 'excerpt'} />
 
       {/* ── Closing CTA ── */}
       <section className="relative">
