@@ -136,7 +136,7 @@ function ClientsIndex() {
           >
             Construction, consumer software, sports tech, real estate. Every
             engagement began with a diagnostic; every build was scoped to the
-            friction we found.
+            friction we found. Four we can show in full. The rest run under NDA.
           </p>
         </div>
       </section>
