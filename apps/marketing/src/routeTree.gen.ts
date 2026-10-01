@@ -9,23 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SowRouteImport } from './routes/sow'
 import { Route as ProcessRouteImport } from './routes/process'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as InquireRouteImport } from './routes/inquire'
 import { Route as DiagnosticRouteImport } from './routes/diagnostic'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as R404RouteImport } from './routes/404'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalIndexRouteImport } from './routes/legal/index'
 import { Route as ClientsIndexRouteImport } from './routes/clients/index'
 import { Route as LegalDocIdRouteImport } from './routes/legal/$docId'
 import { Route as ClientsSlugRouteImport } from './routes/clients/$slug'
 
-const SowRoute = SowRouteImport.update({
-  id: '/sow',
-  path: '/sow',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProcessRoute = ProcessRouteImport.update({
   id: '/process',
   path: '/process',
@@ -49,6 +44,11 @@ const DiagnosticRoute = DiagnosticRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R404Route = R404RouteImport.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -79,12 +79,12 @@ const ClientsSlugRoute = ClientsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
-  '/sow': typeof SowRoute
   '/clients/$slug': typeof ClientsSlugRoute
   '/legal/$docId': typeof LegalDocIdRoute
   '/clients/': typeof ClientsIndexRoute
@@ -92,12 +92,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
-  '/sow': typeof SowRoute
   '/clients/$slug': typeof ClientsSlugRoute
   '/legal/$docId': typeof LegalDocIdRoute
   '/clients': typeof ClientsIndexRoute
@@ -106,12 +106,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/diagnostic': typeof DiagnosticRoute
   '/inquire': typeof InquireRoute
   '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
-  '/sow': typeof SowRoute
   '/clients/$slug': typeof ClientsSlugRoute
   '/legal/$docId': typeof LegalDocIdRoute
   '/clients/': typeof ClientsIndexRoute
@@ -121,12 +121,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/404'
     | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/process'
-    | '/sow'
     | '/clients/$slug'
     | '/legal/$docId'
     | '/clients/'
@@ -134,12 +134,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/404'
     | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/process'
-    | '/sow'
     | '/clients/$slug'
     | '/legal/$docId'
     | '/clients'
@@ -147,12 +147,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/404'
     | '/about'
     | '/diagnostic'
     | '/inquire'
     | '/portal'
     | '/process'
-    | '/sow'
     | '/clients/$slug'
     | '/legal/$docId'
     | '/clients/'
@@ -161,12 +161,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R404Route: typeof R404Route
   AboutRoute: typeof AboutRoute
   DiagnosticRoute: typeof DiagnosticRoute
   InquireRoute: typeof InquireRoute
   PortalRoute: typeof PortalRoute
   ProcessRoute: typeof ProcessRoute
-  SowRoute: typeof SowRoute
   ClientsSlugRoute: typeof ClientsSlugRoute
   LegalDocIdRoute: typeof LegalDocIdRoute
   ClientsIndexRoute: typeof ClientsIndexRoute
@@ -175,13 +175,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sow': {
-      id: '/sow'
-      path: '/sow'
-      fullPath: '/sow'
-      preLoaderRoute: typeof SowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/process': {
       id: '/process'
       path: '/process'
@@ -215,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -257,12 +257,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R404Route: R404Route,
   AboutRoute: AboutRoute,
   DiagnosticRoute: DiagnosticRoute,
   InquireRoute: InquireRoute,
   PortalRoute: PortalRoute,
   ProcessRoute: ProcessRoute,
-  SowRoute: SowRoute,
   ClientsSlugRoute: ClientsSlugRoute,
   LegalDocIdRoute: LegalDocIdRoute,
   ClientsIndexRoute: ClientsIndexRoute,
