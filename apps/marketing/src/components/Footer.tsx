@@ -73,7 +73,9 @@ export function Footer() {
               {siteConfig.contact.email}
             </a>
           </p>
-          <p className="mt-1.5 text-xs text-ink-muted">{siteConfig.contact.hours}</p>
+          <p className="mt-1.5 text-xs text-ink-muted">
+            {siteConfig.contact.hours}
+          </p>
         </div>
       </div>
 
