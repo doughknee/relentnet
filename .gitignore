@@ -18,3 +18,4 @@ count.txt
 # unversioned design inputs
 design_handoff_site_v4/
 relentnet-brandkit/
+.claude/worktrees/
