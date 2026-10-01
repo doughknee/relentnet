@@ -30,9 +30,7 @@ export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
   const products = (study.atAGlance.stack ?? []).flatMap((c) => c.items)
   const global = study.atAGlance.global
   const sizeLabel =
-    study.companySize === 'placeholder'
-      ? null
-      : study.companySize.charAt(0).toUpperCase() + study.companySize.slice(1)
+    study.companySize.charAt(0).toUpperCase() + study.companySize.slice(1)
 
   return (
     <section className="relative z-10 px-6 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 border-t border-line-faint">

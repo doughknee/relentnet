@@ -14,14 +14,11 @@ interface CaseStudyReadMoreProps {
  * Mirrors Stripe /customers/figma's 2-up read-more band.
  */
 export function CaseStudyReadMore({ currentSlug }: CaseStudyReadMoreProps) {
-  const realStudies = caseStudies.filter(
-    (s) => !s.slug.startsWith('placeholder-'),
-  )
-  const idx = realStudies.findIndex((s) => s.slug === currentSlug)
-  if (idx === -1 || realStudies.length < 2) return null
+  const idx = caseStudies.findIndex((s) => s.slug === currentSlug)
+  if (idx === -1 || caseStudies.length < 2) return null
 
-  const prev = realStudies[(idx - 1 + realStudies.length) % realStudies.length]
-  const next = realStudies[(idx + 1) % realStudies.length]
+  const prev = caseStudies[(idx - 1 + caseStudies.length) % caseStudies.length]
+  const next = caseStudies[(idx + 1) % caseStudies.length]
   const tiles: ReadonlyArray<CaseStudy> =
     prev.slug === next.slug ? [next] : [prev, next]
 
