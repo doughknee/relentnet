@@ -116,8 +116,7 @@ export const steps = [
   {
     num: 'iii.',
     title: 'Steward',
-    description:
-      'We host, monitor, secure, and keep improving what we build.',
+    description: 'We host, monitor, secure, and keep improving what we build.',
     note: 'Ongoing: hosting, support, iteration',
   },
 ] as const
@@ -200,8 +199,7 @@ export const stats = [
     // A year, so no thousands separator. Decimals pinned off for the same
     // reason as everywhere else: the climb feeds raw floats.
     format: { useGrouping: false, maximumFractionDigits: 0 },
-    description:
-      'Building, hosting, and stewarding for owner-led businesses.',
+    description: 'Building, hosting, and stewarding for owner-led businesses.',
   },
 ] as const
 
@@ -345,7 +343,10 @@ function StatValue({
     const scale = duration / COUNT_DURATION
     return {
       layout: { duration: FINAL_REEL.layout * scale },
-      opacity: { duration: FINAL_REEL.opacity * scale, ease: 'linear' as const },
+      opacity: {
+        duration: FINAL_REEL.opacity * scale,
+        ease: 'linear' as const,
+      },
       y: {
         type: 'spring' as const,
         visualDuration: FINAL_REEL.y * scale,
@@ -381,10 +382,7 @@ function StatValue({
   }, [hydrated, inView, reducedMotion, value, count, ease, duration])
 
   return (
-    <span
-      ref={ref}
-      className="inline-flex items-baseline whitespace-nowrap"
-    >
+    <span ref={ref} className="inline-flex items-baseline whitespace-nowrap">
       {/* whitespace-pre keeps the prefix's trailing space. The parent is an
           inline-flex, so the prefix is a flex item and its trailing whitespace
           is trimmed like any other, which ran "Since" into "2022". */}
@@ -777,6 +775,7 @@ function HomeComponent() {
                   // undefined, since an inline box-shadow outranks it. No CSS
                   // transition here — it would smear Motion's per-frame writes.
                   className={`chromatic-hover h-full pt-10 px-7 min-[768px]:px-10 pb-11 bg-page border border-line ${
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     'emphasized' in a && a.emphasized
                       ? 'border-t-2 border-t-gold'
                       : ''
@@ -785,7 +784,9 @@ function HomeComponent() {
                   <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
                     {a.num}
                   </p>
-                  <h3 className="font-serif text-[32px] mt-4 mb-3">{a.title}</h3>
+                  <h3 className="font-serif text-[32px] mt-4 mb-3">
+                    {a.title}
+                  </h3>
                   <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
                     {a.body}
                   </p>

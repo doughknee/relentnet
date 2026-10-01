@@ -132,9 +132,7 @@ describe('homepage content (v4)', () => {
     expect(closingDoors).toHaveLength(premise.answers.length)
     // Every card needs somewhere to go, and the gold top rule only means
     // "start here" while it is on one card.
-    expect(
-      closingDoors.every((d) => d.action.to || d.action.href),
-    ).toBe(true)
+    expect(closingDoors.every((d) => d.action.to || d.action.href)).toBe(true)
     expect(closingDoors.filter((d) => d.emphasized)).toHaveLength(1)
   })
 

@@ -67,7 +67,11 @@ export function ClosingDoors({ startDelay = 150 }: { startDelay?: number }) {
   return (
     <div className="mt-16 grid grid-cols-1 min-[900px]:grid-cols-3 gap-5 text-left">
       {closingDoors.map((door, i) => (
-        <Reveal key={door.title} delay={startDelay + i * 120} className="h-full">
+        <Reveal
+          key={door.title}
+          delay={startDelay + i * 120}
+          className="h-full"
+        >
           <TiltCard
             className={`chromatic-hover h-full flex flex-col pt-10 px-7 min-[768px]:px-9 pb-10 bg-page border border-line ${
               door.emphasized ? 'border-t-2 border-t-gold' : ''
