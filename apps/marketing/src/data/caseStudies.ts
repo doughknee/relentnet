@@ -186,7 +186,7 @@ export interface CaseStudy {
   region?: string
 
   /** Drives the index "Customers by size" tab grouping. */
-  companySize: 'startup' | 'growth' | 'enterprise' | 'placeholder'
+  companySize: 'startup' | 'growth' | 'enterprise'
 
   /** Detail-page hero headline. Falls back to hero.tagline. */
   detailHeadline?: string
