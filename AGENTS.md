@@ -187,3 +187,11 @@ Always reference `siteConfig` instead of hardcoding values for domain, email, ph
 - Use default exports for new components (exception: existing `StarParticles`).
 - Hardcode site metadata — use `siteConfig` from `src/site.config.ts`.
 - Commit without running `npm run check`.
+
+## Home
+
+Notes for Home sessions and their subagent workers (see the `home` skill).
+
+- **Dev server leftovers.** A worker that starts Vite from its worktree must stop it before returning. "Stopped" is a claim: confirm with `Get-Process node, esbuild` (PowerShell) or `Get-NetTCPConnection -LocalPort 3000`. A live Vite/esbuild pair locks the worktree so `git worktree remove` fails with "Device or resource busy", and holds port 3000 for the next worker.
+- **`.claude/launch.json` runs from the main checkout**, not a worktree. A worker in `.claude/worktrees/*` that needs a dev server runs `npx vite --port 3000 --strictPort` from its own `apps/marketing` by hand.
+- **No CI.** The merge gate is local: `npm run check`, `npm run typecheck`, `npm run test`, `npm run build`. If `check` or `lint` fails in files you did not touch, confirm the failure exists on `main` before treating it as yours, file it, and say so in your return.
