@@ -14,3 +14,7 @@ count.txt
 
 # proposals local data
 .data/
+
+# unversioned design inputs
+design_handoff_site_v4/
+relentnet-brandkit/
