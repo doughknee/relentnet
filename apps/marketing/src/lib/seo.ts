@@ -16,6 +16,9 @@ export interface SeoInput {
    * (e.g. '/case-studies/scrollr/hero.webp'). Defaults to the site OG image.
    */
   image?: string
+  /** Pixel dimensions of `image`. Omit both for a custom image of unknown size. */
+  imageWidth?: number
+  imageHeight?: number
   /** Keep the page out of search indexes (e.g. the client portal). */
   noindex?: boolean
 }
@@ -45,6 +48,8 @@ export function seo(input: SeoInput): SeoHead {
     description = siteConfig.meta.description,
     path,
     image = siteConfig.meta.ogImage,
+    imageWidth,
+    imageHeight,
     noindex,
   } = input
 
@@ -53,6 +58,13 @@ export function seo(input: SeoInput): SeoHead {
     ? image
     : `${siteConfig.domain}${image}`
 
+  const dimensions =
+    imageWidth && imageHeight
+      ? { width: imageWidth, height: imageHeight }
+      : image === siteConfig.meta.ogImage
+        ? { width: 1200, height: 630 }
+        : undefined
+
   const meta: Array<MetaTag> = [
     { title },
     { name: 'description', content: description },
@@ -60,11 +72,12 @@ export function seo(input: SeoInput): SeoHead {
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },
     { property: 'og:image', content: imageUrl },
-    // Dimensions are only known for the bundled default card; hero images vary.
-    ...(image === siteConfig.meta.ogImage
+    // The bundled default card is 1200x630; other images only get dimensions
+    // when the caller supplies them (wrong values are worse than none).
+    ...(dimensions
       ? [
-          { property: 'og:image:width', content: '1200' },
-          { property: 'og:image:height', content: '630' },
+          { property: 'og:image:width', content: String(dimensions.width) },
+          { property: 'og:image:height', content: String(dimensions.height) },
         ]
       : []),
     { property: 'og:url', content: url },

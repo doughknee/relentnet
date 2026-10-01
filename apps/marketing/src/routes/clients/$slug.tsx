@@ -20,14 +20,14 @@ export const Route = createFileRoute('/clients/$slug')({
     const { study } = loaderData
     // Prefer the case study's own hero/portrait image as the social card.
     const ogImage =
-      study.hero.image?.src ??
-      study.hero.beats?.[0]?.image.src ??
-      study.portraitImage?.src
+      study.hero.image ?? study.hero.beats?.[0]?.image ?? study.portraitImage
     return seo({
       title: study.meta.title,
       description: study.meta.description,
       path: `/clients/${study.slug}`,
-      image: ogImage,
+      image: ogImage?.src,
+      imageWidth: ogImage?.width,
+      imageHeight: ogImage?.height,
     })
   },
   component: ClientDetail,
