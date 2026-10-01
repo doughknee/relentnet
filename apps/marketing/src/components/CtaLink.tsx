@@ -29,6 +29,8 @@ type CtaLinkProps = {
   arrow?: boolean
   /** Fill the container and wrap, rather than sizing to the label. */
   block?: boolean
+  /** Open an `href` in a new tab. */
+  external?: boolean
   children: ReactNode
 } &
   /** An in-app route, through the router. */
@@ -50,6 +52,7 @@ export function CtaLink({
   variant = 'gold',
   arrow = false,
   block = false,
+  external = false,
   children,
 }: CtaLinkProps) {
   const className = `${base} ${layouts[block ? 'block' : 'inline']} ${
@@ -70,7 +73,11 @@ export function CtaLink({
   )
 
   return href ? (
-    <a href={href} className={className}>
+    <a
+      href={href}
+      className={className}
+      {...(external && { target: '_blank', rel: 'noopener' })}
+    >
       {content}
     </a>
   ) : (

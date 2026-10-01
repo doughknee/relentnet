@@ -78,3 +78,33 @@ describe('inquiry form hardening', () => {
     )
   })
 })
+
+describe('start-a-conversation block', () => {
+  const original = siteConfig.contact.bookingUrl
+  afterEach(() => {
+    siteConfig.contact.bookingUrl = original
+  })
+
+  it('hides the booking button while bookingUrl is empty', () => {
+    siteConfig.contact.bookingUrl = ''
+    renderPage()
+    expect(
+      screen.queryByRole('link', { name: /book a 20-minute call/i }),
+    ).toBeNull()
+    expect(
+      screen.getByRole('link', { name: siteConfig.contact.email }),
+    ).toHaveAttribute('href', `mailto:${siteConfig.contact.email}`)
+    expect(
+      screen.getByRole('link', { name: siteConfig.contact.phone }),
+    ).toHaveAttribute('href', expect.stringMatching(/^tel:\+\d+$/))
+  })
+
+  it('shows the booking button in a new tab once bookingUrl is set', () => {
+    siteConfig.contact.bookingUrl = 'https://cal.example/brandon/20min'
+    renderPage()
+    const link = screen.getByRole('link', { name: /book a 20-minute call/i })
+    expect(link).toHaveAttribute('href', 'https://cal.example/brandon/20min')
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', 'noopener')
+  })
+})
