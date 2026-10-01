@@ -60,6 +60,13 @@ export function seo(input: SeoInput): SeoHead {
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },
     { property: 'og:image', content: imageUrl },
+    // Dimensions are only known for the bundled default card; hero images vary.
+    ...(image === siteConfig.meta.ogImage
+      ? [
+          { property: 'og:image:width', content: '1200' },
+          { property: 'og:image:height', content: '630' },
+        ]
+      : []),
     { property: 'og:url', content: url },
     { property: 'og:type', content: 'website' },
     // Twitter

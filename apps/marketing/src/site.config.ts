@@ -19,7 +19,7 @@ export const siteConfig = {
     title: 'RelentNet | Workflow Diagnostic & Technology Stewardship',
     description:
       'White-glove technology partnership for owner-led businesses. We diagnose operational friction with a workflow diagnostic, then clarify what technology is worth building.',
-    ogImage: '/logo512.png',
+    ogImage: '/og-default.png',
   },
   social: {
     // Add social links here if available
