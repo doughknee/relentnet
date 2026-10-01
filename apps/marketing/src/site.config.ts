@@ -2,7 +2,7 @@ export const siteConfig = {
   name: 'RelentNet',
   domain: 'https://relentnet.com',
   contact: {
-    email: 'inquires@relentnet.com',
+    email: 'inquiries@relentnet.com',
     phone: '858-859-1851',
     phoneFormatted: '+1 (858) 859-1851',
     hours: '9am - 5pm CST (Mon-Fri)',
