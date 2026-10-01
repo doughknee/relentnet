@@ -51,14 +51,13 @@ function renderBlocks(blocks: ReadonlyArray<StoryBlock>) {
 }
 
 /**
- * Detail-page narrative — Challenge / Solution / Results in single-column layout.
+ * Detail-page narrative — Challenge / Solution / Results / Stewardship in single-column layout.
  * Mirrors Stripe /customers/figma's mid-page H2 sections.
  *
  * Challenge = story.problem + story.diagnosis (concatenated).
  * Solution = story.build.
  * Results = study.results if set, else single block from story.outcome.
- *
- * Stewardship (story.stewardship) is dropped from the detail page per the spec.
+ * Stewardship = story.stewardship when present.
  */
 export function CaseStudyNarrative({ study }: CaseStudyNarrativeProps) {
   const challengeBlocks: ReadonlyArray<StoryBlock> = [
@@ -88,6 +87,15 @@ export function CaseStudyNarrative({ study }: CaseStudyNarrativeProps) {
             </div>
           ))
         : renderBlocks(study.story.outcome)}
+
+      {study.story.stewardship ? (
+        <>
+          <h2 className="font-serif text-3xl md:text-4xl mb-8 mt-16">
+            Stewardship
+          </h2>
+          {renderBlocks(study.story.stewardship)}
+        </>
+      ) : null}
     </div>
   )
 }

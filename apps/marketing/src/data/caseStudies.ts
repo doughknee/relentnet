@@ -673,6 +673,11 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'Cambridge now opens with its real track record and runs accounts payable as a pipeline rather than a data-entry chore. Invoices move from inbox to QuickBooks with a human in the loop only where judgment is needed, and the brand finally matches the quality of the work behind it.',
         ),
       ],
+      stewardship: [
+        p(
+          'The engagement continues post-launch. RelentNet hosts the marketing site and AP portal on production infrastructure, monitors their availability and performance, maintains security patches and dependency updates, and supports the Cambridge team as both systems power their daily operations.',
+        ),
+      ],
     },
     services: [
       {
