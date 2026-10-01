@@ -51,7 +51,7 @@ describe('Header navigation (v4)', () => {
       'About',
     ])
     expect(utilityCta).toEqual({
-      label: 'Book a Free Diagnostic',
+      label: 'Book a call',
       to: '/inquire',
     })
   })

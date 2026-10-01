@@ -5,6 +5,7 @@ import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
+import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { siteConfig } from '@/site.config'
 import { seo } from '@/lib/seo'
@@ -167,8 +168,53 @@ function Contact() {
             </div>
 
             <div
+              className="animate-fade-in-up"
+              style={{ animationDelay: '100ms' }}
+            >
+              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
+                Start a conversation
+              </p>
+              {/* Hidden until Brandon sets siteConfig.contact.bookingUrl. */}
+              {siteConfig.contact.bookingUrl && (
+                <div className="mb-6">
+                  <CtaLink
+                    href={siteConfig.contact.bookingUrl}
+                    external
+                    arrow
+                    block
+                  >
+                    Book a 20-minute call
+                  </CtaLink>
+                </div>
+              )}
+              {/* From siteConfig, like the footer and the homepage. This page
+                  was the last copy still typed out by hand, which is how a
+                  number gets changed everywhere except one place. */}
+              <p className="font-serif text-[26px] text-ink-em">
+                <a
+                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
+                  className="hover:text-gold-text transition-colors"
+                >
+                  {siteConfig.contact.phone}
+                </a>
+              </p>
+              <p className="mt-1.5 text-sm text-ink-sub">
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="hover:text-gold-text transition-colors"
+                >
+                  {siteConfig.contact.email}
+                </a>{' '}
+                · {siteConfig.contact.hours}
+              </p>
+              <p className="mt-3.5 text-xs text-ink-muted">
+                In-person available across TN, LA, GA, FL.
+              </p>
+            </div>
+
+            <div
               className="animate-fade-in-up border-t border-line-faint pt-8"
-              style={{ animationDelay: '150ms' }}
+              style={{ animationDelay: '200ms' }}
             >
               <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-5">
                 What happens next
@@ -188,38 +234,6 @@ function Contact() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div
-              className="animate-fade-in-up"
-              style={{ animationDelay: '250ms' }}
-            >
-              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
-                Prefer to talk
-              </p>
-              {/* From siteConfig, like the footer and the homepage. This page
-                  was the last copy still typed out by hand, which is how a
-                  number gets changed everywhere except one place. */}
-              <p className="font-serif text-[26px] text-ink-em">
-                <a
-                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
-                  className="hover:text-gold-text transition-colors"
-                >
-                  {siteConfig.contact.phone}
-                </a>
-              </p>
-              <p className="mt-1.5 text-sm text-ink-sub">
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="hover:text-gold-text transition-colors"
-                >
-                  {siteConfig.contact.email}
-                </a>{' '}
-                · 9am–5pm CST, Mon–Fri
-              </p>
-              <p className="mt-3.5 text-xs text-ink-muted">
-                In-person available across TN, LA, GA, FL.
-              </p>
             </div>
           </div>
 
@@ -268,6 +282,9 @@ function Contact() {
                 }}
                 className="flex flex-col gap-7"
               >
+                <h2 className="font-serif text-[28px] leading-tight">
+                  Or write to us
+                </h2>
                 <div
                   aria-hidden="true"
                   className="absolute -left-[9999px] h-0 w-0 overflow-hidden"

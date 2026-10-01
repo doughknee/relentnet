@@ -17,7 +17,7 @@ export const primaryNavItems = [
 ] as const
 
 export const utilityCta = {
-  label: 'Book a Free Diagnostic',
+  label: 'Book a call',
   to: '/inquire',
 } as const
 
