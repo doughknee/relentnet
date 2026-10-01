@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest'
 import { seo } from './seo'
 import { siteConfig } from '@/site.config'
 
-
 const prop = (meta: ReturnType<typeof seo>['meta'], name: string) =>
   meta.find((m) => 'property' in m && m.property === name)
 
