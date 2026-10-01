@@ -24,6 +24,7 @@ import { ClosingDoors } from '@/components/ClosingDoors'
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Frame } from '@/components/Frame'
+import { HomeTestimonial } from '@/components/HomeTestimonial'
 import { Reveal } from '@/components/Reveal'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
@@ -1228,6 +1229,9 @@ function HomeComponent() {
           </dl>
         </div>
       </section>
+
+      {/* ── Testimonial ── */}
+      <HomeTestimonial />
 
       {/* ── Closing CTA ── */}
       <section className="relative">
