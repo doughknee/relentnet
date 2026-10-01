@@ -15,8 +15,8 @@
 
   --th-ink: #191713;
   --th-ink-sub: #54504a;
-  --th-ink-muted: #787369;
-  --th-ink-faint: #6f6a62;
+  --th-ink-muted: #6c6a63;
+  --th-ink-faint: #727065;
   --th-ink-em: #0d0b08;
 
   --th-line: rgba(20, 16, 8, 0.12);
@@ -44,8 +44,8 @@
      longer than one line must use this or brighter; muted/faint are for
      single-line caps metadata only. */
   --th-ink-sub: #c6c1b6;
-  --th-ink-muted: #807b71;
-  --th-ink-faint: #857f74;
+  --th-ink-muted: #88827a;
+  --th-ink-faint: #7d7871;
   --th-ink-em: #f7f3ea;
 
   /* Contrast floor: below ~0.2 alpha over #0a0908, hairlines fall under
