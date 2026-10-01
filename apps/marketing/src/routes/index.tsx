@@ -44,22 +44,6 @@ export const Route = createFileRoute('/')({
 
 export const cases = [
   {
-    label: 'Cambridge',
-    slug: 'cambridge-building-group',
-    industry: 'Commercial construction',
-    headline: 'Invoices that file themselves.',
-    outcome:
-      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks with the PDF and project attached.',
-    statValue: 'Email → QBO',
-    statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
-    image: '/case-studies/cambridge-building-group/hero.webp',
-    imageAlt: 'Cambridge Building Group site and AP portal',
-    quote:
-      'He has proven to be an exceptional partner who not only delivers what he promises, but he also consistently finds ways to deliver more than we ever thought possible.',
-    quoteAttribution:
-      'Jason Hall, Executive Vice President · Cambridge Building Group',
-  },
-  {
     label: 'Scrollr',
     slug: 'scrollr',
     industry: 'Consumer software',
@@ -97,7 +81,52 @@ export const cases = [
     image: '/case-studies/vm-homes/hero.webp',
     imageAlt: 'VM Homes property search',
   },
+  {
+    label: 'Cambridge',
+    slug: 'cambridge-building-group',
+    industry: 'Commercial construction',
+    headline: 'Invoices that file themselves.',
+    outcome:
+      'A credibility-first front door, plus an AP pipeline that reads vendor invoices, routes PM approval, and posts them to QuickBooks with the PDF and project attached.',
+    statValue: 'Email → QBO',
+    statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
+    image: '/case-studies/cambridge-building-group/hero.webp',
+    imageAlt: 'Cambridge Building Group site and AP portal',
+  },
 ] as const
+
+/**
+ * The first proof block: one client, told as problem, build, result, and a line
+ * from the client. A referred visitor is checking whether the work is real, so
+ * this comes before anything that asks them to do something.
+ *
+ * Jason's line is verbatim from his letter, and deliberately not a sentence the
+ * "In their words" excerpt also shows (a test pins both). There is no
+ * hours-saved figure for Cambridge in the case data, so none is stated here.
+ */
+export const cambridgeProof = {
+  slug: 'cambridge-building-group',
+  industry: 'Commercial construction · Nashville',
+  headline: 'Invoices that file themselves.',
+  rows: [
+    {
+      label: 'The problem',
+      body: 'Every vendor invoice was keyed in by hand, across hundreds of active projects.',
+    },
+    {
+      label: 'What we built',
+      body: 'An AP pipeline into QuickBooks Online. Invoices arrive by email, a project manager approves, and each one posts with the PDF attached and a stamp showing the job-cost coding, approver, and date.',
+    },
+    {
+      label: 'The result',
+      body: 'Inbox to QuickBooks with no keying. A project manager’s approval is the only step that still needs a person.',
+    },
+  ],
+  quote:
+    'What Brandon ultimately delivered was far beyond anything we had envisioned.',
+  attribution:
+    'Jason Hall, Executive Vice President · Cambridge Building Group',
+} as const
 
 export const steps = [
   {
@@ -185,13 +214,6 @@ export const stats = [
     format: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
     description:
       'We host, monitor, and answer for everything we build, around the clock.',
-  },
-  {
-    label: 'Clients served',
-    value: 40,
-    suffix: '+',
-    description:
-      'Owner-led businesses across construction, real estate, sports tech, and consumer software.',
   },
   {
     label: 'In business',
@@ -286,7 +308,7 @@ export const SUPPORTING_COUNT_DURATION = 3
  * second count would still be turning well after the figure had landed.
  *
  * Each figure owns its own trigger and starts as its row reaches the fold, so
- * the four are deliberately NOT synchronised. Sharing one trigger for the
+ * the three are deliberately NOT synchronised. Sharing one trigger for the
  * ledger did land them on the same frame, but it also meant the lower rows ran
  * out of sight; counting as the reader arrives is worth more than the set
  * finishing together. They still all run the same animation, which was the
@@ -331,7 +353,7 @@ function StatValue({
 
   /* The curve is built per figure, because how long the closing increments
      take is a fact about how many of them there are: 10,000 hours, 9,999
-     hundredths of a percent, 40 clients. Memoised so the identity is stable,
+     hundredths of a percent, a four-digit year. Memoised so the identity is stable,
      since it is a dependency of the effect that starts the climb. */
   const ease = useMemo(
     () => makeCountEase(Math.round(value / step)),
@@ -512,48 +534,6 @@ export function nextTabIndex(
 }
 
 /**
- * Drafting dimension rule for the portrait: the measurement line you'd find
- * beside a figure on a technical drawing, drawn top to bottom as the section
- * arrives. Decorative, so it carries no label — a plausible-looking
- * measurement would be inventing data. Only shown once the two-column layout
- * has a gutter wide enough to hold it.
- */
-function DimensionRule() {
-  const tick = {
-    initial: { opacity: 0 },
-    whileInView: { opacity: 1 },
-    viewport: { once: true, amount: 0.5 },
-    transition: { duration: 0.4, ease: EASE, delay: 0.75 },
-  } as const
-
-  return (
-    <span
-      aria-hidden="true"
-      className="hidden min-[1024px]:block absolute inset-y-0 -right-9 w-2"
-    >
-      {/* Brightens with the portrait it measures. A drawing's dimension rule
-          belongs to its figure, so tying the two makes the hover read as one
-          object responding rather than two. */}
-      <motion.span
-        className="absolute left-1/2 inset-y-0 w-px bg-gold-deep origin-top transition-colors duration-500 group-hover/fig:bg-gold"
-        initial={{ scaleY: 0 }}
-        whileInView={{ scaleY: 1 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
-      />
-      <motion.span
-        className="absolute inset-x-0 top-0 h-px bg-gold-deep transition-colors duration-500 group-hover/fig:bg-gold"
-        {...tick}
-      />
-      <motion.span
-        className="absolute inset-x-0 bottom-0 h-px bg-gold-deep transition-colors duration-500 group-hover/fig:bg-gold"
-        {...tick}
-      />
-    </span>
-  )
-}
-
-/**
  * The process axis: a drafting rule spanning the three stations, drawing left
  * to right as the section arrives with a tick dropping at each step, so the
  * flow reads as a sequence rather than three simultaneous fades.
@@ -619,25 +599,9 @@ function ProcessAxis({
 function HomeComponent() {
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
-  /** Which process step the pointer is over, so section 04's axis can answer. */
+  /** Which process step the pointer is over, so section 05's axis can answer. */
   const [activeStep, setActiveStep] = useState<number | null>(null)
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
-
-  // Portrait parallax. Scroll-linked styles bypass the root MotionConfig, so
-  // reduced motion is gated by hand; the hydration gate keeps the prerendered
-  // HTML from baking in an offset transform. Deliberately unsprung — smoothing
-  // a scroll-driven transform makes the page feel like it is catching up.
-  const buildersRef = useRef<HTMLElement>(null)
-  const reducedMotion = useReducedMotion()
-  const [hydrated, setHydrated] = useState(false)
-  useEffect(() => setHydrated(true), [])
-  const { scrollYProgress: buildersProgress } = useScroll({
-    target: buildersRef,
-    offset: ['start end', 'end start'],
-  })
-  // Drifts DOWN as the page scrolls up, so it lags the text beside it.
-  const photoY = useTransform(buildersProgress, [0, 1], [-24, 24])
-  const parallax = hydrated && !reducedMotion
 
   /** Roving tabindex: selection follows focus, so moving also moves focus. */
   function onTabKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -684,16 +648,42 @@ function HomeComponent() {
               className="animate-fade-in-up mt-13 flex flex-col min-[768px]:flex-row min-[768px]:items-end justify-between gap-7 min-[768px]:gap-12"
               style={{ animationDelay: '200ms' }}
             >
-              <p className="max-w-[460px] text-ink-sub text-lg font-light leading-[1.6]">
-                One free diagnostic maps where your operation loses time. Then
-                we build only what earns its place, and we run it for you.
-              </p>
+              <div className="max-w-[460px]">
+                <p className="text-ink-sub text-lg font-light leading-[1.6]">
+                  One free diagnostic maps where your operation loses time. Then
+                  we build only what earns its place, and we run it for you.
+                </p>
+                {/* Founder lockup. A referred visitor is checking who they were
+                    sent to, so the name and face sit with the premise rather
+                    than five sections down. The only photo is of both
+                    founders, so the crop is zoomed onto the two of them. */}
+                <div className="mt-8 flex items-center gap-4">
+                  <div className="shrink-0 w-[72px] h-[72px] overflow-hidden border border-line">
+                    <img
+                      src="/founder-photo.webp"
+                      alt="Brandon Harris and Daniel Velez setting up a livestream at a wedding"
+                      width={72}
+                      height={72}
+                      className="w-full h-full object-cover scale-[2.8] origin-[49%_29%]"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl leading-tight text-ink-em">
+                      Brandon Harris
+                    </p>
+                    <p className="mt-1 text-[14px] font-light leading-[1.5] text-ink-sub">
+                      Software engineer turned founder. He builds and runs
+                      automation for owner-led businesses.
+                    </p>
+                  </div>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-3.5 shrink-0">
                 <CtaLink to="/inquire" arrow>
-                  Book a Free Diagnostic
+                  Book a call
                 </CtaLink>
                 <CtaLink to="/clients" variant="outline">
-                  See Client Work
+                  See client work
                 </CtaLink>
               </div>
             </div>
@@ -744,57 +734,146 @@ function HomeComponent() {
         </div>
       </section>
 
-      {/* ── The premise — the ticker's bottom hairline is the divider ── */}
+      {/* ── Proof first: one client, start to finish. The ticker's bottom
+          hairline is the divider ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-start">
+          <div>
+            <Reveal>
+              <Eyebrow className="mb-5">01 · Cambridge Building Group</Eyebrow>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
+                {cambridgeProof.headline}
+              </h2>
+              <p className="mt-4 font-mono text-[11px] tracking-[0.26em] uppercase text-ink-faint font-medium">
+                {cambridgeProof.industry}
+              </p>
+            </Reveal>
+            <Reveal delay={160}>
+              <figure className="mt-10 border-l-2 border-gold pl-6">
+                <blockquote className="font-serif italic text-[22px] leading-[1.45] text-ink">
+                  &ldquo;{cambridgeProof.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-4 font-mono text-[11px] tracking-[0.25em] uppercase text-ink/65">
+                  {cambridgeProof.attribution}
+                </figcaption>
+              </figure>
+            </Reveal>
+          </div>
+          <div>
+            {/* Ruled rows rather than cards, the same spec-sheet reading as
+                the ledger below it. */}
+            <dl className="border-t border-line">
+              {cambridgeProof.rows.map((row, i) => (
+                <Reveal key={row.label} delay={80 + i * 90}>
+                  <div className="grid grid-cols-1 min-[640px]:grid-cols-[150px_1fr] gap-x-8 gap-y-2 border-b border-line py-6">
+                    <dt className="font-mono text-[11px] tracking-[0.2em] uppercase text-gold-text min-[640px]:pt-1">
+                      {row.label}
+                    </dt>
+                    <dd className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                      {row.body}
+                    </dd>
+                  </div>
+                </Reveal>
+              ))}
+            </dl>
+            <Reveal delay={360}>
+              <Link
+                to="/clients/$slug"
+                params={{ slug: cambridgeProof.slug }}
+                className="mt-8 inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.15em] uppercase text-gold-text transition-all hover:gap-4"
+              >
+                Read the case study →
+              </Link>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats ── */}
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-5">01 · The premise</Eyebrow>
+            <Eyebrow className="mb-14">02 · The numbers</Eyebrow>
           </Reveal>
-          <Reveal delay={80}>
-            <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] max-w-[640px]">
-              Every diagnostic ends in one of three answers.
-            </h2>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="mt-6 text-[15px] font-light leading-[1.65] text-ink-sub max-w-[520px]">
-              {premise.intro}
-            </p>
-          </Reveal>
-          {/* Separated cards, not the butted hairline grid used elsewhere —
-              a tilting surface needs air around it to lean into. */}
-          <div className="mt-14 grid grid-cols-1 min-[768px]:grid-cols-3 gap-5">
-            {premise.answers.map((a, i) => (
-              // The emphasized card is marked by the gold top rule alone.
-              // bg-inset recedes in dark theme (it's a deeper black), which
-              // fought the emphasis once the cards stopped being butted
-              // together — and the "No invoice" tag now says the quiet part out
-              // loud, so the surface doesn't need to shout.
-              <Reveal key={a.title} delay={i * 120} className="h-full">
-                <TiltCard
-                  // chromatic-hover is the reduced-motion/touch fallback: the
-                  // static gold offset only lands when TiltCard leaves `style`
-                  // undefined, since an inline box-shadow outranks it. No CSS
-                  // transition here — it would smear Motion's per-frame writes.
-                  className={`chromatic-hover h-full pt-10 px-7 min-[768px]:px-10 pb-11 bg-page border border-line ${
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                    'emphasized' in a && a.emphasized
-                      ? 'border-t-2 border-t-gold'
-                      : ''
-                  }`}
-                >
-                  <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
-                    {a.num}
-                  </p>
-                  <h3 className="font-serif text-[32px] mt-4 mb-3">
-                    {a.title}
-                  </h3>
-                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
-                    {a.body}
-                  </p>
-                </TiltCard>
+          {/* A ledger, not a dashboard. Tiling four figures side by side asked
+              the reader to compare quantities that measure entirely different
+              things, and it cost three of them their scale. Given a row each,
+              every figure gets to run large and the eye reads down a spec
+              sheet instead of across a grid. Rules do the work of boxes. */}
+          <dl className="border-b border-line">
+            {ledger.map((stat, i) => (
+              <Reveal key={stat.label} delay={i * 90}>
+                {/* Hovering runs the leader: a gold line draws from the label
+                    out to the figure, a wash comes up under it, and the row
+                    leans into the gesture. Bleeding the padding past the text
+                    lets the wash wrap the row rather than stop at the glyphs. */}
+                <div className="group relative -mx-4 min-[768px]:-mx-7 px-4 min-[768px]:px-7 border-t border-line grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] gap-x-6 min-[768px]:gap-x-12 py-8 min-[768px]:py-10">
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(90deg,rgba(203,171,69,0.09),rgba(203,171,69,0.02)_45%,transparent_75%)]"
+                  />
+
+                  {/* Label and description stack into one left-hand block with
+                      the figure centred against it. Baseline-aligning the two
+                      columns instead hung the tiny label off the figure's
+                      baseline and left the top of every row empty. */}
+                  <dt className="col-start-1 row-start-1 flex items-baseline gap-4 min-[768px]:gap-6 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                    <span className="font-mono text-[11px] text-gold-deep tabular-nums group-hover:text-gold-text transition-colors duration-500">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className={`font-mono tracking-[0.2em] uppercase transition-colors duration-500 group-hover:text-gold-text ${
+                        i === 0
+                          ? 'text-[12px] text-gold-text font-medium'
+                          : 'text-[11px] text-ink-muted'
+                      }`}
+                    >
+                      {stat.label}
+                    </span>
+                    {/* The leader: a drafting sheet runs one from the label out
+                        to its value, which is exactly the gutter this layout
+                        would otherwise leave empty. Faint at rest, gold on
+                        hover, drawn from the label toward the figure. */}
+                    <span
+                      aria-hidden="true"
+                      className="relative hidden min-[560px]:block flex-1 self-center h-px bg-line-faint"
+                    >
+                      <span className="absolute inset-0 bg-gold origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none" />
+                    </span>
+                  </dt>
+
+                  {/* The hero keeps its extra weight, since one figure carrying
+                      the section is what stopped the others reading as weak. */}
+                  <dd
+                    className={`col-start-2 row-start-1 row-span-2 self-center font-serif leading-[0.85] whitespace-nowrap text-right ${
+                      i === 0
+                        ? 'text-[clamp(46px,7vw,96px)] text-ink-em'
+                        : 'text-[clamp(34px,4.6vw,62px)] text-gold-text'
+                    }`}
+                  >
+                    <StatValue
+                      value={stat.value}
+                      prefix={'prefix' in stat ? stat.prefix : undefined}
+                      suffix={'suffix' in stat ? stat.suffix : undefined}
+                      format={'format' in stat ? stat.format : undefined}
+                      duration={
+                        i === 0 ? COUNT_DURATION : SUPPORTING_COUNT_DURATION
+                      }
+                    />
+                  </dd>
+
+                  {/* self-start against a 1fr track: the figure spans both rows,
+                      so letting the track stretch pushed the description a
+                      different distance from its label in every row. */}
+                  <dd className="col-start-1 row-start-2 self-start mt-3 max-w-[560px] text-[14px] font-light text-ink-sub leading-[1.6] transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                    {stat.description}
+                  </dd>
+                </div>
               </Reveal>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
 
@@ -804,7 +883,7 @@ function HomeComponent() {
           <div className="flex items-end justify-between gap-8 mb-14 flex-wrap">
             <div>
               <Reveal>
-                <Eyebrow className="mb-5">02 · Client work</Eyebrow>
+                <Eyebrow className="mb-5">03 · Client work</Eyebrow>
               </Reveal>
               <Reveal delay={80}>
                 <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
@@ -960,109 +1039,59 @@ function HomeComponent() {
               </div>
             </Frame>
           </div>
-
-          {/* Only some cases carry a quote, so the section's height changes by
-              ~150px between tabs. Easing that change folds it into the swap
-              choreography instead of letting everything below it jump. The
-              top margin lives inside the collapsing element, or it would
-              persist as a gap once the height reaches 0. initial={false}
-              keeps the prerendered quote at full height for crawlers. */}
-          <Reveal delay={100} className="max-w-[680px]">
-            <AnimatePresence initial={false} mode="wait">
-              {'quote' in activeCase && (
-                <motion.div
-                  key={activeCase.slug}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: EASE }}
-                  className="overflow-hidden"
-                >
-                  <div className="mt-12">
-                    <blockquote className="font-serif italic text-[24px] leading-[1.45] text-ink">
-                      &ldquo;{activeCase.quote}&rdquo;
-                    </blockquote>
-                    <p className="mt-4 font-mono text-[11px] tracking-[0.25em] uppercase text-ink/65">
-                      {activeCase.quoteAttribution}
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </Reveal>
         </div>
       </section>
 
-      {/* ── Who you'll work with ── */}
-      <section ref={buildersRef}>
-        {/* 5fr/7fr matches the client-work split, and gives the portrait real
-            presence instead of the 340px thumbnail it was. The source is
-            560×536, so a wider, less severe crop actually uses more of the
-            photograph than the old portrait box did. */}
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-center">
-          {/* The cap only bites in the single-column layout, where a full-width
-              portrait would otherwise run to most of a tablet screen. */}
-          {/* Named group so the dimension rule can answer the portrait: Frame
-              owns the bare `group` for its own zoom, and an unnamed second one
-              here would be ambiguous. */}
-          <motion.div
-            className="group/fig relative max-w-[480px]"
-            style={parallax ? { y: photoY } : undefined}
-          >
-            <Reveal>
-              <Frame reveal caption="Fig. 05 · The builders">
-                <img
-                  src="/founder-photo.webp"
-                  alt="Brandon Harris and Daniel Velez setting up a livestream at a wedding"
-                  width={440}
-                  height={480}
-                  className="block w-full aspect-[11/12] object-cover transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
-                />
-              </Frame>
-            </Reveal>
-            <DimensionRule />
-          </motion.div>
-          <div>
-            <Reveal delay={80}>
-              <Eyebrow className="mb-5">03 · Who you'll work with</Eyebrow>
-            </Reveal>
-            <Reveal delay={160}>
-              <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] mb-6">
-                No account managers.{' '}
-                <span className="italic text-gold-text">
-                  Just the builders.
-                </span>
-              </h2>
-            </Reveal>
-            <Reveal delay={240}>
-              <p className="text-ink-sub font-light leading-[1.65] mb-7 max-w-[560px]">
-                When you call RelentNet, you talk to the people who design,
-                build, host, and monitor your system, before the diagnostic and
-                long after launch.
-              </p>
-            </Reveal>
-            <Reveal delay={320}>
-              {/* These had no hover state at all, not even a transition: two
-                  live links that looked exactly the same whether you were on
-                  them or not. Underline offset rather than a colour change
-                  alone, so the affordance does not depend on seeing gold. */}
-              <p className="font-mono text-xs tracking-[0.1em] text-ink-muted">
-                <a
-                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
-                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
+      {/* ── The premise ── */}
+      <section>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+          <Reveal>
+            <Eyebrow className="mb-5">04 · The premise</Eyebrow>
+          </Reveal>
+          <Reveal delay={80}>
+            <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] max-w-[640px]">
+              Every diagnostic ends in one of three answers.
+            </h2>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-6 text-[15px] font-light leading-[1.65] text-ink-sub max-w-[520px]">
+              {premise.intro}
+            </p>
+          </Reveal>
+          {/* Separated cards, not the butted hairline grid used elsewhere —
+              a tilting surface needs air around it to lean into. */}
+          <div className="mt-14 grid grid-cols-1 min-[768px]:grid-cols-3 gap-5">
+            {premise.answers.map((a, i) => (
+              // The emphasized card is marked by the gold top rule alone.
+              // bg-inset recedes in dark theme (it's a deeper black), which
+              // fought the emphasis once the cards stopped being butted
+              // together — and the "No invoice" tag now says the quiet part out
+              // loud, so the surface doesn't need to shout.
+              <Reveal key={a.title} delay={i * 120} className="h-full">
+                <TiltCard
+                  // chromatic-hover is the reduced-motion/touch fallback: the
+                  // static gold offset only lands when TiltCard leaves `style`
+                  // undefined, since an inline box-shadow outranks it. No CSS
+                  // transition here — it would smear Motion's per-frame writes.
+                  className={`chromatic-hover h-full pt-10 px-7 min-[768px]:px-10 pb-11 bg-page border border-line ${
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    'emphasized' in a && a.emphasized
+                      ? 'border-t-2 border-t-gold'
+                      : ''
+                  }`}
                 >
-                  {siteConfig.contact.phone}
-                </a>{' '}
-                ·{' '}
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
-                >
-                  {siteConfig.contact.email}
-                </a>{' '}
-                · {siteConfig.locations.map((l) => l.city).join(' · ')}
-              </p>
-            </Reveal>
+                  <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-gold-text font-medium">
+                    {a.num}
+                  </p>
+                  <h3 className="font-serif text-[32px] mt-4 mb-3">
+                    {a.title}
+                  </h3>
+                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                    {a.body}
+                  </p>
+                </TiltCard>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -1072,7 +1101,7 @@ function HomeComponent() {
       <section>
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
           <Reveal>
-            <Eyebrow className="mb-10">04 · How it works</Eyebrow>
+            <Eyebrow className="mb-10">05 · How it works</Eyebrow>
           </Reveal>
           <ProcessAxis count={steps.length} active={activeStep} />
           <div
@@ -1144,89 +1173,54 @@ function HomeComponent() {
         </div>
       </section>
 
-      {/* ── Stats ── */}
+      {/* ── Who you'll work with. Text only: the founder is in the hero now,
+          and the full photograph is on /about. ── */}
       <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
-          <Reveal>
-            <Eyebrow className="mb-14">05 · The numbers</Eyebrow>
-          </Reveal>
-          {/* A ledger, not a dashboard. Tiling four figures side by side asked
-              the reader to compare quantities that measure entirely different
-              things, and it cost three of them their scale. Given a row each,
-              every figure gets to run large and the eye reads down a spec
-              sheet instead of across a grid. Rules do the work of boxes. */}
-          <dl className="border-b border-line">
-            {ledger.map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 90}>
-                {/* Hovering runs the leader: a gold line draws from the label
-                    out to the figure, a wash comes up under it, and the row
-                    leans into the gesture. Bleeding the padding past the text
-                    lets the wash wrap the row rather than stop at the glyphs. */}
-                <div className="group relative -mx-4 min-[768px]:-mx-7 px-4 min-[768px]:px-7 border-t border-line grid grid-cols-[1fr_auto] grid-rows-[auto_1fr] gap-x-6 min-[768px]:gap-x-12 py-8 min-[768px]:py-10">
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(90deg,rgba(203,171,69,0.09),rgba(203,171,69,0.02)_45%,transparent_75%)]"
-                  />
-
-                  {/* Label and description stack into one left-hand block with
-                      the figure centred against it. Baseline-aligning the two
-                      columns instead hung the tiny label off the figure's
-                      baseline and left the top of every row empty. */}
-                  <dt className="col-start-1 row-start-1 flex items-baseline gap-4 min-[768px]:gap-6 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
-                    <span className="font-mono text-[11px] text-gold-deep tabular-nums group-hover:text-gold-text transition-colors duration-500">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span
-                      className={`font-mono tracking-[0.2em] uppercase transition-colors duration-500 group-hover:text-gold-text ${
-                        i === 0
-                          ? 'text-[12px] text-gold-text font-medium'
-                          : 'text-[11px] text-ink-muted'
-                      }`}
-                    >
-                      {stat.label}
-                    </span>
-                    {/* The leader: a drafting sheet runs one from the label out
-                        to its value, which is exactly the gutter this layout
-                        would otherwise leave empty. Faint at rest, gold on
-                        hover, drawn from the label toward the figure. */}
-                    <span
-                      aria-hidden="true"
-                      className="relative hidden min-[560px]:block flex-1 self-center h-px bg-line-faint"
-                    >
-                      <span className="absolute inset-0 bg-gold origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none" />
-                    </span>
-                  </dt>
-
-                  {/* The hero keeps its extra weight, since one figure carrying
-                      the section is what stopped the others reading as weak. */}
-                  <dd
-                    className={`col-start-2 row-start-1 row-span-2 self-center font-serif leading-[0.85] whitespace-nowrap text-right ${
-                      i === 0
-                        ? 'text-[clamp(46px,7vw,96px)] text-ink-em'
-                        : 'text-[clamp(34px,4.6vw,62px)] text-gold-text'
-                    }`}
-                  >
-                    <StatValue
-                      value={stat.value}
-                      prefix={'prefix' in stat ? stat.prefix : undefined}
-                      suffix={'suffix' in stat ? stat.suffix : undefined}
-                      format={'format' in stat ? stat.format : undefined}
-                      duration={
-                        i === 0 ? COUNT_DURATION : SUPPORTING_COUNT_DURATION
-                      }
-                    />
-                  </dd>
-
-                  {/* self-start against a 1fr track: the figure spans both rows,
-                      so letting the track stretch pushed the description a
-                      different distance from its label in every row. */}
-                  <dd className="col-start-1 row-start-2 self-start mt-3 max-w-[560px] text-[14px] font-light text-ink-sub leading-[1.6] transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
-                    {stat.description}
-                  </dd>
-                </div>
-              </Reveal>
-            ))}
-          </dl>
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-6 min-[1024px]:gap-18 items-end">
+          <div>
+            <Reveal>
+              <Eyebrow className="mb-5">06 · Who you'll work with</Eyebrow>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
+                No account managers.{' '}
+                <span className="italic text-gold-text">
+                  Just the builders.
+                </span>
+              </h2>
+            </Reveal>
+          </div>
+          <div>
+            <Reveal delay={160}>
+              <p className="text-ink-sub font-light leading-[1.65] mb-7 max-w-[560px]">
+                When you call RelentNet, you talk to the people who design,
+                build, host, and monitor your system, before the diagnostic and
+                long after launch.
+              </p>
+            </Reveal>
+            <Reveal delay={240}>
+              {/* These had no hover state at all, not even a transition: two
+                  live links that looked exactly the same whether you were on
+                  them or not. Underline offset rather than a colour change
+                  alone, so the affordance does not depend on seeing gold. */}
+              <p className="font-mono text-xs tracking-[0.1em] text-ink-muted">
+                <a
+                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
+                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
+                >
+                  {siteConfig.contact.phone}
+                </a>{' '}
+                ·{' '}
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="text-gold-text underline decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-gold hover:text-gold-bright"
+                >
+                  {siteConfig.contact.email}
+                </a>{' '}
+                · {siteConfig.locations.map((l) => l.city).join(' · ')}
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 

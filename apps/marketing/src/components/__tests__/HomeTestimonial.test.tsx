@@ -25,14 +25,14 @@ const letter = caseStudies.find(
 )?.testimonial
 
 describe('HomeTestimonial', () => {
-  it('renders paragraphs 3 and 5 verbatim, with signature and link', () => {
+  it('renders paragraphs 4 and 5 verbatim, with signature and link', () => {
     if (!letter) throw new Error('Cambridge testimonial missing')
     render(<HomeTestimonial />)
     const section = screen.getByTestId('home-testimonial')
     const paragraphs = within(section)
       .getAllByText(/./, { selector: 'blockquote p' })
       .map((p) => p.textContent)
-    expect(paragraphs).toEqual([letter.paragraphs[2], letter.paragraphs[4]])
+    expect(paragraphs).toEqual([letter.paragraphs[3], letter.paragraphs[4]])
     expect(within(section).getByText('Jason Hall')).toBeInTheDocument()
     expect(
       within(section).getByText('Executive Vice President'),

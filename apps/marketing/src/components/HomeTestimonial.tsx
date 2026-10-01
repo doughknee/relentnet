@@ -5,8 +5,10 @@ import { caseStudies } from '@/data/caseStudies'
 
 const SLUG = 'cambridge-building-group'
 
-/** Indices into the letter's paragraphs: the outcome and the recommendation. */
-const EXCERPT = [2, 4] as const
+/** Indices into the letter's paragraphs: how the work went, and the
+ *  recommendation. Not the outcome paragraph, whose first sentence is the
+ *  homepage proof block's quote. */
+export const testimonialExcerpt = [3, 4] as const
 
 /**
  * Two paragraphs of Jason Hall's Cambridge letter on the homepage, read from
@@ -18,7 +20,7 @@ export function HomeTestimonial() {
   if (!testimonial) return null
 
   const { attribution } = testimonial
-  const paragraphs = EXCERPT.map((i) => testimonial.paragraphs[i])
+  const paragraphs = testimonialExcerpt.map((i) => testimonial.paragraphs[i])
 
   return (
     <section
@@ -27,7 +29,7 @@ export function HomeTestimonial() {
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
         <Reveal>
-          <Eyebrow className="mb-10">06 · In their words</Eyebrow>
+          <Eyebrow className="mb-10">07 · In their words</Eyebrow>
           <h2 id="home-testimonial-heading" className="sr-only">
             In their words: Jason Hall, Cambridge Building Group
           </h2>
