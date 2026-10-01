@@ -8,7 +8,6 @@ const exploreLinks = [
   { label: 'Process', to: '/process' },
   { label: 'Client Work', to: '/clients' },
   { label: 'About', to: '/about' },
-  { label: 'Client Portal', to: '/portal' },
 ] as const
 
 export function Footer() {
