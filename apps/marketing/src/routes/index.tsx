@@ -32,11 +32,6 @@ import { makeCountEase } from '@/lib/countEase'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/')({
-  // Review only (REL-438): picks the testimonial variant. Removed before merge.
-  validateSearch: (
-    search: Record<string, unknown>,
-  ): { testimonial?: 'full' } =>
-    search.testimonial === 'full' ? { testimonial: 'full' } : {},
   head: () =>
     seo({
       title: siteConfig.meta.title,
@@ -622,7 +617,6 @@ function ProcessAxis({
 }
 
 function HomeComponent() {
-  const { testimonial } = Route.useSearch()
   const [activeTab, setActiveTab] = useState(0)
   const activeCase = cases[activeTab]
   /** Which process step the pointer is over, so section 04's axis can answer. */
@@ -1236,8 +1230,8 @@ function HomeComponent() {
         </div>
       </section>
 
-      {/* ── Testimonial (REL-438 review: variant from ?testimonial=) ── */}
-      <HomeTestimonial variant={testimonial ?? 'excerpt'} />
+      {/* ── Testimonial ── */}
+      <HomeTestimonial />
 
       {/* ── Closing CTA ── */}
       <section className="relative">

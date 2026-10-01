@@ -7,16 +7,14 @@ import { caseStudies } from '@/data/caseStudies'
 vi.mock('@tanstack/react-router', () => ({
   Link: ({
     to,
-    params,
     children,
     className,
   }: {
     to: string
-    params?: { slug: string }
     children: unknown
     className?: string
   }) => (
-    <a href={to.replace('$slug', params?.slug ?? '')} className={className}>
+    <a href={to} className={className}>
       {children as never}
     </a>
   ),
@@ -27,9 +25,9 @@ const letter = caseStudies.find(
 )?.testimonial
 
 describe('HomeTestimonial', () => {
-  it('excerpt renders paragraphs 3 and 5 verbatim, with signature and link', () => {
+  it('renders paragraphs 3 and 5 verbatim, with signature and link', () => {
     if (!letter) throw new Error('Cambridge testimonial missing')
-    render(<HomeTestimonial variant="excerpt" />)
+    render(<HomeTestimonial />)
     const section = screen.getByTestId('home-testimonial')
     const paragraphs = within(section)
       .getAllByText(/./, { selector: 'blockquote p' })
@@ -37,18 +35,11 @@ describe('HomeTestimonial', () => {
     expect(paragraphs).toEqual([letter.paragraphs[2], letter.paragraphs[4]])
     expect(within(section).getByText('Jason Hall')).toBeInTheDocument()
     expect(
-      within(section).getByRole('link', { name: /full letter/i }),
-    ).toHaveAttribute('href', '/clients/cambridge-building-group')
-  })
-
-  it('full renders all five paragraphs', () => {
-    if (!letter) throw new Error('Cambridge testimonial missing')
-    render(<HomeTestimonial variant="full" />)
-    const section = screen.getByTestId('home-testimonial')
-    const paragraphs = within(section)
-      .getAllByText(/./, { selector: 'blockquote p' })
-      .map((p) => p.textContent)
-    expect(paragraphs).toEqual(letter.paragraphs)
+      within(section).getByText('Executive Vice President'),
+    ).toBeInTheDocument()
+    expect(
+      within(section).getByText('Cambridge Building Group, LLC'),
+    ).toBeInTheDocument()
     expect(
       within(section).getByRole('link', { name: /full letter/i }),
     ).toHaveAttribute('href', '/clients/cambridge-building-group')
