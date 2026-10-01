@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest'
 import { phases } from './process'
 
 describe('process route content (v4)', () => {
-  it('keeps diagnose, prioritize, design, build, and steward phases', () => {
+  it('keeps diagnose, prioritize, design, build, and run phases', () => {
     expect(phases.map((phase) => phase.title)).toEqual([
       'Diagnose the workflow',
       'Prioritize the friction',
       'Design the system',
       'Build the operating layer',
-      'Steward the technology',
+      'Run and support the system',
     ])
   })
 

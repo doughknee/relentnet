@@ -75,16 +75,16 @@ export const phases = [
   },
   {
     number: '05',
-    label: 'Steward',
-    title: 'Steward the technology',
+    label: 'Run',
+    title: 'Run and support the system',
     quote: 'The launch is the start of the operating relationship.',
     description:
-      'Hosting, monitoring, maintenance, security, and ongoing improvement as the business changes, with direct access to the people who built it.',
+      'Hosting and monitoring on production infrastructure you control. Fixes and improvements on a monthly retainer. Direct access to the engineering team that built it. The system keeps working; RelentNet stays accountable for it.',
     deliverables: [
-      'Hosting and monitoring',
-      'Security and dependency care',
-      'Support and iteration',
-      'Ongoing roadmap guidance',
+      'Production hosting and monitoring',
+      'Security and dependency maintenance',
+      'Fixes, improvements, and iteration',
+      'Direct access to the engineering team',
     ],
   },
 ] as const
