@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
 import { FOUNDED_YEAR, aboutSections, founders } from './about'
+import { stats } from './index'
 import { primaryNavItems } from '@/components/Header'
 import { siteConfig } from '@/site.config'
-import { stats } from './index'
 
 describe('about page content', () => {
   it('names both founders', () => {

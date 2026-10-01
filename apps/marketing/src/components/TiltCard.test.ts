@@ -39,8 +39,6 @@ describe('chromaticPlates', () => {
 
   it('scales with the configured swing rather than raw degrees', () => {
     // Same proportional lean on a different maxTilt lands the same offset.
-    expect(chromaticPlates(0, 10, 1, 20)).toEqual(
-      chromaticPlates(0, 2.5, 1, 5),
-    )
+    expect(chromaticPlates(0, 10, 1, 20)).toEqual(chromaticPlates(0, 2.5, 1, 5))
   })
 })

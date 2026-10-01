@@ -29,12 +29,12 @@ type CtaLinkProps = {
   /** Fill the container and wrap, rather than sizing to the label. */
   block?: boolean
   children: ReactNode
-} & (
+} &
   /** An in-app route, through the router. */
-  | { to: string; href?: never }
-  /** Anything the router cannot own: tel:, mailto:, another origin. */
-  | { href: string; to?: never }
-)
+  (| { to: string; href?: never }
+    /** Anything the router cannot own: tel:, mailto:, another origin. */
+    | { href: string; to?: never }
+  )
 
 /**
  * The v4 pill-less CTA pair: solid gold (optionally with arrow) or outline.

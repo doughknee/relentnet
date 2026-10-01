@@ -6,10 +6,9 @@ import {
   useScroll,
   useTransform,
 } from 'motion/react'
+import type { ReactNode } from 'react'
 
 import { Scramble } from '@/components/Scramble'
-
-import type { ReactNode } from 'react'
 
 /**
  * Screenshot frame: 1px line border, 10px padding, page background, with the

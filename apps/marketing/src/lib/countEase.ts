@@ -66,7 +66,9 @@ const raisedCosineArea = (
   toSpeed: number,
 ) =>
   ((fromSpeed + toSpeed) * elapsed) / 2 +
-  ((fromSpeed - toSpeed) * duration * Math.sin((Math.PI * elapsed) / duration)) /
+  ((fromSpeed - toSpeed) *
+    duration *
+    Math.sin((Math.PI * elapsed) / duration)) /
     (2 * Math.PI)
 
 /**
@@ -81,9 +83,7 @@ export function makeCountEase(increments: number): (t: number) => number {
 
   /* Peak speed is solved, not chosen, so the phases sum to exactly 1. */
   const peakSpeed =
-    (1 -
-      tailDistance -
-      joinSpeed * BRAKE_SPAN * (1 - 1 / (BRAKE_DECAY + 1))) /
+    (1 - tailDistance - joinSpeed * BRAKE_SPAN * (1 - 1 / (BRAKE_DECAY + 1))) /
     (PEAK_TIME / 2 + BRAKE_SPAN / (BRAKE_DECAY + 1))
 
   const peakDistance = (peakSpeed * PEAK_TIME) / 2
