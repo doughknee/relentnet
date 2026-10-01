@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   COUNT_DURATION,
   SUPPORTING_COUNT_DURATION,
+  cambridgeProof,
   cases,
   heroStat,
   marqueeItems,
@@ -12,6 +13,7 @@ import {
   steps,
 } from './index'
 import { closingDoors } from '@/components/ClosingDoors'
+import { testimonialExcerpt } from '@/components/HomeTestimonial'
 import { makeCountEase } from '@/lib/countEase'
 import { siteConfig } from '@/site.config'
 import { caseStudies } from '@/data/caseStudies'
@@ -88,7 +90,7 @@ describe('homepage content (v4)', () => {
             'suffix' in s ? s.suffix : ''
           }`,
       ),
-    ).toEqual(['99.99%', '40+', 'Since 2022'])
+    ).toEqual(['99.99%', 'Since 2022'])
   })
 
   it('spends over two seconds on the last eight hours of the headline count', () => {
@@ -134,6 +136,20 @@ describe('homepage content (v4)', () => {
     // "start here" while it is on one card.
     expect(closingDoors.every((d) => d.action.to || d.action.href)).toBe(true)
     expect(closingDoors.filter((d) => d.emphasized)).toHaveLength(1)
+  })
+
+  it('quotes Jason verbatim in the proof block, never twice on the page', () => {
+    const cambridge = caseStudies.find((s) => s.slug === cambridgeProof.slug)
+    const letter = cambridge?.testimonial?.paragraphs ?? []
+    // Real words from the real letter, and a case page that exists.
+    expect(letter.join(' ')).toContain(cambridgeProof.quote)
+    // The "In their words" section shows other paragraphs of the same letter;
+    // the proof block's sentence must not be in them.
+    const excerpt = testimonialExcerpt.map((i) => letter[i]).join(' ')
+    expect(excerpt).not.toBe('')
+    expect(excerpt).not.toContain(cambridgeProof.quote)
+    // No other case on the page carries a quote of its own any more.
+    expect(cases.some((c) => 'quote' in c)).toBe(false)
   })
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {
