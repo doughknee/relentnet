@@ -14,7 +14,6 @@ export const primaryNavItems = [
   { label: 'Process', to: '/process' },
   { label: 'Client Work', to: '/clients' },
   { label: 'About', to: '/about' },
-  { label: 'Portal', to: '/portal' },
 ] as const
 
 export const utilityCta = {
