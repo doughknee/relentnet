@@ -4,6 +4,7 @@ import { CaseStudyDetailHero } from '@/components/caseStudy/CaseStudyDetailHero'
 import { CaseStudyPullquote } from '@/components/caseStudy/CaseStudyPullquote'
 import { CaseStudyReadMore } from '@/components/caseStudy/CaseStudyReadMore'
 import { CaseStudyStoryLayout } from '@/components/caseStudy/CaseStudyStoryLayout'
+import { CaseStudyTestimonial } from '@/components/caseStudy/CaseStudyTestimonial'
 import { ClosingCtaPair } from '@/components/clients/ClosingCtaPair'
 import { caseStudies } from '@/data/caseStudies'
 import { seo } from '@/lib/seo'
@@ -41,6 +42,9 @@ function ClientDetail() {
       <CaseStudyStoryLayout study={study} />
       {study.pullquote ? (
         <CaseStudyPullquote pullquote={study.pullquote} />
+      ) : null}
+      {study.testimonial ? (
+        <CaseStudyTestimonial testimonial={study.testimonial} />
       ) : null}
       <CaseStudyReadMore currentSlug={study.slug} />
       <ClosingCtaPair />

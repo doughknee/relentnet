@@ -137,6 +137,19 @@ export interface CaseStudyPullquote {
   }
 }
 
+/**
+ * A client's full written testimonial, rendered verbatim as a letter on the
+ * detail page. One string per paragraph; never trim or paraphrase.
+ */
+export interface CaseStudyTestimonial {
+  paragraphs: ReadonlyArray<string>
+  attribution: {
+    name: string
+    role: string
+    company: string
+  }
+}
+
 export type EngagementType = 'product' | 'operations' | 'platform'
 
 export interface CaseStudy {
@@ -159,6 +172,7 @@ export interface CaseStudy {
   atAGlance: CaseStudyAtAGlance
   story: CaseStudyStory
   pullquote?: CaseStudyPullquote
+  testimonial?: CaseStudyTestimonial
   services?: ReadonlyArray<CaseStudyServiceCategory>
   recognition?: ReadonlyArray<CaseStudyRecognition>
   meta: CaseStudyMeta
@@ -697,6 +711,29 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         body: 'The marketing site leads with the firm’s record: a decade in business, 350+ projects, and an unlimited Tennessee contractor license.',
       },
     ],
+    pullquote: {
+      text: 'What Brandon ultimately delivered was far beyond anything we had envisioned. We are very excited for the possibilities this type of technology could provide as our company continues to grow.',
+      attribution: {
+        name: 'Jason Hall',
+        role: 'Executive Vice President',
+        company: 'Cambridge Building Group',
+      },
+    },
+    // Verbatim from Jason Hall's email of 2026-09-05 (REL-431). Do not edit.
+    testimonial: {
+      paragraphs: [
+        'Brandon Harris and RelentNet were contracted by our startup construction company to develop a website. The design and data-collection process was detailed and required significant feedback from my team, as should be expected with a project of this nature. The final website was right on par with what we were promised, and the craftsmanship and attention to the small details—animations, transitions, and other design elements—went well beyond what we had expected.',
+        'Less than a year after completing the website, we engaged Brandon to develop a web-based solution that would allow our team to digitally process the miscellaneous invoices we receive each month. Our initial request was, at best, vague regarding our ultimate expectations for functionality. We were really only able to explain how our existing "paperless" process worked for receiving, coding, approving, and filing PDF invoices.',
+        'What Brandon ultimately delivered was far beyond anything we had envisioned. We are very excited for the possibilities this type of technology could provide as our company continues to grow. Brandon created a fully functional, scalable solution that automates most of the invoice process from receipt to pushing data and documents into QBO, notifies team members when an invoice requires attention, and sends a daily reminder at a designated time if their review has not been completed. He even figured out how to integrate a digital "stamp" reflecting the job-cost coding, approver, and approval date.',
+        'The design process was practically painless for our team. Brandon listened carefully to what we needed, understood what we were trying to accomplish, and then worked his digital magic to turn our ideas into a highly functional solution. He was able to take a relatively basic description of our existing process and transform it into something significantly more sophisticated and efficient.',
+        'We would highly recommend Brandon Harris and RelentNet for any bespoke coding or technology project. We could not be happier with our investment, the products he has delivered, or the continued support Brandon has provided throughout beta testing and our ongoing daily use of the system. He has proven to be an exceptional partner who not only delivers what he promises, but he also consistently finds ways to deliver more than we ever thought possible.',
+      ],
+      attribution: {
+        name: 'Jason Hall',
+        role: 'Executive Vice President',
+        company: 'Cambridge Building Group, LLC',
+      },
+    },
     meta: {
       title: 'Cambridge Building Group Case Study | RelentNet',
       description:

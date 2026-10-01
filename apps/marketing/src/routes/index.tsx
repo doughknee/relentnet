@@ -53,12 +53,10 @@ export const cases = [
     statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
     image: '/case-studies/cambridge-building-group/hero.webp',
     imageAlt: 'Cambridge Building Group site and AP portal',
-    // Jason's own words, confirmed by Brandon. The comment here used to call
-    // this a placeholder awaiting real copy, which was wrong and held up a
-    // merge (REL-92).
     quote:
-      'Invoices used to eat my Fridays. Now they land in QuickBooks with the PDF attached, and all I do is approve.',
-    quoteAttribution: 'Jason Hall · Cambridge Building Group',
+      'He has proven to be an exceptional partner who not only delivers what he promises, but he also consistently finds ways to deliver more than we ever thought possible.',
+    quoteAttribution:
+      'Jason Hall, Executive Vice President · Cambridge Building Group',
   },
   {
     label: 'Scrollr',
