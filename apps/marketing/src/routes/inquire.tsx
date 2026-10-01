@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -65,7 +65,10 @@ const labelClasses = 'text-[11px] uppercase tracking-[0.15em] text-ink-muted'
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [hasError, setHasError] = useState(false)
+  // Honeypot: uncontrolled and kept out of the form values so the webhook
+  // payload shape stays unchanged. Real visitors never see or fill it.
+  const honeypotRef = useRef<HTMLInputElement>(null)
 
   const form = useForm({
     // Field set matches the long-standing webhook payload — fields the v4
@@ -90,7 +93,12 @@ function Contact() {
       cityState: '',
     },
     onSubmit: async ({ value }) => {
-      setError(null)
+      setHasError(false)
+      if (honeypotRef.current?.value) {
+        // Bot: show the normal success state, send nothing.
+        setIsSuccess(true)
+        return
+      }
       const body = JSON.stringify(value)
       // One retry, for transient network/timeout failures only. HTTP errors
       // (the server responded) are not retried — the request reached n8n, so
@@ -109,19 +117,9 @@ function Contact() {
             REQUEST_TIMEOUT_MS,
           )
 
+          // Any non-2xx is an error. The n8n workflow must have a Respond to
+          // Webhook node returning 200 (REL-445, set up in n8n).
           if (!response.ok) {
-            const responseBody = await response.text()
-
-            // N8N Workaround: If the workflow runs but lacks a response node, it returns 500 with this message.
-            // We treat this as a success since the data successfully reached the webhook.
-            if (
-              response.status === 500 &&
-              responseBody.includes('No Respond to Webhook node found')
-            ) {
-              setIsSuccess(true)
-              return
-            }
-
             throw new Error(
               `Failed to submit form: ${response.status} ${response.statusText}`,
             )
@@ -138,7 +136,7 @@ function Contact() {
           if (attempt < maxAttempts && (isTimeout || isNetwork)) {
             continue
           }
-          setError('Something went wrong. Please try again later.')
+          setHasError(true)
           return
         }
       }
@@ -270,6 +268,18 @@ function Contact() {
                 }}
                 className="flex flex-col gap-7"
               >
+                <div
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+                >
+                  <input
+                    ref={honeypotRef}
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <form.Field
                     name="fullName"
@@ -500,9 +510,19 @@ function Contact() {
                   <p className="mt-3.5 text-center text-xs text-ink-faint">
                     Free diagnostic · transparent pricing · no mystery retainers
                   </p>
-                  {error && (
-                    <p className="text-red-500 text-xs mt-4 text-center">
-                      {error}
+                  {hasError && (
+                    <p
+                      role="alert"
+                      className="text-red-500 text-xs mt-4 text-center"
+                    >
+                      Something went wrong. Please try again, or reach us at{' '}
+                      <a
+                        href={`mailto:${siteConfig.contact.email}`}
+                        className="underline"
+                      >
+                        {siteConfig.contact.email}
+                      </a>{' '}
+                      or {siteConfig.contact.phone}.
                     </p>
                   )}
                 </div>
