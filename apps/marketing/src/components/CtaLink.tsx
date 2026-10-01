@@ -14,7 +14,8 @@ const base =
  * the padding and out the side.
  */
 const layouts = {
-  inline: 'inline-flex px-[30px] whitespace-nowrap',
+  inline:
+    'inline-flex max-w-full px-[30px] whitespace-nowrap max-[359px]:px-5 max-[359px]:text-center max-[359px]:whitespace-normal',
   block: 'flex w-full justify-center text-center px-5',
 } as const
 

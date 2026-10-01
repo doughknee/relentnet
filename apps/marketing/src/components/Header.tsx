@@ -52,7 +52,7 @@ export function Header() {
         </Link>
 
         {/* Links — wrap to a full-width centered second line under 900px */}
-        <div className="flex gap-[26px] font-mono text-[13px] tracking-[0.12em] uppercase text-ink whitespace-nowrap max-[899px]:order-3 max-[899px]:w-full max-[899px]:justify-center">
+        <div className="flex flex-wrap gap-x-[26px] gap-y-2 max-[899px]:gap-x-4 font-mono text-[13px] tracking-[0.12em] uppercase text-ink whitespace-nowrap max-[899px]:order-3 max-[899px]:w-full max-[899px]:justify-center">
           {primaryNavItems.map((item) => (
             <Link
               key={item.to}
