@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { CtaLink } from '@/components/CtaLink'
+import { EngagementTerms } from '@/components/EngagementTerms'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Reveal } from '@/components/Reveal'
 import { seo } from '@/lib/seo'
+import { siteConfig } from '@/site.config'
 
 export const Route = createFileRoute('/diagnostic')({
   head: () =>
@@ -110,9 +112,10 @@ function Diagnostic() {
               className="animate-fade-in-up mt-9 max-w-[480px] text-ink-sub text-[17px] font-light leading-[1.6]"
               style={{ animationDelay: '180ms' }}
             >
-              A free first engagement for owner-led teams. We map how work
-              actually moves, find the root friction, and hand you a clear
-              answer: build, connect, or don't.
+              A {siteConfig.pricing.diagnostic.price} first engagement for
+              owner-led teams, credited toward the build if you sign within 60
+              days. We map how work actually moves, find the root friction, and
+              hand you a clear answer: build, connect, or don't.
             </p>
             <div
               className="animate-fade-in-up mt-11 flex flex-wrap gap-3.5"
@@ -150,7 +153,7 @@ function Diagnostic() {
               ))}
             </div>
             <p className="mt-6 text-xs text-ink-muted leading-[1.6]">
-              Free, fixed scope, and you keep everything we map.
+              Fixed price, fixed scope, and you keep everything we map.
             </p>
           </aside>
         </div>
@@ -291,6 +294,8 @@ function Diagnostic() {
           </div>
         </div>
       </section>
+
+      <EngagementTerms />
 
       {/* ── Closing CTA ── */}
       <section className="relative">

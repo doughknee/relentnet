@@ -13,7 +13,7 @@ interface CtaTile {
 const TILES: ReadonlyArray<CtaTile> = [
   {
     headline: "Always know what you'll pay",
-    body: 'Free diagnostic. Transparent engagement pricing after. No mystery retainers.',
+    body: '$2,000 diagnostic, credited toward the build. Transparent engagement pricing after. No mystery retainers.',
     label: 'Start a Diagnostic',
     to: '/diagnostic',
   },

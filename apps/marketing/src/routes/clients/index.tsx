@@ -255,7 +255,7 @@ function ClientsIndex() {
           <Reveal delay={150}>
             <div className="mt-11 flex flex-wrap justify-center gap-3.5">
               <CtaLink to="/inquire" arrow>
-                Book a Free Diagnostic
+                Book a Diagnostic
               </CtaLink>
               <CtaLink to="/process" variant="outline">
                 How we work
@@ -264,7 +264,8 @@ function ClientsIndex() {
           </Reveal>
           <Reveal delay={250}>
             <p className="mt-8 text-[13px] text-ink-muted">
-              Free diagnostic. Transparent pricing after. No mystery retainers.
+              $2,000 diagnostic, credited toward the build. Transparent pricing
+              after. No mystery retainers.
             </p>
           </Reveal>
         </div>

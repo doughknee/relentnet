@@ -133,7 +133,7 @@ export const steps = [
     num: 'i.',
     title: 'Diagnose',
     description:
-      'A free diagnostic maps how work actually moves through your business, and where it stalls.',
+      'A $2,000 diagnostic maps how work actually moves through your business, and where it stalls.',
     note: 'Deliverable: workflow map + priority list',
   },
   {
@@ -145,8 +145,9 @@ export const steps = [
   },
   {
     num: 'iii.',
-    title: 'Steward',
-    description: 'We host, monitor, secure, and keep improving what we build.',
+    title: 'Run',
+    description:
+      'Hosting and monitoring on infrastructure you control, plus fixes and improvements on a monthly retainer.',
     note: 'Ongoing: hosting, support, iteration',
   },
 ] as const
@@ -168,7 +169,7 @@ export const marqueeItems = [
 
 export const premise = {
   intro:
-    'The diagnostic is free. It’s how we show you the way we think. If software isn’t the answer, we’ll say so, and you keep the map.',
+    'The diagnostic is $2,000, fixed, and credited toward the build if you sign within 60 days. It’s how we show you the way we think. If software isn’t the answer, we’ll say so, and you keep the map.',
   answers: [
     {
       num: 'Answer 01',
@@ -181,9 +182,9 @@ export const premise = {
       body: 'The tools you already pay for can cover it. They’ve just never been wired together properly. We do the wiring.',
     },
     {
-      num: 'Answer 03 · No invoice',
+      num: 'Answer 03 · No build',
       title: 'Don’t build yet',
-      body: 'The honest answer, more often than you’d think. You keep the workflow map, and you skip the invoice.',
+      body: 'The honest answer, more often than you’d think. You keep the workflow map, and you skip the build.',
       emphasized: true,
     },
   ],
@@ -650,7 +651,7 @@ function HomeComponent() {
             >
               <div className="max-w-[540px]">
                 <p className="text-ink-sub text-lg font-light leading-[1.6]">
-                  One free diagnostic maps where your operation loses time. Then
+                  A $2,000 diagnostic maps where your operation loses time. Then
                   we build only what earns its place, and we run it for you.
                 </p>
                 {/* Founder lockup. A referred visitor is checking who they were
@@ -1067,7 +1068,7 @@ function HomeComponent() {
               // The emphasized card is marked by the gold top rule alone.
               // bg-inset recedes in dark theme (it's a deeper black), which
               // fought the emphasis once the cards stopped being butted
-              // together — and the "No invoice" tag now says the quiet part out
+              // together — and the "No build" tag now says the quiet part out
               // loud, so the surface doesn't need to shout.
               <Reveal key={a.title} delay={i * 120} className="h-full">
                 <TiltCard
