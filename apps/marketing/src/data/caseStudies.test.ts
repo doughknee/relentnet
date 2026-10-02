@@ -117,6 +117,42 @@ describe('caseStudies data', () => {
     )
   })
 
+  it('fills every section of the detail template for every study', () => {
+    for (const study of caseStudies) {
+      const { slug, atAGlance, story, testimonial } = study
+      expect(study.heroQuote, `${slug}.heroQuote`).toBeTruthy()
+      expect(atAGlance.metrics, `${slug} needs three outcomes`).toHaveLength(3)
+      for (const metric of atAGlance.metrics ?? []) {
+        expect(metric.context, `${slug} "${metric.label}" context`).toBeTruthy()
+      }
+      expect(
+        story.stewardship?.length,
+        `${slug}.story.stewardship`,
+      ).toBeGreaterThan(0)
+      expect(atAGlance.stack, `${slug} needs four stack groups`).toHaveLength(4)
+      expect(
+        testimonial?.paragraphs.length,
+        `${slug}.testimonial`,
+      ).toBeGreaterThan(0)
+      expect(study.builtBy, `${slug}.builtBy`).toBeDefined()
+    }
+  })
+
+  it('never renders an empty string anywhere in a study', () => {
+    const walk = (value: unknown, path: string): void => {
+      if (typeof value === 'string') {
+        expect(value.trim(), `${path} is empty`).not.toBe('')
+      } else if (Array.isArray(value)) {
+        value.forEach((item, i) => walk(item, `${path}[${i}]`))
+      } else if (value && typeof value === 'object') {
+        for (const [key, item] of Object.entries(value)) {
+          walk(item, `${path}.${key}`)
+        }
+      }
+    }
+    for (const study of caseStudies) walk(study, study.slug)
+  })
+
   it('ships all 15 Cambridge tools across four stack groups', () => {
     const stack =
       getCaseStudyBySlug('cambridge-building-group')?.atAGlance.stack ?? []
