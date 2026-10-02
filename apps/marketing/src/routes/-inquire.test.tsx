@@ -27,10 +27,11 @@ describe('inquiry route content', () => {
   })
 })
 
-describe('Start a conversation block', () => {
+describe('Reach us directly block', () => {
   it('shows phone and email from siteConfig', () => {
     renderPage()
     expect(screen.getByText('Start a conversation')).toBeInTheDocument()
+    expect(screen.getByText('Reach us directly')).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: siteConfig.contact.phone }),
     ).toHaveAttribute('href', 'tel:+18588591851')

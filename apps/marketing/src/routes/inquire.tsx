@@ -50,94 +50,66 @@ function Contact() {
       />
 
       <div className="relative z-10 pt-[110px] pb-20 px-5 md:px-12">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-20 items-start">
-          {/* ── Left: context ── */}
-          <div className="flex flex-col gap-11">
-            <div className="animate-fade-in-up">
-              <Eyebrow className="mb-7">Book a diagnostic</Eyebrow>
-              <h1 className="font-serif text-[clamp(36px,6vw,72px)] leading-none mb-6 text-balance">
-                Tell us where it{' '}
-                <span className="italic text-gold-text">feels slow.</span>
-              </h1>
-              <p className="text-ink-sub font-light leading-[1.65] max-w-[400px]">
-                {inquiryContent.body}
-              </p>
-            </div>
-
-            <div
-              className="animate-fade-in-up"
-              style={{ animationDelay: '100ms' }}
-            >
-              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
-                Start a conversation
-              </p>
-              {/* Hidden until Brandon sets siteConfig.contact.bookingUrl. */}
-              {siteConfig.contact.bookingUrl && (
-                <div className="mb-6">
-                  <CtaLink
-                    href={siteConfig.contact.bookingUrl}
-                    external
-                    arrow
-                    block
-                  >
-                    Book a 20-minute call
-                  </CtaLink>
-                </div>
-              )}
-              {/* From siteConfig, like the footer and the homepage. This page
-                  was the last copy still typed out by hand, which is how a
-                  number gets changed everywhere except one place. */}
-              <p className="font-serif text-[26px] text-ink-em">
-                <a
-                  href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
-                  className="hover:text-gold-text transition-colors"
-                >
-                  {siteConfig.contact.phone}
-                </a>
-              </p>
-              <p className="mt-1.5 text-sm text-ink-sub">
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="hover:text-gold-text transition-colors"
-                >
-                  {siteConfig.contact.email}
-                </a>{' '}
-                · {siteConfig.contact.hours}
-              </p>
-              <p className="mt-3.5 text-xs text-ink-muted">
-                In-person available across TN, LA, GA, FL.
-              </p>
-            </div>
-
-            <div
-              className="animate-fade-in-up border-t border-line-faint pt-8"
-              style={{ animationDelay: '200ms' }}
-            >
-              <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-5">
-                What happens next
-              </p>
-              <div className="flex flex-col">
-                {inquiryNextSteps.map((text, i) => (
-                  <div
-                    key={i}
-                    className="flex items-baseline gap-[18px] border-b border-line-faint py-3.5"
-                  >
-                    <span className="font-serif italic text-[15px] text-gold-text shrink-0">
-                      {['i.', 'ii.', 'iii.'][i]}
-                    </span>
-                    <span className="text-sm font-light text-ink-sub leading-normal">
-                      {text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+        <div className="max-w-[720px] mx-auto flex flex-col gap-11">
+          <div className="animate-fade-in-up">
+            <Eyebrow className="mb-7">Start a conversation</Eyebrow>
+            <h1 className="font-serif text-[clamp(36px,6vw,72px)] leading-none mb-6 text-balance">
+              Tell us where it{' '}
+              <span className="italic text-gold-text">feels slow.</span>
+            </h1>
+            <p className="text-ink-sub font-light leading-[1.65] max-w-[400px]">
+              {inquiryContent.body}
+            </p>
           </div>
 
-          {/* ── Right: write to us ── */}
           <div
-            className="animate-fade-in-up border border-line bg-card p-7 md:p-12"
-            style={{ animationDelay: '300ms' }}
+            className="animate-fade-in-up"
+            style={{ animationDelay: '100ms' }}
+          >
+            <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-4">
+              Reach us directly
+            </p>
+            {/* Hidden until Brandon sets siteConfig.contact.bookingUrl. */}
+            {siteConfig.contact.bookingUrl && (
+              <div className="mb-6">
+                <CtaLink
+                  href={siteConfig.contact.bookingUrl}
+                  external
+                  arrow
+                  block
+                >
+                  Book a 20-minute call
+                </CtaLink>
+              </div>
+            )}
+            {/* From siteConfig, like the footer and the homepage. This page
+                was the last copy still typed out by hand, which is how a
+                number gets changed everywhere except one place. */}
+            <p className="font-serif text-[26px] text-ink-em">
+              <a
+                href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
+                className="hover:text-gold-text transition-colors"
+              >
+                {siteConfig.contact.phone}
+              </a>
+            </p>
+            <p className="mt-1.5 text-sm text-ink-sub">
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="hover:text-gold-text transition-colors"
+              >
+                {siteConfig.contact.email}
+              </a>{' '}
+              · {siteConfig.contact.hours}
+            </p>
+            <p className="mt-3.5 text-xs text-ink-muted">
+              In-person available across TN, LA, GA, FL.
+            </p>
+          </div>
+
+          <div
+            className="animate-fade-in-up border border-line bg-card p-7 md:p-10"
+            style={{ animationDelay: '200ms' }}
           >
             <h2 className="font-serif text-[28px] leading-tight mb-6">
               Or write to us
@@ -149,6 +121,30 @@ function Contact() {
               A few sentences is enough. We read every note and reply within one
               business day.
             </p>
+          </div>
+
+          <div
+            className="animate-fade-in-up border-t border-line-faint pt-8"
+            style={{ animationDelay: '300ms' }}
+          >
+            <p className="font-mono text-[10px] tracking-[0.26em] uppercase text-ink-faint mb-5">
+              What happens next
+            </p>
+            <div className="flex flex-col">
+              {inquiryNextSteps.map((text, i) => (
+                <div
+                  key={i}
+                  className="flex items-baseline gap-[18px] border-b border-line-faint py-3.5"
+                >
+                  <span className="font-serif italic text-[15px] text-gold-text shrink-0">
+                    {['i.', 'ii.', 'iii.'][i]}
+                  </span>
+                  <span className="text-sm font-light text-ink-sub leading-normal">
+                    {text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
