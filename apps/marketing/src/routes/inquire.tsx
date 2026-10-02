@@ -50,8 +50,7 @@ export const inquiryNextSteps = [
   'A diagnostic, then a clear build / connect / don’t-build answer.',
 ] as const
 
-/** The 30-minute call. `minutes` stays unset until Brandon confirms the
- *  split; a row shows its time only when it is set. */
+/** The 30-minute call. A row shows its time only when `minutes` is set. */
 export const callAgenda: ReadonlyArray<{
   title: string
   detail: string
@@ -59,15 +58,18 @@ export const callAgenda: ReadonlyArray<{
 }> = [
   {
     title: 'What feels slow or manual',
+    minutes: 15,
     detail: 'Manual, disconnected, hard to see. Tell us where it feels slow.',
   },
   {
     title: 'Tools you use today',
+    minutes: 10,
     detail:
       'What the work already runs on, so nothing gets rebuilt that only needs connecting.',
   },
   {
     title: 'Whether the diagnostic is the right first step',
+    minutes: 5,
     detail: `If it is, the ${siteConfig.pricing.diagnostic.price} diagnostic ends with a clear build / connect / don’t-build answer. If it is not, we say so.`,
   },
 ]

@@ -63,9 +63,11 @@ describe('inquiry route content', () => {
     expect(inquiryNextSteps[2]).not.toMatch(/free/i)
   })
 
-  it('leaves every agenda time unset', () => {
-    expect(callAgenda).toHaveLength(3)
-    for (const row of callAgenda) expect(row.minutes).toBeUndefined()
+  it('splits the 30-minute call 15, 10 and 5', () => {
+    expect(callAgenda.map((row) => row.minutes)).toEqual([15, 10, 5])
+    expect(callAgenda.reduce((sum, row) => sum + (row.minutes ?? 0), 0)).toBe(
+      30,
+    )
   })
 })
 
@@ -120,12 +122,12 @@ describe('booking on', () => {
 })
 
 describe('call agenda', () => {
-  it('renders the three rows and no times', () => {
+  it('renders the three rows with their minutes', () => {
     const { container } = renderPage()
     for (const row of callAgenda) {
       expect(screen.getByText(row.title)).toBeInTheDocument()
+      expect(screen.getByText(`${row.minutes} min`)).toBeInTheDocument()
     }
-    expect(container.textContent).not.toMatch(/\bmin\b/i)
     expect(container.textContent).not.toMatch(/\[placeholder/i)
     expect(screen.getByText('30 minutes')).toBeInTheDocument()
   })

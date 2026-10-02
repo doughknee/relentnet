@@ -27,9 +27,12 @@ export function GuaranteeChip() {
  *  `pricing.diagnostic.guarantee` is set, so no terms ship until Brandon
  *  supplies them. */
 export function GuaranteeBand() {
-  const { price, terms, guarantee } = siteConfig.pricing.diagnostic
+  const { terms, guarantee } = siteConfig.pricing.diagnostic
   if (!guarantee) return null
   const person = founders[0]
+  // "Worth $2,000, or your money back." keeps its gold italic tail.
+  const at = guarantee.headline.indexOf(', or ')
+  const cut = at < 0 ? guarantee.headline.length : at + 5
 
   return (
     <section data-testid="guarantee-band" className={surfaces.tint}>
@@ -54,9 +57,9 @@ export function GuaranteeBand() {
           </Reveal>
           <Reveal delay={100}>
             <h2 className="font-serif text-[clamp(34px,4.4vw,56px)] leading-[1.07] text-balance">
-              Worth {price}, or{' '}
+              {guarantee.headline.slice(0, cut)}
               <span className="italic text-gold-text">
-                {guarantee.headline}.
+                {guarantee.headline.slice(cut)}
               </span>
             </h2>
           </Reveal>
@@ -72,7 +75,7 @@ export function GuaranteeBand() {
               <p className="text-lg leading-[30px] text-ink-em">{terms}</p>
             </div>
             <div className="border border-line bg-page/40 px-6 py-5">
-              <p className={`${monoGold} mb-2`}>If you don&rsquo;t</p>
+              <p className={`${monoGold} mb-2`}>Refund window</p>
               <p className="text-lg leading-[30px] text-ink-em">
                 {guarantee.window}
               </p>

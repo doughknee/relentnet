@@ -95,7 +95,7 @@ function Diagnostic() {
   const proofTicks = [
     `${price}, fixed scope`,
     'Credited to the build within 60 days',
-    ...(guarantee ? [guarantee.window] : []),
+    ...(guarantee ? [`Full refund within ${guarantee.window}`] : []),
   ]
 
   return (

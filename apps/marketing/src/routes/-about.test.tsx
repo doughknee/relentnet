@@ -135,20 +135,45 @@ describe('about redesign (REL-525)', () => {
       { label: 'Role', value: 'Co-founder & CEO' },
       { label: 'Based', value: 'Nashville, TN' },
       { label: 'Building since', value: 'May 2022' },
+      {
+        label: 'Credential',
+        value: 'Building software since age 11. More than 15 years.',
+      },
+      {
+        label: 'Built',
+        value: 'Scrollr, Cambridge Building Group, CourtCommand, VM Homes',
+      },
     ])
     expect(founderSpec(founders[1], since)).toEqual([
       { label: 'Role', value: 'Co-founder & COO' },
       { label: 'Based', value: 'New Orleans, LA' },
       { label: 'Building since', value: 'May 2022' },
+      { label: 'Credential', value: 'Also runs Function IT Services.' },
+      { label: 'Also runs', value: 'Function IT Services' },
     ])
   })
 
-  it('renders no credential or LinkedIn with the current config', () => {
+  it('renders credentials and the extra rows, but no LinkedIn or Before', () => {
     const { container } = render(<About />)
-    expect(screen.queryByText('Credential')).toBeNull()
+    const brandon = within(screen.getByTestId('about-founder-brandon'))
+    expect(brandon.getByText('Built')).toBeTruthy()
+    expect(
+      brandon.getByText(/Cambridge Building Group.*CourtCommand.*VM Homes/),
+    ).toBeTruthy()
+    const daniel = within(screen.getByTestId('about-founder-daniel'))
+    expect(daniel.getByText('Also runs')).toBeTruthy()
+    expect(daniel.getByText('Function IT Services')).toBeTruthy()
+    expect(screen.queryByText('Before')).toBeNull()
     expect(screen.queryByText('LinkedIn')).toBeNull()
     expect(container.innerHTML).not.toContain('linkedin.com')
     expect(container.innerHTML).not.toContain('[placeholder')
+  })
+
+  it('omits the credential row when the field is removed', () => {
+    siteConfig.founders['Brandon Harris'].credential = undefined
+    render(<About />)
+    const block = screen.getByTestId('about-founder-brandon')
+    expect(within(block).queryByText('Credential')).toBeNull()
   })
 
   it('renders credential and LinkedIn rows once they are supplied', () => {
@@ -160,9 +185,8 @@ describe('about redesign (REL-525)', () => {
     expect(within(block).getByText('A real credential')).toBeTruthy()
     const link = within(block).getByRole('link', { name: /LinkedIn/ })
     expect(link.getAttribute('href')).toBe('https://example.com/in/brandon')
-    // Daniel has supplied nothing, so his block still has neither row.
+    // Daniel has no LinkedIn, so his block has no such row.
     const daniel = screen.getByTestId('about-founder-daniel')
-    expect(within(daniel).queryByText('Credential')).toBeNull()
     expect(within(daniel).queryByText('LinkedIn')).toBeNull()
   })
 

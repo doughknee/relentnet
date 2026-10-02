@@ -2,7 +2,11 @@ import { render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ClosingCta } from '../ClosingCta'
-import { EngagementTerms, engagementRows } from '../EngagementTerms'
+import {
+  EngagementRow,
+  EngagementTerms,
+  engagementRows,
+} from '../EngagementTerms'
 import { GuaranteeBand, GuaranteeChip } from '../GuaranteeBand'
 import { PriceExamples } from '../PriceExamples'
 import type { DiagnosticGuarantee, PriceExample } from '@/site.config'
@@ -29,9 +33,14 @@ vi.mock('@tanstack/react-router', async () => ({
 
 const { pricing, contact } = siteConfig
 
+const original = {
+  guarantee: pricing.diagnostic.guarantee,
+  examples: pricing.examples,
+}
+
 afterEach(() => {
-  pricing.diagnostic.guarantee = undefined
-  pricing.examples = []
+  pricing.diagnostic.guarantee = original.guarantee
+  pricing.examples = original.examples
   contact.booking.handle = 'brandon-harris'
 })
 
@@ -58,16 +67,36 @@ describe('EngagementTerms', () => {
     expect(container.textContent).not.toMatch(/free/i)
   })
 
-  it('shows "How long" only for the build, the one published duration', () => {
+  it('shows "How long" for each of the four published durations', () => {
+    expect(pricing.diagnostic.duration).toBe('1 to 2 weeks')
     expect(pricing.build.duration).toBe('4 to 10 weeks')
-    expect(pricing.diagnostic.duration).toBeUndefined()
-    expect(pricing.website.duration).toBeUndefined()
-    expect(pricing.run.duration).toBeUndefined()
-    expect(engagementRows.filter((r) => r.duration)).toHaveLength(1)
+    expect(pricing.website.duration).toBe('3 to 6 weeks')
+    expect(pricing.run.duration).toBe("Monthly, 30 days' notice")
+    expect(engagementRows.filter((r) => r.duration)).toHaveLength(4)
 
     render(<EngagementTerms />)
-    expect(screen.getAllByText('How long')).toHaveLength(1)
-    expect(screen.getByText('4 to 10 weeks')).toBeTruthy()
+    expect(screen.getAllByText('How long')).toHaveLength(4)
+    for (const text of [
+      '1 to 2 weeks',
+      '4 to 10 weeks',
+      '3 to 6 weeks',
+      "Monthly, 30 days' notice",
+    ]) {
+      expect(screen.getByText(text)).toBeTruthy()
+    }
+  })
+
+  it('omits the How long cell for an engagement with no duration', () => {
+    const { duration } = pricing.website
+    pricing.website.duration = undefined
+    try {
+      const row = { ...engagementRows[2], duration: undefined }
+      expect(row.duration).toBeUndefined()
+      render(<EngagementRow row={row} />)
+      expect(screen.queryByText('How long')).toBeNull()
+    } finally {
+      pricing.website.duration = duration
+    }
   })
 
   it('renders the badge it is given, and none otherwise', () => {
@@ -106,8 +135,22 @@ const example: PriceExample = {
 }
 
 describe('guarantee band', () => {
-  it('does not render with the current config', () => {
-    expect(pricing.diagnostic.guarantee).toBeUndefined()
+  it('renders with the approved config', () => {
+    const { container } = render(
+      <>
+        <GuaranteeBand />
+        <GuaranteeChip />
+      </>,
+    )
+    expect(screen.getByTestId('guarantee-band')).toBeTruthy()
+    expect(screen.getByTestId('guarantee-chip')).toBeTruthy()
+    expect(container.textContent).toContain('Worth $2,000, or your money back.')
+    expect(container.textContent).toContain('within 14 days of receiving')
+    expect(container.textContent).toContain('14 days')
+  })
+
+  it('hides band and chip when the guarantee is removed', () => {
+    pricing.diagnostic.guarantee = undefined
     const { container } = render(
       <>
         <GuaranteeBand />
@@ -117,7 +160,7 @@ describe('guarantee band', () => {
     expect(container.innerHTML).toBe('')
   })
 
-  it('renders band and chip once the config supplies terms', () => {
+  it('renders band and chip from whatever the config supplies', () => {
     pricing.diagnostic.guarantee = guarantee
     render(
       <>
@@ -133,8 +176,24 @@ describe('guarantee band', () => {
 })
 
 describe('price examples', () => {
-  it('does not render with the current (empty) config', () => {
-    expect(pricing.examples).toEqual([])
+  it('renders the three approved examples', () => {
+    render(<PriceExamples />)
+    expect(screen.getByText('One workflow automated')).toBeTruthy()
+    expect(screen.getByText('$7,000')).toBeTruthy()
+    expect(screen.getByText('$350 a month')).toBeTruthy()
+    expect(screen.getByText('$11,200')).toBeTruthy()
+  })
+
+  it('works year one out as build plus 12 months of run', () => {
+    expect(pricing.examples.map((e) => e.total)).toEqual([
+      '$11,200',
+      '$24,000',
+      '$46,000',
+    ])
+  })
+
+  it('hides when the examples are removed', () => {
+    pricing.examples = []
     const { container } = render(<PriceExamples />)
     expect(container.innerHTML).toBe('')
   })

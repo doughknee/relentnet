@@ -43,9 +43,8 @@ interface Phase {
   /** Which engagement the phase belongs to; durations and prices come from
    *  `siteConfig.pricing` through it. */
   engagement: PhaseEngagement
-  /** Who the client talks to in this phase. Left unset everywhere: /about
-   *  says both founders sit in client meetings but does not split it by
-   *  phase, so nothing is claimed. The block renders it only when set. */
+  /** Who the client talks to in this phase. The block renders it only when
+   *  set. */
   who?: string
 }
 
@@ -64,6 +63,7 @@ export const phases: ReadonlyArray<Phase> = [
       'Opportunity summary',
     ],
     engagement: 'diagnostic',
+    who: 'Brandon and Daniel',
   },
   {
     number: '02',
@@ -79,6 +79,7 @@ export const phases: ReadonlyArray<Phase> = [
       'Recommended system scope',
     ],
     engagement: 'diagnostic',
+    who: 'Brandon',
   },
   {
     number: '03',
@@ -94,6 +95,7 @@ export const phases: ReadonlyArray<Phase> = [
       'Implementation roadmap',
     ],
     engagement: 'build',
+    who: 'Brandon',
   },
   {
     number: '04',
@@ -109,6 +111,7 @@ export const phases: ReadonlyArray<Phase> = [
       'Launch preparation',
     ],
     engagement: 'build',
+    who: 'Brandon',
   },
   {
     number: '05',
@@ -124,6 +127,7 @@ export const phases: ReadonlyArray<Phase> = [
       'Direct access to the engineering team',
     ],
     engagement: 'run',
+    who: 'Daniel day to day, Brandon for changes',
   },
 ]
 
@@ -139,7 +143,12 @@ export function phaseMeta(phase: Phase) {
   const { price, duration } = pricing[phase.engagement]
   const part = `Part of ${engagementNames[phase.engagement]}`
   return duration
-    ? { label: 'How long', value: `${part}. Most run ${duration}.` }
+    ? {
+        label: 'How long',
+        value: `${part}. ${
+          phase.engagement === 'run' ? duration : `Most run ${duration}`
+        }.`,
+      }
     : { label: 'Engagement', value: `${part}, ${price.toLowerCase()}.` }
 }
 
