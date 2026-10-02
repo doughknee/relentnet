@@ -50,7 +50,7 @@ export const inquiryNextSteps = [
   'A diagnostic, then a clear build / connect / don’t-build answer.',
 ] as const
 
-/** The 20-minute call. `minutes` stays unset until Brandon confirms the
+/** The 30-minute call. `minutes` stays unset until Brandon confirms the
  *  split; a row shows its time only when it is set. */
 export const callAgenda: ReadonlyArray<{
   title: string
@@ -138,7 +138,7 @@ function Contact() {
               <h2 className="font-mono text-[11px] tracking-[0.26em] uppercase text-gold-text">
                 What happens on the call
               </h2>
-              <span className={mono}>20 minutes</span>
+              <span className={mono}>30 minutes</span>
             </div>
             <ol>
               {callAgenda.map((row) => (

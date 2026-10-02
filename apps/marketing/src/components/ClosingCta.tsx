@@ -42,7 +42,7 @@ export function ClosingCta({ children, cta }: ClosingCtaProps) {
                     hash="book"
                     className="text-ink-sub underline underline-offset-4 hover:text-gold-text"
                   >
-                    Book a 20-minute call
+                    Book a call
                   </Link>
                   {'. '}
                 </>

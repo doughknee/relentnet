@@ -127,7 +127,7 @@ describe('call agenda', () => {
     }
     expect(container.textContent).not.toMatch(/\bmin\b/i)
     expect(container.textContent).not.toMatch(/\[placeholder/i)
-    expect(screen.getByText('20 minutes')).toBeInTheDocument()
+    expect(screen.getByText('30 minutes')).toBeInTheDocument()
   })
 })
 
