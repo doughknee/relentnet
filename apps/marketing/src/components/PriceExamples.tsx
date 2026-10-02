@@ -82,7 +82,8 @@ export function PriceExamples({
           ))}
         </div>
         <p className="mt-6 text-base text-ink-muted">
-          Year one is the build plus 12 months of run.
+          Illustrative, not a quote. Every build is fixed-price, scoped in the
+          diagnostic. Year one is the build plus 12 months of run.
         </p>
       </div>
     </section>

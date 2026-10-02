@@ -67,7 +67,7 @@ const pricing: {
     guarantee: {
       headline: 'Worth $2,000, or your money back.',
       terms:
-        "If the diagnostic isn't worth it to you, tell us within 14 days of receiving the map and we refund the full $2,000. No questions.",
+        "If the diagnostic isn't worth it to you, tell us in writing within 14 days of receiving the map and we refund the full $2,000. One diagnostic per business. No questions.",
       window: '14 days',
     },
   },
