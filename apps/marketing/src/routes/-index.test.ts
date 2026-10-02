@@ -33,11 +33,11 @@ const closingSeconds = (value: number, duration: number) => {
 }
 
 describe('homepage content (v4)', () => {
-  it('walks diagnose → build → steward', () => {
+  it('walks diagnose → build → run', () => {
     expect(steps.map((step) => step.title)).toEqual([
       'Diagnose',
       'Build',
-      'Steward',
+      'Run',
     ])
   })
 
@@ -56,7 +56,8 @@ describe('homepage content (v4)', () => {
       'Connect',
       'Don’t build yet',
     ])
-    expect(premise.intro).toContain('free')
+    expect(premise.intro).toContain('$2,000')
+    expect(premise.intro).toContain('credited toward the build')
   })
 
   it('runs the eight designed pain points through the marquee', () => {

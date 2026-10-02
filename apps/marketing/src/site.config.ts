@@ -24,6 +24,29 @@ export const siteConfig = {
       'White-glove technology partnership for owner-led businesses. We diagnose operational friction with a workflow diagnostic, then clarify what technology is worth building.',
     ogImage: '/og-default.png',
   },
+  /** Published prices. Brandon approved these numbers 2026-10-02; every page
+   *  that quotes a price reads from here. No hourly or embedded rate is
+   *  published. */
+  pricing: {
+    diagnostic: {
+      price: '$2,000',
+      terms: 'Fixed. Credited toward the build if you sign within 60 days.',
+    },
+    build: {
+      price: 'From $6,000',
+      terms:
+        'Most automation engagements run $10,000 to $25,000 over 4 to 10 weeks.',
+    },
+    website: {
+      price: 'From $5,000',
+      terms: 'A marketing site, priced on its own.',
+    },
+    run: {
+      price: 'From $350 a month',
+      terms:
+        'Hosting, monitoring, and fixes. Improvement retainers are scoped per system.',
+    },
+  },
   social: {
     // Add social links here if available
   },

@@ -23,8 +23,8 @@ export const closingDoors: ReadonlyArray<{
   {
     num: '01',
     title: 'Book a diagnostic',
-    body: 'Free, and it commits you to nothing. It ends with one of three answers: build, connect, or don’t build yet.',
-    action: { label: 'Book a Free Diagnostic', to: '/inquire' },
+    body: `${siteConfig.pricing.diagnostic.price}, fixed, and credited toward the build if you sign within 60 days. It ends with one of three answers: build, connect, or don’t build yet.`,
+    action: { label: 'Book a Diagnostic', to: '/inquire' },
     emphasized: true,
   },
   {

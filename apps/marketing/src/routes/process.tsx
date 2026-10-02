@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { CtaLink } from '@/components/CtaLink'
+import { EngagementTerms } from '@/components/EngagementTerms'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Reveal } from '@/components/Reveal'
 import { seo } from '@/lib/seo'
+import { siteConfig } from '@/site.config'
 
 export const Route = createFileRoute('/process')({
   head: () =>
@@ -161,6 +163,8 @@ function Process() {
         </section>
       ))}
 
+      <EngagementTerms />
+
       {/* ── Closing CTA ── */}
       <section className="relative">
         <div
@@ -170,7 +174,7 @@ function Process() {
         <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-30 text-center relative">
           <Reveal>
             <h2 className="font-serif text-[clamp(32px,5.6vw,68px)] leading-[1.05] text-balance">
-              Phase one costs you nothing.
+              Phase one is {siteConfig.pricing.diagnostic.price}, fixed.
               <br />
               <span className="italic text-gold-text">
                 The wrong build costs a year.
