@@ -148,7 +148,6 @@ describe('about redesign (REL-525)', () => {
       { label: 'Role', value: 'Co-founder & COO' },
       { label: 'Based', value: 'New Orleans, LA' },
       { label: 'Building since', value: 'May 2022' },
-      { label: 'Credential', value: 'Also runs Function IT Services.' },
       { label: 'Also runs', value: 'Function IT Services' },
     ])
   })

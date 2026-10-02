@@ -126,7 +126,7 @@ const founders: Record<'Brandon Harris' | 'Daniel Velez', FounderProfile> = {
     portrait: '/brandon-harris-about.webp',
     portrait1x: '/brandon-harris-about-520.webp',
   },
-  'Daniel Velez': { credential: 'Also runs Function IT Services.' },
+  'Daniel Velez': {},
 }
 
 export interface BookingConfig {
