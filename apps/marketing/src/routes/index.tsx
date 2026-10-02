@@ -648,23 +648,25 @@ function HomeComponent() {
               className="animate-fade-in-up mt-13 flex flex-col min-[768px]:flex-row min-[768px]:items-end justify-between gap-7 min-[768px]:gap-12"
               style={{ animationDelay: '200ms' }}
             >
-              <div className="max-w-[460px]">
+              <div className="max-w-[540px]">
                 <p className="text-ink-sub text-lg font-light leading-[1.6]">
                   One free diagnostic maps where your operation loses time. Then
                   we build only what earns its place, and we run it for you.
                 </p>
                 {/* Founder lockup. A referred visitor is checking who they were
                     sent to, so the name and face sit with the premise rather
-                    than five sections down. The only photo is of both
-                    founders, so the crop is zoomed onto the two of them. */}
-                <div className="mt-8 flex items-center gap-4">
-                  <div className="shrink-0 w-[72px] h-[72px] overflow-hidden border border-line">
+                    than five sections down. Solo headshot, 4:5; the beige wall
+                    is toned down a touch so it sits on the dark page. */}
+                <div className="mt-8 flex items-center gap-5">
+                  <div className="shrink-0 w-24 min-[768px]:w-32 aspect-[4/5] overflow-hidden border border-line">
                     <img
-                      src="/founder-photo.webp"
-                      alt="Brandon Harris and Daniel Velez setting up a livestream at a wedding"
-                      width={72}
-                      height={72}
-                      className="w-full h-full object-cover scale-[2.8] origin-[49%_29%]"
+                      src="/brandon-harris.webp"
+                      srcSet="/brandon-harris-320.webp 320w, /brandon-harris.webp 640w"
+                      sizes="(min-width: 768px) 128px, 96px"
+                      alt="Brandon Harris, founder of RelentNet"
+                      width={640}
+                      height={800}
+                      className="block w-full h-full object-cover saturate-[0.85] brightness-[0.92]"
                     />
                   </div>
                   <div>
