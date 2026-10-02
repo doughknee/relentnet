@@ -1,10 +1,14 @@
-import { describe, expect, it } from 'vitest'
+import { render, screen, within } from '@testing-library/react'
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { FOUNDED_MONTH, FOUNDED_YEAR, founders } from './about'
 import {
   COUNT_DURATION,
+  Route,
   SUPPORTING_COUNT_DURATION,
   cambridgeProof,
   cases,
+  heroProof,
   heroStat,
   marqueeItems,
   nextTabIndex,
@@ -17,6 +21,56 @@ import { testimonialExcerpt } from '@/components/HomeTestimonial'
 import { makeCountEase } from '@/lib/countEase'
 import { siteConfig } from '@/site.config'
 import { caseStudies } from '@/data/caseStudies'
+
+vi.mock('@tanstack/react-router', async () => ({
+  ...(await vi.importActual('@tanstack/react-router')),
+  Link: ({
+    to,
+    children,
+    className,
+  }: {
+    to: string
+    children: unknown
+    className?: string
+  }) => (
+    <a href={to} className={className}>
+      {children as never}
+    </a>
+  ),
+}))
+
+beforeAll(() => {
+  // jsdom has neither; Motion's in-view triggers and the theme need both.
+  class NoopObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return []
+    }
+  }
+  vi.stubGlobal('IntersectionObserver', NoopObserver)
+  vi.stubGlobal('ResizeObserver', NoopObserver)
+  vi.stubGlobal(
+    'matchMedia',
+    (query: string) =>
+      ({
+        matches: false,
+        media: query,
+        addEventListener() {},
+        removeEventListener() {},
+        addListener() {},
+        removeListener() {},
+      }) as unknown as MediaQueryList,
+  )
+})
+
+const Home = Route.options.component as React.ComponentType
+
+afterEach(() => {
+  siteConfig.founders['Brandon Harris'] = {}
+  siteConfig.founders['Daniel Velez'] = {}
+})
 
 /** Seconds a figure spends on its closing eight increments. Bisects the curve,
  *  which is monotonic, then scales the result by the clock it runs on. */
@@ -160,5 +214,107 @@ describe('homepage content (v4)', () => {
     expect(
       new Intl.NumberFormat('en-US', uptime.format).format(uptime.value),
     ).toBe('99.99')
+  })
+})
+
+describe('homepage layout (REL-520)', () => {
+  it('runs the sections in the redesign order', () => {
+    const { container } = render(<Home />)
+    // Section eyebrows are the ones led by the Eyebrow component's gold rule.
+    const eyebrows = Array.from(container.querySelectorAll('span.w-7'))
+      .map((rule) => rule.parentElement?.textContent.trim())
+      .filter((t) => t && /^0\d · /.test(t))
+    expect(eyebrows).toEqual([
+      '01 · Cambridge Building Group',
+      '02 · The numbers',
+      '03 · What it costs',
+      '04 · Client work',
+      '05 · The premise',
+      '06 · How it works',
+      "07 · Who you'll work with",
+      '08 · In their words',
+    ])
+  })
+
+  it('lists the hero proof ticks from the ledger figures', () => {
+    expect(heroProof).toEqual([
+      'Cambridge Building Group',
+      '10,000+ hours of admin automated',
+      '99.99% uptime across hosted systems',
+    ])
+  })
+
+  it('renders four price tiers from config, the Diagnostic accented', () => {
+    render(<Home />)
+    const tiers = screen.getAllByTestId('price-tier')
+    expect(tiers).toHaveLength(4)
+    const { pricing } = siteConfig
+    expect(tiers.map((t) => t.querySelector('h3')?.textContent)).toEqual([
+      'Diagnostic',
+      'Build',
+      'Website',
+      'Run',
+    ])
+    for (const [i, entry] of [
+      pricing.diagnostic,
+      pricing.build,
+      pricing.website,
+      pricing.run,
+    ].entries()) {
+      expect(within(tiers[i]).getByText(entry.price)).toBeInTheDocument()
+      expect(within(tiers[i]).getByText(entry.terms)).toBeInTheDocument()
+    }
+    // The phone ladder carries the same four.
+    expect(screen.getAllByTestId('price-rung')).toHaveLength(4)
+  })
+
+  it('names both founders exactly as /about does', () => {
+    render(<Home />)
+    const rows = screen.getByTestId('founder-rows')
+    for (const person of founders) {
+      expect(within(rows).getByText(person.name)).toBeInTheDocument()
+      expect(
+        within(rows).getByText(`${person.role} · ${person.city}`),
+      ).toBeInTheDocument()
+    }
+    expect(screen.getByTestId('hero-founder')).toHaveTextContent(
+      `since ${FOUNDED_MONTH} ${FOUNDED_YEAR}`,
+    )
+  })
+
+  it('renders no credential line or LinkedIn link until they are supplied', () => {
+    const { container } = render(<Home />)
+    expect(container.querySelector('a[href*="linkedin.com"]')).toBeNull()
+    expect(container.textContent).not.toMatch(/linkedin|placeholder/i)
+  })
+
+  it('renders the credential and both LinkedIn links once supplied', () => {
+    siteConfig.founders['Brandon Harris'] = {
+      credential: 'Test credential line',
+      linkedin: 'https://www.linkedin.com/in/brandon-test',
+    }
+    siteConfig.founders['Daniel Velez'] = {
+      linkedin: 'https://www.linkedin.com/in/daniel-test',
+    }
+    render(<Home />)
+    expect(
+      within(screen.getByTestId('hero-founder')).getByText(
+        'Test credential line',
+      ),
+    ).toBeInTheDocument()
+    const brandon = screen.getAllByRole('link', {
+      name: 'Brandon Harris on LinkedIn',
+    })
+    // Hero card and team row.
+    expect(brandon).toHaveLength(2)
+    for (const link of brandon) {
+      expect(link).toHaveAttribute(
+        'href',
+        'https://www.linkedin.com/in/brandon-test',
+      )
+    }
+    expect(
+      screen.getByRole('link', { name: 'Daniel Velez on LinkedIn' }),
+    ).toHaveAttribute('href', 'https://www.linkedin.com/in/daniel-test')
   })
 })
