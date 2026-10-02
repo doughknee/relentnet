@@ -250,7 +250,7 @@ function ClientsIndex() {
           </Reveal>
           <Reveal delay={120}>
             <div className="flex flex-wrap gap-3.5">
-              <CtaLink to="/inquire" arrow>
+              <CtaLink to="/inquire" hash="book" arrow>
                 Book a call
               </CtaLink>
               <CtaLink to="/process" variant="outline">

@@ -12,14 +12,16 @@ vi.mock('@tanstack/react-router', async () => ({
   ...(await vi.importActual('@tanstack/react-router')),
   Link: ({
     to,
+    hash,
     children,
     className,
   }: {
     to: string
+    hash?: string
     children: unknown
     className?: string
   }) => (
-    <a href={to} className={className}>
+    <a href={hash ? `${to}#${hash}` : to} className={className}>
       {children as never}
     </a>
   ),
@@ -30,7 +32,7 @@ const { pricing, contact } = siteConfig
 afterEach(() => {
   pricing.diagnostic.guarantee = undefined
   pricing.examples = []
-  contact.bookingUrl = ''
+  contact.booking.handle = 'brandon-harris'
 })
 
 describe('EngagementTerms', () => {
@@ -147,17 +149,16 @@ describe('price examples', () => {
 })
 
 describe('closing CTA booking line', () => {
-  it('shows only the phone line while bookingUrl is empty', () => {
-    expect(contact.bookingUrl).toBe('')
+  it('shows only the phone line while booking has no handle', () => {
+    contact.booking.handle = undefined
     render(<ClosingCta cta="Go">Heading</ClosingCta>)
     expect(screen.queryByText('Book a 20-minute call')).toBeNull()
     expect(screen.getByText(contact.phone)).toBeTruthy()
   })
 
-  it('adds the booking link once bookingUrl is set', () => {
-    contact.bookingUrl = 'https://cal.example/relentnet'
+  it('adds a booking link to /inquire#book while booking has a handle', () => {
     render(<ClosingCta cta="Go">Heading</ClosingCta>)
     const link = screen.getByText('Book a 20-minute call')
-    expect(link.getAttribute('href')).toBe('https://cal.example/relentnet')
+    expect(link.getAttribute('href')).toBe('/inquire#book')
   })
 })

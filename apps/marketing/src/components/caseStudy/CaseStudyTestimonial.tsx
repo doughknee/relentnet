@@ -109,7 +109,13 @@ function BuilderCard({ builder }: { builder: CaseStudyBuilder }) {
         {builder.bio}
       </p>
       <div className="col-span-2 md:col-span-1 md:justify-self-start">
-        <CtaLink to={utilityCta.to} variant="outline" arrow block>
+        <CtaLink
+          to={utilityCta.to}
+          hash={utilityCta.hash}
+          variant="outline"
+          arrow
+          block
+        >
           {utilityCta.label}
         </CtaLink>
       </div>

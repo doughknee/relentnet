@@ -53,6 +53,7 @@ describe('Header navigation (v4)', () => {
     expect(utilityCta).toEqual({
       label: 'Book a call',
       to: '/inquire',
+      hash: 'book',
     })
   })
 

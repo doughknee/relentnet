@@ -70,7 +70,7 @@ describe('mid-page CTA', () => {
     const cta = screen.getByTestId('mid-cta')
     expect(
       within(cta).getByRole('link', { name: /book a call/i }),
-    ).toHaveAttribute('href', '/inquire')
+    ).toHaveAttribute('href', '/inquire#book')
     const rows = screen.getAllByTestId('study-row')
     expect(
       rows[1].compareDocumentPosition(cta) & Node.DOCUMENT_POSITION_FOLLOWING,

@@ -34,9 +34,9 @@ type CtaLinkProps = {
   children: ReactNode
 } &
   /** An in-app route, through the router. */
-  (| { to: string; href?: never }
+  (| { to: string; hash?: string; href?: never }
     /** Anything the router cannot own: tel:, mailto:, another origin. */
-    | { href: string; to?: never }
+    | { href: string; to?: never; hash?: never }
   )
 
 /**
@@ -48,6 +48,7 @@ type CtaLinkProps = {
  */
 export function CtaLink({
   to,
+  hash,
   href,
   variant = 'gold',
   arrow = false,
@@ -81,7 +82,7 @@ export function CtaLink({
       {content}
     </a>
   ) : (
-    <Link to={to as string} className={className}>
+    <Link to={to as string} hash={hash} className={className}>
       {content}
     </Link>
   )

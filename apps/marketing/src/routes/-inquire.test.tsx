@@ -1,5 +1,5 @@
-import { render, screen, within } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { render, screen, waitFor, within } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
   Route,
@@ -33,8 +33,22 @@ function renderPage() {
   return render(<Page />)
 }
 
+// Booking is on by default, so the widget fetches on mount. Hold every
+// request open: no test here may reach the live hq API.
+const realFetch = globalThis.fetch
+
+beforeEach(() => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => new Promise(() => {})),
+  )
+})
+
 afterEach(() => {
-  siteConfig.contact.bookingUrl = ''
+  // Put back only fetch: unstubAllGlobals would also drop the setup file's
+  // IntersectionObserver and matchMedia stubs.
+  vi.stubGlobal('fetch', realFetch)
+  siteConfig.contact.booking.handle = 'brandon-harris'
 })
 
 describe('inquiry route content', () => {
@@ -55,15 +69,17 @@ describe('inquiry route content', () => {
   })
 })
 
-describe('today (no booking URL)', () => {
+describe('booking off (no handle)', () => {
+  beforeEach(() => {
+    siteConfig.contact.booking.handle = undefined
+  })
+
   it('renders the fallback block and no iframe', () => {
     const { container } = renderPage()
     expect(screen.getByTestId('booking-fallback')).toBeInTheDocument()
     expect(screen.queryByTestId('booking-calendar')).toBeNull()
     expect(container.querySelector('iframe')).toBeNull()
-    expect(
-      screen.queryByRole('link', { name: /book a 20-minute call/i }),
-    ).toBeNull()
+    expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
   it('shows phone, email and hours from siteConfig in the block', () => {
@@ -79,19 +95,27 @@ describe('today (no booking URL)', () => {
   })
 })
 
-describe('with a booking URL', () => {
-  it('embeds the scheduling page and keeps an open-in-new-tab link', () => {
-    siteConfig.contact.bookingUrl = 'https://cal.example/relentnet'
+describe('booking on', () => {
+  it('puts the booking UI in the hero card under #book, with no iframe', async () => {
     const { container } = renderPage()
-    const frame = container.querySelector('iframe')
-    expect(frame).not.toBeNull()
-    expect(frame).toHaveAttribute('src', 'https://cal.example/relentnet')
-    expect(frame).toHaveAttribute('loading', 'lazy')
-    expect(frame?.getAttribute('title')).toBeTruthy()
-    expect(
-      screen.getByRole('link', { name: /open the booking page/i }),
-    ).toHaveAttribute('href', 'https://cal.example/relentnet')
+    const card = screen.getByTestId('booking-calendar')
+    expect(card).toHaveAttribute('id', 'book')
+    expect(container.querySelector('iframe')).toBeNull()
     expect(screen.queryByTestId('booking-fallback')).toBeNull()
+    await waitFor(() => {
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        `${siteConfig.contact.booking.api}/brandon-harris`,
+        expect.anything(),
+      )
+    })
+  })
+
+  it('shows the phone and email once: the lower band keeps them', () => {
+    renderPage()
+    const { phone, email } = siteConfig.contact
+    expect(screen.getAllByRole('link', { name: phone })).toHaveLength(1)
+    expect(screen.getAllByRole('link', { name: email })).toHaveLength(1)
+    expect(screen.getAllByRole('link', { name: 'Email us' })).toHaveLength(1)
   })
 })
 
@@ -118,6 +142,7 @@ describe('fit lists', () => {
 
 describe('Or write to us', () => {
   it('links to a prefilled mailto with the three prompts', () => {
+    siteConfig.contact.booking.handle = undefined
     renderPage()
     // One in the fallback block, one in the write-to-us band.
     const links = screen.getAllByRole('link', { name: 'Email us' })
@@ -137,12 +162,9 @@ describe('Or write to us', () => {
     }
   })
 
-  it('renders no form and makes no network request', () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+  it('renders no form before a time is picked', () => {
     const { container } = renderPage()
     expect(container.querySelector('form')).toBeNull()
-    expect(fetchSpy).not.toHaveBeenCalled()
-    fetchSpy.mockRestore()
   })
 })
 

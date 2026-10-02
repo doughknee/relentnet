@@ -1,10 +1,11 @@
+import { BookingWidget } from '@/components/BookingWidget'
 import { CtaLink } from '@/components/CtaLink'
 import { siteConfig } from '@/site.config'
 
 interface BookingBlockProps {
-  /** Shown beside the portrait in the calendar state. */
+  /** Shown beside the portrait while booking is on. */
   founder: { name: string; role: string; city: string }
-  /** Prefilled mailto: for the fallback state's "Email us". */
+  /** Prefilled mailto: for the contact state's "Email us". */
   mailto: string
 }
 
@@ -13,78 +14,12 @@ const phoneHref = () =>
 
 const linkClass = 'hover:text-gold-text transition-colors'
 
-/**
- * The booking card at the top of /inquire, in one of two states.
- *
- * Calendar: `siteConfig.contact.bookingUrl` is set, so the scheduling page
- * (Cal.com or Calendly) is embedded in a plain iframe, with a link to open it
- * for anyone whose browser blocks the frame.
- *
- * Fallback: no URL yet, so the card offers what exists today: phone, email,
- * hours and the prefilled mailto.
- */
-export function BookingBlock({ founder, mailto }: BookingBlockProps) {
-  const { bookingUrl, phone, email, hours } = siteConfig.contact
-
-  if (bookingUrl) {
-    return (
-      <aside
-        data-testid="booking-calendar"
-        className="border border-line bg-card p-6 md:p-8"
-      >
-        <div className="flex items-center gap-4">
-          <img
-            src="/brandon-harris-320.webp"
-            width={56}
-            height={56}
-            alt=""
-            className="size-14 rounded-full object-cover border border-line"
-          />
-          <div>
-            <p className="text-lg font-medium text-ink-em">{founder.name}</p>
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-ink-muted">
-              {founder.role} · {founder.city}
-            </p>
-          </div>
-        </div>
-        <h2 className="mt-6 font-serif text-[28px] leading-tight">
-          Book a 20-minute call
-        </h2>
-        <iframe
-          src={bookingUrl}
-          title="Book a 20-minute call with RelentNet"
-          loading="lazy"
-          className="mt-5 block w-full min-h-[700px] h-[700px] border border-line bg-inset"
-        />
-        <p className="mt-4 text-base">
-          <a
-            href={bookingUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-gold-text hover:underline underline-offset-4"
-          >
-            Open the booking page &rarr;
-          </a>
-        </p>
-        <p className="mt-3 text-base text-ink-muted">
-          Prefer to talk now?{' '}
-          <a href={phoneHref()} className={linkClass}>
-            {phone}
-          </a>{' '}
-          ·{' '}
-          <a href={`mailto:${email}`} className={linkClass}>
-            {email}
-          </a>
-        </p>
-      </aside>
-    )
-  }
-
+/** The contact details and the prefilled mailto, for when booking is off or
+ *  hq says the page is not available. */
+function ContactDetails({ mailto }: { mailto: string }) {
+  const { phone, email, hours } = siteConfig.contact
   return (
-    <aside
-      data-testid="booking-fallback"
-      className="border border-line bg-card p-6 md:p-8"
-    >
+    <>
       <p className="font-mono text-[11px] tracking-[0.26em] uppercase text-ink-muted mb-4">
         Reach us directly
       </p>
@@ -116,6 +51,54 @@ export function BookingBlock({ founder, mailto }: BookingBlockProps) {
           business day.
         </p>
       </div>
+    </>
+  )
+}
+
+/**
+ * The booking card at the top of /inquire (`id="book"`, where every "Book a
+ * call" button lands), in one of two states.
+ *
+ * Booking: `siteConfig.contact.booking.handle` is set, so the card holds the
+ * founder and `BookingWidget`, which books through hq's API. Phone and email
+ * live in the "Or write to us" band below, so they appear once.
+ *
+ * Contact: no handle, so the card offers what exists without booking: phone,
+ * email, hours and the prefilled mailto.
+ */
+export function BookingBlock({ founder, mailto }: BookingBlockProps) {
+  const { handle } = siteConfig.contact.booking
+
+  return (
+    <aside
+      id="book"
+      data-testid={handle ? 'booking-calendar' : 'booking-fallback'}
+      className="scroll-mt-28 border border-line bg-card p-6 md:p-8"
+    >
+      {handle ? (
+        <>
+          <div className="flex items-center gap-4">
+            <img
+              src="/brandon-harris-320.webp"
+              width={56}
+              height={56}
+              alt=""
+              className="size-14 rounded-full object-cover border border-line"
+            />
+            <div>
+              <p className="text-lg font-medium text-ink-em">{founder.name}</p>
+              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-ink-muted">
+                {founder.role} · {founder.city}
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 min-h-[200px]">
+            <BookingWidget fallback={<ContactDetails mailto={mailto} />} />
+          </div>
+        </>
+      ) : (
+        <ContactDetails mailto={mailto} />
+      )}
     </aside>
   )
 }

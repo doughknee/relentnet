@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { AgendaRow } from '../AgendaRow'
 import { BookingBlock } from '../BookingBlock'
@@ -12,12 +12,25 @@ const founder = {
 }
 const mailto = 'mailto:inquiries@relentnet.com?subject=x'
 
+const realFetch = globalThis.fetch
+
+beforeEach(() => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => new Promise(() => {})),
+  )
+})
+
 afterEach(() => {
-  siteConfig.contact.bookingUrl = ''
+  // Put back only fetch: unstubAllGlobals would also drop the setup file's
+  // IntersectionObserver and matchMedia stubs.
+  vi.stubGlobal('fetch', realFetch)
+  siteConfig.contact.booking.handle = 'brandon-harris'
 })
 
 describe('BookingBlock', () => {
-  it('is the fallback while bookingUrl is empty', () => {
+  it('is the contact card while booking has no handle', () => {
+    siteConfig.contact.booking.handle = undefined
     const { container } = render(
       <BookingBlock founder={founder} mailto={mailto} />,
     )
@@ -26,17 +39,15 @@ describe('BookingBlock', () => {
       'href',
       mailto,
     )
+    expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
-  it('is the calendar once bookingUrl is set', () => {
-    siteConfig.contact.bookingUrl = 'https://cal.com/example'
+  it('is the booking card once there is a handle', () => {
     const { container } = render(
       <BookingBlock founder={founder} mailto={mailto} />,
     )
-    expect(container.querySelector('iframe')).toHaveAttribute(
-      'src',
-      'https://cal.com/example',
-    )
+    expect(container.querySelector('aside')).toHaveAttribute('id', 'book')
+    expect(container.querySelector('iframe')).toBeNull()
     expect(screen.getByText('Brandon Harris')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Email us' })).toBeNull()
   })
