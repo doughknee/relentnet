@@ -475,7 +475,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       stewardship: [
         p(
-          'Two years in, the work is ongoing. RelentNet designs and builds new channels and features, hosts the production stack [on Coolify, or on DigitalOcean Kubernetes as myscrollr.com/architecture says: confirm which], and monitors and maintains the services.',
+          'Two years in, the work is ongoing. RelentNet designs and builds new channels and features, hosts the production stack, and monitors and maintains the services.',
         ),
         p(
           'Every release builds, deploys, and runs a smoke test through GitHub Actions. The download page is on version 1.6.10 as of October 2026.',
@@ -1054,7 +1054,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         },
         {
           label: 'Markets covered',
-          from: '[How buyers browsed by area before]',
+          from: 'No area pages; buyers browsed on portals',
           to: 'Six Tampa Bay areas',
           context:
             'Search by Area covers North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach. Each area has its own page a buyer can be sent straight to.',
