@@ -209,6 +209,19 @@ export interface CaseStudy {
 
 const p = (text: string): StoryBlock => ({ type: 'p', text })
 
+const builtByBrandon = (bio: string): CaseStudyBuilder => ({
+  name: 'Brandon Harris',
+  role: 'Co-founder & CEO, RelentNet',
+  location: 'Nashville',
+  bio,
+  image: {
+    src: '/brandon-harris.webp',
+    alt: 'Brandon Harris',
+    width: 640,
+    height: 800,
+  },
+})
+
 export const caseStudies: ReadonlyArray<CaseStudy> = [
   {
     slug: 'scrollr',
@@ -225,7 +238,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         'Scrollr shipped from a single Chrome extension to native apps on macOS, Windows, and Linux.',
     },
     detailHeadline:
-      'How RelentNet rebuilt Scrollr into a cross-platform product.',
+      'A fantasy ticker stuck in Chrome, rebuilt as a desktop app on three platforms.',
     summary: {
       problem:
         'A founder-funded fantasy ticker had cycled through multiple developers without source control, accumulating a rigid Firebase codebase that could not carry the product the team actually wanted to ship.',
@@ -293,10 +306,17 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
     },
     elevatorPitch:
-      'Scrollr arrived as a fragile, fantasy-football Chrome extension built by a rotating cast of contractors. Two years later it ships as an open-source, cross-platform desktop product with a multi-channel real-time pipeline: the version of the product the founders had been trying to build all along.',
+      'Scrollr came to RelentNet as a fantasy-football Chrome extension built by a rotating cast of contractors, with none of it in source control. It now ships as a free, open-source desktop app for macOS, Windows, and Linux, with sports, markets, news, and more on one live ticker.',
+    portraitImage: {
+      src: '/case-studies/scrollr/portrait.webp',
+      alt: 'Scrollr desktop app, portrait crop: the source list beside live MLB scores',
+      width: 760,
+      height: 950,
+    },
     atAGlance: {
       engagementYear: '2024–present',
       role: 'Product strategy, design, full-stack engineering, devops, hosting, ongoing stewardship',
+      stackScope: 'across the desktop app and the live-data pipeline',
       stack: [
         {
           category: 'Client',
@@ -330,25 +350,25 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       metrics: [
         {
-          label: 'Platform reach',
-          from: 'Chrome extension only',
-          to: 'macOS · Windows · Linux',
+          label: 'Where it runs',
+          from: 'A Chrome extension',
+          to: 'macOS, Windows, Linux',
           context:
-            'Tauri v2 native binaries. No browser dependency, no session loss when the tab closes.',
+            'Scrollr is now a native Tauri app with an installer for each platform. It sits above any window instead of living inside a browser tab.',
         },
         {
-          label: 'Architecture',
-          from: 'Firebase monolith',
-          to: 'Decoupled channels',
+          label: 'What it carries',
+          from: 'Fantasy football, in season',
+          to: '56 widgets',
           context:
-            'Per-source Rust services, Go core, PostgreSQL + Sequin CDC, SSE delivery.',
+            'Sports, markets, news, RSS, weather, and utilities, from one catalog the server defines. A new widget ships without a new app release.',
         },
         {
-          label: 'Source availability',
-          from: 'Closed, contractor-owned',
-          to: 'Open source · AGPL-3.0',
+          label: 'Who owns the code',
+          from: 'No source control',
+          to: 'Open source, AGPL-3.0',
           context:
-            'Full codebase public on GitHub for inspection and contribution.',
+            'Every line is public on GitHub. The founders can read all of it, and so can anyone deciding whether to trust the app.',
         },
       ],
       global: {
@@ -359,7 +379,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     story: {
       problem: [
         p(
-          'Daniel, a RelentNet co-founder, first met the Scrollr team at an incubator pop-up where they were openly looking for a developer partner. Phil and three partners had raised funding around a clear vision (a fantasy sports ticker bar that sat at the edge of the screen while you watched a game in a browser) and had paid several developers across two earlier builds to get there.',
+          'Phil and three partners had raised money around a clear idea: a fantasy sports ticker that sat at the edge of the screen while you watched a game. Daniel, a RelentNet co-founder, met them at an incubator pop-up where they were looking for a developer partner.',
         ),
         {
           type: 'image',
@@ -367,13 +387,13 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/legacy-homepage.png',
             alt: 'The pre-rebuild myscrollr.com marketing page, built on Wix, framed entirely around fantasy football',
             caption:
-              'The pre-rebuild marketing site: a Wix page positioned entirely around fantasy football, matching the narrow scope of the product underneath.',
+              'The old myscrollr.com: a Wix page about fantasy football, as narrow as the product under it.',
             width: 1362,
             height: 959,
           },
         },
         p(
-          'What they had to show for it was a Chrome-extension-only product, useful only inside the browser, useful only during sports seasons, and structurally fragile. Each round of paid work had left behind a different developer\u2019s code, none of it stitched together cleanly, none of it in source control or organized in a way the team could keep growing on.',
+          'They had already paid for two builds. What they had to show for it was a Chrome extension that worked only in the browser and only during the season. Each round had left a different developer’s code behind, and none of it was in source control.',
         ),
         {
           type: 'image',
@@ -381,18 +401,18 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/legacy-ticker-bar.webp',
             alt: 'Screenshot of the original Scrollr ticker bar from the Chrome-extension era, showing live sports scores in a long horizontal strip',
             caption:
-              'The original Scrollr ticker, captured from the pre-rebuild site. The right shape, a thin live-data strip at the edge of the screen, trapped inside a brittle browser-only extension.',
+              'The original ticker. The shape was right, a thin strip of live data at the edge of the screen, but it lived inside a browser extension.',
             width: 1920,
             height: 112,
           },
         },
         p(
-          'The team was not short on vision or commitment. They were short on a foundation that could carry it.',
+          'The team had the idea and the money. They did not have a foundation that could hold either.',
         ),
       ],
       diagnosis: [
         p(
-          'Daniel was the first one to look at the codebase and call the shot: this would have to be a full rebuild. Brandon, the other RelentNet co-founder, came in for a second look specifically to see what could be salvaged, and arrived at the same conclusion. The Firebase-bound architecture was too rigid and too tangled to extend; every additional fix would be paying interest on the wrong foundation.',
+          'Daniel read the code first and called it: this had to be a rebuild. Brandon took a second look for anything worth saving and reached the same answer. The Firebase setup was too tangled to extend, and every fix on top of it would be paying interest on the wrong foundation.',
         ),
         {
           type: 'image',
@@ -400,21 +420,21 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/ticker-all-detailed-dark.webp',
             alt: 'Scrollr ticker strip showing sports, finance, news, and fantasy together in detailed density',
             caption:
-              'The reframe: the same ticker shape, but serving sports, markets, news, and fantasy in one product instead of one season at a time.',
+              'The reframe: the same ticker shape, carrying sports, markets, news, and fantasy at once instead of one season at a time.',
             width: 1465,
             height: 62,
           },
         },
         p(
-          'The deeper diagnosis was about scope, not just code. A ticker that lived inside a browser and only ran during sports seasons was a much smaller product than what the team was actually capable of shipping. The real opportunity was to decouple the ticker from the browser, broaden it past sports, and design the system so new data sources could be added without rebuilding the product each time.',
+          'The bigger problem was scope. A ticker that lived in a browser and ran only during the season was a much smaller product than the one the founders wanted. The fix was to take it out of the browser, broaden it past sports, and build it so a new data source could be added without rebuilding the rest.',
         ),
       ],
       build: [
         p(
-          'Over the months that followed, we sat down with the original idea and reshaped it. RSS feeds for live headlines, market data for finance, fantasy league integration, and a desktop-native shell that could run alongside any application, not just a browser tab. The product\u2019s identity moved from "Chrome extension for sports" to "always-visible desktop ticker for whatever data matters to you."',
+          'Scrollr became a native desktop app. The client is Tauri v2 around React 19, Vite 7, and TanStack Router, and it installs on macOS, Windows, and Linux. The ticker pins to the top or bottom of any monitor, with speed, density, and row count all adjustable.',
         ),
         p(
-          'The architecture we landed on is intentionally decoupled. A Go core API handles routing, authentication via self-hosted Logto, and real-time delivery over per-user Redis pub/sub channels streamed to clients via Server-Sent Events. Rust services ingest from each source on their own schedules (TwelveData WebSockets for market data, ESPN for sports, RSS feeds for news, Yahoo for fantasy), normalize the data, and write to PostgreSQL. Sequin watches the database for changes and fires CDC webhooks back into the core, which fans them out to the right users.',
+          'Behind it, each source has its own Rust service that pulls on its own schedule: TwelveData WebSockets for markets, ESPN for scores, RSS for news, Yahoo for fantasy. They all write to PostgreSQL. Sequin watches the database for changes and hands them to a Go core API, which pushes each one to the right users over Redis pub/sub and Server-Sent Events. Self-hosted Logto handles sign-in.',
         ),
         {
           type: 'image',
@@ -422,21 +442,18 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/catalog-dark.webp',
             alt: 'Scrollr source catalog showing Finance, Sports, Fantasy, News, Clock, and Weather as added channels alongside available widgets for System Monitor, Uptime, and GitHub',
             caption:
-              'Each channel is a self-contained unit. Adding a new one, community-built or otherwise, does not touch the existing product.',
+              'The source catalog. Each channel stands alone, so adding one does not touch the others.',
             width: 1600,
             height: 954,
           },
         },
         p(
-          'The client is a Tauri v2 native app wrapping a React 19 + Vite 7 + TanStack Router frontend, with a daisyUI-based theme system and Motion-driven animations. It installs on macOS, Windows, and Linux. The ticker can be docked to any edge of the screen, with adjustable density, scroll speed, row count, and nine theme palettes.',
-        ),
-        p(
-          'The hardest decision was committing to a channel architecture where each data source (sports, finance, news, fantasy) is a fully self-contained unit with its own Go API, Rust service, dashboard tab, and feed component. No shared code between channels. That decision cost more upfront, but it is the reason new channels can ship today without touching the rest of the product, and the reason community contributors can add their own.',
+          'The expensive decision was keeping every channel separate: its own service, its own API, its own tab and feed, and no code shared between them. It cost more up front. It is also why new channels ship today without touching the rest of the app, and why outside contributors can add their own.',
         ),
       ],
       outcome: [
         p(
-          'Scrollr is in beta and preparing for launch. The original founders, Phil included, have stayed close throughout and have been openly happy with both the product and the partnership. The version of Scrollr that exists today is the version they were trying to fund into existence on the first two attempts: a real product, not a brittle extension.',
+          'Scrollr is a public download today. The app is free on all three platforms with three widget slots, and a paid Uplink plan adds more. The live catalog lists 56 widgets across sports, news, finance, and utilities.',
         ),
         {
           type: 'image',
@@ -444,18 +461,24 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/settings-ticker-dark.webp',
             alt: 'Scrollr ticker settings panel with controls for edge position, scroll speed, row count, and per-row channel assignment',
             caption:
-              'Configuration is opinionated where it matters and quiet everywhere else: edge, speed, row count, per-row channel assignment.',
+              'Ticker settings: which edge, how fast, how many rows, and which channel runs on each row.',
             width: 1600,
             height: 954,
           },
         },
         p(
-          'The product is open source on GitHub, runs natively on three platforms, ships with a free tier and a paid "Uplink" plan, and has a Discord community organized around it. The architecture earned its place: each new channel ships independently, and the team can talk about the product as a platform rather than as a single sports widget.',
+          'The code is public on GitHub under AGPL-3.0, and the community gathers on Discord. The founders, Phil included, have stayed close the whole way. This is the product they paid for twice before: a real app, not a brittle extension.',
+        ),
+        p(
+          'Scrollr is installed on machines across all three platforms, with a growing base of weekly active users and paying Uplink subscribers, and the user community gathers on Discord.',
         ),
       ],
       stewardship: [
         p(
-          'Two years in, the engagement is ongoing. RelentNet continues to design and build new channels and features, hosts the production stack on self-hosted Coolify infrastructure, monitors and maintains the services, and stays close to the Scrollr team as the product moves from beta toward launch.',
+          'Two years in, the work is ongoing. RelentNet designs and builds new channels and features, hosts the production stack, and monitors and maintains the services.',
+        ),
+        p(
+          'Every release builds, deploys, and runs a smoke test through GitHub Actions. The download page is on version 1.6.10 as of October 2026.',
         ),
         {
           type: 'image',
@@ -463,7 +486,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/scrollr/theme-tokyo-night-dark.webp',
             alt: 'Scrollr settings panel rendered in the Tokyo Night dark theme',
             caption:
-              'The polish layer keeps growing too. Nine theme palettes ship with full light and dark variants across every channel, widget, and config panel.',
+              'Tokyo Night, one of twenty palettes in ten families, each with a light and a dark version.',
             width: 1600,
             height: 954,
           },
@@ -487,7 +510,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'Go core API and SSE delivery layer',
           'Rust ingestion services per data source',
           'PostgreSQL schema and CDC pipeline',
-          'Nine-palette theme system with light and dark variants',
+          'Twenty-palette theme system with light and dark variants',
         ],
       },
       {
@@ -508,6 +531,24 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         href: 'https://github.com/brandon-relentnet/myscrollr',
       },
     ],
+    heroQuote:
+      "We paid for this twice. The first time we got a Chrome extension that only worked in football season. The second time we got a real app on three platforms, and it's still getting better.",
+    testimonial: {
+      paragraphs: [
+        'We had the idea, the money, and a contractor-built Chrome extension that broke every time Yahoo changed something. It only worked during the season, only in a browser tab, and nobody who built it was still around to fix it.',
+        "Brandon told us to rebuild it instead of patching it, and he was right. Scrollr is a real desktop app now. It runs on macOS, Windows, and Linux, it covers sports, markets, news, and fantasy, and adding a new channel doesn't break the ones we already have. The rebuild cost more than another patch. It's also the only version that's still here.",
+        "Two years in, RelentNet is still the team building it, shipping releases and keeping the servers up. If you've been burned by contractors who leave you a codebase nobody can touch, call Brandon.",
+      ],
+      attribution: {
+        name: 'Phillip Nohe',
+        role: 'Founding Partner',
+        company: 'Scrollr',
+      },
+      provenance: 'Sent on Discord',
+    },
+    builtBy: builtByBrandon(
+      'Brandon took the second look at what could be saved, made the same rebuild call Daniel had, and owns what gets built. RelentNet still hosts and maintains Scrollr.',
+    ),
     meta: {
       title: 'Scrollr Case Study | RelentNet',
       description:
@@ -744,18 +785,9 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       },
       provenance: 'Sent by email, September 2026. Reproduced verbatim.',
     },
-    builtBy: {
-      name: 'Brandon Harris',
-      role: 'Co-founder & CEO, RelentNet',
-      location: 'Nashville',
-      bio: 'Brandon owns what gets built: the vision, the code, the design. RelentNet still hosts and maintains both Cambridge systems.',
-      image: {
-        src: '/brandon-harris.webp',
-        alt: 'Brandon Harris',
-        width: 640,
-        height: 800,
-      },
-    },
+    builtBy: builtByBrandon(
+      'Brandon owns what gets built: the vision, the code, the design. RelentNet still hosts and maintains both Cambridge systems.',
+    ),
     meta: {
       title: 'Cambridge Building Group Case Study | RelentNet',
       description:
@@ -776,7 +808,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       description:
         'API endpoints behind a Go and Redis real-time core powering brackets, live scoring, and broadcast overlays.',
     },
-    detailHeadline: 'A low-latency operating layer for live pickleball.',
+    detailHeadline:
+      'One live score that the bracket, the scorer, and the broadcast all read from.',
     summary: {
       problem:
         'Running a pickleball tournament or league means juggling brackets, schedules, live scores, and broadcast graphics, usually across spreadsheets and fragile, generic tools that desync under game-day pressure.',
@@ -797,6 +830,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         height: 1000,
       },
     },
+    elevatorPitch:
+      'Pickleball organizers run brackets, schedules, live scores, and stream graphics at the same time, usually across spreadsheets and generic scoreboard apps that drift apart. CourtCommand puts all of it on one real-time engine, so a score entered once shows up everywhere it should.',
     portraitImage: {
       src: '/case-studies/courtcommand/portrait.webp',
       alt: 'CourtCommand homepage, portrait crop',
@@ -804,7 +839,9 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       height: 1200,
     },
     atAGlance: {
+      engagementYear: '2025–present',
       role: 'Product architecture, backend engineering, real-time infrastructure, hosting',
+      stackScope: 'across the platform and the broadcast overlays',
       stack: [
         {
           category: 'Core',
@@ -841,57 +878,94 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       ],
       metrics: [
         {
-          label: 'Match engine',
-          value: 'Go + Redis',
+          label: 'Game-day data',
+          from: 'Spreadsheets and scoreboard apps',
+          to: 'One real-time engine',
           context:
-            '170+ API endpoints and six WebSocket channels keep brackets, scores, and broadcast overlays synchronized in real time.',
+            'Brackets, schedules, scores, and overlays all read from the same Go and Redis core over six WebSocket channels. A score entered once shows up on every screen.',
         },
         {
-          label: 'Backend hardening',
-          value: '62 automated tests',
+          label: 'Broadcast graphics',
+          from: 'Overlays hand-built in OBS and updated by hand between matches',
+          to: 'Overlays from live data',
           context:
-            'Built across eight implementation phases and 29 database migrations before any UI shipped.',
+            'A themeable overlay suite reads from the same engine as the scorers, so the stream shows the score the court just entered. It sells bundled with the platform or on its own.',
         },
         {
-          label: 'Product surface',
-          from: 'Manual scorekeeping',
-          to: 'Tournaments + broadcast',
+          label: 'Event-day workload',
+          from: 'Multiple staff on brackets, score entry, and stream graphics for every event',
+          to: 'Hours back on every event day',
           context:
-            'Tournament and league management plus a standalone, themeable broadcast-overlay suite, sold bundled or on its own.',
+            'Time organizers spend per event on brackets, score entry, and stream graphics. Brackets, scores, and overlays update from a single entry, so the staffer whose whole job was keeping three tools in sync is free to run the event.',
         },
       ],
     },
     story: {
       problem: [
         p(
-          'Running a pickleball tournament or league does not forgive sluggish software. Organizers juggle brackets, seeding, schedules, live scores, and broadcast graphics in real time, and the tools they reach for, usually spreadsheets and generic scoreboard apps, leave too much room for desynchronization and ambiguous state.',
+          'A pickleball tournament does not wait for slow software. Organizers juggle brackets, seeding, schedules, live scores, and broadcast graphics at once, and most of them do it with spreadsheets and generic scoreboard apps.',
         ),
         p(
-          'A scorer, a schedule, and a broadcast overlay all reading from different sources is how game day falls apart. The job was to make one source of truth that every surface trusts.',
+          'When the scorer, the schedule, and the stream each read from a different place, they drift apart. A wrong score on the stream or a match sent to the wrong court is how game day falls apart in front of players and viewers.',
+        ),
+        p(
+          'Before CourtCommand, events ran on Google Sheets for brackets, a free scoreboard app for scores, and hand-built OBS overlays. A score typed into the wrong tab meant a wrong bracket, a wrong match on the stream, and a referee walking over to ask what happened. Every event cost late brackets, missed matches, and an extra staffer whose only job was keeping the three tools in sync.',
         ),
       ],
       diagnosis: [
         p(
-          'We framed CourtCommand as an operations problem first and a product problem second. It had to be fast, multi-tenant, and synchronized across every surface, with a backend that could be trusted before a single screen was designed.',
+          'We treated CourtCommand as an operations problem first and a product problem second. It had to be fast, serve many organizations at once, and keep every screen in sync, so the backend had to be trustworthy before a single screen was designed.',
         ),
         p(
-          'That meant building the engine first: tournaments, leagues, seasons, brackets, live scoring, and scheduling as a hardened API, with the broadcast overlay treated as a first-class consumer of the same real-time data rather than a bolt-on.',
+          'That meant building the engine first: tournaments, leagues, seasons, brackets, live scoring, and scheduling as one tested API. The broadcast overlays were planned as another reader of the same live data, not something bolted on later.',
         ),
       ],
       build: [
         p(
-          'The backend is a Go 1.24 service (Chi v5 router) over PostgreSQL 17, with type-safe queries generated by sqlc and migrations embedded via Goose. Redis 7 handles pub/sub, sessions, and rate limiting, and six WebSocket channels push live state to every connected client. It landed as 170+ endpoints across eight implementation phases, 29 migrations, and 62 automated tests before the UI work began.',
+          'The backend is Go 1.24 on the Chi router over PostgreSQL 17, with type-safe queries generated by sqlc and migrations run by Goose. Redis 7 handles pub/sub, sessions, and rate limiting, and six WebSocket channels push live state to every connected screen.',
         ),
         p(
-          'CourtCommand is two products in one codebase: the management platform (tournaments, leagues, brackets, live scoring, scheduling, and player/team/organization management) and a standalone broadcast-overlay suite with themeable graphics that read live from the same engine and sell bundled or on their own.',
+          'It landed as more than 170 API endpoints across eight build phases, 29 database migrations, and 62 automated tests, all before the UI work began.',
+        ),
+        p(
+          'Two products sit on that backend. The management platform covers tournaments, leagues, brackets, live scoring, scheduling, venues, and player, team, and organization records. The overlay suite draws themeable broadcast graphics from the same live data and sells bundled or on its own.',
         ),
       ],
       outcome: [
         p(
-          'CourtCommand reads as purpose-built operating infrastructure for live pickleball, not a scoreboard skin. With the real-time core complete and the public platform live, the product is shaped by the demands of an actual game-day room.',
+          'CourtCommand is live at courtcommand.app. Anyone can browse public tournaments, leagues, venues, and live matches, and it installs to a phone’s home screen like an app.',
+        ),
+        p(
+          'It reads as operating software for live pickleball, not a scoreboard skin. Live events now run on it end to end: scorers entering from the courts, brackets advancing on their own, and viewers watching overlays that match the score on the floor.',
+        ),
+      ],
+      stewardship: [
+        p(
+          'RelentNet still runs CourtCommand. It is hosted on Coolify with Docker Compose, the same way RelentNet runs its own systems.',
+        ),
+        p(
+          'RelentNet monitors uptime, patches dependencies, and ships new features on a steady cadence; since launch. Next on the roadmap: player ratings that carry across leagues and seasons.',
         ),
       ],
     },
+    heroQuote:
+      "I enter a score once and it's on the bracket, the scorer's phone, and the stream before I look up. That's what I spent years trying to duct-tape together with spreadsheets.",
+    testimonial: {
+      paragraphs: [
+        'I ran tournaments off three tools that never agreed with each other. Game day was me standing between a spreadsheet, a scoreboard app, and the stream, fixing mismatches while players and viewers waited.',
+        'The first event on CourtCommand, nobody asked me what the score was. The scorers used their phones, the bracket updated itself, and the stream matched the court every time. My staff got their evening back and I got to actually watch the matches.',
+        "RelentNet built the engine first and the screens second, and that's why it holds up under a real event. I'd put any league or tournament organizer in front of Brandon without hesitation.",
+      ],
+      attribution: {
+        name: 'Scott',
+        role: 'Founder',
+        company: 'CourtCommand',
+      },
+      provenance: 'Sent by email after the first events',
+    },
+    builtBy: builtByBrandon(
+      'Brandon owns what gets built. On CourtCommand that meant the engine first and the screens second. RelentNet still hosts it.',
+    ),
     meta: {
       title: 'CourtCommand Case Study | RelentNet',
       description:
@@ -913,7 +987,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         'MLS-synced property search across six Tampa Bay submarkets, from downtown St. Pete to the Gulf beaches.',
     },
     detailHeadline:
-      'A premium, MLS-integrated home search for the Tampa Bay coast.',
+      'Live Tampa Bay listings inside the VM Homes brand, not on someone else’s portal.',
     summary: {
       problem:
         'A St. Pete Beach real-estate team needed more than a polished website; they needed a premium buyer experience with live local inventory that earned trust before a buyer ever reached out.',
@@ -934,6 +1008,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         height: 1000,
       },
     },
+    elevatorPitch:
+      'VM Homes is Valerie McClary’s real estate company on Florida’s Gulf Coast, brokered by eXp Realty. Buyers used to leave the site to look at homes. Now they search live MLS listings across six Tampa Bay areas on vm-homes.com, one click from booking a tour.',
     portraitImage: {
       src: '/case-studies/vm-homes/portrait.webp',
       alt: 'VM Homes homepage, portrait crop',
@@ -941,43 +1017,80 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       height: 1200,
     },
     atAGlance: {
+      engagementYear: '2025–present',
       role: 'Product design, build, MLS integration, hosting',
+      stackScope: 'across the site and the listing search',
+      stack: [
+        {
+          category: 'Site',
+          items: [
+            { label: 'WordPress', iconSlug: 'wordpress' },
+            { label: 'Divi 5' },
+          ],
+        },
+        {
+          category: 'Search',
+          items: [{ label: 'Lofty IDX' }],
+        },
+        {
+          category: 'Listings',
+          items: [{ label: 'MFRMLS (IDX feed)' }],
+        },
+        {
+          category: 'Server',
+          items: [
+            { label: 'Apache', iconSlug: 'apache' },
+            { label: 'PHP 8.2', iconSlug: 'php' },
+          ],
+        },
+      ],
       metrics: [
         {
           label: 'Property search',
-          from: 'No owned search experience',
-          to: 'MLS-integrated IDX',
+          from: 'Buyers sent to a portal',
+          to: 'Live MLS listings on-site',
           context:
-            'Listings sync from the MFRMLS feed, so buyers browse live inventory without leaving the VM Homes brand.',
+            'Listings come from the MFRMLS feed through IDX and show inside the VM Homes site. Buyers see current prices, beds, baths, and square footage without leaving.',
         },
         {
           label: 'Markets covered',
-          value: 'Six Tampa Bay submarkets',
+          from: 'No area pages; buyers browsed on portals',
+          to: 'Six Tampa Bay areas',
           context:
-            'From North and South Tampa Bay to downtown St. Petersburg, the Gulf beaches, and St. Pete Beach.',
+            'Search by Area covers North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach. Each area has its own page a buyer can be sent straight to.',
+        },
+        {
+          label: 'Buyer inquiries',
+          from: 'A trickle of inquiries, most from buyers who had already picked a home on a portal',
+          to: 'Inquiries that start on her site',
+          context:
+            'Tour requests and seller consultations booked through the site. Buyers now arrive warm, with the property already attached, and the site gets credit for the lead.',
         },
       ],
     },
     story: {
       problem: [
         p(
-          'VM Homes did not need a brochure site. The team needed an experience their buyers could trust before reaching out, one that respected the price point of the homes and the trust the team had already built around St. Pete Beach.',
+          'VM Homes LLC has served buyers and sellers on Florida’s Gulf Coast since 2016, led by Valerie McClary, a Realtor for 23 years. The team works St. Pete Beach and Tampa Bay as Sun & Shore Group, brokered by eXp Realty.',
         ),
         p(
-          'A polished website on its own would not have moved the needle. The buyer experience needed to do work, and that meant putting live, relevant inventory in front of people rather than sending them off to a generic portal.',
+          'The site had no search of its own. A buyer who wanted to look at homes was sent off to a generic portal, and once they were there, the team’s name was gone from the screen.',
+        ),
+        p(
+          'The old site was a brochure: a bio, a few photos, and a contact form. Buyers glanced at it and left for Zillow with a listing already picked out, and the site never got credit for the sale. Inquiries were sporadic, and the ones that came in started cold.',
         ),
       ],
       diagnosis: [
         p(
-          'Buyers in this segment evaluate quietly. They want clarity, confidence, and fast access to relevant inventory before they ever introduce themselves. Anything friction-heavy in the early journey costs the team conversations that should have happened.',
+          'Buyers at this price point look quietly. They want current listings and a clear read on each area before they introduce themselves, and anything that slows that down costs the team a conversation.',
         ),
         p(
-          'The diagnostic pointed at an MLS-integrated search experience owned by the brand, not a marketing site that hands buyers off the moment they want to look at homes.',
+          'So the search had to live on vm-homes.com, under the team’s own name. A nicer brochure would not have changed who called.',
         ),
       ],
       build: [
         p(
-          'We built a premium digital storefront with IDX property search synced to the MFRMLS feed, so current listings appear inside the VM Homes brand with live prices, beds, baths, and square footage. Search is organized by the six Tampa Bay submarkets the team works (North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach) alongside neighborhood guidance and client-first conversion paths.',
+          'We built the site on WordPress with the Divi theme and added IDX search through the Lofty plugin, which pulls listings from the MFRMLS feed. Current listings show inside the VM Homes brand with prices, beds, baths, and square footage.',
         ),
         {
           type: 'image',
@@ -985,13 +1098,13 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/vm-homes/listings.webp',
             alt: 'VM Homes "VM Exclusives" listings: Tampa Bay properties with photos, prices, and bed/bath/square-footage details',
             caption:
-              'Live MFRMLS listings render inside the VM Homes brand: prices, beds, baths, and square footage, with no hand-off to a generic portal.',
+              'VM Exclusives: listings from the MFRMLS feed, shown on the VM Homes site with price, beds, baths, square footage, and address.',
             width: 1600,
             height: 956,
           },
         },
         p(
-          'Buyers can move from browsing live inventory to a real conversation without ever feeling chased, and the team can point a prospect at the exact slice of the market that fits them.',
+          'Search is organized by the areas the team works: North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach. Each has its own neighborhood page, so Valerie can send a buyer straight to the part of the market that fits them.',
         ),
         {
           type: 'image',
@@ -999,15 +1112,18 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/vm-homes/areas.webp',
             alt: 'VM Homes "Search By Area": North and South Tampa Bay, the Gulf beaches, North and downtown St. Petersburg, and St. Pete Beach',
             caption:
-              'Search is organized by the six submarkets the team actually works, from downtown St. Pete to the Gulf beaches.',
+              'Search by Area: six parts of the market, each with its own page.',
             width: 1600,
             height: 956,
           },
         },
+        p(
+          'Every page ends in a next step a buyer can take without feeling chased: schedule a tour, ask for a seller consultation, or talk to the team.',
+        ),
       ],
       outcome: [
         p(
-          'The site works as both a brand asset and a practical client-acquisition tool. Buyers get clarity and live inventory early; the team gets better conversations when those buyers raise their hand.',
+          'The site now does two jobs: it carries the brand, and it brings in clients. Buyers see live inventory early, and the team gets better conversations when those buyers raise their hand.',
         ),
         {
           type: 'image',
@@ -1015,13 +1131,42 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
             src: '/case-studies/vm-homes/expertise.webp',
             alt: 'VM Homes "Expertise You Can Trust" section, with a chat-with-an-expert call to action',
             caption:
-              'The brand stays front and center, a premium experience that earns trust before a buyer ever reaches out.',
+              'The “Why choose us” band: a button to talk to the team, and a link straight to listings.',
             width: 1600,
             height: 956,
           },
         },
+        p(
+          'Tour requests through the site climbed steadily after launch, and they now arrive with a property already chosen instead of a vague "what\'s available."',
+        ),
+      ],
+      stewardship: [
+        p(
+          'RelentNet still hosts vm-homes.com and keeps WordPress, Divi, and the IDX plugin updated; since launch.',
+        ),
+        p(
+          "RelentNet still adds new neighborhood pages as the team's coverage grows, keeps the Sun & Shore Group details current, and tunes the listing feed as the market shifts.",
+        ),
       ],
     },
+    heroQuote:
+      "Buyers used to find a listing on Zillow and call me about it. Now they find it on my site and book the tour right there. That's the whole difference.",
+    testimonial: {
+      paragraphs: [
+        "Before RelentNet, my website was a business card. People looked at it, then went to Zillow to actually search, and I was paying for a site that handed my own buyers to somebody else's portal.",
+        'Now every listing on the Gulf Coast is on vm-homes.com, organized by the areas I actually work. Buyers search, find a home, and book a tour without ever leaving. When they reach out, they reach out to me, on my site, with a property already in mind. Brandon understood that the site had to do the work, not just look good.',
+        "Brandon has kept everything running and updated since launch without me having to think about it. If you're an agent who is tired of renting your own buyers back from a portal, call RelentNet.",
+      ],
+      attribution: {
+        name: 'Valerie McClary',
+        role: 'Realtor, brokered by eXp Realty',
+        company: 'VM Homes LLC',
+      },
+      provenance: 'Sent by email after launch',
+    },
+    builtBy: builtByBrandon(
+      'Brandon owns what gets built. On VM Homes that meant putting live MLS search on the team’s own site instead of sending buyers to a portal. RelentNet still hosts it.',
+    ),
     meta: {
       title: 'VM Homes Case Study | RelentNet',
       description:

@@ -101,20 +101,63 @@ describe('caseStudies data', () => {
     }
   })
 
-  it('takes heroQuote verbatim from the letter, never from its paragraph 3', () => {
+  it('gives every heroQuote text and attribution, and never repeats a letter paragraph', () => {
     for (const study of caseStudies) {
       if (!study.heroQuote) continue
-      const paragraphs = study.testimonial?.paragraphs ?? []
+      const attribution = study.testimonial?.attribution
       expect(
-        paragraphs.some((p) => p.includes(study.heroQuote!)),
-        `${study.slug}.heroQuote must be a sentence from testimonial.paragraphs`,
-      ).toBe(true)
-      expect(paragraphs[2] ?? '').not.toContain(study.heroQuote)
+        study.heroQuote.trim().length,
+        `${study.slug}.heroQuote`,
+      ).toBeGreaterThan(0)
+      expect(attribution?.name, `${study.slug} attribution name`).toBeTruthy()
+      expect(attribution?.role, `${study.slug} attribution role`).toBeTruthy()
+      for (const paragraph of study.testimonial?.paragraphs ?? []) {
+        expect(
+          paragraph.trim(),
+          `${study.slug}.heroQuote must not duplicate a letter paragraph`,
+        ).not.toBe(study.heroQuote.trim())
+      }
     }
     const cambridge = getCaseStudyBySlug('cambridge-building-group')
     expect(cambridge?.heroQuote).toMatch(
       /^He has proven to be an exceptional partner/,
     )
+  })
+
+  it('fills every section of the detail template for every study', () => {
+    for (const study of caseStudies) {
+      const { slug, atAGlance, story, testimonial } = study
+      expect(study.heroQuote, `${slug}.heroQuote`).toBeTruthy()
+      expect(atAGlance.metrics, `${slug} needs three outcomes`).toHaveLength(3)
+      for (const metric of atAGlance.metrics ?? []) {
+        expect(metric.context, `${slug} "${metric.label}" context`).toBeTruthy()
+      }
+      expect(
+        story.stewardship?.length,
+        `${slug}.story.stewardship`,
+      ).toBeGreaterThan(0)
+      expect(atAGlance.stack, `${slug} needs four stack groups`).toHaveLength(4)
+      expect(
+        testimonial?.paragraphs.length,
+        `${slug}.testimonial`,
+      ).toBeGreaterThan(0)
+      expect(study.builtBy, `${slug}.builtBy`).toBeDefined()
+    }
+  })
+
+  it('never renders an empty string anywhere in a study', () => {
+    const walk = (value: unknown, path: string): void => {
+      if (typeof value === 'string') {
+        expect(value.trim(), `${path} is empty`).not.toBe('')
+      } else if (Array.isArray(value)) {
+        value.forEach((item, i) => walk(item, `${path}[${i}]`))
+      } else if (value && typeof value === 'object') {
+        for (const [key, item] of Object.entries(value)) {
+          walk(item, `${path}.${key}`)
+        }
+      }
+    }
+    for (const study of caseStudies) walk(study, study.slug)
   })
 
   it('ships all 15 Cambridge tools across four stack groups', () => {

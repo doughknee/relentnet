@@ -57,7 +57,8 @@ describe('CaseStudyDetailHero', () => {
   })
 
   it('omits the endorsement when the study has no hero quote', () => {
-    const study = caseStudies.find((s) => s.slug === 'scrollr')!
+    const base = caseStudies.find((s) => s.slug === 'scrollr')!
+    const study = { ...base, heroQuote: undefined, testimonial: undefined }
     renderWithRouter(<CaseStudyDetailHero study={study} />)
     expect(
       screen.queryByRole('link', { name: /read the full letter/i }),
