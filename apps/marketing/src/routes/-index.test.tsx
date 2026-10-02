@@ -69,9 +69,16 @@ beforeAll(() => {
 
 const Home = Route.options.component as React.ComponentType
 
+const originalFounders = {
+  'Brandon Harris': { ...siteConfig.founders['Brandon Harris'] },
+  'Daniel Velez': { ...siteConfig.founders['Daniel Velez'] },
+}
+
 afterEach(() => {
-  siteConfig.founders['Brandon Harris'] = {}
-  siteConfig.founders['Daniel Velez'] = {}
+  siteConfig.founders['Brandon Harris'] = {
+    ...originalFounders['Brandon Harris'],
+  }
+  siteConfig.founders['Daniel Velez'] = { ...originalFounders['Daniel Velez'] }
 })
 
 /** Seconds a figure spends on its closing eight increments. Bisects the curve,
@@ -296,10 +303,23 @@ describe('homepage layout (REL-520)', () => {
     )
   })
 
-  it('renders no credential line or LinkedIn link until they are supplied', () => {
+  it('shows the hero credential and no LinkedIn link', () => {
     const { container } = render(<Home />)
+    expect(
+      within(screen.getByTestId('hero-founder')).getByText(
+        'Building software since age 11. More than 15 years.',
+      ),
+    ).toBeInTheDocument()
     expect(container.querySelector('a[href*="linkedin.com"]')).toBeNull()
     expect(container.textContent).not.toMatch(/linkedin|placeholder/i)
+  })
+
+  it('hides the hero credential when the field is removed', () => {
+    siteConfig.founders['Brandon Harris'].credential = undefined
+    render(<Home />)
+    expect(
+      screen.queryByText('Building software since age 11. More than 15 years.'),
+    ).toBeNull()
   })
 
   it('renders the credential and both LinkedIn links once supplied', () => {

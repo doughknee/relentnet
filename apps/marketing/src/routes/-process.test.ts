@@ -22,22 +22,42 @@ describe('process route content (v4)', () => {
     }
   })
 
-  it('claims no per-phase contact that /about does not state', () => {
-    for (const phase of phases) expect(phase.who).toBeUndefined()
+  it('says who you talk to in each phase', () => {
+    expect(phases.map((phase) => phase.who)).toEqual([
+      'Brandon and Daniel',
+      'Brandon',
+      'Brandon',
+      'Brandon',
+      'Daniel day to day, Brandon for changes',
+    ])
   })
 
-  it('shows How long only where a duration is published', () => {
+  it('shows How long from each published duration', () => {
     const [diagnose, , design, , run] = phases.map(phaseMeta)
     expect(design).toEqual({
       label: 'How long',
       value: 'Part of the Build. Most run 4 to 10 weeks.',
     })
-    expect(diagnose.label).toBe('Engagement')
     expect(diagnose.value).toBe(
-      'Part of the Diagnostic, ' + siteConfig.pricing.diagnostic.price + '.',
+      'Part of the Diagnostic. Most run 1 to 2 weeks.',
     )
-    expect(run.label).toBe('Engagement')
-    expect(JSON.stringify([diagnose, run])).not.toMatch(/weeks/)
+    expect(run.value).toBe("Part of Run. Monthly, 30 days' notice.")
+  })
+
+  it('falls back to the engagement price where no duration is set', () => {
+    const { duration } = siteConfig.pricing.diagnostic
+    siteConfig.pricing.diagnostic.duration = undefined
+    try {
+      expect(phaseMeta(phases[0])).toEqual({
+        label: 'Engagement',
+        value:
+          'Part of the Diagnostic, ' +
+          siteConfig.pricing.diagnostic.price +
+          '.',
+      })
+    } finally {
+      siteConfig.pricing.diagnostic.duration = duration
+    }
   })
 
   it('quotes Jason Hall verbatim from his letter', () => {

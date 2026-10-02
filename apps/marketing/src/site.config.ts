@@ -7,11 +7,10 @@ export interface PricingEntry {
   duration?: string
 }
 
-/** The Diagnostic's guarantee. Brandon decides the terms; while this is
- *  undefined the guarantee band, the hero chip and the hero tick are all
- *  hidden. */
+/** The Diagnostic's guarantee. Unset it and the guarantee band, the hero chip
+ *  and the hero tick are all hidden. */
 export interface DiagnosticGuarantee {
-  /** Finishes the sentence "Worth $2,000, or ...". */
+  /** The whole headline, e.g. "Worth $2,000, or your money back." */
   headline: string
   /** The terms, in a sentence or two. */
   terms: string
@@ -31,6 +30,24 @@ export interface PriceExample {
   total: string
 }
 
+const money = (n: number) => `$${n.toLocaleString('en-US')}`
+
+/** A typical build, with year one worked out as build plus 12 months of run. */
+function example(
+  name: string,
+  description: string,
+  build: number,
+  monthly: number,
+): PriceExample {
+  return {
+    name,
+    description,
+    build: money(build),
+    run: `${money(monthly)} a month`,
+    total: money(build + 12 * monthly),
+  }
+}
+
 /** Published prices. Brandon approved these numbers 2026-10-02; every page
  *  that quotes a price reads from here. No hourly or embedded rate is
  *  published. */
@@ -39,13 +56,20 @@ const pricing: {
   build: PricingEntry
   website: PricingEntry
   run: PricingEntry
-  /** Worked all-in examples for /diagnostic. Empty until Brandon approves
-   *  real ones; the section does not render while this is empty. */
+  /** Typical builds, not client work, for /diagnostic. The section does not
+   *  render while this is empty. */
   examples: Array<PriceExample>
 } = {
   diagnostic: {
     price: '$2,000',
     terms: 'Fixed. Credited toward the build if you sign within 60 days.',
+    duration: '1 to 2 weeks',
+    guarantee: {
+      headline: 'Worth $2,000, or your money back.',
+      terms:
+        "If the diagnostic isn't worth it to you, tell us within 14 days of receiving the map and we refund the full $2,000. No questions.",
+      window: '14 days',
+    },
   },
   build: {
     price: 'From $6,000',
@@ -56,13 +80,29 @@ const pricing: {
   website: {
     price: 'From $5,000',
     terms: 'A marketing site, priced on its own.',
+    duration: '3 to 6 weeks',
   },
   run: {
     price: 'From $350 a month',
     terms:
       'Hosting, monitoring, and fixes. Improvement retainers are scoped per system.',
+    duration: "Monthly, 30 days' notice",
   },
-  examples: [],
+  examples: [
+    example('One workflow automated', 'Like intake into your CRM', 7000, 350),
+    example(
+      'A client or vendor portal',
+      'With two or three integrations',
+      15000,
+      750,
+    ),
+    example(
+      'An internal operating system',
+      'Replacing the spreadsheets',
+      28000,
+      1500,
+    ),
+  ],
 }
 
 /** Founder details Brandon has not supplied yet. The homepage renders each
@@ -82,10 +122,11 @@ export interface FounderProfile {
 /** Keyed by the names in `founders` (routes/about.tsx). */
 const founders: Record<'Brandon Harris' | 'Daniel Velez', FounderProfile> = {
   'Brandon Harris': {
+    credential: 'Building software since age 11. More than 15 years.',
     portrait: '/brandon-harris-about.webp',
     portrait1x: '/brandon-harris-about-520.webp',
   },
-  'Daniel Velez': {},
+  'Daniel Velez': { credential: 'Also runs Function IT Services.' },
 }
 
 export interface BookingConfig {

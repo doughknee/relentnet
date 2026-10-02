@@ -1,6 +1,6 @@
 import { Eyebrow } from '@/components/Eyebrow'
 import { Reveal } from '@/components/Reveal'
-import { owns } from '@/data/founders'
+import { extraSpecs, owns } from '@/data/founders'
 import { siteConfig } from '@/site.config'
 
 interface Person {
@@ -45,7 +45,7 @@ function Spec({ label, value, href }: SpecRow) {
 
 /**
  * The spec list: role, city, and tenure, which /about and `siteConfig` already
- * state, plus the credential and LinkedIn rows only once Brandon supplies them.
+ * state, plus the credential, LinkedIn and `extraSpecs` rows where set.
  */
 export function founderSpec(person: Person, since: string): Array<SpecRow> {
   const { credential, linkedin } = siteConfig.founders[person.name]
@@ -61,6 +61,7 @@ export function founderSpec(person: Person, since: string): Array<SpecRow> {
   if (credential) rows.push({ label: 'Credential', value: credential })
   if (linkedin)
     rows.push({ label: 'LinkedIn', value: person.name, href: linkedin })
+  for (const row of extraSpecs[person.name]) if (row.value) rows.push(row)
   return rows
 }
 
