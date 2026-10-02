@@ -9,6 +9,8 @@
   --th-page: #faf9f7;
   --th-surface: rgba(250, 249, 247, 0.88);
   --th-card: rgba(20, 16, 8, 0.03);
+  /* Alternating full-width section bands (Figma: #171614 dark) */
+  --th-band: #f1efeb;
   --th-chrome: rgba(241, 239, 235, 0.95);
   --th-inset: #f1efeb;
   --th-overlay: rgba(250, 249, 247, 0.95);
@@ -16,7 +18,7 @@
   --th-ink: #191713;
   --th-ink-sub: #54504a;
   --th-ink-muted: #6c6a63;
-  --th-ink-faint: #727065;
+  --th-ink-faint: #6f6d62;
   --th-ink-em: #0d0b08;
 
   --th-line: rgba(20, 16, 8, 0.12);
@@ -35,6 +37,7 @@
   --th-surface: rgba(10, 9, 8, 0.75);
   /* Bands recede into deeper black rather than lifting to grey */
   --th-card: rgba(0, 0, 0, 0.3);
+  --th-band: #171614;
   --th-chrome: rgba(25, 23, 19, 0.8);
   --th-inset: rgba(0, 0, 0, 0.25);
   --th-overlay: rgba(10, 9, 8, 0.95);
@@ -44,8 +47,8 @@
      longer than one line must use this or brighter; muted/faint are for
      single-line caps metadata only. */
   --th-ink-sub: #c6c1b6;
-  --th-ink-muted: #88827a;
-  --th-ink-faint: #7d7871;
+  --th-ink-muted: #8f8a82;
+  --th-ink-faint: #86817a;
   --th-ink-em: #f7f3ea;
 
   /* Contrast floor: below ~0.2 alpha over #0a0908, hairlines fall under
@@ -74,6 +77,7 @@
   --color-page: var(--th-page);
   --color-surface: var(--th-surface);
   --color-card: var(--th-card);
+  --color-band: var(--th-band);
   --color-chrome: var(--th-chrome);
   --color-inset: var(--th-inset);
   --color-overlay: var(--th-overlay);

@@ -11,7 +11,9 @@ export const sectionInner =
  *  transparent so the starfield and the light-theme grid show through. */
 export const surfaces = {
   page: 'border-t border-line',
-  card: 'border-t border-line bg-card',
+  // `card` is the call-site name for the raised alternating band; it paints
+  // the band token, not the card token (cards inside sections keep bg-card).
+  card: 'border-t border-line bg-band',
   tint: 'border-t border-line bg-gold-tint',
 } as const
 

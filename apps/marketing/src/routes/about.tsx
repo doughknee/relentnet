@@ -127,14 +127,14 @@ function About() {
         person={founders[0]}
         since={since}
         secondShot="/brandon-harris.webp"
-        className="bg-card"
+        className="bg-band"
       />
 
       {/* ── Daniel ── */}
       <AboutFounder person={founders[1]} since={since} />
 
       {/* ── The builders ── */}
-      <section className="border-t border-line bg-card">
+      <section className="border-t border-line bg-band">
         <div className="max-w-[1440px] mx-auto px-5 md:px-12 xl:px-20 py-14 min-[1024px]:py-24 flex flex-col min-[1024px]:flex-row min-[1024px]:items-center gap-8 min-[1024px]:gap-[72px]">
           <Reveal className="w-full min-[1024px]:w-[480px] shrink-0">
             <figure className="flex flex-col gap-3">
@@ -174,7 +174,7 @@ function About() {
         <AboutSection
           key={section.num}
           {...section}
-          className={i % 2 === 1 ? 'bg-card' : ''}
+          className={i % 2 === 1 ? 'bg-band' : ''}
         />
       ))}
 

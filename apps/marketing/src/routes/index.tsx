@@ -731,7 +731,7 @@ function HomeComponent() {
 
       {/* ── Proof first: one client, start to finish. The ticker's bottom
           hairline is the divider ── */}
-      <section className="bg-card">
+      <section className="bg-band">
         <div
           className={`${sectionInner} grid grid-cols-1 min-[1024px]:grid-cols-[minmax(0,1fr)_minmax(0,600px)] gap-12 min-[1024px]:gap-[72px] items-start`}
         >
