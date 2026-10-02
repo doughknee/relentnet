@@ -39,4 +39,28 @@ describe('CaseStudyDetailHero', () => {
       study.hero.tagline,
     )
   })
+
+  it('shows the hero quote with its attribution and a link to the letter', () => {
+    const study = caseStudies.find(
+      (s) => s.slug === 'cambridge-building-group',
+    )!
+    renderWithRouter(<CaseStudyDetailHero study={study} />)
+    expect(
+      screen.getByText(/exceptional partner who not only delivers/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('Executive Vice President, Cambridge Building Group'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /read the full letter/i }),
+    ).toHaveAttribute('href', '#letter')
+  })
+
+  it('omits the endorsement when the study has no hero quote', () => {
+    const study = caseStudies.find((s) => s.slug === 'scrollr')!
+    renderWithRouter(<CaseStudyDetailHero study={study} />)
+    expect(
+      screen.queryByRole('link', { name: /read the full letter/i }),
+    ).toBeNull()
+  })
 })

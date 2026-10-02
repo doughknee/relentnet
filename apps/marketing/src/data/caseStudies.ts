@@ -79,14 +79,15 @@ export interface CaseStudyAtAGlance {
   duration?: string
   role?: string
   stack?: ReadonlyArray<StackCategory>
+  /** Follows the computed tool count under "Built with", e.g. "across the site and the portal". */
+  stackScope?: string
   metrics?: ReadonlyArray<CaseStudyMetric>
   /**
-   * Compact inline quote rendered inside the At-a-glance strip. For a
-   * full-width pull quote with photo/role styling, populate the
-   * top-level `pullquote` field on CaseStudy instead.
+   * Compact inline quote for the At-a-glance strip. The detail-page hero
+   * quote is the top-level `heroQuote` instead.
    */
   quote?: CaseStudyQuote
-  /** Stripe-style "Global" row in the right-side Stack card. */
+  /** Stripe-style "Global" row in the At-a-glance card. */
   global?: CaseStudyGlobal
 }
 
@@ -124,20 +125,6 @@ export interface CaseStudyRecognition {
 }
 
 /**
- * Page-scale pull quote with attribution metadata. Distinct from the
- * inline `quote` StoryBlock variant which lives mid-narrative; this one
- * is its own section.
- */
-export interface CaseStudyPullquote {
-  text: string
-  attribution: {
-    name: string
-    role: string
-    company?: string
-  }
-}
-
-/**
  * A client's full written testimonial, rendered verbatim as a letter on the
  * detail page. One string per paragraph; never trim or paraphrase.
  */
@@ -148,6 +135,18 @@ export interface CaseStudyTestimonial {
     role: string
     company: string
   }
+  /** Where and when the letter came from, shown under the signature. */
+  provenance?: string
+}
+
+/** The RelentNet person behind the engagement, shown beside the letter. */
+export interface CaseStudyBuilder {
+  name: string
+  /** e.g. "Co-founder & CEO, RelentNet". */
+  role: string
+  location?: string
+  bio: string
+  image: CaseStudyImage
 }
 
 export type EngagementType = 'product' | 'operations' | 'platform'
@@ -171,8 +170,13 @@ export interface CaseStudy {
   elevatorPitch?: string
   atAGlance: CaseStudyAtAGlance
   story: CaseStudyStory
-  pullquote?: CaseStudyPullquote
+  /**
+   * One sentence from `testimonial.paragraphs`, verbatim, shown in the hero
+   * with the letter's attribution. Renders only alongside a testimonial.
+   */
+  heroQuote?: string
   testimonial?: CaseStudyTestimonial
+  builtBy?: CaseStudyBuilder
   services?: ReadonlyArray<CaseStudyServiceCategory>
   recognition?: ReadonlyArray<CaseStudyRecognition>
   meta: CaseStudyMeta
@@ -180,7 +184,12 @@ export interface CaseStudy {
   portraitImage?: CaseStudyImage
 
   /** One huge stat surfaced in the index "Measurable results" band. */
-  featuredStat?: { value: string; description: string }
+  featuredStat?: {
+    value: string
+    description: string
+    /** The description continues the value ("170+" + "API endpoints…"), so excerpts join them. */
+    joinsValue?: boolean
+  }
 
   /** Pill in the detail-page "Products used" row. Falls back to omitted. */
   region?: string
@@ -550,6 +559,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     atAGlance: {
       engagementYear: '2025–present',
       role: 'Marketing site, internal software hub, AP automation, hosting',
+      stackScope: 'across the marketing site and the AP portal',
       stack: [
         {
           category: 'Marketing Site',
@@ -716,14 +726,8 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         body: 'The marketing site leads with the firm’s record: a decade in business, 350+ projects, and an unlimited Tennessee contractor license.',
       },
     ],
-    pullquote: {
-      text: 'What Brandon ultimately delivered was far beyond anything we had envisioned. We are very excited for the possibilities this type of technology could provide as our company continues to grow.',
-      attribution: {
-        name: 'Jason Hall',
-        role: 'Executive Vice President',
-        company: 'Cambridge Building Group',
-      },
-    },
+    heroQuote:
+      'He has proven to be an exceptional partner who not only delivers what he promises, but he also consistently finds ways to deliver more than we ever thought possible.',
     // Verbatim from Jason Hall's email of 2026-09-05 (REL-431). Do not edit.
     testimonial: {
       paragraphs: [
@@ -737,6 +741,19 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         name: 'Jason Hall',
         role: 'Executive Vice President',
         company: 'Cambridge Building Group, LLC',
+      },
+      provenance: 'Sent by email, September 2026. Reproduced verbatim.',
+    },
+    builtBy: {
+      name: 'Brandon Harris',
+      role: 'Co-founder & CEO, RelentNet',
+      location: 'Nashville',
+      bio: 'Brandon owns what gets built: the vision, the code, the design. RelentNet still hosts and maintains both Cambridge systems.',
+      image: {
+        src: '/brandon-harris.webp',
+        alt: 'Brandon Harris',
+        width: 640,
+        height: 800,
       },
     },
     meta: {
@@ -755,6 +772,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
     companySize: 'startup',
     featuredStat: {
       value: '170+',
+      joinsValue: true,
       description:
         'API endpoints behind a Go and Redis real-time core powering brackets, live scoring, and broadcast overlays.',
     },

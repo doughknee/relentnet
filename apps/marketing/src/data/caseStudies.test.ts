@@ -101,6 +101,37 @@ describe('caseStudies data', () => {
     }
   })
 
+  it('takes heroQuote verbatim from the letter, never from its paragraph 3', () => {
+    for (const study of caseStudies) {
+      if (!study.heroQuote) continue
+      const paragraphs = study.testimonial?.paragraphs ?? []
+      expect(
+        paragraphs.some((p) => p.includes(study.heroQuote!)),
+        `${study.slug}.heroQuote must be a sentence from testimonial.paragraphs`,
+      ).toBe(true)
+      expect(paragraphs[2] ?? '').not.toContain(study.heroQuote)
+    }
+    const cambridge = getCaseStudyBySlug('cambridge-building-group')
+    expect(cambridge?.heroQuote).toMatch(
+      /^He has proven to be an exceptional partner/,
+    )
+  })
+
+  it('ships all 15 Cambridge tools across four stack groups', () => {
+    const stack =
+      getCaseStudyBySlug('cambridge-building-group')?.atAGlance.stack ?? []
+    expect(stack).toHaveLength(4)
+    expect(stack.flatMap((g) => g.items)).toHaveLength(15)
+  })
+
+  it('gives every builder card an image and a bio', () => {
+    for (const study of caseStudies) {
+      if (!study.builtBy) continue
+      expect(study.builtBy.image.src).toMatch(/^\//)
+      expect(study.builtBy.bio.length).toBeGreaterThan(0)
+    }
+  })
+
   it('rejects metrics that are neither flat nor delta', () => {
     // A valid metric must be flat (value only) or delta (from + to only).
     // The data must never contain mixed-shape or empty-shape metrics.
