@@ -29,6 +29,7 @@ COPY apps/proposals/shared apps/proposals/shared
 COPY --from=build /app/apps/proposals/dist apps/proposals/dist
 
 EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+# Traefik routes only to healthy containers, so the first check must come quickly after start.
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
   CMD wget -qO- http://127.0.0.1/healthz >/dev/null || exit 1
 CMD ["node", "apps/proposals/server/main.ts"]
