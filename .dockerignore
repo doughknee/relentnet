@@ -8,7 +8,10 @@ dist
 **/dist
 .superpowers
 .coolify
-docs
+docs/*
+!docs/MSA.md
+!docs/SOW.md
+!docs/SupportAndHosting.md
 README.md
 AGENTS.md
 GEMINI.md
