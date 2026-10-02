@@ -17,7 +17,7 @@ export const legalDocs: Record<string, LegalDoc> = {
     title: 'Statement of Work (SOW)',
     description:
       'Defines scope, deliverables, timeline, and acceptance criteria.',
-    lastUpdated: 'January 2026',
+    lastUpdated: 'October 2026',
   },
   sha: {
     id: 'sha',
