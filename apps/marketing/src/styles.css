@@ -226,6 +226,54 @@
   outline-offset: 2px;
 }
 
+/* ── Legal docs rendered from docs/*.md ── */
+.legal-prose > * + * {
+  @apply mt-4;
+}
+.legal-prose hr {
+  display: none;
+}
+.legal-prose h2 {
+  @apply text-gold-text text-xs font-bold tracking-[0.3em] uppercase mt-16 mb-6;
+}
+.legal-prose h3 {
+  @apply font-serif text-xl text-ink-em mt-8 mb-4;
+}
+.legal-prose p {
+  @apply text-ink-sub font-light leading-relaxed mb-4 text-sm;
+}
+.legal-prose ul,
+.legal-prose ol {
+  @apply text-ink-sub font-light text-sm space-y-2 mb-4 pl-4 list-inside;
+}
+.legal-prose ul {
+  @apply list-disc;
+}
+.legal-prose ol {
+  @apply list-decimal;
+}
+.legal-prose strong {
+  @apply text-ink-em font-normal;
+}
+.legal-prose .legal-table {
+  @apply overflow-x-auto border border-line rounded-sm mb-6;
+}
+.legal-prose table {
+  @apply w-full text-left text-sm text-ink-sub;
+}
+.legal-prose thead {
+  @apply bg-line-faint uppercase text-xs tracking-widest text-gold-text;
+}
+.legal-prose th {
+  @apply p-4 border-b border-line;
+}
+.legal-prose td {
+  @apply p-4;
+}
+.legal-prose tbody {
+  @apply divide-y divide-line-faint;
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *,

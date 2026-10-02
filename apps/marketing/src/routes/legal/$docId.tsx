@@ -1,10 +1,6 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { legalDocs } from '../../data/legalDocs'
-import {
-  MSAContent,
-  SHAContent,
-  SOWContent,
-} from '../../components/legal/LegalContents'
+import { legalHtml } from '../../data/legalHtml'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/legal/$docId')({
@@ -31,13 +27,9 @@ function LegalDoc() {
   const doc = Route.useLoaderData()
   const { docId } = Route.useParams()
 
-  const ContentComponent = {
-    msa: MSAContent,
-    sow: SOWContent,
-    sha: SHAContent,
-  }[docId]
+  const html = legalHtml[docId] as string | undefined
 
-  if (!ContentComponent) {
+  if (!html) {
     return <div className="text-ink">Document content not found</div>
   }
 
@@ -67,7 +59,10 @@ function LegalDoc() {
       {/* CONTENT */}
       <section className="pb-32 px-6 md:px-20 relative z-10">
         <div className="max-w-4xl mx-auto animate-fade-in-up opacity-0 delay-200">
-          <ContentComponent />
+          <div
+            className="legal-prose"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
       </section>
     </div>
