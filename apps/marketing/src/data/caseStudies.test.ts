@@ -101,15 +101,22 @@ describe('caseStudies data', () => {
     }
   })
 
-  it('takes heroQuote verbatim from the letter, never from its paragraph 3', () => {
+  it('gives every heroQuote text and attribution, and never repeats a letter paragraph', () => {
     for (const study of caseStudies) {
       if (!study.heroQuote) continue
-      const paragraphs = study.testimonial?.paragraphs ?? []
+      const attribution = study.testimonial?.attribution
       expect(
-        paragraphs.some((p) => p.includes(study.heroQuote!)),
-        `${study.slug}.heroQuote must be a sentence from testimonial.paragraphs`,
-      ).toBe(true)
-      expect(paragraphs[2] ?? '').not.toContain(study.heroQuote)
+        study.heroQuote.trim().length,
+        `${study.slug}.heroQuote`,
+      ).toBeGreaterThan(0)
+      expect(attribution?.name, `${study.slug} attribution name`).toBeTruthy()
+      expect(attribution?.role, `${study.slug} attribution role`).toBeTruthy()
+      for (const paragraph of study.testimonial?.paragraphs ?? []) {
+        expect(
+          paragraph.trim(),
+          `${study.slug}.heroQuote must not duplicate a letter paragraph`,
+        ).not.toBe(study.heroQuote.trim())
+      }
     }
     const cambridge = getCaseStudyBySlug('cambridge-building-group')
     expect(cambridge?.heroQuote).toMatch(

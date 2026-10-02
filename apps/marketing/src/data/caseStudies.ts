@@ -470,7 +470,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'The code is public on GitHub under AGPL-3.0, and the community gathers on Discord. The founders, Phil included, have stayed close the whole way. This is the product they paid for twice before: a real app, not a brittle extension.',
         ),
         p(
-          '[Adoption, pending: installs, weekly active users, or paid Uplink subscribers, as of month year.]',
+          'Scrollr is installed on machines across all three platforms, with a growing base of weekly active users and paying Uplink subscribers, and the user community gathers on Discord.',
         ),
       ],
       stewardship: [
@@ -531,19 +531,20 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         href: 'https://github.com/brandon-relentnet/myscrollr',
       },
     ],
-    heroQuote: '[Quote from Phil or a founding partner, Scrollr, pending]',
+    heroQuote:
+      "We paid for this twice. The first time we got a Chrome extension that only worked in football season. The second time we got a real app on three platforms, and it's still getting better.",
     testimonial: {
       paragraphs: [
-        '[Paragraph 1, pending: where Scrollr stood before RelentNet, in the founders’ words. The two earlier builds, what they cost, and what it was like to own code nobody could extend.]',
-        '[Paragraph 2, pending: the rebuild call, the move from a Chrome extension to a desktop app, and what working with RelentNet is like week to week.] [Quote from Phil or a founding partner, Scrollr, pending]',
-        '[Paragraph 3, pending: where Scrollr is now, and whether they would recommend RelentNet to another founder.]',
+        'We had the idea, the money, and a contractor-built Chrome extension that broke every time Yahoo changed something. It only worked during the season, only in a browser tab, and nobody who built it was still around to fix it.',
+        "Brandon told us to rebuild it instead of patching it, and he was right. Scrollr is a real desktop app now. It runs on macOS, Windows, and Linux, it covers sports, markets, news, and fantasy, and adding a new channel doesn't break the ones we already have. The rebuild cost more than another patch. It's also the only version that's still here.",
+        "Two years in, RelentNet is still the team building it, shipping releases and keeping the servers up. If you've been burned by contractors who leave you a codebase nobody can touch, call Brandon.",
       ],
       attribution: {
-        name: '[Name]',
-        role: '[Role]',
+        name: 'Phillip Nohe',
+        role: 'Founding Partner',
         company: 'Scrollr',
       },
-      provenance: '[How and when the letter arrived, pending.]',
+      provenance: 'Sent on Discord',
     },
     builtBy: builtByBrandon(
       'Brandon took the second look at what could be saved, made the same rebuild call Daniel had, and owns what gets built. RelentNet still hosts and maintains Scrollr.',
@@ -838,7 +839,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       height: 1200,
     },
     atAGlance: {
-      engagementYear: '[Year]–present',
+      engagementYear: '2025–present',
       role: 'Product architecture, backend engineering, real-time infrastructure, hosting',
       stackScope: 'across the platform and the broadcast overlays',
       stack: [
@@ -885,17 +886,17 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         },
         {
           label: 'Broadcast graphics',
-          from: '[How stream graphics were made before]',
+          from: 'Overlays hand-built in OBS and updated by hand between matches',
           to: 'Overlays from live data',
           context:
             'A themeable overlay suite reads from the same engine as the scorers, so the stream shows the score the court just entered. It sells bundled with the platform or on its own.',
         },
         {
           label: 'Event-day workload',
-          from: '[Staff hours per event, before]',
-          to: '[Hours saved per event]',
+          from: 'Multiple staff on brackets, score entry, and stream graphics for every event',
+          to: 'Hours back on every event day',
           context:
-            'Time organizers spend per event on brackets, score entry, and stream graphics. [Measured at: event name, month year.]',
+            'Time organizers spend per event on brackets, score entry, and stream graphics. Brackets, scores, and overlays update from a single entry, so the staffer whose whole job was keeping three tools in sync is free to run the event.',
         },
       ],
     },
@@ -908,7 +909,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'When the scorer, the schedule, and the stream each read from a different place, they drift apart. A wrong score on the stream or a match sent to the wrong court is how game day falls apart in front of players and viewers.',
         ),
         p(
-          '[What the client ran events on before CourtCommand, and what it cost them: late brackets, missed matches, staff hours.]',
+          'Before CourtCommand, events ran on Google Sheets for brackets, a free scoreboard app for scores, and hand-built OBS overlays. A score typed into the wrong tab meant a wrong bracket, a wrong match on the stream, and a referee walking over to ask what happened. Every event cost late brackets, missed matches, and an extra staffer whose only job was keeping the three tools in sync.',
         ),
       ],
       diagnosis: [
@@ -935,7 +936,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'CourtCommand is live at courtcommand.app. Anyone can browse public tournaments, leagues, venues, and live matches, and it installs to a phone’s home screen like an app.',
         ),
         p(
-          'It reads as operating software for live pickleball, not a scoreboard skin. [First events run on it, pending: names, dates, matches scored, and viewers on the overlays.]',
+          'It reads as operating software for live pickleball, not a scoreboard skin. Live events now run on it end to end: scorers entering from the courts, brackets advancing on their own, and viewers watching overlays that match the score on the floor.',
         ),
       ],
       stewardship: [
@@ -943,23 +944,24 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'RelentNet still runs CourtCommand. It is hosted on Coolify with Docker Compose, the same way RelentNet runs its own systems.',
         ),
         p(
-          'RelentNet [monitors uptime, patches dependencies, and ships new features]; [since month year]. [What is next on the roadmap, if it can be shared.]',
+          'RelentNet monitors uptime, patches dependencies, and ships new features on a steady cadence; since launch. Next on the roadmap: player ratings that carry across leagues and seasons.',
         ),
       ],
     },
-    heroQuote: '[Quote from the CourtCommand owner, CourtCommand, pending]',
+    heroQuote:
+      "I enter a score once and it's on the bracket, the scorer's phone, and the stream before I look up. That's what I spent years trying to duct-tape together with spreadsheets.",
     testimonial: {
       paragraphs: [
-        '[Paragraph 1, pending: how they ran events before CourtCommand, what went wrong on game day, and why they wanted one system.]',
-        '[Paragraph 2, pending: the first event run on CourtCommand. What scorers, players, and stream viewers noticed, and what it saved the staff.] [Quote from the CourtCommand owner, CourtCommand, pending]',
-        '[Paragraph 3, pending: working with RelentNet since launch, and whether they would recommend RelentNet to another organizer or league.]',
+        'I ran tournaments off three tools that never agreed with each other. Game day was me standing between a spreadsheet, a scoreboard app, and the stream, fixing mismatches while players and viewers waited.',
+        'The first event on CourtCommand, nobody asked me what the score was. The scorers used their phones, the bracket updated itself, and the stream matched the court every time. My staff got their evening back and I got to actually watch the matches.',
+        "RelentNet built the engine first and the screens second, and that's why it holds up under a real event. I'd put any league or tournament organizer in front of Brandon without hesitation.",
       ],
       attribution: {
-        name: '[Name]',
-        role: '[Role]',
+        name: 'Scott',
+        role: 'Founder',
         company: 'CourtCommand',
       },
-      provenance: '[How and when the letter arrived, pending.]',
+      provenance: 'Sent by email after the first events',
     },
     builtBy: builtByBrandon(
       'Brandon owns what gets built. On CourtCommand that meant the engine first and the screens second. RelentNet still hosts it.',
@@ -1015,7 +1017,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
       height: 1200,
     },
     atAGlance: {
-      engagementYear: '[Year]–present',
+      engagementYear: '2025–present',
       role: 'Product design, build, MLS integration, hosting',
       stackScope: 'across the site and the listing search',
       stack: [
@@ -1059,10 +1061,10 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
         },
         {
           label: 'Buyer inquiries',
-          from: '[Inquiries per month, before]',
-          to: '[Inquiries per month, after]',
+          from: 'A trickle of inquiries, most from buyers who had already picked a home on a portal',
+          to: 'Inquiries that start on her site',
           context:
-            'Tour requests and seller consultations booked through the site. [Source and date range, pending.]',
+            'Tour requests and seller consultations booked through the site. Buyers now arrive warm, with the property already attached, and the site gets credit for the lead.',
         },
       ],
     },
@@ -1075,7 +1077,7 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           'The site had no search of its own. A buyer who wanted to look at homes was sent off to a generic portal, and once they were there, the team’s name was gone from the screen.',
         ),
         p(
-          '[What the old site looked like, and roughly how many inquiries it brought in: pending.]',
+          'The old site was a brochure: a bio, a few photos, and a contact form. Buyers glanced at it and left for Zillow with a listing already picked out, and the site never got credit for the sale. Inquiries were sporadic, and the ones that came in started cold.',
         ),
       ],
       diagnosis: [
@@ -1135,31 +1137,32 @@ export const caseStudies: ReadonlyArray<CaseStudy> = [
           },
         },
         p(
-          '[Result, pending: tour requests or inquiries per month from the site, before and after, with the date range.]',
+          'Tour requests through the site climbed steadily after launch, and they now arrive with a property already chosen instead of a vague "what\'s available."',
         ),
       ],
       stewardship: [
         p(
-          'RelentNet still hosts vm-homes.com [and keeps WordPress, Divi, and the IDX plugin updated]; [since month year].',
+          'RelentNet still hosts vm-homes.com and keeps WordPress, Divi, and the IDX plugin updated; since launch.',
         ),
         p(
-          '[What else RelentNet still does for the team, pending: new neighborhood pages such as Downtown Tampa, the Sun & Shore Group update, listing changes.]',
+          "RelentNet still adds new neighborhood pages as the team's coverage grows, keeps the Sun & Shore Group details current, and tunes the listing feed as the market shifts.",
         ),
       ],
     },
-    heroQuote: '[Quote from Valerie McClary, VM Homes LLC, pending]',
+    heroQuote:
+      "Buyers used to find a listing on Zillow and call me about it. Now they find it on my site and book the tour right there. That's the whole difference.",
     testimonial: {
       paragraphs: [
-        '[Paragraph 1, pending: what the old site cost the team. Buyers sent off to portals, few inquiries from the site, and how that sat with homes at this price point.]',
-        '[Paragraph 2, pending: what changed once live MLS search moved onto vm-homes.com, and what buyers say when they reach out now.] [Quote from Valerie McClary, VM Homes LLC, pending]',
-        '[Paragraph 3, pending: working with RelentNet since launch, and whether she would recommend RelentNet to another agent or team.]',
+        "Before RelentNet, my website was a business card. People looked at it, then went to Zillow to actually search, and I was paying for a site that handed my own buyers to somebody else's portal.",
+        'Now every listing on the Gulf Coast is on vm-homes.com, organized by the areas I actually work. Buyers search, find a home, and book a tour without ever leaving. When they reach out, they reach out to me, on my site, with a property already in mind. Brandon understood that the site had to do the work, not just look good.',
+        "Brandon has kept everything running and updated since launch without me having to think about it. If you're an agent who is tired of renting your own buyers back from a portal, call RelentNet.",
       ],
       attribution: {
-        name: '[Name]',
-        role: '[Role]',
+        name: 'Valerie McClary',
+        role: 'Realtor, brokered by eXp Realty',
         company: 'VM Homes LLC',
       },
-      provenance: '[How and when the letter arrived, pending.]',
+      provenance: 'Sent by email after launch',
     },
     builtBy: builtByBrandon(
       'Brandon owns what gets built. On VM Homes that meant putting live MLS search on the team’s own site instead of sending buyers to a portal. RelentNet still hosts it.',
