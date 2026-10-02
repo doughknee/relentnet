@@ -24,8 +24,11 @@ import { ClosingDoors } from '@/components/ClosingDoors'
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Frame } from '@/components/Frame'
+import { FounderRows, HeroFounder } from '@/components/Founders'
 import { HomeTestimonial } from '@/components/HomeTestimonial'
+import { WhatItCosts } from '@/components/PriceTier'
 import { Reveal } from '@/components/Reveal'
+import { sectionInner, surfaces } from '@/components/SectionHead'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
 import { makeCountEase } from '@/lib/countEase'
@@ -229,6 +232,21 @@ export const stats = [
 
 /** The section reads as one ledger, with the hero simply the first row. */
 export const ledger = [heroStat, ...stats] as const
+
+/** The three ticks under the hero buttons: the named client, then the two
+ *  figures from the ledger, worded from their own labels. */
+export const heroProof = [
+  'Cambridge Building Group',
+  `${heroStat.value.toLocaleString('en-US')}${heroStat.suffix} ${heroStat.label.toLowerCase()}`,
+  `${stats[0].value}${stats[0].suffix} ${stats[0].label.toLowerCase()}`,
+] as const
+
+/** Section titles at the redesign's H2 size. */
+const sectionTitle =
+  'font-serif text-[34px] leading-10 min-[768px]:text-[40px] min-[768px]:leading-[46px] text-ink-em text-balance'
+
+const monoLabel =
+  'font-mono text-[11px] tracking-[0.26em] uppercase leading-4 font-medium'
 
 /** The brand ease, matching every other entrance on the site. */
 const EASE = [0.2, 0.8, 0.2, 1] as const
@@ -631,63 +649,60 @@ function HomeComponent() {
       />
 
       {/* ── Hero — the ticker sits flush at the section's bottom edge ── */}
-      <section className="relative pt-[130px] overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 relative">
+      <section className="relative pt-10 min-[768px]:pt-[112px] overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-12 xl:px-20 relative">
           <HeroGhostMark />
           <div className="relative">
-            <Eyebrow className="animate-fade-in-up mb-9">
-              Technology partner for owner-led businesses
+            <Eyebrow className="animate-fade-in-up mb-5 min-[768px]:mb-8">
+              <span className="max-[479px]:hidden">Technology partner</span>
+              <span className="min-[480px]:hidden">Partner</span> for owner-led
+              businesses
             </Eyebrow>
             <h1
-              className="animate-fade-in-up font-serif text-[clamp(42px,9vw,118px)] leading-[0.98] tracking-[-0.01em] max-w-[1150px] text-balance"
+              className="animate-fade-in-up font-serif text-[clamp(44px,7.5vw,108px)] leading-[1.045] min-[768px]:leading-[0.963] tracking-[-0.01em] max-w-[1150px] text-balance"
               style={{ animationDelay: '80ms' }}
             >
               Your business has outgrown its tools.{' '}
               <span className="italic text-gold-text">We fix that.</span>
             </h1>
+            {/* Phones read pitch, founder, buttons, proof, so the face sits
+                above the fold. From 1200 the founder card moves beside the
+                pitch: the pitch column is `contents` on phones, which lets
+                its children take their order in the outer column. */}
             <div
-              className="animate-fade-in-up mt-13 flex flex-col min-[768px]:flex-row min-[768px]:items-end justify-between gap-7 min-[768px]:gap-12"
+              className="animate-fade-in-up mt-4 min-[768px]:mt-14 flex flex-col gap-[22px] min-[1200px]:flex-row min-[1200px]:items-end min-[1200px]:gap-14"
               style={{ animationDelay: '200ms' }}
             >
-              <div className="max-w-[540px]">
-                <p className="text-ink-sub text-lg font-light leading-[1.6]">
+              <div className="contents min-[1200px]:flex min-[1200px]:flex-1 min-[1200px]:min-w-0 min-[1200px]:flex-col min-[1200px]:gap-8">
+                <p className="order-1 max-w-[660px] text-ink-sub text-lg leading-7 min-[768px]:text-[21px] min-[768px]:leading-[34px] font-light">
                   A $2,000 diagnostic maps where your operation loses time. Then
                   we build only what earns its place, and we run it for you.
                 </p>
-                {/* Founder lockup. A referred visitor is checking who they were
-                    sent to, so the name and face sit with the premise rather
-                    than five sections down. Solo headshot, 4:5; the beige wall
-                    is toned down a touch so it sits on the dark page. */}
-                <div className="mt-8 flex items-center gap-5">
-                  <div className="shrink-0 w-24 min-[768px]:w-32 aspect-[4/5] overflow-hidden border border-line">
-                    <img
-                      src="/brandon-harris.webp"
-                      srcSet="/brandon-harris-320.webp 320w, /brandon-harris.webp 640w"
-                      sizes="(min-width: 768px) 128px, 96px"
-                      alt="Brandon Harris, founder of RelentNet"
-                      width={640}
-                      height={800}
-                      className="block w-full h-full object-cover saturate-[0.85] brightness-[0.92]"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-serif text-xl leading-tight text-ink-em">
-                      Brandon Harris
-                    </p>
-                    <p className="mt-1 text-[14px] font-light leading-[1.5] text-ink-sub">
-                      Software engineer turned founder. He builds and runs
-                      automation for owner-led businesses.
-                    </p>
-                  </div>
+                <div className="order-3 flex flex-col gap-2.5 min-[480px]:flex-row min-[480px]:flex-wrap min-[480px]:gap-3.5 [&>a]:justify-center">
+                  <CtaLink to="/inquire" arrow>
+                    Book a call
+                  </CtaLink>
+                  <CtaLink to="/clients" variant="outline">
+                    See client work
+                  </CtaLink>
                 </div>
+                <ul className="order-4 -mt-1 min-[1200px]:mt-0 flex flex-col gap-2 min-[768px]:flex-row min-[768px]:flex-wrap min-[768px]:gap-x-6 min-[768px]:gap-y-2.5">
+                  {heroProof.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-2.5 font-mono text-[12px] tracking-[0.08em] min-[768px]:text-[13px] min-[768px]:tracking-[0.12em] uppercase leading-4 text-ink-sub"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="w-1.5 h-1.5 bg-gold rotate-45 shrink-0"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="flex flex-wrap gap-3.5 shrink-0">
-                <CtaLink to="/inquire" arrow>
-                  Book a call
-                </CtaLink>
-                <CtaLink to="/clients" variant="outline">
-                  See client work
-                </CtaLink>
+              <div className="order-2 min-[1200px]:shrink-0">
+                <HeroFounder />
               </div>
             </div>
           </div>
@@ -739,42 +754,32 @@ function HomeComponent() {
 
       {/* ── Proof first: one client, start to finish. The ticker's bottom
           hairline is the divider ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-12 min-[1024px]:gap-18 items-start">
-          <div>
+      <section className="bg-card">
+        <div
+          className={`${sectionInner} grid grid-cols-1 min-[1024px]:grid-cols-[minmax(0,1fr)_minmax(0,600px)] gap-12 min-[1024px]:gap-[72px] items-start`}
+        >
+          <div className="flex flex-col items-start">
             <Reveal>
               <Eyebrow className="mb-5">01 · Cambridge Building Group</Eyebrow>
             </Reveal>
             <Reveal delay={80}>
-              <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
-                {cambridgeProof.headline}
-              </h2>
-              <p className="mt-4 font-mono text-[11px] tracking-[0.26em] uppercase text-ink-faint font-medium">
+              <h2 className={sectionTitle}>{cambridgeProof.headline}</h2>
+              <p className={`mt-5 ${monoLabel} text-ink-muted`}>
                 {cambridgeProof.industry}
               </p>
             </Reveal>
-            <Reveal delay={160}>
-              <figure className="mt-10 border-l-2 border-gold pl-6">
-                <blockquote className="font-serif italic text-[22px] leading-[1.45] text-ink">
-                  &ldquo;{cambridgeProof.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-4 font-mono text-[11px] tracking-[0.25em] uppercase text-ink/65">
-                  {cambridgeProof.attribution}
-                </figcaption>
-              </figure>
-            </Reveal>
-          </div>
-          <div>
             {/* Ruled rows rather than cards, the same spec-sheet reading as
                 the ledger below it. */}
-            <dl className="border-t border-line">
+            <dl className="mt-8 w-full">
               {cambridgeProof.rows.map((row, i) => (
                 <Reveal key={row.label} delay={80 + i * 90}>
-                  <div className="grid grid-cols-1 min-[640px]:grid-cols-[150px_1fr] gap-x-8 gap-y-2 border-b border-line py-6">
-                    <dt className="font-mono text-[11px] tracking-[0.2em] uppercase text-gold-text min-[640px]:pt-1">
+                  <div className="grid grid-cols-1 min-[640px]:grid-cols-[130px_1fr] gap-x-6 gap-y-2 border-t border-line py-5">
+                    <dt
+                      className={`${monoLabel} text-gold-text min-[640px]:pt-1`}
+                    >
                       {row.label}
                     </dt>
-                    <dd className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                    <dd className="text-base leading-6 text-ink-sub">
                       {row.body}
                     </dd>
                   </div>
@@ -785,20 +790,44 @@ function HomeComponent() {
               <Link
                 to="/clients/$slug"
                 params={{ slug: cambridgeProof.slug }}
-                className="mt-8 inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.15em] uppercase text-gold-text transition-all hover:gap-4"
+                className={`mt-3 inline-flex items-center gap-2.5 ${monoLabel} text-gold-text transition-all hover:gap-4`}
               >
                 Read the case study →
               </Link>
+            </Reveal>
+          </div>
+          <div className="flex flex-col gap-8">
+            <Reveal>
+              <Frame reveal caption="Fig. 01 · Cambridge Building Group">
+                <img
+                  src="/case-studies/cambridge-building-group/hero.webp"
+                  width={1600}
+                  height={1000}
+                  alt="The Cambridge Building Group website RelentNet built"
+                  loading="lazy"
+                  className="block w-full aspect-[16/10] object-cover object-top transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+                />
+              </Frame>
+            </Reveal>
+            <Reveal delay={160}>
+              <figure className="border-l-2 border-gold pl-6">
+                <blockquote className="font-serif italic text-2xl leading-[1.35] min-[768px]:text-[28px] min-[768px]:leading-9 text-ink">
+                  &ldquo;{cambridgeProof.quote}&rdquo;
+                </blockquote>
+                <figcaption className={`mt-3.5 ${monoLabel} text-ink-muted`}>
+                  {cambridgeProof.attribution}
+                </figcaption>
+              </figure>
             </Reveal>
           </div>
         </div>
       </section>
 
       {/* ── Stats ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+      <section className={surfaces.page}>
+        <div className={sectionInner}>
           <Reveal>
-            <Eyebrow className="mb-14">02 · The numbers</Eyebrow>
+            <Eyebrow className="mb-10">02 · The numbers</Eyebrow>
           </Reveal>
           {/* A ledger, not a dashboard. Tiling four figures side by side asked
               the reader to compare quantities that measure entirely different
@@ -870,7 +899,7 @@ function HomeComponent() {
                   {/* self-start against a 1fr track: the figure spans both rows,
                       so letting the track stretch pushed the description a
                       different distance from its label in every row. */}
-                  <dd className="col-start-1 row-start-2 self-start mt-3 max-w-[560px] text-[14px] font-light text-ink-sub leading-[1.6] transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                  <dd className="col-start-1 row-start-2 self-start mt-3 max-w-[560px] text-base font-light text-ink-sub leading-6 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
                     {stat.description}
                   </dd>
                 </div>
@@ -880,16 +909,18 @@ function HomeComponent() {
         </div>
       </section>
 
+      <WhatItCosts />
+
       {/* ── Client work (tabbed) ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+      <section className={surfaces.page}>
+        <div className={sectionInner}>
           <div className="flex items-end justify-between gap-8 mb-14 flex-wrap">
             <div>
               <Reveal>
-                <Eyebrow className="mb-5">03 · Client work</Eyebrow>
+                <Eyebrow className="mb-5">04 · Client work</Eyebrow>
               </Reveal>
               <Reveal delay={80}>
-                <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
+                <h2 className={sectionTitle}>
                   Systems that earned their place.
                 </h2>
               </Reveal>
@@ -976,7 +1007,7 @@ function HomeComponent() {
                 </motion.h3>
                 <motion.p
                   variants={panelLine}
-                  className="text-ink-sub font-light leading-[1.65] mb-8 max-w-[400px]"
+                  className="text-ink-sub text-lg leading-[30px] mb-8 max-w-[460px]"
                 >
                   {activeCase.outcome}
                 </motion.p>
@@ -995,7 +1026,7 @@ function HomeComponent() {
                   <p className="font-serif text-[40px] leading-none text-gold-text">
                     {activeCase.statValue}
                   </p>
-                  <p className="mt-2.5 text-[13px] text-ink-sub max-w-[340px] transition-colors duration-500 group-hover:text-ink">
+                  <p className="mt-2.5 text-base leading-6 text-ink-sub max-w-[340px] transition-colors duration-500 group-hover:text-ink">
                     {activeCase.statDesc}
                   </p>
                 </motion.div>
@@ -1013,13 +1044,17 @@ function HomeComponent() {
             <Frame
               reveal
               scrambleCaption
-              caption={`Fig. 0${activeTab + 1} · ${activeCase.label}`}
+              caption={`Fig. 04 · ${activeCase.label}`}
             >
               {/* True crossfade: outgoing image fades while the incoming one
                   fades in over it, settling from a slight zoom so the swap
                   reads as a plate being placed. The wrapper owns the aspect
-                  ratio so the layout never jumps mid-swap. */}
-              <div className="relative aspect-[16/10]">
+                  ratio so the layout never jumps mid-swap. It is the widest
+                  screenshot's own (Scrollr, 1600x954): a 16:10 box cropped
+                  that one at the sides, cutting letters off its sidebar.
+                  The 16:10 shots lose a sliver at the bottom instead, which
+                  is page below the fold rather than a cut edge. */}
+              <div className="relative aspect-[1600/954]">
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={activeCase.slug}
@@ -1046,18 +1081,18 @@ function HomeComponent() {
       </section>
 
       {/* ── The premise ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+      <section className={surfaces.card}>
+        <div className={sectionInner}>
           <Reveal>
-            <Eyebrow className="mb-5">04 · The premise</Eyebrow>
+            <Eyebrow className="mb-5">05 · The premise</Eyebrow>
           </Reveal>
           <Reveal delay={80}>
-            <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05] max-w-[640px]">
+            <h2 className={`${sectionTitle} max-w-[640px]`}>
               Every diagnostic ends in one of three answers.
             </h2>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-6 text-[15px] font-light leading-[1.65] text-ink-sub max-w-[520px]">
+            <p className="mt-5 text-base leading-6 min-[768px]:text-lg min-[768px]:leading-[30px] text-ink-sub max-w-[600px]">
               {premise.intro}
             </p>
           </Reveal>
@@ -1089,9 +1124,7 @@ function HomeComponent() {
                   <h3 className="font-serif text-[32px] mt-4 mb-3">
                     {a.title}
                   </h3>
-                  <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
-                    {a.body}
-                  </p>
+                  <p className="text-base leading-6 text-ink-sub">{a.body}</p>
                 </TiltCard>
               </Reveal>
             ))}
@@ -1101,10 +1134,10 @@ function HomeComponent() {
 
       {/* ── How it works — numbered flow, deliberately lighter than the
           premise grid ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+      <section className={surfaces.page}>
+        <div className={sectionInner}>
           <Reveal>
-            <Eyebrow className="mb-10">05 · How it works</Eyebrow>
+            <Eyebrow className="mb-10">06 · How it works</Eyebrow>
           </Reveal>
           <ProcessAxis count={steps.length} active={activeStep} />
           <div
@@ -1148,7 +1181,7 @@ function HomeComponent() {
                       aria-hidden="true"
                       className="block h-px w-full max-w-[120px] bg-gold origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-x-100 motion-reduce:transition-none mb-3.5 -mt-1"
                     />
-                    <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
+                    <p className="text-base leading-6 text-ink-sub">
                       {step.description}
                     </p>
                     <p className="mt-5 text-xs tracking-[0.08em] uppercase text-ink-sub transition-colors duration-500 group-hover:text-gold-text">
@@ -1176,36 +1209,47 @@ function HomeComponent() {
         </div>
       </section>
 
-      {/* ── Who you'll work with. Text only: the founder is in the hero now,
-          and the full photograph is on /about. ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18 grid grid-cols-1 min-[1024px]:grid-cols-[5fr_7fr] gap-6 min-[1024px]:gap-18 items-end">
-          <div>
+      {/* ── Who you'll work with: both founders, with the photo from
+          /about ── */}
+      <section className={surfaces.card}>
+        <div
+          className={`${sectionInner} grid grid-cols-1 min-[1024px]:grid-cols-[minmax(0,500px)_minmax(0,1fr)] gap-[18px] min-[1024px]:gap-20 items-center`}
+        >
+          <Reveal>
+            <Frame reveal caption="Fig. 07 · The builders">
+              <img
+                src="/founder-photo.webp"
+                width={560}
+                height={536}
+                alt="Brandon Harris and Daniel Velez setting up a livestream at a wedding"
+                loading="lazy"
+                className="block w-full aspect-[560/536] object-cover transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+              />
+            </Frame>
+          </Reveal>
+          <div className="flex flex-col items-start gap-[18px] min-[1024px]:gap-6">
             <Reveal>
-              <Eyebrow className="mb-5">06 · Who you'll work with</Eyebrow>
+              <Eyebrow>07 · Who you'll work with</Eyebrow>
             </Reveal>
             <Reveal delay={80}>
-              <h2 className="font-serif text-[clamp(30px,4.2vw,52px)] leading-[1.05]">
+              <h2 className="font-serif text-[34px] leading-10 min-[768px]:text-[52px] min-[768px]:leading-[56px] text-ink-em text-balance">
                 No account managers.{' '}
                 <span className="italic text-gold-text">
                   Just the builders.
                 </span>
               </h2>
             </Reveal>
-          </div>
-          <div>
             <Reveal delay={160}>
-              <p className="text-ink-sub font-light leading-[1.65] mb-7 max-w-[560px]">
+              <p className="text-base leading-6 min-[768px]:text-lg min-[768px]:leading-[30px] text-ink-sub max-w-[600px]">
                 When you call RelentNet, you talk to the people who design,
                 build, host, and monitor your system, before the diagnostic and
                 long after launch.
               </p>
             </Reveal>
+            <Reveal delay={200} className="w-full">
+              <FounderRows />
+            </Reveal>
             <Reveal delay={240}>
-              {/* These had no hover state at all, not even a transition: two
-                  live links that looked exactly the same whether you were on
-                  them or not. Underline offset rather than a colour change
-                  alone, so the affordance does not depend on seeing gold. */}
               <p className="font-mono text-xs tracking-[0.1em] text-ink-muted">
                 <a
                   href={`tel:${siteConfig.contact.phoneFormatted.replace(/[^+\d]/g, '')}`}
@@ -1231,12 +1275,12 @@ function HomeComponent() {
       <HomeTestimonial />
 
       {/* ── Closing CTA ── */}
-      <section className="relative">
+      <section className={`relative ${surfaces.card}`}>
         <div
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_700px_500px_at_50%_100%,rgba(203,171,69,0.08),transparent_70%)]"
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_1200px_500px_at_50%_0%,rgba(203,171,69,0.1),transparent_70%)]"
         />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-32 text-center relative">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-12 xl:px-20 py-24 min-[768px]:py-32 text-center relative">
           <div className="mx-auto mb-9 w-[76px]">
             {/* Not wrapped in Reveal: the plates own their own entrance, and a
                 Reveal transform on the parent would ride on top of it. */}

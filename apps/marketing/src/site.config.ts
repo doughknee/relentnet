@@ -65,6 +65,21 @@ const pricing: {
   examples: [],
 }
 
+/** Founder details Brandon has not supplied yet. The homepage renders each
+ *  one only once it is set. */
+export interface FounderProfile {
+  /** A prior credential for the hero founder card, in one line. */
+  credential?: string
+  /** Full LinkedIn profile URL. */
+  linkedin?: string
+}
+
+/** Keyed by the names in `founders` (routes/about.tsx). */
+const founders: Record<'Brandon Harris' | 'Daniel Velez', FounderProfile> = {
+  'Brandon Harris': {},
+  'Daniel Velez': {},
+}
+
 export const siteConfig = {
   name: 'RelentNet',
   domain: 'https://relentnet.com',
@@ -92,6 +107,7 @@ export const siteConfig = {
     ogImage: '/og-default.png',
   },
   pricing,
+  founders,
   social: {
     // Add social links here if available
   },

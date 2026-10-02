@@ -1,6 +1,7 @@
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
 import { Reveal } from '@/components/Reveal'
+import { sectionInner, surfaces } from '@/components/SectionHead'
 import { caseStudies } from '@/data/caseStudies'
 
 const SLUG = 'cambridge-building-group'
@@ -26,36 +27,49 @@ export function HomeTestimonial() {
     <section
       aria-labelledby="home-testimonial-heading"
       data-testid="home-testimonial"
+      className={surfaces.page}
     >
-      <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-18">
+      <div className={sectionInner}>
         <Reveal>
-          <Eyebrow className="mb-10">07 · In their words</Eyebrow>
+          <Eyebrow className="mb-[22px] min-[768px]:mb-10">
+            08 · In their words
+          </Eyebrow>
           <h2 id="home-testimonial-heading" className="sr-only">
             In their words: Jason Hall, Cambridge Building Group
           </h2>
         </Reveal>
-        <Reveal delay={80} className="max-w-2xl">
-          <figure className="border-l-2 border-gold pl-6 md:pl-10">
-            <blockquote className="space-y-6 font-serif text-lg md:text-xl leading-relaxed text-ink">
-              {paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+        <Reveal delay={80}>
+          {/* One gold rule runs down the letter and, on phones, the
+              signature under it. Phones get the recommendation paragraph
+              alone, which ends on a full sentence. */}
+          <figure className="grid grid-cols-1 min-[1024px]:grid-cols-[minmax(0,800px)_minmax(0,1fr)] min-[1024px]:grid-rows-[auto_1fr] min-[1024px]:gap-x-20">
+            <blockquote className="min-[1024px]:row-span-2 space-y-6 border-l-2 border-gold pl-5 min-[768px]:pl-10 font-serif text-xl leading-[30px] min-[768px]:text-[22px] min-[768px]:leading-[34px] text-ink">
+              {paragraphs.map((paragraph, i) => (
+                <p
+                  key={paragraph}
+                  className={i === 0 ? 'hidden min-[768px]:block' : undefined}
+                >
+                  {paragraph}
+                </p>
               ))}
             </blockquote>
-            <figcaption className="mt-10 flex flex-col gap-1">
-              <span className="font-serif text-xl text-ink-em">
+            <figcaption className="flex flex-col items-start gap-1 border-l-2 border-gold pl-5 pt-4 min-[768px]:pl-10 min-[1024px]:border-0 min-[1024px]:pl-0 min-[1024px]:pt-1">
+              <span className="font-serif text-[26px] leading-[30px] text-ink-em">
                 {attribution.name}
               </span>
-              <span className="text-sm text-ink-muted">{attribution.role}</span>
-              <span className="text-sm text-ink-muted">
+              <span className="text-base leading-6 text-ink-sub">
+                {attribution.role}
+              </span>
+              <span className="text-base leading-6 text-ink-sub">
                 {attribution.company}
               </span>
             </figcaption>
+            <div className="mt-[22px] min-[1024px]:col-start-2 min-[1024px]:mt-6">
+              <CtaLink to={`/clients/${SLUG}`} variant="outline" arrow>
+                Read Jason&rsquo;s full letter
+              </CtaLink>
+            </div>
           </figure>
-          <div className="mt-10 pl-6 md:pl-10">
-            <CtaLink to={`/clients/${SLUG}`} variant="outline" arrow>
-              Read Jason&rsquo;s full letter
-            </CtaLink>
-          </div>
         </Reveal>
       </div>
     </section>
