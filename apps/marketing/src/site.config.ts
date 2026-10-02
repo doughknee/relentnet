@@ -88,6 +88,20 @@ const founders: Record<'Brandon Harris' | 'Daniel Velez', FounderProfile> = {
   'Daniel Velez': {},
 }
 
+export interface BookingConfig {
+  api: string
+  /** Unset means booking is off. */
+  handle?: string
+  page: string
+}
+
+const booking: BookingConfig = {
+  api: 'https://hq.relentnet.com/api/book',
+  handle: 'brandon-harris',
+  /** hq's own booking page, the fallback when the API cannot be reached. */
+  page: 'https://hq.relentnet.com/book/brandon-harris',
+}
+
 export const siteConfig = {
   name: 'RelentNet',
   domain: 'https://relentnet.com',
@@ -95,9 +109,9 @@ export const siteConfig = {
     email: 'inquiries@relentnet.com',
     phone: '858-859-1851',
     phoneFormatted: '+1 (858) 859-1851',
-    /** Cal.com or Calendly link for the 20-minute call. Brandon fills this in;
-     *  while it is empty the /inquire booking button is not rendered. */
-    bookingUrl: '',
+    /** The hq booking API (docs/booking-api.md). Unset `handle` to switch
+     *  the on-page booking off; /inquire then shows the contact card. */
+    booking,
     hours: '9am - 5pm CST (Mon-Fri)',
   },
   regions: ['Tennessee', 'Louisiana', 'Georgia', 'Florida'],

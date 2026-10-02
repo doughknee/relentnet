@@ -19,6 +19,7 @@ export const primaryNavItems = [
 export const utilityCta = {
   label: 'Book a call',
   to: '/inquire',
+  hash: 'book',
 } as const
 
 /** 2px gold bar at the nav's bottom edge tracking scroll progress. */
@@ -120,6 +121,7 @@ export function Header() {
           </div>
           <Link
             to={utilityCta.to}
+            hash={utilityCta.hash}
             className="chromatic-hover bg-gold text-gold-ink px-2.5 py-2 min-[900px]:px-[22px] min-[900px]:py-[11px] text-center leading-[1.2] min-[900px]:leading-normal min-[900px]:whitespace-nowrap font-mono text-[10px] min-[900px]:text-[11px] tracking-[0.08em] min-[900px]:tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:bg-ink-em hover:text-page"
           >
             {utilityCta.label}

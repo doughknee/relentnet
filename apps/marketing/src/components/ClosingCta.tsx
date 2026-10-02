@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { CtaLink } from '@/components/CtaLink'
 import { Reveal } from '@/components/Reveal'
@@ -11,9 +12,9 @@ interface ClosingCtaProps {
 }
 
 /** Tinted closing band: heading, the one button, the phone line, and a
- *  booking line that exists only once `contact.bookingUrl` is set. */
+ *  booking line that exists only while `contact.booking.handle` is set. */
 export function ClosingCta({ children, cta }: ClosingCtaProps) {
-  const { phone, bookingUrl } = siteConfig.contact
+  const { phone, booking } = siteConfig.contact
   return (
     <section className={`relative ${surfaces.tint}`}>
       <div
@@ -34,16 +35,15 @@ export function ClosingCta({ children, cta }: ClosingCtaProps) {
               {cta}
             </CtaLink>
             <p className="text-base text-ink-muted">
-              {bookingUrl && (
+              {booking.handle && (
                 <>
-                  <a
-                    href={bookingUrl}
-                    target="_blank"
-                    rel="noopener"
+                  <Link
+                    to="/inquire"
+                    hash="book"
                     className="text-ink-sub underline underline-offset-4 hover:text-gold-text"
                   >
                     Book a 20-minute call
-                  </a>
+                  </Link>
                   {'. '}
                 </>
               )}

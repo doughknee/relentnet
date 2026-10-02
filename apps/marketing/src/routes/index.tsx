@@ -656,7 +656,7 @@ function HomeComponent() {
                   we build only what earns its place, and we run it for you.
                 </p>
                 <div className="order-3 flex flex-col gap-2.5 min-[480px]:flex-row min-[480px]:flex-wrap min-[480px]:gap-3.5 [&>a]:justify-center">
-                  <CtaLink to="/inquire" arrow>
+                  <CtaLink to="/inquire" hash="book" arrow>
                     Book a call
                   </CtaLink>
                   <CtaLink to="/clients" variant="outline">
