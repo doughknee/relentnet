@@ -1,13 +1,6 @@
+import { owns } from '@/data/founders'
 import { siteConfig } from '@/site.config'
 import { FOUNDED_MONTH, FOUNDED_YEAR, founders } from '@/routes/about'
-
-type FounderName = (typeof founders)[number]['name']
-
-/** Each founder's half of the work, from /about's "How the work splits". */
-export const owns: Record<FounderName, string> = {
-  'Brandon Harris': 'Owns what gets built: the vision, the code, the design.',
-  'Daniel Velez': 'Owns bringing the work in and keeping it running.',
-}
 
 const monoLabel =
   'font-mono text-[11px] tracking-[0.26em] uppercase leading-4 font-medium'

@@ -10,6 +10,7 @@ import {
   cases,
   heroProof,
   heroStat,
+  ledger,
   marqueeItems,
   nextTabIndex,
   premise,
@@ -21,6 +22,7 @@ import { testimonialExcerpt } from '@/components/HomeTestimonial'
 import { makeCountEase } from '@/lib/countEase'
 import { siteConfig } from '@/site.config'
 import { caseStudies } from '@/data/caseStudies'
+import { formatProof, proofStats } from '@/data/proof'
 
 vi.mock('@tanstack/react-router', async () => ({
   ...(await vi.importActual('@tanstack/react-router')),
@@ -134,6 +136,18 @@ describe('homepage content (v4)', () => {
     expect(nextTabIndex('Tab', 1, n)).toBeNull()
   })
 
+  it('reads the ledger figures from data/proof.ts, not its own copies', () => {
+    // One source for the three numbers: the homepage ledger is data/proof.ts.
+    expect(heroStat).toBe(proofStats[0])
+    expect(stats).toEqual(proofStats.slice(1))
+    expect(ledger).toEqual(proofStats)
+    expect(proofStats.map(formatProof)).toEqual([
+      '10,000+',
+      '99.99%',
+      'Since 2022',
+    ])
+  })
+
   it('pins the company-level stat claims', () => {
     expect(`${heroStat.value}${heroStat.suffix}`).toBe('10000+')
     // Assembled from all three parts: tenure carries its "Since " as a prefix
@@ -209,7 +223,7 @@ describe('homepage content (v4)', () => {
 
   it('renders uptime to two decimals so 99.99 never rounds to 100', () => {
     const uptime = stats.find((s) => s.label.startsWith('Uptime'))
-    if (!uptime || !('format' in uptime)) throw new Error('uptime stat missing')
+    if (!uptime?.format) throw new Error('uptime stat missing')
     expect(uptime.format.maximumFractionDigits).toBe(2)
     expect(
       new Intl.NumberFormat('en-US', uptime.format).format(uptime.value),

@@ -72,11 +72,19 @@ export interface FounderProfile {
   credential?: string
   /** Full LinkedIn profile URL. */
   linkedin?: string
+  /** Solo portrait for /about, at 2x of its 520x650 frame (1040x1300). Unset
+   *  means the founder's block renders without a portrait. */
+  portrait?: string
+  /** The same portrait at 1x (520x650), for `srcset`. */
+  portrait1x?: string
 }
 
 /** Keyed by the names in `founders` (routes/about.tsx). */
 const founders: Record<'Brandon Harris' | 'Daniel Velez', FounderProfile> = {
-  'Brandon Harris': {},
+  'Brandon Harris': {
+    portrait: '/brandon-harris-about.webp',
+    portrait1x: '/brandon-harris-about-520.webp',
+  },
   'Daniel Velez': {},
 }
 

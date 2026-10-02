@@ -14,6 +14,7 @@ import {
   sectionInner,
   surfaces,
 } from '@/components/SectionHead'
+import { owns } from '@/data/founders'
 import { seo } from '@/lib/seo'
 import { siteConfig } from '@/site.config'
 
@@ -162,11 +163,6 @@ const timeline = [
 /** A sentence from Jason Hall's Cambridge letter, verbatim. */
 export const processProofQuote =
   'The design process was practically painless for our team.'
-
-const owns: Record<string, string> = {
-  'Brandon Harris': 'Owns what gets built: the vision, the code, the design.',
-  'Daniel Velez': 'Owns bringing the work in and keeping it running.',
-}
 
 function PhaseTimeline() {
   return (
