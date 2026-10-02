@@ -15,6 +15,7 @@ import {
   sectionInner,
   surfaces,
 } from '@/components/SectionHead'
+import { diagnosticFit } from '@/data/fit'
 import { seo } from '@/lib/seo'
 import { siteConfig } from '@/site.config'
 
@@ -82,19 +83,6 @@ const outcomes = [
       'Clarify the process, change a tool, or wait until the workflow is sharper. We’ll say so.',
   },
 ] as const
-
-export const diagnosticFit = {
-  goodFit: [
-    'Owner-led businesses',
-    'Teams with repeated manual admin',
-    'Companies deciding whether custom software is worth building',
-  ],
-  notFit: [
-    'Commodity brochure sites',
-    'One-off landing pages',
-    'Teams that want software before defining the workflow',
-  ],
-} as const
 
 /** A sentence from Jason Hall's Cambridge letter, verbatim. The proof band
  *  checks the letter still contains it. */

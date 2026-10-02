@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest'
 
 import {
   diagnosticDeliverables,
-  diagnosticFit,
   diagnosticProofQuote,
   diagnosticReviewAreas,
 } from './diagnostic'
 import { caseStudies } from '@/data/caseStudies'
+import { diagnosticFit } from '@/data/fit'
 
 describe('diagnostic route content (v4)', () => {
   it('promises the four designed deliverables', () => {
