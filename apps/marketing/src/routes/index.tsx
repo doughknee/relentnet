@@ -28,6 +28,7 @@ import { FounderRows, HeroFounder } from '@/components/Founders'
 import { HomeTestimonial } from '@/components/HomeTestimonial'
 import { WhatItCosts } from '@/components/PriceTier'
 import { Reveal } from '@/components/Reveal'
+import { proofStats } from '@/data/proof'
 import { sectionInner, surfaces } from '@/components/SectionHead'
 import { TiltCard } from '@/components/TiltCard'
 import { siteConfig } from '@/site.config'
@@ -193,42 +194,16 @@ export const premise = {
   ],
 } as const
 
-/** The figure the section leads on: the one that measures delivered value. */
-export const heroStat = {
-  label: 'Hours of admin automated',
-  value: 10000,
-  suffix: '+',
-  description:
-    'Invoice filing, follow-ups, and handoffs: manual work now handled by systems we run.',
-} as const
-
 /**
- * Supporting figures, read as a spec panel rather than as rivals to the hero
- * number. Tenure is stated as a date rather than as a duration: "4" next to
- * "10,000+" invites a comparison it can only lose, while a year reads as
- * provenance. It still counts, because a row that arrives finished while the
- * other three are climbing looks like it failed to start.
+ * The ledger's three figures live in `data/proof.ts`, shared with /clients.
+ * The first leads the section: the one that measures delivered value. The
+ * others read as a spec panel rather than as rivals to it. Tenure is stated
+ * as a date rather than a duration ("4" next to "10,000+" invites a
+ * comparison it can only lose, while a year reads as provenance), and it
+ * still counts, because a row that arrives finished while the others are
+ * climbing looks like it failed to start.
  */
-export const stats = [
-  {
-    label: 'Uptime across hosted systems',
-    value: 99.99,
-    suffix: '%',
-    // Two digits, or 99.99 rounds to a "100.0%" that claims perfect uptime.
-    format: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-    description:
-      'We host, monitor, and answer for everything we build, around the clock.',
-  },
-  {
-    label: 'In business',
-    prefix: 'Since ',
-    value: 2022,
-    // A year, so no thousands separator. Decimals pinned off for the same
-    // reason as everywhere else: the climb feeds raw floats.
-    format: { useGrouping: false, maximumFractionDigits: 0 },
-    description: 'Building, hosting, and stewarding for owner-led businesses.',
-  },
-] as const
+export const [heroStat, ...stats] = proofStats
 
 /** The section reads as one ledger, with the hero simply the first row. */
 export const ledger = [heroStat, ...stats] as const
@@ -347,7 +322,7 @@ function StatValue({
   value: number
   prefix?: string
   suffix?: string
-  format?: React.ComponentProps<typeof AnimateNumber>['format']
+  format?: Intl.NumberFormatOptions
   /** Seconds for the whole climb. Scales the closing reel with it. */
   duration?: number
 }) {
@@ -431,7 +406,9 @@ function StatValue({
       {prefix ? <span className="whitespace-pre">{prefix}</span> : null}
       <AnimateNumber
         locales="en-US"
-        format={numberFormat}
+        format={
+          numberFormat as React.ComponentProps<typeof AnimateNumber>['format']
+        }
         transition={closing ? finalReel : REEL_TRANSITION}
         className="tabular-nums"
       >
@@ -887,9 +864,9 @@ function HomeComponent() {
                   >
                     <StatValue
                       value={stat.value}
-                      prefix={'prefix' in stat ? stat.prefix : undefined}
-                      suffix={'suffix' in stat ? stat.suffix : undefined}
-                      format={'format' in stat ? stat.format : undefined}
+                      prefix={stat.prefix}
+                      suffix={stat.suffix}
+                      format={stat.format}
                       duration={
                         i === 0 ? COUNT_DURATION : SUPPORTING_COUNT_DURATION
                       }
