@@ -2,8 +2,11 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { CtaLink } from '@/components/CtaLink'
 import { Eyebrow } from '@/components/Eyebrow'
-import { Frame } from '@/components/Frame'
+import { ProofStat } from '@/components/ProofStat'
 import { Reveal } from '@/components/Reveal'
+import { leadClass, sectionInner, surfaces } from '@/components/SectionHead'
+import { CaseStudyCard } from '@/components/clients/CaseStudyCard'
+import { proofStats } from '@/data/proof'
 import { seo } from '@/lib/seo'
 
 export const Route = createFileRoute('/clients/')({
@@ -29,6 +32,7 @@ export const studies = [
     statValue: 'Email → QBO',
     statDesc: 'Hands-off invoice pipeline across hundreds of active projects.',
     image: '/case-studies/cambridge-building-group/hero.webp',
+    imageHeight: 1000,
     imageAlt: 'Cambridge Building Group site',
   },
   {
@@ -43,6 +47,7 @@ export const studies = [
     statDesc:
       'One Chrome extension became native apps on macOS, Windows, and Linux.',
     image: '/case-studies/scrollr/hero-sports-dark.webp',
+    imageHeight: 954,
     imageAlt: 'Scrollr desktop ticker',
   },
   {
@@ -56,6 +61,7 @@ export const studies = [
     statValue: '170+',
     statDesc: 'API endpoints behind brackets, scoring, and broadcast graphics.',
     image: '/case-studies/courtcommand/hero.webp',
+    imageHeight: 1000,
     imageAlt: 'CourtCommand platform',
   },
   {
@@ -70,6 +76,7 @@ export const studies = [
     statDesc:
       'MLS-synced search across Tampa Bay, from downtown St. Pete to the Gulf beaches.',
     image: '/case-studies/vm-homes/hero.webp',
+    imageHeight: 1000,
     imageAlt: 'VM Homes property search',
   },
 ] as const
@@ -110,6 +117,77 @@ export const solutions = [
   },
 ] as const
 
+const diagnosticLine =
+  '$2,000 diagnostic, credited toward the build. Transparent pricing after. No mystery retainers.'
+
+/** One study: card and figure, image side alternating. Odd rows sit on the
+ *  card surface, even rows on the page, as in the frames. */
+function StudyRow({
+  study,
+  i,
+}: {
+  study: (typeof studies)[number]
+  i: number
+}) {
+  const imageFirst = i % 2 === 1
+  return (
+    <section
+      data-testid="study-row"
+      className={i % 2 === 1 ? surfaces.card : surfaces.page}
+    >
+      <div
+        className={`${sectionInner} grid grid-cols-1 gap-10 min-[1024px]:gap-[72px] items-center ${
+          imageFirst
+            ? 'min-[1024px]:grid-cols-[minmax(0,1fr)_520px]'
+            : 'min-[1024px]:grid-cols-[520px_minmax(0,1fr)]'
+        }`}
+      >
+        {/* On mobile the figure leads, as in the frames. */}
+        <Reveal
+          delay={150}
+          className={`order-first ${imageFirst ? '' : 'min-[1024px]:order-last'}`}
+        >
+          <Link
+            to="/clients/$slug"
+            params={{ slug: study.slug }}
+            aria-label={`Read the ${study.name} case study`}
+            className="block"
+          >
+            <figure className="group flex flex-col gap-3">
+              <div className="overflow-hidden border border-line">
+                <img
+                  src={study.image}
+                  width={1600}
+                  height={study.imageHeight}
+                  alt={study.imageAlt}
+                  loading="lazy"
+                  className="w-full h-auto block transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+                />
+              </div>
+              <figcaption className="font-mono text-xs tracking-[0.22em] uppercase font-medium leading-4 text-ink-muted">
+                Fig. 0{i + 1} · {study.name}
+              </figcaption>
+            </figure>
+          </Link>
+        </Reveal>
+        <Reveal>
+          <CaseStudyCard
+            slug={study.slug}
+            index={i}
+            industry={study.industry}
+            headline={study.headline}
+            outcome={study.outcome}
+            statValue={study.statValue}
+            statDesc={study.statDesc}
+            name={study.name}
+            systemType={study.systemType}
+          />
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
 function ClientsIndex() {
   return (
     <div className="relative overflow-x-clip">
@@ -120,8 +198,8 @@ function ClientsIndex() {
       />
 
       {/* ── Hero ── */}
-      <section className="relative pt-[120px] pb-20 px-5 md:px-12">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="relative pt-[120px] pb-[72px] md:pb-[88px] px-5 md:px-12 xl:px-20">
+        <div className="max-w-[1280px] mx-auto">
           <Eyebrow className="animate-fade-in-up mb-8">Client work</Eyebrow>
           <h1
             className="animate-fade-in-up font-serif text-[clamp(38px,7.5vw,92px)] leading-none tracking-[-0.01em] max-w-[1000px] text-balance"
@@ -131,7 +209,7 @@ function ClientsIndex() {
             <span className="italic text-gold-text">earned their place.</span>
           </h1>
           <p
-            className="animate-fade-in-up mt-10 max-w-[520px] text-ink-sub text-[17px] font-light leading-[1.6]"
+            className={`animate-fade-in-up mt-8 max-w-[680px] ${leadClass}`}
             style={{ animationDelay: '180ms' }}
           >
             Construction, consumer software, sports tech, real estate. Every
@@ -141,81 +219,64 @@ function ClientsIndex() {
         </div>
       </section>
 
-      {/* ── Case-study rows (image side alternates) ── */}
-      {studies.map((s, i) => (
-        <section key={s.slug}>
-          <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-[90px]">
-            <div
-              className={`grid grid-cols-1 gap-12 min-[1024px]:gap-18 items-center ${
-                i % 2 === 1
-                  ? 'min-[1024px]:grid-cols-[7fr_5fr]'
-                  : 'min-[1024px]:grid-cols-[5fr_7fr]'
-              }`}
-            >
-              <div className={i % 2 === 1 ? 'min-[1024px]:order-last' : ''}>
-                <Reveal>
-                  <p className="font-mono text-[11px] tracking-[0.26em] uppercase text-ink-faint font-medium mb-[18px]">
-                    0{i + 1} · {s.industry}
-                  </p>
-                </Reveal>
-                <Reveal delay={80}>
-                  <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05] mb-5">
-                    {s.headline}
-                  </h2>
-                </Reveal>
-                <Reveal delay={160}>
-                  <p className="text-ink-sub font-light leading-[1.65] mb-8 max-w-[400px]">
-                    {s.outcome}
-                  </p>
-                </Reveal>
-                <Reveal delay={240}>
-                  <div className="border-l border-line pl-6 mb-8">
-                    <p className="font-serif text-[40px] leading-none text-gold-text">
-                      {s.statValue}
-                    </p>
-                    <p className="mt-2.5 text-[13px] text-ink-muted max-w-[340px]">
-                      {s.statDesc}
-                    </p>
-                  </div>
-                </Reveal>
-                <Reveal delay={320}>
-                  <p className="text-xs tracking-[0.06em] text-ink-faint">
-                    {s.name} · {s.systemType}
-                  </p>
-                </Reveal>
-              </div>
-              <Reveal delay={150}>
-                <Link
-                  to="/clients/$slug"
-                  params={{ slug: s.slug }}
-                  aria-label={`Read the ${s.name} case study`}
-                >
-                  {/* Middot, matching every other Fig. caption on the site.
-                      This one was the odd caption out. */}
-                  <Frame caption={`Fig. 0${i + 1} · ${s.name}`}>
-                    <div
-                      role="img"
-                      aria-label={s.imageAlt}
-                      className="w-full aspect-[16/10] bg-cover bg-top transition-transform duration-800 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
-                      style={{ backgroundImage: `url('${s.image}')` }}
-                    />
-                  </Frame>
-                </Link>
-              </Reveal>
+      {/* ── Proof band ── */}
+      <section data-testid="proof-band" className={surfaces.card}>
+        <div className="max-w-[1440px] mx-auto px-5 md:px-12 xl:px-20 py-12 md:py-16 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {proofStats.map((stat, i) => (
+            <Reveal key={stat.label} delay={i * 90}>
+              <ProofStat stat={stat} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Studies 01 and 02 ── */}
+      {studies.slice(0, 2).map((s, i) => (
+        <StudyRow key={s.slug} study={s} i={i} />
+      ))}
+
+      {/* ── Mid-page CTA ── */}
+      <section data-testid="mid-cta" className={surfaces.tint}>
+        <div
+          className={`${sectionInner} !py-[56px] md:!py-[72px] flex flex-col min-[1024px]:flex-row min-[1024px]:items-center gap-8 min-[1024px]:gap-12`}
+        >
+          <Reveal className="flex-1 min-w-0 flex flex-col gap-3.5">
+            <h2 className="font-serif text-[34px] leading-10 md:text-[40px] md:leading-[46px] text-ink-em text-balance">
+              Every engagement began with a diagnostic.
+            </h2>
+            <p className="text-lg leading-[30px] text-ink-sub">
+              {diagnosticLine}
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="flex flex-wrap gap-3.5">
+              <CtaLink to="/inquire" arrow>
+                Book a call
+              </CtaLink>
+              <CtaLink to="/process" variant="outline">
+                How we work
+              </CtaLink>
             </div>
-          </div>
-        </section>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Studies 03 and 04 ── */}
+      {studies.slice(2).map((s, i) => (
+        <StudyRow key={s.slug} study={s} i={i + 2} />
       ))}
 
       {/* ── What we take on ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25 grid grid-cols-1 min-[1024px]:grid-cols-[4fr_8fr] gap-12 min-[1024px]:gap-18 items-start">
+      <section className={surfaces.page}>
+        <div
+          className={`${sectionInner} grid grid-cols-1 min-[1024px]:grid-cols-[400px_minmax(0,1fr)] gap-12 min-[1024px]:gap-[72px] items-start`}
+        >
           <div>
             <Reveal>
               <Eyebrow className="mb-5">What we take on</Eyebrow>
             </Reveal>
             <Reveal delay={100}>
-              <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05]">
+              <h2 className="font-serif text-[34px] leading-10 md:text-[40px] md:leading-[46px] text-ink-em">
                 The work behind the stories.
               </h2>
             </Reveal>
@@ -225,12 +286,12 @@ function ClientsIndex() {
               <Reveal
                 key={sol.label}
                 delay={100 + i * 60}
-                className="border-b border-line-faint py-5 transition-colors duration-300 hover:border-gold/45"
+                className="border-b border-line py-5 transition-colors duration-300 hover:border-gold/45"
               >
-                <p className="font-serif text-[22px] text-ink-em">
+                <p className="font-serif text-[26px] leading-8 text-ink-em">
                   {sol.label}
                 </p>
-                <p className="mt-1.5 text-[13px] font-light text-ink-muted leading-[1.55]">
+                <p className="mt-1.5 text-[15px] leading-6 text-ink-muted">
                   {sol.blurb}
                 </p>
               </Reveal>
@@ -240,20 +301,22 @@ function ClientsIndex() {
       </section>
 
       {/* ── Closing CTA ── */}
-      <section className="relative">
+      <section className={`relative ${surfaces.tint}`}>
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_700px_500px_at_50%_100%,rgba(203,171,69,0.08),transparent_70%)]"
         />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-30 text-center relative">
+        <div
+          className={`${sectionInner} relative flex flex-col items-center gap-10 text-center`}
+        >
           <Reveal>
-            <h2 className="font-serif text-[clamp(32px,5.6vw,68px)] leading-[1.05] text-balance">
+            <h2 className="font-serif text-[clamp(34px,5.6vw,56px)] leading-[1.07] text-balance">
               Your operation could be{' '}
               <span className="italic text-gold-text">the fifth story.</span>
             </h2>
           </Reveal>
           <Reveal delay={150}>
-            <div className="mt-11 flex flex-wrap justify-center gap-3.5">
+            <div className="flex flex-wrap justify-center gap-3.5">
               <CtaLink to="/inquire" arrow>
                 Book a Diagnostic
               </CtaLink>
@@ -263,10 +326,7 @@ function ClientsIndex() {
             </div>
           </Reveal>
           <Reveal delay={250}>
-            <p className="mt-8 text-[13px] text-ink-muted">
-              $2,000 diagnostic, credited toward the build. Transparent pricing
-              after. No mystery retainers.
-            </p>
+            <p className="text-[15px] text-ink-muted">{diagnosticLine}</p>
           </Reveal>
         </div>
       </section>
