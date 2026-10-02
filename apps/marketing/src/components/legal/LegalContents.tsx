@@ -296,7 +296,46 @@ export const SOWContent = () => (
     </Section>
 
     <Section>
-      <H2>6. Termination</H2>
+      <H2>6. Workflow Diagnostic and Refund</H2>
+      <P>
+        <Strong>6.1 Scope and fee.</Strong> A Workflow Diagnostic is a fixed-fee
+        engagement of two thousand U.S. dollars ($2,000) (the “Diagnostic Fee”).
+        Relentnet delivers a written workflow map, friction summary, priority
+        list, and build recommendation (together, the “Map”).
+      </P>
+      <P>
+        <Strong>6.2 Credit toward a build.</Strong> If Client accepts a
+        Statement of Work, quote, or invoice for a build within sixty (60) days
+        after Relentnet delivers the Map, the Diagnostic Fee is credited in full
+        toward that build.
+      </P>
+      <P>
+        <Strong>6.3 Refund.</Strong> If Client is not satisfied with the
+        Workflow Diagnostic, Client may request a refund of the Diagnostic Fee
+        by written notice, which may be sent by email to
+        inquiries@relentnet.com, received within fourteen (14) days after
+        Relentnet delivers the Map. Client does not need to give a reason.
+        Relentnet will refund the Diagnostic Fee in full within ten (10)
+        business days after receiving the request.
+      </P>
+      <P>
+        <Strong>6.4 Limits.</Strong> The refund in Section 6.3: (a) applies only
+        to the Diagnostic Fee and not to any other fees, services, or
+        deliverables; (b) is available once per business, including its
+        affiliates and successors; (c) is not available after the Diagnostic Fee
+        has been credited toward a build under Section 6.2; and (d) is Client’s
+        sole remedy for dissatisfaction with the Workflow Diagnostic.
+      </P>
+      <P>
+        <Strong>6.5 The Map after a refund.</Strong> Client may keep and use the
+        Map for its internal business purposes after a refund. All other
+        intellectual property terms of the Master Services Agreement continue to
+        apply.
+      </P>
+    </Section>
+
+    <Section>
+      <H2>7. Termination</H2>
       <P>Relentnet may terminate this SOW at any time.</P>
       <P>
         Client may terminate with{' '}
@@ -310,7 +349,7 @@ export const SOWContent = () => (
     </Section>
 
     <Section>
-      <H2>7. Acceptance</H2>
+      <H2>8. Acceptance</H2>
       <P>Payment of any invoice constitutes acceptance of this SOW.</P>
       <P>
         Client acknowledges that it has had the opportunity to review this SOW
