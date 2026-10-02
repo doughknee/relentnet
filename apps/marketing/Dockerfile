@@ -36,5 +36,6 @@ COPY apps/marketing/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/apps/marketing/dist/client /usr/share/nginx/html
 
 EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+# Traefik routes only to healthy containers, so the first check must come quickly after start.
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
   CMD wget -qO- http://127.0.0.1/healthz >/dev/null || exit 1
