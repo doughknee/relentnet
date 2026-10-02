@@ -3,8 +3,10 @@ import { describe, expect, it } from 'vitest'
 import {
   diagnosticDeliverables,
   diagnosticFit,
+  diagnosticProofQuote,
   diagnosticReviewAreas,
 } from './diagnostic'
+import { caseStudies } from '@/data/caseStudies'
 
 describe('diagnostic route content (v4)', () => {
   it('promises the four designed deliverables', () => {
@@ -21,5 +23,14 @@ describe('diagnostic route content (v4)', () => {
     expect(diagnosticReviewAreas).toContain('Manual handoffs')
     expect(diagnosticFit.goodFit).toContain('Owner-led businesses')
     expect(diagnosticFit.notFit).toContain('Commodity brochure sites')
+  })
+
+  it('quotes Jason Hall verbatim from his letter', () => {
+    const letter = caseStudies.find(
+      (s) => s.slug === 'cambridge-building-group',
+    )?.testimonial
+    expect(
+      letter?.paragraphs.some((p) => p.includes(diagnosticProofQuote)),
+    ).toBe(true)
   })
 })

@@ -1,9 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { ClientProofBand } from '@/components/ClientProofBand'
+import { ClosingCta } from '@/components/ClosingCta'
 import { CtaLink } from '@/components/CtaLink'
 import { EngagementTerms } from '@/components/EngagementTerms'
 import { Eyebrow } from '@/components/Eyebrow'
+import { FitLists } from '@/components/FitLists'
+import { GuaranteeBand, GuaranteeChip } from '@/components/GuaranteeBand'
+import { PriceExamples } from '@/components/PriceExamples'
 import { Reveal } from '@/components/Reveal'
+import {
+  SectionHead,
+  leadClass,
+  sectionInner,
+  surfaces,
+} from '@/components/SectionHead'
 import { seo } from '@/lib/seo'
 import { siteConfig } from '@/site.config'
 
@@ -85,7 +96,20 @@ export const diagnosticFit = {
   ],
 } as const
 
+/** A sentence from Jason Hall's Cambridge letter, verbatim. The proof band
+ *  checks the letter still contains it. */
+export const diagnosticProofQuote =
+  'Our initial request was, at best, vague regarding our ultimate expectations for functionality.'
+
 function Diagnostic() {
+  const { price, guarantee } = siteConfig.pricing.diagnostic
+  const hasExamples = siteConfig.pricing.examples.length > 0
+  const proofTicks = [
+    `${price}, fixed scope`,
+    'Credited to the build within 60 days',
+    ...(guarantee ? [guarantee.window] : []),
+  ]
+
   return (
     <div className="relative overflow-x-clip">
       {/* Radial gold glow over the top of the page */}
@@ -95,30 +119,30 @@ function Diagnostic() {
       />
 
       {/* ── Hero + "You leave with" aside ── */}
-      <section className="relative pt-[120px] pb-[90px] px-5 md:px-12">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 min-[1024px]:grid-cols-[7fr_5fr] gap-12 min-[1024px]:gap-20 items-center">
+      <section className="relative pt-[112px] pb-[72px] md:pb-[104px] px-5 md:px-12 xl:px-20">
+        <div className="max-w-[1280px] mx-auto grid grid-cols-1 min-[1024px]:grid-cols-[minmax(0,1fr)_460px] gap-12 min-[1024px]:gap-20 items-center">
           <div>
             <Eyebrow className="animate-fade-in-up mb-8">
               The Workflow Diagnostic
             </Eyebrow>
             <h1
-              className="animate-fade-in-up font-serif text-[clamp(38px,7.2vw,88px)] leading-none tracking-[-0.01em] text-balance"
+              className="animate-fade-in-up font-serif text-[clamp(40px,7vw,84px)] leading-[1.03] tracking-[-0.01em] text-balance"
               style={{ animationDelay: '80ms' }}
             >
               Map the workflow.{' '}
               <span className="italic text-gold-text">Then decide.</span>
             </h1>
             <p
-              className="animate-fade-in-up mt-9 max-w-[480px] text-ink-sub text-[17px] font-light leading-[1.6]"
+              className={`animate-fade-in-up mt-8 ${leadClass}`}
               style={{ animationDelay: '180ms' }}
             >
-              A {siteConfig.pricing.diagnostic.price} first engagement for
-              owner-led teams, credited toward the build if you sign within 60
-              days. We map how work actually moves, find the root friction, and
-              hand you a clear answer: build, connect, or don't.
+              A {price} first engagement for owner-led teams, credited toward
+              the build if you sign within 60 days. We map how work actually
+              moves, find the root friction, and hand you a clear answer: build,
+              connect, or don't.
             </p>
             <div
-              className="animate-fade-in-up mt-11 flex flex-wrap gap-3.5"
+              className="animate-fade-in-up mt-10 flex flex-wrap gap-3.5"
               style={{ animationDelay: '280ms' }}
             >
               <CtaLink to="/inquire" arrow>
@@ -128,127 +152,133 @@ function Diagnostic() {
                 See the process
               </CtaLink>
             </div>
+            <ul
+              className="animate-fade-in-up mt-8 flex flex-wrap gap-x-7 gap-y-2"
+              style={{ animationDelay: '340ms' }}
+            >
+              {proofTicks.map((tick) => (
+                <li
+                  key={tick}
+                  className="flex items-center gap-2.5 text-base text-ink-sub"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 bg-gold"
+                  />
+                  {tick}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <aside
             className="animate-fade-in-up border border-line bg-card p-7 min-[768px]:p-10"
             style={{ animationDelay: '380ms' }}
           >
-            <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint mb-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-ink-muted mb-5">
               You leave with
             </p>
             <div className="flex flex-col">
               {diagnosticDeliverables.map((label, i) => (
                 <div
                   key={label}
-                  className="flex items-baseline gap-[18px] border-b border-line-faint py-4"
+                  className="flex items-baseline gap-[18px] border-b border-line py-4"
                 >
-                  <span className="font-serif italic text-[15px] text-gold-text">
+                  <span className="w-7 font-serif italic text-[17px] text-gold-text">
                     {romans[i]}
                   </span>
-                  <span className="font-serif text-[22px] text-ink-em">
+                  <span className="font-serif text-[26px] leading-[30px] text-ink-em">
                     {label}
                   </span>
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-xs text-ink-muted leading-[1.6]">
+            <p className="mt-5 text-base leading-6 text-ink-muted">
               Fixed price, fixed scope, and you keep everything we map.
             </p>
+            <GuaranteeChip />
           </aside>
         </div>
       </section>
 
-      {/* ── Why start here ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25 grid grid-cols-1 min-[1024px]:grid-cols-[4fr_8fr] gap-12 min-[1024px]:gap-18 items-start">
+      <GuaranteeBand />
+
+      <ClientProofBand
+        surface="card"
+        eyebrow="In a client's words"
+        quote={diagnosticProofQuote}
+        support="Vague is a normal place to start. The Diagnostic turns it into a map before anyone writes code."
+      />
+
+      {/* ── Why start here + what we review ── */}
+      <section className={surfaces.page}>
+        <div className={`${sectionInner} flex flex-col gap-14`}>
+          <SectionHead
+            eyebrow="Why start here"
+            lead="Most software conversations start with a feature list. We start with the business motion: what triggers work, who owns each step, where information moves, and where the team loses visibility. That's how the build gets protected from the wrong assumptions."
+          >
+            Features lie.{' '}
+            <span className="italic text-ink-muted">Workflows don't.</span>
+          </SectionHead>
           <div>
             <Reveal>
-              <Eyebrow className="mb-5">Why start here</Eyebrow>
+              <Eyebrow className="mb-8">What we review</Eyebrow>
             </Reveal>
-            <Reveal delay={100}>
-              <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05]">
-                Features lie.{' '}
-                <span className="text-ghost">Workflows don't.</span>
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={200}>
-            <p className="text-ink-sub text-lg font-light leading-[1.7]">
-              Most software conversations start with a feature list. We start
-              with the business motion: what triggers work, who owns each step,
-              where information moves, and where the team loses visibility.
-              That's how the build gets protected from the wrong assumptions.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── What we review ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25">
-          <Reveal>
-            <Eyebrow className="mb-16">What we review</Eyebrow>
-          </Reveal>
-          <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-px p-0.5 bg-line">
-            {reviewCards.map((card, i) => (
-              <Reveal
-                key={card.title}
-                delay={i * 150}
-                className="bg-page pt-11 px-7 min-[768px]:px-10 pb-12"
-              >
-                <span className="font-serif italic text-xl text-gold-text">
-                  {romans[i]}
-                </span>
-                <h3 className="font-serif text-[34px] mt-[18px] mb-3.5">
-                  {card.title}
-                </h3>
-                <p className="text-[15px] font-light leading-[1.65] text-ink-sub">
-                  {card.description}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal delay={400}>
-            <div className="mt-7 flex flex-wrap gap-2.5">
-              {diagnosticReviewAreas.map((area) => (
-                <span
-                  key={area}
-                  className="border border-line-faint px-4 py-[9px] text-xs tracking-[0.06em] text-ink-muted"
+            <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-4">
+              {reviewCards.map((card, i) => (
+                <Reveal
+                  key={card.title}
+                  delay={i * 120}
+                  className="border border-line bg-card pt-10 px-7 min-[1024px]:px-9 pb-11 flex flex-col gap-3.5"
                 >
-                  {area}
-                </span>
+                  <span className="font-serif italic text-[26px] leading-[30px] text-gold-text">
+                    {romans[i]}
+                  </span>
+                  <h3 className="font-serif text-[26px] leading-8 text-ink-em">
+                    {card.title}
+                  </h3>
+                  <p className="text-base leading-6 text-ink-sub">
+                    {card.description}
+                  </p>
+                </Reveal>
               ))}
             </div>
-          </Reveal>
+            <Reveal delay={300}>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {diagnosticReviewAreas.map((area) => (
+                  <span
+                    key={area}
+                    className="border border-line px-4 py-[9px] text-base text-ink-muted"
+                  >
+                    {area}
+                  </span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
       {/* ── Three outcomes ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-25">
-          <div className="max-w-[700px] mb-16">
-            <Reveal>
-              <Eyebrow className="mb-5">The answer</Eyebrow>
-            </Reveal>
-            <Reveal delay={100}>
-              <h2 className="font-serif text-[clamp(28px,4vw,50px)] leading-[1.05] text-balance">
-                Three honest outcomes.{' '}
-                <span className="italic text-gold-text">
-                  One of them is "don't build."
-                </span>
-              </h2>
-            </Reveal>
-          </div>
-          <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-10 min-[768px]:gap-14">
+      <section className={surfaces.card}>
+        <div className={`${sectionInner} flex flex-col gap-14`}>
+          <SectionHead eyebrow="The answer">
+            Three honest outcomes.{' '}
+            <span className="italic text-gold-text">
+              One of them is “don’t build.”
+            </span>
+          </SectionHead>
+          <div className="grid grid-cols-1 min-[768px]:grid-cols-3 gap-10 min-[768px]:gap-12">
             {outcomes.map((o, i) => (
               <Reveal
                 key={o.title}
-                delay={100 + i * 150}
+                delay={100 + i * 120}
                 className="border-t-2 border-gold pt-6"
               >
-                <h3 className="font-serif text-[32px] mb-3">{o.title}</h3>
-                <p className="text-sm font-light leading-[1.65] text-ink-sub">
+                <h3 className="font-serif text-[26px] leading-8 text-ink-em mb-3">
+                  {o.title}
+                </h3>
+                <p className="text-base leading-6 text-ink-sub">
                   {o.description}
                 </p>
               </Reveal>
@@ -257,70 +287,25 @@ function Diagnostic() {
         </div>
       </section>
 
-      {/* ── Fit panels ── */}
-      <section>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-[90px] grid grid-cols-1 min-[768px]:grid-cols-2 gap-12 min-[768px]:gap-20">
-          <div>
-            <Reveal>
-              <h3 className="font-serif text-[34px] text-gold-text mb-7">
-                A good fit if
-              </h3>
-            </Reveal>
-            <div className="flex flex-col">
-              {diagnosticFit.goodFit.map((item) => (
-                <Reveal key={item} delay={100}>
-                  <p className="border-b border-line-faint py-4 text-[15px] font-light text-ink-sub">
-                    {item}
-                  </p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-          <div>
-            <Reveal>
-              <h3 className="font-serif text-[34px] text-ink-faint mb-7">
-                Not the right fit for
-              </h3>
-            </Reveal>
-            <div className="flex flex-col">
-              {diagnosticFit.notFit.map((item) => (
-                <Reveal key={item} delay={100}>
-                  <p className="border-b border-line-faint py-4 text-[15px] font-light text-ink-muted">
-                    {item}
-                  </p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <PriceExamples />
 
-      <EngagementTerms />
+      <FitLists
+        goodFit={diagnosticFit.goodFit}
+        notFit={diagnosticFit.notFit}
+        surface={hasExamples ? 'card' : 'page'}
+      />
 
-      {/* ── Closing CTA ── */}
-      <section className="relative">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_700px_500px_at_50%_100%,rgba(203,171,69,0.08),transparent_70%)]"
-        />
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 py-30 text-center relative">
-          <Reveal>
-            <h2 className="font-serif text-[clamp(32px,5.6vw,68px)] leading-[1.05] text-balance">
-              If the workflow is unclear,{' '}
-              <span className="italic text-gold-text">
-                the system will be too.
-              </span>
-            </h2>
-          </Reveal>
-          <Reveal delay={150}>
-            <div className="mt-11 flex justify-center">
-              <CtaLink to="/inquire" arrow>
-                Request a Workflow Diagnostic
-              </CtaLink>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <EngagementTerms
+        surface={hasExamples ? 'page' : 'card'}
+        showCta
+        badges={{ diagnostic: 'You are here' }}
+        intro="The path is Diagnostic, then Build, then Run. A website is priced on its own and can start any time."
+      />
+
+      <ClosingCta cta="Request a Workflow Diagnostic">
+        If the workflow is unclear,{' '}
+        <span className="italic text-gold-text">the system will be too.</span>
+      </ClosingCta>
     </div>
   )
 }
