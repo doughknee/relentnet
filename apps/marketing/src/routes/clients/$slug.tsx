@@ -1,7 +1,8 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
+import { CaseStudyBuiltWith } from '@/components/caseStudy/CaseStudyBuiltWith'
 import { CaseStudyDetailHero } from '@/components/caseStudy/CaseStudyDetailHero'
-import { CaseStudyPullquote } from '@/components/caseStudy/CaseStudyPullquote'
+import { CaseStudyOutcomes } from '@/components/caseStudy/CaseStudyOutcomes'
 import { CaseStudyReadMore } from '@/components/caseStudy/CaseStudyReadMore'
 import { CaseStudyStoryLayout } from '@/components/caseStudy/CaseStudyStoryLayout'
 import { CaseStudyTestimonial } from '@/components/caseStudy/CaseStudyTestimonial'
@@ -35,16 +36,21 @@ export const Route = createFileRoute('/clients/$slug')({
 
 function ClientDetail() {
   const { study } = Route.useLoaderData()
+  const { metrics, stack, stackScope } = study.atAGlance
 
   return (
     <article className="min-h-screen">
       <CaseStudyDetailHero study={study} />
+      {metrics?.length ? <CaseStudyOutcomes metrics={metrics} /> : null}
       <CaseStudyStoryLayout study={study} />
-      {study.pullquote ? (
-        <CaseStudyPullquote pullquote={study.pullquote} />
+      {stack?.length ? (
+        <CaseStudyBuiltWith stack={stack} scope={stackScope} />
       ) : null}
       {study.testimonial ? (
-        <CaseStudyTestimonial testimonial={study.testimonial} />
+        <CaseStudyTestimonial
+          testimonial={study.testimonial}
+          builtBy={study.builtBy}
+        />
       ) : null}
       <CaseStudyReadMore currentSlug={study.slug} />
       <ClosingCtaPair />

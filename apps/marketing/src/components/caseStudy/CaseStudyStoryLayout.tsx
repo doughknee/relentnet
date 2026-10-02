@@ -1,143 +1,122 @@
+import { useId, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, Building2, Globe } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 
 import { CaseStudyNarrative } from './CaseStudyNarrative'
-import type { CaseStudy, CaseStudyMetric } from '@/data/caseStudies'
-import { BrandIcon } from '@/components/BrandIcon'
+import { label } from './label'
+import type { ReactNode } from 'react'
+import type { CaseStudy } from '@/data/caseStudies'
+import { CtaLink } from '@/components/CtaLink'
 import { Reveal } from '@/components/Reveal'
 
 interface CaseStudyStoryLayoutProps {
   study: CaseStudy
 }
 
-function isDelta(metric: CaseStudyMetric): boolean {
-  return (
-    typeof metric.from === 'string' &&
-    metric.from.length > 0 &&
-    typeof metric.to === 'string' &&
-    metric.to.length > 0
-  )
+interface GlanceRow {
+  label: string
+  value: ReactNode
+  testId?: string
 }
 
 /**
- * Detail-page body — two-column layout with a sticky LEFT rail and the
- * long-form article on the right. The rail carries the customer meta card
- * (wordmark, products used, global partner, region, tier), the result stats,
- * and the "Ready to get started?" CTA.
+ * Detail-page body: a sticky "At a glance" rail beside the long-form article.
+ * The rail holds only the facts card and the Diagnostic CTA, so it fits a
+ * 900px viewport while sticky. Below `lg` it collapses into a sticky bar
+ * with a toggle and a compact CTA.
  */
 export function CaseStudyStoryLayout({ study }: CaseStudyStoryLayoutProps) {
-  const metrics = study.atAGlance.metrics ?? []
-  const products = (study.atAGlance.stack ?? []).flatMap((c) => c.items)
-  const global = study.atAGlance.global
+  const [isOpen, setIsOpen] = useState(false)
+  const panelId = useId()
+  const { engagementYear, role, global } = study.atAGlance
   const sizeLabel =
     study.companySize.charAt(0).toUpperCase() + study.companySize.slice(1)
 
+  const rows: ReadonlyArray<GlanceRow | false | undefined | ''> = [
+    { label: 'Client', value: study.name, testId: 'detail-hero-logo' },
+    { label: 'Industry', value: study.industry },
+    study.region && { label: 'Region', value: study.region },
+    { label: 'Company size', value: sizeLabel },
+    engagementYear && { label: 'Engagement', value: engagementYear },
+    role && { label: 'Scope', value: role },
+    global && {
+      label: 'Global',
+      value: (
+        <span className="flex items-center gap-2">
+          <img
+            src={global.logoSrc}
+            alt={global.label}
+            className="size-4 shrink-0 opacity-80"
+          />
+          {global.label}
+        </span>
+      ),
+    },
+  ]
+
   return (
-    <section className="relative z-10 px-6 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 border-t border-line-faint">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-        <aside className="lg:col-span-4">
-          <div className="lg:sticky lg:top-28 space-y-8">
-            <div className="border border-line-faint bg-card">
-              <div
-                data-testid="detail-hero-logo"
-                className="flex items-center justify-center border-b border-line-faint px-6 py-7"
+    <section className="relative z-10 px-6 md:px-12 pb-14 lg:pt-20 lg:pb-24 border-t border-line-faint">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 lg:grid-cols-[320px_minmax(0,680px)] lg:gap-24">
+        <aside className="sticky top-[60px] min-[900px]:top-20 lg:top-28 z-30 lg:z-auto self-start -mx-6 md:-mx-12 lg:mx-0 bg-page lg:bg-transparent">
+          <div className="border-b border-line-faint lg:border lg:bg-card">
+            <div className="flex items-center justify-between gap-3 bg-card px-6 md:px-12 py-2.5 lg:px-6 lg:py-5 border-b border-line-faint">
+              <button
+                type="button"
+                onClick={() => setIsOpen((open) => !open)}
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                className={`lg:hidden flex min-h-11 items-center gap-2 text-gold-text ${label}`}
               >
-                <span className="font-serif text-xl tracking-[0.15em] uppercase text-ink-em text-center">
-                  {study.name}
-                </span>
-              </div>
-
-              {products.length > 0 ? (
-                <div className="border-b border-line-faint px-6 py-5">
-                  <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink-muted mb-4">
-                    Products used
-                  </p>
-                  <ul className="flex flex-col gap-3">
-                    {products.slice(0, 8).map((item) => (
-                      <li
-                        key={item.label}
-                        className="flex items-center gap-3 text-sm text-ink"
-                      >
-                        <BrandIcon
-                          slug={item.iconSlug}
-                          label={item.label}
-                          className="size-4 text-ink-muted shrink-0"
-                        />
-                        <span>{item.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {global ? (
-                <div className="flex items-center gap-3 border-b border-line-faint px-6 py-4 text-sm text-ink-sub">
-                  <img
-                    src={global.logoSrc}
-                    alt={global.label}
-                    className="size-4 shrink-0 opacity-80"
-                  />
-                  <span>{global.label}</span>
-                </div>
-              ) : null}
-
-              {study.region ? (
-                <div className="flex items-center gap-3 border-b border-line-faint px-6 py-4 text-sm text-ink-sub">
-                  <Globe className="size-4 shrink-0 text-ink-muted" />
-                  <span>{study.region}</span>
-                </div>
-              ) : null}
-
-              {sizeLabel ? (
-                <div className="flex items-center gap-3 px-6 py-4 text-sm text-ink-sub">
-                  <Building2 className="size-4 shrink-0 text-ink-muted" />
-                  <span>{sizeLabel}</span>
-                </div>
-              ) : null}
-            </div>
-
-            {metrics.length > 0 ? (
-              <dl className="space-y-6 pt-2">
-                {metrics.map((metric) => (
-                  <div
-                    key={metric.label}
-                    className="border-l-2 border-gold pl-5"
-                  >
-                    <dd className="font-serif text-2xl text-ink-em leading-tight">
-                      {isDelta(metric) ? (
-                        <>
-                          <span className="text-ink-muted">{metric.from}</span>
-                          <span className="mx-2 text-gold-text">→</span>
-                          <span>{metric.to}</span>
-                        </>
-                      ) : (
-                        metric.value
-                      )}
-                    </dd>
-                    <dt className="mt-2 text-sm text-ink-muted">
-                      {metric.label}
-                    </dt>
-                  </div>
-                ))}
-              </dl>
-            ) : null}
-
-            <div className="border-t border-line-faint pt-7">
-              <h2 className="font-serif text-xl mb-4">
-                Ready to diagnose your friction?
+                At a glance
+                <ChevronDown
+                  className={`size-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                  aria-hidden="true"
+                />
+              </button>
+              <h2 className={`hidden lg:block text-gold-text ${label}`}>
+                At a glance
               </h2>
               <Link
                 to="/diagnostic"
-                className="inline-flex items-center justify-center gap-3 border border-gold bg-gold px-6 py-3.5 text-sm uppercase tracking-widest text-black transition-all duration-300 hover:bg-transparent hover:text-gold-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                className="lg:hidden chromatic-hover bg-gold text-gold-ink px-3.5 py-3 text-center text-xs leading-5 tracking-[0.1em] uppercase font-medium transition-all duration-300 hover:bg-ink-em hover:text-page"
               >
                 Start a Diagnostic
-                <ArrowRight className="size-4" />
               </Link>
             </div>
+            <dl
+              id={panelId}
+              className={`${isOpen ? 'block' : 'hidden'} lg:block max-h-[60vh] overflow-y-auto lg:max-h-none lg:overflow-visible bg-card`}
+            >
+              {rows.map((row) =>
+                row ? (
+                  <div
+                    key={row.label}
+                    className="flex flex-col gap-1 px-6 md:px-12 lg:px-6 py-3.5 border-b border-line-faint last:border-b-0"
+                  >
+                    <dt className={`text-ink-muted ${label}`}>{row.label}</dt>
+                    <dd
+                      data-testid={row.testId}
+                      className="text-[15px] leading-6 text-ink"
+                    >
+                      {row.value}
+                    </dd>
+                  </div>
+                ) : null,
+              )}
+            </dl>
+          </div>
+
+          <div className="hidden lg:flex flex-col items-start gap-4 mt-10">
+            <p className="font-serif text-[26px] leading-8 text-ink-em">
+              Ready to diagnose your friction?
+            </p>
+            <CtaLink to="/diagnostic" arrow>
+              Start a Diagnostic
+            </CtaLink>
           </div>
         </aside>
 
-        <Reveal className="lg:col-span-8">
+        <Reveal>
           <CaseStudyNarrative study={study} />
         </Reveal>
       </div>
