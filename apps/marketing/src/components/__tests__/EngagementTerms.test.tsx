@@ -152,13 +152,13 @@ describe('closing CTA booking line', () => {
   it('shows only the phone line while booking has no handle', () => {
     contact.booking.handle = undefined
     render(<ClosingCta cta="Go">Heading</ClosingCta>)
-    expect(screen.queryByText('Book a 20-minute call')).toBeNull()
+    expect(screen.queryByText('Book a call')).toBeNull()
     expect(screen.getByText(contact.phone)).toBeTruthy()
   })
 
   it('adds a booking link to /inquire#book while booking has a handle', () => {
     render(<ClosingCta cta="Go">Heading</ClosingCta>)
-    const link = screen.getByText('Book a 20-minute call')
+    const link = screen.getByText('Book a call')
     expect(link.getAttribute('href')).toBe('/inquire#book')
   })
 })
